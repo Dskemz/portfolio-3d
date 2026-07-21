@@ -24,7 +24,6 @@ export default function SkillFlowMobile() {
 
   /** Hauteur courante du trait, en pixels depuis startY. */
   const [flow, setFlow] = useState(0);
-  const [scrollDebug, setScrollDebug] = useState(0);
   const [armed, setArmed] = useState(false);
   const [litIds, setLitIds] = useState<string[]>([]);
   const [headId, setHeadId] = useState<string | null>(null);
@@ -80,7 +79,6 @@ export default function SkillFlowMobile() {
 
     const compute = () => {
       frame = 0;
-      setScrollDebug(window.scrollY);
       const container = containerRef.current;
       if (!container) return;
 
@@ -141,20 +139,11 @@ export default function SkillFlowMobile() {
 
   return (
     <div ref={containerRef} className="relative w-full overflow-hidden">
-      <div
-        className="fixed left-2 top-2 z-[9999] rounded bg-white/90 px-2 py-1 font-mono text-[10px] leading-tight text-black"
-      >
-        scrollY {Math.round(scrollDebug)}<br />
-        startY {Math.round(startY)}<br />
-        endY {Math.round(endY)}<br />
-        flow {Math.round(flow)}<br />
-        lit {litIds.length}
-      </div>
       {/* ═══ Accueil ═══ */}
       <header className="px-6 pb-10 pt-24">
         <div className="flex w-full flex-col items-center text-center">
           <h1 className="font-display text-[clamp(2.2rem,8vw,3rem)] font-light leading-[1.05] tracking-[-0.02em] text-white">
-            TEST 123
+            Denis Masquet
           </h1>
           <p className="mt-4 text-xs uppercase tracking-[0.18em] text-[#FF7F50]">
             {INTRO.role}
