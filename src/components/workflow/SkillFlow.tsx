@@ -16,6 +16,15 @@ const BREAKPOINT = 1024;
 const LINE_VH = 0.62; // ligne de front du flux dans le viewport
 const DROP = 88; // descente avant le coude à 90°
 
+/**
+ * Fiches secondaires décalées à GAUCHE de l'axe (les autres restent à droite).
+ * Alternance voulue : 01 centre · 02 droite · 03 centre · 04 gauche ·
+ * 05 centre · 06 droite · 07 centre.
+ * Le circuit est reconstruit à partir des pastilles mesurées dans le DOM :
+ * le fil orange suit donc automatiquement le nouveau côté, à angles droits.
+ */
+const LEFT_SIDE_IDS = new Set<string>(["uv-pbr"]);
+
 type Mode = "desktop" | "mobile";
 interface Point { x: number; y: number }
 interface Geometry { entry: Point; exit: Point }
@@ -509,7 +518,11 @@ export default function SkillFlow() {
           {WORKFLOW_NODES.map((node, index) => {
             const isSecondary = node.kind === "secondaire";
             const spacing = index === 0 ? "mt-[16vh]" : isSecondary ? "mt-[24vh]" : "mt-[34vh]";
-            const width = isSecondary ? "ml-auto w-[32%]" : "mx-auto w-[54%]";
+            const width = isSecondary
+              ? LEFT_SIDE_IDS.has(node.id)
+                ? "mr-auto w-[32%]"
+                : "ml-auto w-[32%]"
+              : "mx-auto w-[54%]";
 
             return (
               <div key={node.id} className={spacing}>
