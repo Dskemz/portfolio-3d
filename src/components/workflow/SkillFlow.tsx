@@ -16,6 +16,8 @@ import SkillFlowMobile from "./SkillFlowMobile";
 const BREAKPOINT = 1024;
 const LINE_VH = 0.62; // ligne de front du flux dans le viewport
 const DROP = 88; // descente avant le coude à 90°
+/** Rayon des coudes du circuit, en px. Clampé par segment dans emitPolyline. */
+const CORNER_R = 11;
 
 /**
  * Fiches secondaires décalées à GAUCHE de l'axe (les autres restent à droite).
@@ -108,7 +110,7 @@ const EMPTY: Built = { d: "", length: 0, thresholds: {} };
 
 /* ─────────── Polyligne orthogonale avec arrondis légers et synchro millimétrique ─────────── */
 
-function emitPolyline(points: Point[], cornerRadius = 6) {
+function emitPolyline(points: Point[], cornerRadius = CORNER_R) {
   const pts: Point[] = [];
   for (const p of points) {
     const last = pts[pts.length - 1];
@@ -137,7 +139,11 @@ function emitPolyline(points: Point[], cornerRadius = 6) {
 
     let segmentLen = 0;
     if (isHorizontal !== nextIsHorizontal) {
-      const r = cornerRadius;
+      // Le rayon ne peut jamais dépasser la moitié du plus court des deux
+      // segments adjacents, sinon les coudes se chevauchent sur les jogs courts.
+      const lenPrev = Math.hypot(cur.x - prev.x, cur.y - prev.y);
+      const lenNext = Math.hypot(next.x - cur.x, next.y - cur.y);
+      const r = Math.min(cornerRadius, lenPrev / 2, lenNext / 2);
       const x1 = cur.x + (prev.x > cur.x ? r : prev.x < cur.x ? -r : 0);
       const y1 = cur.y + (prev.y > cur.y ? r : prev.y < cur.y ? -r : 0);
       const x2 = cur.x + (next.x > cur.x ? r : next.x < cur.x ? -r : 0);
