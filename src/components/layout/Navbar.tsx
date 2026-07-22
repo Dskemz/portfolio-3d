@@ -71,31 +71,37 @@ export default function Navbar() {
           className="pointer-events-auto mx-auto flex h-16 w-full max-w-6xl items-center justify-between rounded-2xl border shadow-2xl backdrop-blur-md px-6 md:h-20 md:px-8 transition-colors duration-150"
         >
           <Link
-            href="/"
-            className="flex items-center text-papier transition-colors hover:text-[#FF7F50]"
-            aria-label="Accueil"
-          >
-            <svg
-              className="h-6 w-24"
-              fill="none"
-              viewBox="0 0 96 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
-            >
-              {/* Ligne principale avec une cassure de progression */}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 12h32m8 0h48"
-              />
-              {/* Point de départ */}
-              <circle cx="4" cy="12" r="2" fill="currentColor" />
-              {/* Nœud central "étape" */}
-              <circle cx="36" cy="12" r="2" fill="currentColor" />
-              {/* Point d'arrivée final */}
-              <circle cx="92" cy="12" r="2" fill="currentColor" />
-            </svg>
-          </Link>
+  href="/"
+  className="flex items-center text-papier transition-colors hover:text-[#FF7F50]"
+  aria-label="Accueil"
+>
+  <svg
+    className="h-6 w-24"
+    fill="none"
+    viewBox="0 0 96 24"
+    stroke="currentColor"
+    strokeWidth={1.5}
+  >
+    {/* Premier segment horizontal avec un point à chaque extrémité */}
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M4 16h32"
+    />
+    <circle cx="4" cy="16" r="2" fill="currentColor" />
+    <circle cx="36" cy="16" r="2" fill="currentColor" />
+
+    {/* Liaison en diagonale et second segment horizontal plus haut */}
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M42 16l8-8h42"
+    />
+    
+    {/* Point final à l'extrémité haute */}
+    <circle cx="92" cy="8" r="2" fill="currentColor" />
+  </svg>
+</Link>
 
           {/* Navigation desktop */}
           <ul className="hidden items-center gap-8 md:flex">
