@@ -33,9 +33,59 @@ const STEP_MS = 1150;
 const STEP_COOLDOWN_MS = 140;
 /** Molette : en dessous de ce delta, l'événement est ignoré (micro-inertie trackpad). */
 const WHEEL_MIN_DELTA = 2;
+/**
+ * Hauteur (en fraction de viewport) à laquelle l'ancre de la 1re fiche déclenche
+ * la visite guidée. Au-dessus : molette libre, tu peux empiler ce que tu veux dans l'accueil.
+ */
+const INTRO_GRAB_VH = 0.95;
 
-const STEP_EASE = (t: number) =>
-  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+/**
+ * Courbe du cran, en coordonnées cubic-bézier [x1, y1, x2, y2] — même convention
+ * que le CSS. Départ franc, freinage long : monte y1 et rapproche x1 de 0 pour
+ * partir plus vite, tire x2 vers 0 pour freiner plus longtemps.
+ */
+const STEP_BEZIER: [number, number, number, number] = [0.16, 0.9, 0.2, 1];
+
+/** Solveur cubic-bézier (Newton-Raphson, repli par dichotomie). */
+function cubicBezier(x1: number, y1: number, x2: number, y2: number) {
+  const A = (a: number, b: number) => 1 - 3 * b + 3 * a;
+  const B = (a: number, b: number) => 3 * b - 6 * a;
+  const C = (a: number) => 3 * a;
+
+  const calc = (t: number, a: number, b: number) =>
+    ((A(a, b) * t + B(a, b)) * t + C(a)) * t;
+  const slope = (t: number, a: number, b: number) =>
+    3 * A(a, b) * t * t + 2 * B(a, b) * t + C(a);
+
+  return (x: number) => {
+    if (x <= 0) return 0;
+    if (x >= 1) return 1;
+
+    let t = x;
+    for (let i = 0; i < 6; i++) {
+      const d = slope(t, x1, x2);
+      if (Math.abs(d) < 1e-6) break;
+      t -= (calc(t, x1, x2) - x) / d;
+    }
+
+    if (t < 0 || t > 1) {
+      let lo = 0;
+      let hi = 1;
+      t = x;
+      for (let i = 0; i < 24; i++) {
+        const v = calc(t, x1, x2);
+        if (Math.abs(v - x) < 1e-5) break;
+        if (v > x) hi = t;
+        else lo = t;
+        t = (lo + hi) / 2;
+      }
+    }
+
+    return calc(t, y1, y2);
+  };
+}
+
+const STEP_EASE = cubicBezier(...STEP_BEZIER);
 
 type Mode = "desktop" | "mobile";
 interface Point { x: number; y: number }
@@ -417,31 +467,60 @@ export default function SkillFlow() {
   useEffect(() => {
     if (mode !== "desktop") return;
 
-    /** Tant que le point d'amorce n'a pas franchi la ligne de front, le scroll reste natif. */
+    const LAST_INDEX = WORKFLOW_NODES.length - 1;
+
+    /** Accueil : molette libre tant que la 1re fiche n'est pas en approche. */
     const introStillFree = () => {
       if (stepRef.current !== -1) return false;
-      const origin = document.getElementById(ORIGIN_ID);
-      if (!origin) return true;
-      return origin.getBoundingClientRect().top > window.innerHeight * LINE_VH;
+      const first = WORKFLOW_NODES[0];
+      const anchor = first && document.getElementById(getNodeAnchorId(first.id));
+      if (!anchor) return true;
+      return anchor.getBoundingClientRect().top > window.innerHeight * INTRO_GRAB_VH;
     };
 
-    const advance = (direction: 1 | -1) => {
-      if (lockRef.current) return;
+    /** Position d'accroche de la fiche terminale. */
+    const tailAnchor = () => scrollTargetFor(LAST_INDEX);
+
+    /** Posé sur la fiche terminale : la descente vers le footer redevient libre. */
+    const tailReached = () => {
+      if (stepRef.current !== LAST_INDEX) return false;
+      const target = tailAnchor();
+      return target !== null && window.scrollY >= target - 2;
+    };
+
+    /** Sous la fiche terminale : la remontée est libre jusqu'à retrouver l'accroche. */
+    const belowTail = () => {
+      const target = tailAnchor();
+      return target !== null && window.scrollY > target + 2;
+    };
+
+    /** Renvoie true si l'événement est consommé par la visite guidée. */
+    const consume = (direction: 1 | -1) => {
+      if (!builtRef.current.length) return false;
+
+      if (direction === 1) {
+        if (introStillFree()) return false;
+        if (tailReached()) return false;
+      } else {
+        if (stepRef.current === -1) return false;
+        if (belowTail()) return false;
+      }
+
       goToStep(stepRef.current + direction);
+      return true;
     };
 
     const onWheel = (event: WheelEvent) => {
       if (!builtRef.current.length) return;
       if (Math.abs(event.deltaY) < WHEEL_MIN_DELTA) return;
 
-      const direction: 1 | -1 = event.deltaY > 0 ? 1 : -1;
+      // Pendant une animation de cran, aucune entrée ne doit faire bouger la page.
+      if (lockRef.current) {
+        event.preventDefault();
+        return;
+      }
 
-      // Descente dans l'accueil, ou remontée vers l'accueil : on laisse faire le navigateur.
-      if (direction === 1 && introStillFree()) return;
-      if (direction === -1 && stepRef.current === -1) return;
-
-      event.preventDefault();
-      advance(direction);
+      if (consume(event.deltaY > 0 ? 1 : -1)) event.preventDefault();
     };
 
     const onKey = (event: KeyboardEvent) => {
@@ -450,29 +529,34 @@ export default function SkillFlow() {
       if (target && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
       if (target?.isContentEditable) return;
 
+      let direction: 1 | -1 | 0 = 0;
       switch (event.key) {
         case "ArrowDown":
         case "PageDown":
         case " ":
-          event.preventDefault();
-          advance(1);
+          direction = 1;
           break;
         case "ArrowUp":
         case "PageUp":
-          event.preventDefault();
-          advance(-1);
+          direction = -1;
           break;
         case "Home":
           event.preventDefault();
           goToStep(-1);
-          break;
+          return;
         case "End":
           event.preventDefault();
-          goToStep(WORKFLOW_NODES.length - 1);
-          break;
+          goToStep(LAST_INDEX);
+          return;
         default:
-          break;
+          return;
       }
+
+      if (lockRef.current) {
+        event.preventDefault();
+        return;
+      }
+      if (consume(direction)) event.preventDefault();
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
@@ -482,7 +566,7 @@ export default function SkillFlow() {
       window.removeEventListener("keydown", onKey);
       if (animRef.current) cancelAnimationFrame(animRef.current);
     };
-  }, [mode, goToStep]);
+  }, [mode, goToStep, scrollTargetFor]);
 
   /* ── Moteur de scroll : 1:1, aucune inertie, strictement réversible ── */
   const progress = useMotionValue(0);
