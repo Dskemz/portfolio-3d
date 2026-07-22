@@ -7,6 +7,7 @@ import {
   ORIGIN_ID,
   WORKFLOW_NODES,
   getNodeAnchorId,
+  getNodeCardId,
   getNodeExitId,
 } from "@/content/workflowData";
 import WorkflowCard from "./WorkflowCard";
@@ -28,7 +29,7 @@ const LEFT_SIDE_IDS = new Set<string>(["uv-pbr"]);
 /* ─────────── Mode cranté (« QTE ») ─────────── */
 
 /** Durée de l'avancée d'une fiche à la suivante, en ms. C'est LE réglage de vitesse. */
-const STEP_MS = 1150;
+const STEP_MS = 1000;
 /** Petit silence après l'animation avant d'accepter un nouveau cran (anti-rafale trackpad). */
 const STEP_COOLDOWN_MS = 140;
 /** Molette : en dessous de ce delta, l'événement est ignoré (micro-inertie trackpad). */
@@ -38,13 +39,18 @@ const WHEEL_MIN_DELTA = 2;
  * la visite guidée. Au-dessus : molette libre, tu peux empiler ce que tu veux dans l'accueil.
  */
 const INTRO_GRAB_VH = 0.95;
+/**
+ * Marge (px) conservée sous l'ancre de la fiche suivante quand on centre la fiche
+ * courante : garantit qu'aucune fiche ne s'allume en avance.
+ */
+const NEXT_SAFE_GAP = 24;
 
 /**
  * Courbe du cran, en coordonnées cubic-bézier [x1, y1, x2, y2] — même convention
  * que le CSS. Départ franc, freinage long : monte y1 et rapproche x1 de 0 pour
  * partir plus vite, tire x2 vers 0 pour freiner plus longtemps.
  */
-const STEP_BEZIER: [number, number, number, number] = [0.16, 0.9, 0.2, 1];
+const STEP_BEZIER: [number, number, number, number] = [0.3, 0.72, 0.24, 1];
 
 /** Solveur cubic-bézier (Newton-Raphson, repli par dichotomie). */
 function cubicBezier(x1: number, y1: number, x2: number, y2: number) {
@@ -400,9 +406,8 @@ export default function SkillFlow() {
   }, []);
 
   /** Position de scroll à laquelle le front touche l'ancre de la fiche `index`. */
-  const scrollTargetFor = useCallback(
+  const anchorScrollFor = useCallback(
     (index: number): number | null => {
-      if (index < 0) return 0;
       const container = containerRef.current;
       const node = WORKFLOW_NODES[index];
       const { total } = ruler.current;
@@ -415,6 +420,43 @@ export default function SkillFlow() {
       const y = yAtLength(Math.min(total, threshold * total + 1));
       const containerTop = container.getBoundingClientRect().top + window.scrollY;
       const vh = window.innerHeight || 1;
+
+      return Math.round(y + containerTop - vh * LINE_VH + 2);
+    },
+    [yAtLength]
+  );
+
+  /** Position de scroll qui met la fiche `index` au centre exact du viewport. */
+  const centerScrollFor = useCallback((index: number): number | null => {
+    const node = WORKFLOW_NODES[index];
+    const card = node && document.getElementById(getNodeCardId(node.id));
+    if (!card) return null;
+    const rect = card.getBoundingClientRect();
+    return Math.round(
+      rect.top + window.scrollY + rect.height / 2 - (window.innerHeight || 1) / 2
+    );
+  }, []);
+
+  /**
+   * Cible retenue pour un cran : la fiche est centrée, mais jamais avant sa
+   * position d'allumage (plancher) ni au-delà de l'ancre de la suivante (plafond),
+   * sinon la fiche d'après s'allumerait en avance.
+   */
+  const scrollTargetFor = useCallback(
+    (index: number): number | null => {
+      if (index < 0) return 0;
+
+      const floor = anchorScrollFor(index);
+      if (floor === null) return null;
+
+      const nextAnchor =
+        index < WORKFLOW_NODES.length - 1 ? anchorScrollFor(index + 1) : null;
+      const ceiling =
+        nextAnchor === null ? Infinity : Math.max(floor, nextAnchor - NEXT_SAFE_GAP);
+
+      const centered = centerScrollFor(index);
+      const wanted = centered === null ? floor : centered;
+
       const maxScroll = Math.max(
         0,
         document.documentElement.scrollHeight - window.innerHeight
@@ -422,10 +464,10 @@ export default function SkillFlow() {
 
       return Math.min(
         maxScroll,
-        Math.max(0, Math.round(y + containerTop - vh * LINE_VH + 2))
+        Math.max(0, Math.min(Math.max(wanted, floor), ceiling))
       );
     },
-    [yAtLength]
+    [anchorScrollFor, centerScrollFor]
   );
 
   const goToStep = useCallback(
@@ -784,7 +826,7 @@ export default function SkillFlow() {
         <div className="relative z-10 mx-auto flex w-full max-w-[84rem] flex-col">
           {WORKFLOW_NODES.map((node, index) => {
             const isSecondary = node.kind === "secondaire";
-            const spacing = index === 0 ? "mt-[16vh]" : isSecondary ? "mt-[24vh]" : "mt-[34vh]";
+            const spacing = index === 0 ? "mt-[16vh]" : isSecondary ? "mt-[34vh]" : "mt-[44vh]";
             const width = isSecondary
               ? LEFT_SIDE_IDS.has(node.id)
                 ? "mr-auto w-[32%]"

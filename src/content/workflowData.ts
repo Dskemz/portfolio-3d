@@ -7,13 +7,15 @@
  * part à angle droit vers l'étape secondaire, revient sur l'axe, et ainsi
  * de suite jusqu'à la fiche finale où il s'arrête net.
  *
- *   1 · Modélisation 3D            principale
- *   2 · GLB                        secondaire
- *   3 · Textures et shaders        principale
- *   4 · UV's et matériaux PBR      secondaire
- *   5 · Lighting et rendu          principale
- *   6 · Visite virtuelle           secondaire
- *   7 · Démarrer votre projet      terminal
+ *   01       · Modélisation 3D            principale
+ *   01 - Bis · Modélisation optimisée     secondaire
+ *   02       · Textures et shaders        principale
+ *   02 - Bis · UV's et matériaux PBR      secondaire
+ *   03       · Lighting et rendu          principale
+ *   03 - Bis · Visite virtuelle           secondaire
+ *   04       · Démarrer votre projet      terminal
+ *
+ * Les « Bis » signalent la variante temps réel de l'étape principale qui précède.
  */
 
 export type NodeKind = "principale" | "secondaire" | "terminal";
@@ -73,17 +75,21 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
   {
     id: "glb",
     kind: "secondaire",
-    step: "02",
-    title: "GLB",
+    step: "01 - Bis",
+    title: "Modélisation optimisée",
+    quote: {
+      text: "La simplicité est la sophistication suprême.",
+      author: "Léonard de Vinci",
+    },
     description:
-      "Export normalisé du modèle : hiérarchie propre, transformations appliquées, échelle en mètres. Décimation guidée par la silhouette et compression Draco pour que le fichier reste léger sans perdre sa lecture.",
-    tags: ["glTF 2.0", "gltf-transform", "Draco"],
+      "Pour garantir une fluidité, un affichage défini et une animation sans artefact, le modèle 3D abandonne la lourdeur des fichiers bruts ou sculptés. En éliminant les N-Gon au profit d'une topologie régulière, le maillage devient un support léger, propre et définitivement prêt à l'emploi.",
+    tags: ["glTF 2.0", "gltf-transform", "Babylon.js"],
     blueprint: 2,
   },
   {
     id: "textures-shaders",
     kind: "principale",
-    step: "03",
+    step: "02",
     title: "Textures et shaders",
     quote: {
       text: "La perfection est atteinte non quand il n'y a plus rien à ajouter, mais plus rien à retirer.",
@@ -97,7 +103,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
   {
     id: "uv-pbr",
     kind: "secondaire",
-    step: "04",
+    step: "02 - Bis",
     title: "UV's et matériaux PBR",
     description:
       "Dépliage sans recouvrement, densité de texels homogène, marges maîtrisées. Les cartes albédo, rugosité, métallicité et normales sont calibrées pour rester lisibles à toutes les distances de caméra.",
@@ -107,7 +113,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
   {
     id: "lighting-rendu",
     kind: "principale",
-    step: "05",
+    step: "03",
     title: "Lighting et rendu",
     quote: {
       text: "Ce que l'on conçoit bien s'énonce clairement, et se manipule sans mode d'emploi.",
@@ -121,7 +127,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
   {
     id: "visite-virtuelle",
     kind: "secondaire",
-    step: "06",
+    step: "03 - Bis",
     title: "Visite virtuelle",
     description:
       "La scène devient navigable : points d'intérêt, trajectoires de caméra, ambiances. Livrée en lien partageable, intégrable en iframe, et pilotable par le client sans une ligne de code.",
@@ -133,7 +139,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
   {
     id: "contact-terminal",
     kind: "terminal",
-    step: "07",
+    step: "04",
     title: "Démarrer votre projet",
     description:
       "Le courant s'arrête ici. Décrivez votre projet : je vous dis par quelle étape il commence et ce que cela implique concrètement.",
