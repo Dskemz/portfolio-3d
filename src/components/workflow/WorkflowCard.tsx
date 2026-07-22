@@ -21,6 +21,8 @@ interface WorkflowCardProps {
   receding: boolean;
   /** Mode mobile : rendu natif, statique */
   plain?: boolean;
+  /** Mode cranté : le retour en arrière est une animation délibérée, pas un scrub */
+  stepped?: boolean;
 }
 
 const METAL =
@@ -33,6 +35,7 @@ export default function WorkflowCard({
   isHead,
   receding,
   plain = false,
+  stepped = false,
 }: WorkflowCardProps) {
   const isBis = node.kind === "secondaire";
   const isTerminal = node.kind === "terminal";
@@ -57,7 +60,7 @@ export default function WorkflowCard({
   const perimeter =
     box.w > 0 && box.h > 0 ? `M ${box.w / 2} 0 H ${box.w} V ${box.h} H 0 V 0 Z` : "";
 
-  const instant = receding;
+  const instant = receding && !stepped;
   const shell = instant
     ? { duration: 0.05, ease: "linear" as const }
     : { duration: 0.3, ease: [0.22, 1, 0.36, 1] as const };

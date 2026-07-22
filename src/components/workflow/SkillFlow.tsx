@@ -25,6 +25,18 @@ const DROP = 88; // descente avant le coude à 90°
  */
 const LEFT_SIDE_IDS = new Set<string>(["uv-pbr"]);
 
+/* ─────────── Mode cranté (« QTE ») ─────────── */
+
+/** Durée de l'avancée d'une fiche à la suivante, en ms. C'est LE réglage de vitesse. */
+const STEP_MS = 1150;
+/** Petit silence après l'animation avant d'accepter un nouveau cran (anti-rafale trackpad). */
+const STEP_COOLDOWN_MS = 140;
+/** Molette : en dessous de ce delta, l'événement est ignoré (micro-inertie trackpad). */
+const WHEEL_MIN_DELTA = 2;
+
+const STEP_EASE = (t: number) =>
+  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
 type Mode = "desktop" | "mobile";
 interface Point { x: number; y: number }
 interface Geometry { entry: Point; exit: Point }
@@ -211,6 +223,12 @@ export default function SkillFlow() {
     total: 0,
   });
 
+  /** Fiche courante : -1 = accueil, 0…n = index dans WORKFLOW_NODES */
+  const stepRef = useRef(-1);
+  /** Une animation de cran est en cours : toute nouvelle entrée est ignorée */
+  const lockRef = useRef(false);
+  const animRef = useRef(0);
+
   /* ── Mesure (desktop uniquement) ── */
   const measure = useCallback(() => {
     const container = containerRef.current;
@@ -310,6 +328,162 @@ export default function SkillFlow() {
     ruler.current = { ys, ls, total };
   }, [built.d]);
 
+  /* ── Mode cranté : un cran d'entrée = une fiche ── */
+
+  /** Inverse de lengthAtY : longueur sur le tracé → ordonnée dans le conteneur. */
+  const yAtLength = useCallback((target: number) => {
+    const { ys, ls, total } = ruler.current;
+    if (!total || !ys.length) return 0;
+    if (target <= 0) return ys[0];
+    if (target >= total) return ys[ys.length - 1];
+    let lo = 0;
+    let hi = ls.length - 1;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (ls[mid] < target) lo = mid + 1;
+      else hi = mid;
+    }
+    const i = Math.max(1, lo);
+    const span = ls[i] - ls[i - 1];
+    const ratio = span > 0.0001 ? (target - ls[i - 1]) / span : 0;
+    return ys[i - 1] + (ys[i] - ys[i - 1]) * ratio;
+  }, []);
+
+  /** Position de scroll à laquelle le front touche l'ancre de la fiche `index`. */
+  const scrollTargetFor = useCallback(
+    (index: number): number | null => {
+      if (index < 0) return 0;
+      const container = containerRef.current;
+      const node = WORKFLOW_NODES[index];
+      const { total } = ruler.current;
+      if (!container || !node || !total) return null;
+
+      const threshold = builtRef.current.thresholds[node.id];
+      if (threshold === undefined) return null;
+
+      // +1 px de marge : le seuil doit être franchi, pas seulement atteint.
+      const y = yAtLength(Math.min(total, threshold * total + 1));
+      const containerTop = container.getBoundingClientRect().top + window.scrollY;
+      const vh = window.innerHeight || 1;
+      const maxScroll = Math.max(
+        0,
+        document.documentElement.scrollHeight - window.innerHeight
+      );
+
+      return Math.min(
+        maxScroll,
+        Math.max(0, Math.round(y + containerTop - vh * LINE_VH + 2))
+      );
+    },
+    [yAtLength]
+  );
+
+  const goToStep = useCallback(
+    (index: number) => {
+      const clamped = Math.max(-1, Math.min(WORKFLOW_NODES.length - 1, index));
+      if (clamped === stepRef.current) return;
+
+      const target = scrollTargetFor(clamped);
+      if (target === null) return;
+
+      stepRef.current = clamped;
+
+      const start = window.scrollY;
+      const delta = target - start;
+      if (Math.abs(delta) < 1) return;
+
+      lockRef.current = true;
+      if (animRef.current) cancelAnimationFrame(animRef.current);
+      const t0 = performance.now();
+
+      const tick = (now: number) => {
+        const p = Math.min(1, (now - t0) / STEP_MS);
+        window.scrollTo(0, start + delta * STEP_EASE(p));
+        if (p < 1) {
+          animRef.current = requestAnimationFrame(tick);
+          return;
+        }
+        animRef.current = 0;
+        window.setTimeout(() => {
+          lockRef.current = false;
+        }, STEP_COOLDOWN_MS);
+      };
+
+      animRef.current = requestAnimationFrame(tick);
+    },
+    [scrollTargetFor]
+  );
+
+  useEffect(() => {
+    if (mode !== "desktop") return;
+
+    /** Tant que le point d'amorce n'a pas franchi la ligne de front, le scroll reste natif. */
+    const introStillFree = () => {
+      if (stepRef.current !== -1) return false;
+      const origin = document.getElementById(ORIGIN_ID);
+      if (!origin) return true;
+      return origin.getBoundingClientRect().top > window.innerHeight * LINE_VH;
+    };
+
+    const advance = (direction: 1 | -1) => {
+      if (lockRef.current) return;
+      goToStep(stepRef.current + direction);
+    };
+
+    const onWheel = (event: WheelEvent) => {
+      if (!builtRef.current.length) return;
+      if (Math.abs(event.deltaY) < WHEEL_MIN_DELTA) return;
+
+      const direction: 1 | -1 = event.deltaY > 0 ? 1 : -1;
+
+      // Descente dans l'accueil, ou remontée vers l'accueil : on laisse faire le navigateur.
+      if (direction === 1 && introStillFree()) return;
+      if (direction === -1 && stepRef.current === -1) return;
+
+      event.preventDefault();
+      advance(direction);
+    };
+
+    const onKey = (event: KeyboardEvent) => {
+      if (!builtRef.current.length) return;
+      const target = event.target as HTMLElement | null;
+      if (target && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
+      if (target?.isContentEditable) return;
+
+      switch (event.key) {
+        case "ArrowDown":
+        case "PageDown":
+        case " ":
+          event.preventDefault();
+          advance(1);
+          break;
+        case "ArrowUp":
+        case "PageUp":
+          event.preventDefault();
+          advance(-1);
+          break;
+        case "Home":
+          event.preventDefault();
+          goToStep(-1);
+          break;
+        case "End":
+          event.preventDefault();
+          goToStep(WORKFLOW_NODES.length - 1);
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("keydown", onKey);
+      if (animRef.current) cancelAnimationFrame(animRef.current);
+    };
+  }, [mode, goToStep]);
+
   /* ── Moteur de scroll : 1:1, aucune inertie, strictement réversible ── */
   const progress = useMotionValue(0);
 
@@ -346,6 +520,7 @@ export default function SkillFlow() {
         setHeadId(null);
         setReceding(false);
         previous.current = 0;
+        if (!lockRef.current) stepRef.current = -1;
         return;
       }
 
@@ -367,6 +542,14 @@ export default function SkillFlow() {
 
       const goingBack = value < previous.current - 0.0002;
       previous.current = value;
+
+      // Barre de défilement manipulée à la main : on recale le cran courant.
+      if (!lockRef.current) {
+        const last = nextLit.length ? nextLit[nextLit.length - 1] : null;
+        stepRef.current = last
+          ? WORKFLOW_NODES.findIndex((n) => n.id === last)
+          : -1;
+      }
 
       setReceding((p) => (p === goingBack ? p : goingBack));
       setHeadId((p) => {
@@ -532,6 +715,7 @@ export default function SkillFlow() {
                     lit={litSet.has(node.id)}
                     isHead={headId === node.id}
                     receding={receding}
+                    stepped
                   />
                 </div>
               </div>
