@@ -190,17 +190,43 @@ export default function FluxCompetences() {
       {/* ---------------------------------------------------------------- */}
       {/*  Mobile et tablette — rail vertical, cadres empilés               */}
       {/* ---------------------------------------------------------------- */}
-      <div className="relative lg:hidden">
+      {/*
+        Le rail ne flotte plus dans le vide : il ARRIVE du bord gauche de
+        l'écran par un coude en haut, descend le long des cadres, puis REPART
+        vers le bord droit par un coude en bas. Même principe que sur
+        ordinateur — le fil traverse la page, il ne naît pas ici.
+
+        Les coudes sont des boîtes dont on ne peint que deux bordures : la
+        bordure haute + droite dessine « j'arrive de la gauche puis je
+        descends », la bordure gauche + basse dessine « je descends puis je
+        pars à droite ». Le rayon vit sur le coin correspondant. Zéro SVG,
+        zéro JavaScript, et ça suit la hauteur réelle de la pile de cadres.
+
+        `-left-6` / `-right-6` compensent exactement le `px-6` de la section :
+        les deux extrémités atteignent donc le bord de l'écran.
+      */}
+      <div className="relative overflow-x-clip lg:hidden">
+        {/* Émission */}
         <span
           aria-hidden="true"
-          className="absolute -top-20 bottom-[-5rem] left-[7px] w-px bg-orange-500/45"
+          className="pointer-events-none absolute -left-6 bottom-[6px] top-0 w-[calc(1.5rem+7px)] rounded-tr-[6px] border-r-[3px] border-t-[3px] border-orange-500/25 blur-[3px]"
         />
         <span
           aria-hidden="true"
-          className="absolute -top-20 bottom-[-5rem] left-[4px] w-[7px] bg-orange-500/10 blur-[3px]"
+          className="pointer-events-none absolute -right-6 bottom-0 left-[7px] h-[6px] rounded-bl-[6px] border-b-[3px] border-l-[3px] border-orange-500/25 blur-[3px]"
         />
 
-        <div className="flex flex-col gap-10 pl-12">
+        {/* Trait plein */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-6 bottom-[6px] top-0 w-[calc(1.5rem+7px)] rounded-tr-[6px] border-r border-t border-orange-500/60"
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-6 bottom-0 left-[7px] h-[6px] rounded-bl-[6px] border-b border-l border-orange-500/60"
+        />
+
+        <div className="flex flex-col gap-10 py-10 pl-12">
           {DOMAINES.map((domaine) => (
             <article
               key={domaine.titre}
@@ -208,7 +234,7 @@ export default function FluxCompetences() {
             >
               <span
                 aria-hidden="true"
-                className="absolute -left-12 top-1/2 h-px w-12 bg-orange-500/45"
+                className="absolute -left-12 top-1/2 h-px w-12 bg-orange-500/60"
               />
               <span
                 aria-hidden="true"
