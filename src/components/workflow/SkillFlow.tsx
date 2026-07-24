@@ -49,6 +49,8 @@ const INTRO_GRAB_VH = 0.95;
 const THRESHOLD_EPS = 0.0005;
 /** Tolérance (px) pour considérer qu'on est encore posé sur la fiche courante. */
 const PARK_TOL = 6;
+/** Seuil minimal de swipe (px) pour déclencher un cran. */
+const SWIPE_MIN_DELTA = 24;
 
 /**
  * Courbe du cran, en coordonnées cubic-bézier [x1, y1, x2, y2] — même convention
@@ -295,6 +297,8 @@ export default function SkillFlow() {
   /** Position de scroll du dernier cran abouti (-1 = jamais crantée) */
   const parkedRef = useRef(-1);
   const animRef = useRef(0);
+  /** Suivi du swipe sur mobile/tablette : {x, y} de touchstart. */
+  const touchStartRef = useRef<{x: number; y: number} | null>(null);
 
   /* ── Mesure (desktop uniquement) ── */
   const measure = useCallback(() => {
@@ -610,10 +614,37 @@ export default function SkillFlow() {
       if (consume(direction)) event.preventDefault();
     };
 
+    const onTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (touch) touchStartRef.current = {x: touch.clientX, y: touch.clientY};
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      const start = touchStartRef.current;
+      if (!start) return;
+      const end = e.changedTouches[0];
+      if (!end) return;
+
+      const dy = start.y - end.clientY; // positif = swipe vers le haut
+      if (Math.abs(dy) < SWIPE_MIN_DELTA) return;
+
+      if (lockRef.current) {
+        e.preventDefault();
+        return;
+      }
+
+      if (consume(dy > 0 ? 1 : -1)) e.preventDefault();
+      touchStartRef.current = null;
+    };
+
     window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: false });
     window.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("keydown", onKey);
       if (animRef.current) cancelAnimationFrame(animRef.current);
     };
@@ -855,7 +886,11 @@ export default function SkillFlow() {
         <div className="relative z-10 mx-auto flex w-full max-w-[84rem] flex-col">
           {WORKFLOW_NODES.map((node, index) => {
             const isSecondary = node.kind === "secondaire";
-            const spacing = index === 0 ? "mt-[16vh]" : isSecondary ? "mt-[34vh]" : "mt-[44vh]";
+            const spacing = index === 0
+              ? "mt-[16vh]"
+              : isSecondary
+                ? "mt-[34vh] md:mt-[20vh]"
+                : "mt-[44vh] md:mt-[28vh]";
             const width = isSecondary
               ? LEFT_SIDE_IDS.has(node.id)
                 ? "mr-auto w-[32%]"
