@@ -1,10 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, IBM_Plex_Mono } from "next/font/google";
+import { Sora, IBM_Plex_Mono } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
-const archivo = Archivo({
+/**
+ * Sora — police de tout le site (SIL Open Font License, gratuite).
+ *
+ * Elle est appliquée par `sora.className` sur le <body>, PAS via une classe
+ * Tailwind : `font-display` et `font-body` ne génèrent aucun CSS dans ce projet
+ * (le design system vit dans `tailwind.config.ts`, que Tailwind v4 ne charge
+ * pas sans directive `@config`). Passer par le <body> couvre donc l'ensemble
+ * des pages par héritage, quelles que soient les classes utilisées ailleurs.
+ *
+ * La variable `--font-display` est conservée : elle reprendra son rôle le jour
+ * où la directive `@config` sera activée.
+ */
+const sora = Sora({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-display",
@@ -44,8 +56,10 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${archivo.variable} ${mono.variable}`}>
-      <body className="flex min-h-screen flex-col bg-encre text-papier antialiased">
+    <html lang="fr" className={`${sora.variable} ${mono.variable}`}>
+      <body
+        className={`${sora.className} flex min-h-screen flex-col bg-encre text-papier antialiased`}
+      >
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -1,50 +1,28 @@
 /**
  * menu-mobile.css
- * Floute et neutralise la page tant que le menu mobile est ouvert.
+ * Verrouille le défilement de la page tant que le menu mobile est ouvert.
  *
  * À importer en tête de src/app/globals.css :
  *     @import "./menu-mobile.css";
  *
  * ⚠️ Le sélecteur s'accroche à l'id du <details> du composant MenuMobile.
  *    Ne pas renommer #menu-mobile.
+ *
+ * Le flou et le voile sombre ont été retirés : le menu n'est plus un panneau
+ * posé au-dessus de la page mais une PAGE plein écran opaque, qui recouvre
+ * simplement le contenu. Flouter ce qui est déjà masqué ne coûtait que du GPU.
  */
 
 @media (max-width: 1023px) {
-  /* Scroll de la page verrouillé */
   body:has(#menu-mobile[open]) {
     overflow: hidden;
     touch-action: none;
   }
 
-  /* Contenu flouté et totalement inerte */
+  /* Le contenu derrière est recouvert : on le rend juste inerte. */
   body:has(#menu-mobile[open]) main,
   body:has(#menu-mobile[open]) footer {
-    filter: blur(8px) saturate(0.85);
     pointer-events: none;
     user-select: none;
-  }
-
-  /* Voile sombre au-dessus du contenu flouté */
-  body:has(#menu-mobile[open])::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 30;
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(2px);
-    pointer-events: none;
-  }
-}
-
-/* Transition douce à l'ouverture comme à la fermeture */
-main,
-footer {
-  transition: filter 260ms ease;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  main,
-  footer {
-    transition: none;
   }
 }

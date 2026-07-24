@@ -13,8 +13,58 @@ const LIENS: readonly LienNav[] = [
   { libelle: "Contact", href: "/contact" },
 ] as const;
 
+/**
+ * ⚠️ À REMPLACER par les vraies URL de profil.
+ * Isolées en tête de fichier : une seule ligne à changer pour chacune.
+ */
+const RESEAUX = [
+  { nom: "LinkedIn", href: "https://www.linkedin.com/" },
+  { nom: "Instagram", href: "https://www.instagram.com/" },
+] as const;
+
 /** Distance de scroll (px) sur laquelle le fond passe de transparent à opaque. */
 const DISTANCE_FONDU = 120;
+
+/** Icônes tracées au trait, pour rester dans la sobriété du reste de la navbar. */
+function IconeReseau({ nom }: { nom: (typeof RESEAUX)[number]["nom"] }) {
+  if (nom === "Instagram") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="h-[18px] w-[18px]"
+        aria-hidden
+      >
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.1" cy="6.9" r="1" fill="currentColor" stroke="none" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-[18px] w-[18px]"
+      aria-hidden
+    >
+      <rect x="3" y="3" width="18" height="18" rx="3" />
+      <path d="M7.2 10.6v6.2" />
+      <circle cx="7.2" cy="7.3" r="1" fill="currentColor" stroke="none" />
+      <path d="M11.2 16.8v-6.2" />
+      <path d="M11.2 13.4a2.6 2.6 0 0 1 5.2 0v3.4" />
+    </svg>
+  );
+}
 
 /**
  * Navbar fixe flottante en îlot.
@@ -52,10 +102,6 @@ export default function Navbar() {
    *  · ailleurs → on laisse Next naviguer (prefetch, historique, transitions
    *    conservés) et on note l'intention ; l'effet ci-dessous remonte la page
    *    une fois la route commise.
-   *
-   * Next remet bien la page en haut lors d'une navigation, mais en passant par
-   * le lisseur natif de `globals.css` : d'où le second passage explicite en
-   * `behavior: "auto"`, seul moyen d'obtenir un saut réellement instantané.
    */
   const veutRemonter = useRef(false);
 
@@ -88,12 +134,10 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 pointer-events-none transition-all duration-150">
-      
       {/*
         Masque supérieur : couvre toute la hauteur de l'îlot puis se fond vers le
         bas, pour que le flux de la home s'évanouisse en approchant du haut au
         lieu de rester visible dans les marges autour de la navbar.
-        Couleur = fond de page (#000), pas la couleur de l'îlot.
       */}
       <div
         className="absolute inset-x-0 top-0 z-0 h-24 pointer-events-none md:h-28"
@@ -104,17 +148,11 @@ export default function Navbar() {
         }}
       />
 
-      {/* 
-        Le pt-4 décolle la navbar du haut. 
-        pointer-events-auto rend la navbar cliquable (car le parent est none).
-      */}
       {/*
         `relative z-10` : SANS ça, le masque ci-dessus recouvrait l'îlot.
-        Il est `absolute` (donc peint avec les descendants positionnés) tandis que
-        ce conteneur est `static` (peint plus tôt) — l'ordre de peinture CSS le
-        faisait donc passer AU-DESSUS de la navbar. Invisible tant que le masque
-        mesurait `h-6`, flagrant depuis son passage à `h-24/md:h-28` : une fois la
-        page défilée, un voile noir à 92–100 % couvrait logo, liens et survols.
+        Il est `absolute` (donc peint avec les descendants positionnés) tandis
+        que ce conteneur est `static` (peint plus tôt) — l'ordre de peinture CSS
+        le faisait donc passer AU-DESSUS de la navbar.
       */}
       <div className="relative z-10 pt-4 px-4 sm:px-6 lg:px-8">
         <nav
@@ -123,12 +161,12 @@ export default function Navbar() {
             backgroundColor: `rgba(20, 22, 26, ${Math.max(opacite * 0.94, 0.75)})`,
             borderColor: `rgba(60, 65, 72, ${Math.max(opacite, 0.3)})`,
           }}
-          className="pointer-events-auto mx-auto flex h-14 w-full max-w-4xl items-center justify-between rounded-2xl border shadow-2xl px-5 md:h-16 md:px-6 transition-colors duration-150"
+          className="pointer-events-auto mx-auto flex h-14 w-full max-w-4xl items-center gap-8 rounded-2xl border px-5 shadow-2xl transition-colors duration-150 md:h-16 md:px-6"
         >
           <Link
             href="/"
             onClick={surClicLogo}
-            className="flex items-center text-zinc-300 transition-colors duration-200 hover:text-[#FF7F50]"
+            className="flex shrink-0 items-center text-zinc-300 transition-colors duration-200 hover:text-[#FF7F50]"
             aria-label="Accueil — revenir en haut"
           >
             <svg
@@ -139,11 +177,7 @@ export default function Navbar() {
               strokeWidth={1.5}
             >
               {/* Ligne principale avec une cassure de progression */}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 12h32m8 0h48"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 12h32m8 0h48" />
               {/* Point de départ */}
               <circle cx="4" cy="12" r="2" fill="currentColor" />
               {/* Nœud central "étape" */}
@@ -153,28 +187,55 @@ export default function Navbar() {
             </svg>
           </Link>
 
-          {/* Navigation desktop */}
+          {/* Onglets — collés au logo, comme sur la référence fournie */}
           <ul className="hidden items-center gap-7 md:flex">
             {LIENS.map(({ libelle, href }) => (
               <li key={href}>
                 <Link
                   href={href}
                   aria-current={estActif(href) ? "page" : undefined}
-                  className={`relative inline-block text-sm transition-colors duration-200 ${
+                  className={`relative inline-block whitespace-nowrap text-sm transition-colors duration-200 ${
                     estActif(href) ? "text-white" : "text-zinc-400 hover:text-white"
                   }`}
                 >
                   {libelle}
+                  {/*
+                    Trait corail sous l'onglet SÉLECTIONNÉ uniquement.
+                    Le halo est un second trait flouté par `blur-[3px]` : aucun
+                    filtre SVG, donc aucun coût de rastérisation au défilement.
+                  */}
                   {estActif(href) && (
-                    <span
-                      aria-hidden
-                      className="absolute -bottom-1 left-0 h-px w-full bg-[#FF7F50]"
-                    />
+                    <>
+                      <span
+                        aria-hidden
+                        className="absolute -bottom-1.5 left-0 h-[3px] w-full bg-[#FF7F50] opacity-45 blur-[3px]"
+                      />
+                      <span
+                        aria-hidden
+                        className="absolute -bottom-1.5 left-0 h-px w-full bg-[#FF7F50]"
+                      />
+                    </>
                   )}
                 </Link>
               </li>
             ))}
           </ul>
+
+          {/* Réseaux — poussés à droite par `ml-auto`, l'espace prévu sur le PDF */}
+          <div className="ml-auto hidden items-center gap-4 md:flex">
+            {RESEAUX.map(({ nom, href }) => (
+              <a
+                key={nom}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={nom}
+                className="text-zinc-500 transition-colors duration-200 hover:text-[#FF7F50]"
+              >
+                <IconeReseau nom={nom} />
+              </a>
+            ))}
+          </div>
 
           {/* Navigation mobile — HTML natif, sans JavaScript. */}
           <MenuMobile liens={LIENS} actif={pathname} />
