@@ -14,7 +14,7 @@ export default function BlueprintPanel({ node }: { node: WorkflowNode }) {
   const variant = node.blueprint ?? 0;
 
   return (
-    <div className="blueprint-stage group/blueprint relative h-full min-h-[18rem] w-full overflow-hidden bg-[#0b0b0b]">
+    <div className="blueprint-stage group/blueprint relative h-full min-h-[clamp(9rem,22svh,18rem)] w-full overflow-hidden bg-[#0b0b0b]">
       {/* Grille technique */}
       <div
         aria-hidden

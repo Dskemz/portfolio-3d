@@ -38,6 +38,19 @@ const CORNER_R = 11;
  */
 const LEFT_SIDE_IDS = new Set<string>(["uv-pbr"]);
 
+/**
+ * Largeur des fiches. Sur un viewport court (1080p, portable), on ÉLARGIT :
+ * une colonne de texte plus large = moins de retours à la ligne = fiche moins
+ * haute, donc plus d'air autour d'elle une fois centrée. Sur un grand écran,
+ * les valeurs d'origine sont conservées telles quelles.
+ *
+ * Ces chaînes doivent rester littérales : Tailwind scanne le source brut.
+ */
+const W_PRINCIPALE =
+  "mx-auto w-[54%] [@media(max-height:900px)]:w-[61%] [@media(max-height:760px)]:w-[68%]";
+const W_SECONDAIRE =
+  "w-[32%] [@media(max-height:900px)]:w-[35%] [@media(max-height:760px)]:w-[39%]";
+
 /* ─────────── Mode cranté (« QTE ») ─────────── */
 
 /** Marge de franchissement d'un seuil (le front doit dépasser l'ancre, pas l'effleurer). */
@@ -414,9 +427,14 @@ export default function SkillFlow() {
     const card = node && document.getElementById(getNodeCardId(node.id));
     if (!card) return null;
     const rect = card.getBoundingClientRect();
-    return Math.round(
-      rect.top + window.scrollY + rect.height / 2 - (window.innerHeight || 1) / 2
-    );
+    const vh = window.innerHeight || 1;
+    const top = rect.top + window.scrollY;
+
+    // Une fiche plus haute que l'écran ne peut pas être centrée sans être rognée
+    // des deux côtés : on cale son haut, on garde son début lisible.
+    if (rect.height > vh * 0.92) return Math.round(top - vh * 0.1);
+
+    return Math.round(top + rect.height / 2 - vh / 2);
   }, []);
 
   /**
@@ -859,9 +877,9 @@ export default function SkillFlow() {
                 : "mt-[44vh]";
             const width = isSecondary
               ? LEFT_SIDE_IDS.has(node.id)
-                ? "mr-auto w-[32%]"
-                : "ml-auto w-[32%]"
-              : "mx-auto w-[54%]";
+                ? `mr-auto ${W_SECONDAIRE}`
+                : `ml-auto ${W_SECONDAIRE}`
+              : W_PRINCIPALE;
 
             return (
               <div key={node.id} className={spacing}>

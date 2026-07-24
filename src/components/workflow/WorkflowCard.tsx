@@ -95,46 +95,54 @@ function WorkflowCard({
   );
 
   const editorial = (
-    <div className={`flex flex-col justify-center ${isBis ? "px-7 py-8" : "px-8 py-10 md:px-10 md:py-12"}`}>
+    <div
+      className={`flex flex-col justify-center ${
+        isBis
+          ? "px-[clamp(1rem,3svh,1.75rem)] py-[clamp(1.1rem,3.3svh,2rem)]"
+          : "px-[clamp(1.25rem,3.6svh,2.5rem)] py-[clamp(1.35rem,4.4svh,3rem)]"
+      }`}
+    >
       <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-[#FF7F50]">
         Étape {node.step}
       </p>
 
       <h3
-        className={`mt-4 font-display font-light leading-tight text-white ${
+        className={`mt-[clamp(0.5rem,1.5svh,1rem)] font-display font-light leading-tight text-white ${
           isTerminal
-            ? "text-[clamp(1.7rem,3vw,2.6rem)]"
+            ? "text-[clamp(1.4rem,3.4svh,2.6rem)]"
             : isBis
-              ? "text-lg md:text-xl"
-              : "text-2xl md:text-3xl"
+              ? "text-[clamp(1rem,1.95svh,1.25rem)]"
+              : "text-[clamp(1.25rem,2.7svh,1.875rem)]"
         }`}
       >
         {node.title}
       </h3>
 
       {node.quote && (
-        <p className="mt-4 font-body text-[0.72rem] italic leading-relaxed text-zinc-500">
+        <p className="mt-[clamp(0.5rem,1.5svh,1rem)] font-body text-[clamp(0.68rem,1.05svh,0.72rem)] italic leading-relaxed text-zinc-500">
           «&nbsp;{node.quote.text}&nbsp;»
           <br />
           <span className="not-italic">— {node.quote.author}</span>
         </p>
       )}
 
-      <div className="my-6 h-px w-full bg-white/[0.09]" />
+      <div className="my-[clamp(0.7rem,2.2svh,1.5rem)] h-px w-full bg-white/[0.09]" />
 
       <p
         className={`leading-relaxed text-zinc-400 ${
-          isBis ? "text-[0.84rem]" : "text-sm md:text-[0.95rem]"
+          isBis
+            ? "text-[clamp(0.75rem,1.25svh,0.84rem)]"
+            : "text-[clamp(0.8rem,1.35svh,0.95rem)]"
         }`}
       >
         {node.description}
       </p>
 
-      <div className="mt-7 flex flex-wrap items-center gap-2.5">
+      <div className="mt-[clamp(0.75rem,2.5svh,1.75rem)] flex flex-wrap items-center gap-[clamp(0.35rem,0.9svh,0.625rem)]">
         {node.tags.map((tag) => (
           <span
             key={tag}
-            className="border border-white/[0.14] px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-zinc-400"
+            className="border border-white/[0.14] px-[clamp(0.5rem,1.1svh,0.75rem)] py-[clamp(0.25rem,0.6svh,0.375rem)] font-mono text-[clamp(8px,0.85svh,9px)] uppercase tracking-[0.16em] text-zinc-400"
           >
             {tag}
           </span>
@@ -146,8 +154,8 @@ function WorkflowCard({
           href={node.href}
           className={
             isTerminal
-              ? "mt-8 inline-block self-start bg-[#FF7F50] px-7 py-3.5 font-display text-sm font-semibold tracking-wide text-black transition-colors hover:bg-[#E67E22]"
-              : "mt-8 inline-flex items-center gap-2 self-start font-mono text-[10px] uppercase tracking-[0.24em] text-[#FF7F50] transition-colors hover:text-[#E67E22]"
+              ? "mt-[clamp(0.9rem,2.9svh,2rem)] inline-block self-start bg-[#FF7F50] px-[clamp(1.1rem,2.6svh,1.75rem)] py-[clamp(0.6rem,1.5svh,0.875rem)] font-display text-[clamp(0.8rem,1.4svh,0.875rem)] font-semibold tracking-wide text-black transition-colors hover:bg-[#E67E22]"
+              : "mt-[clamp(0.9rem,2.9svh,2rem)] inline-flex items-center gap-2 self-start font-mono text-[10px] uppercase tracking-[0.24em] text-[#FF7F50] transition-colors hover:text-[#E67E22]"
           }
           style={isTerminal ? { touchAction: "manipulation" } : undefined}
         >
@@ -161,11 +169,11 @@ function WorkflowCard({
   const body = isBis ? (
     editorial
   ) : isTerminal ? (
-    <div className="px-8 py-12 text-center md:px-14 md:py-16">
+    <div className="px-[clamp(1.25rem,3.6svh,3.5rem)] py-[clamp(1.5rem,4.4svh,4rem)] text-center">
       <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-zinc-500">
         Fin de parcours
       </p>
-      <div className="mx-auto mt-8 max-w-2xl">{editorial}</div>
+      <div className="mx-auto mt-[clamp(0.9rem,2.9svh,2rem)] max-w-2xl">{editorial}</div>
     </div>
   ) : (
     <div className="grid grid-cols-1 md:grid-cols-2">

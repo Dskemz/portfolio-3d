@@ -212,9 +212,29 @@ export default function SkillFlowMobile() {
       return t !== null && window.scrollY > t + 2;
     };
 
+    /**
+     * Fiche plus haute que l'écran : on rend la main au défilement natif tant que
+     * le bord concerné n'est pas atteint. Sans ça, le cran sauterait par-dessus la
+     * fin de la fiche, qui deviendrait tout simplement illisible.
+     */
+    const overflowFree = (direction: 1 | -1) => {
+      const idx = stepRef.current;
+      if (idx < 0) return false;
+      const node = WORKFLOW_NODES[idx];
+      const el = node && cardRefs.current.get(node.id);
+      if (!el) return false;
+
+      const vh = window.innerHeight || 1;
+      const rect = el.getBoundingClientRect();
+      if (rect.height <= vh * 0.92) return false;
+
+      return direction === 1 ? rect.bottom > vh - 8 : rect.top < 8;
+    };
+
     /** La visite guidée prend-elle la main pour ce sens de défilement ? */
     const guided = (direction: 1 | -1) => {
       if (!cardRefs.current.size) return false;
+      if (overflowFree(direction)) return false;
       if (direction === 1) {
         if (introStillFree()) return false;
         if (tailReached()) return false;
