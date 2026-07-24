@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import IndexProjets from "@/components/portfolio/IndexProjets";
+import CarrouselProjets from "@/components/portfolio/CarrouselProjets";
 import LienSobre from "@/components/portfolio/LienSobre";
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export default function PortfolioPage() {
         <div className="w-full px-6 lg:px-16 xl:px-24">
           <h1 className="max-w-4xl font-display text-[clamp(2.5rem,7vw,5rem)] font-light leading-[1.05] tracking-tight text-papier">
             Des espaces qui se{" "}
-            <span className="text-bleu-encre">visitent</span>, pas qui se
+            <span className="text-orange-500">visitent</span>, pas qui se
             feuillettent
           </h1>
 
@@ -35,9 +35,11 @@ export default function PortfolioPage() {
         </div>
       </section>
 
-      {/* Index : texte à gauche, visuels à droite */}
+      {/* Carrousel : texte à gauche, visuels empilés à droite */}
       <main className="flex-grow border-b border-mine">
-        <IndexProjets />
+        <div className="w-full px-6 py-24 lg:px-16 lg:py-28 xl:px-24">
+          <CarrouselProjets />
+        </div>
 
         <div className="flex w-full justify-center px-6 pb-24 lg:px-16 lg:pb-32">
           <LienSobre href="/portfolio/tous">Voir la grille complète</LienSobre>
