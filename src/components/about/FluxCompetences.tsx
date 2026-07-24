@@ -1,27 +1,23 @@
 /**
  * FluxCompetences — les quatre domaines traversés par le fil orange.
  *
- * Le tracé est ORTHOGONAL : uniquement des segments horizontaux et verticaux,
- * jamais de diagonale, avec un rayon de 6 unités sur chaque coude. Il part du
- * bord GAUCHE du repère et ressort au bord DROIT : le fil traverse la page, il
- * ne commence ni ne s'arrête ici. C'est le rappel du fil de la page d'accueil.
+ * PLEINE LARGEUR. Le bloc sort de son conteneur (`left-1/2 w-screen
+ * -translate-x-1/2`) pour que le fil parte réellement du bord gauche de
+ * l'écran et ressorte au bord droit. Enfermé dans le `max-w-6xl` de la
+ * section, il s'arrêtait au milieu de nulle part.
  *
- * Il entre et ressort TOUJOURS au milieu des cadres : l'entrée et la sortie
- * sont alignées sur l'axe vertical du cadre, donc le segment caché à
- * l'intérieur est une droite. Aucun décrochage parasite, le motif se lit comme
- * un signal carré régulier.
+ * Le tracé est ORTHOGONAL : segments horizontaux et verticaux uniquement,
+ * rayon de 8 unités sur chaque coude. Il entre et ressort TOUJOURS sur l'axe
+ * médian des cadres, donc le segment caché à l'intérieur est une droite.
  *
- * Les cadres portent un fond OPAQUE identique à celui de la page : c'est ce qui
- * fait disparaître le fil derrière eux et le fait ressortir de l'autre côté.
- * Sans ce fond, le tracé traverserait le texte.
+ * ⚠️ Tailles en `clamp(..vw..)` et NON en rem : le repère SVG se met à
+ * l'échelle avec la largeur de l'écran, la typographie doit suivre la même
+ * loi. Avec des tailles fixes, le texte débordait des cadres en dessous de
+ * 1280 px — les cadres ont une hauteur imposée par la géométrie du tracé.
  *
- * Émission : TROIS passes du même tracé, de la plus large et la plus diffuse à
- * la plus fine et la plus dense. Aucun filtre SVG — un `feGaussianBlur` se
- * rastérise à chaque image au défilement, ce que trois traits ne font pas.
- *
- * Géométrie figée dans un viewBox normalisé (820 × 330) et cadres positionnés
- * en pourcentages du MÊME repère : les deux couches restent alignées à toutes
- * les largeurs, sans mesure DOM ni JavaScript.
+ * Émission : un `feGaussianBlur` sur une copie du tracé, plus le trait plein
+ * par-dessus. Le filtre est appliqué à un chemin unique et statique, il n'est
+ * rastérisé qu'une fois.
  */
 
 const ACCENT = "#FF7F50";
@@ -34,68 +30,76 @@ interface Domaine {
 const DOMAINES: readonly Domaine[] = [
   {
     titre: "Visite\nvirtuelle",
-    description:
-      "Des espaces que l'on parcourt dans le navigateur, sans installation ni plugin.",
+    description: "Parcourue dans le navigateur, sans installation ni plugin.",
   },
   {
     titre: "Modélisation\n3D",
-    description:
-      "Des modèles haute fidélité, pensés pour rester légers sur le web.",
+    description: "Haute fidélité, pensée pour rester légère sur le web.",
   },
   {
     titre: "Temps réel\nweb",
-    description:
-      "Babylon.js, WebGL, intégration sur mesure. La technique disparaît.",
+    description: "Babylon.js et WebGL, intégrés sur mesure à votre site.",
   },
   {
     titre: "Direction\nartistique",
-    description:
-      "Recherche de matières, d'éclairage et de cadrage. La lumière décide.",
+    description: "Matières, éclairage, cadrage. La lumière décide.",
   },
 ] as const;
 
-/** Position des quatre cadres dans le repère du viewBox, en pourcentages. */
-const CADRES = [
-  { gauche: "3.66%", haut: "24.24%" },
-  { gauche: "27.07%", haut: "15.15%" },
-  { gauche: "50.49%", haut: "24.24%" },
-  { gauche: "73.90%", haut: "15.15%" },
-] as const;
-
-const LARGEUR_CADRE = "21.46%";
-const HAUTEUR_CADRE = "60.61%";
-
 /**
- * Le tracé, écrit une seule fois et réutilisé par les trois passes.
- * Axes verticaux : 88, 280, 472, 664 — exactement le milieu de chaque cadre.
- * Couloirs horizontaux : 25 en haut, 315 en bas, hors de tous les cadres.
+ * Repère commun au tracé et aux cadres : 1440 × 520.
+ * Axes médians des cadres : 240, 560, 880, 1200.
+ * Couloirs horizontaux : 25 en haut, 490 en bas — hors de tous les cadres.
  */
 const TRACE =
-  "M -30 315 H 82 Q 88 315 88 309 V 31 Q 88 25 94 25 " +
-  "H 274 Q 280 25 280 31 V 309 Q 280 315 286 315 " +
-  "H 466 Q 472 315 472 309 V 31 Q 472 25 478 25 " +
-  "H 658 Q 664 25 664 31 V 309 Q 664 315 670 315 H 790";
+  "M 0 490 H 232 Q 240 490 240 482 V 33 Q 240 25 248 25 " +
+  "H 552 Q 560 25 560 33 V 482 Q 560 490 568 490 " +
+  "H 872 Q 880 490 880 482 V 33 Q 880 25 888 25 " +
+  "H 1192 Q 1200 25 1200 33 V 482 Q 1200 490 1208 490 H 1440";
 
-/** Points de perçage des bordures — toujours sur l'axe médian du cadre. */
-const NOEUDS = [
-  { cx: 88, cy: 285 },
-  { cx: 88, cy: 85 },
-  { cx: 280, cy: 55 },
-  { cx: 280, cy: 255 },
-  { cx: 472, cy: 285 },
-  { cx: 472, cy: 85 },
-  { cx: 664, cy: 55 },
-  { cx: 664, cy: 255 },
+/** Position des cadres, en pourcentages du MÊME repère. */
+const CADRES = [
+  { gauche: "6.25%", haut: "26.92%" },
+  { gauche: "28.47%", haut: "11.54%" },
+  { gauche: "50.69%", haut: "26.92%" },
+  { gauche: "72.92%", haut: "11.54%" },
 ] as const;
+
+const LARGEUR_CADRE = "20.83%";
+const HAUTEUR_CADRE = "57.69%";
+
+/** Perçages des bordures, toujours sur l'axe médian. */
+const NOEUDS = [
+  { cx: 240, cy: 440 },
+  { cx: 240, cy: 140 },
+  { cx: 560, cy: 60 },
+  { cx: 560, cy: 360 },
+  { cx: 880, cy: 440 },
+  { cx: 880, cy: 140 },
+  { cx: 1200, cy: 60 },
+  { cx: 1200, cy: 360 },
+] as const;
+
+/* Tailles indexées sur la largeur d'écran, comme le repère SVG. */
+const PADDING_CADRE = "clamp(1rem, 1.7vw, 2.125rem)";
+const TAILLE_TITRE = "clamp(1.0625rem, 2.1vw, 2rem)";
+const TAILLE_TEXTE = "clamp(0.6875rem, 0.95vw, 0.9375rem)";
+const ECART_TITRE_TEXTE = "clamp(0.75rem, 1.15vw, 1.5rem)";
 
 function ContenuCadre({ domaine }: { domaine: Domaine }) {
   return (
     <>
-      <h2 className="whitespace-pre-line font-display text-2xl font-light leading-[1.15] tracking-tight text-papier xl:text-3xl">
+      <h2
+        className="whitespace-pre-line font-display font-light leading-[1.12] tracking-tight text-papier"
+        style={{ fontSize: TAILLE_TITRE }}
+      >
         {domaine.titre}
       </h2>
 
-      <p className="mt-6 text-sm font-light leading-relaxed text-papier/60">
+      <p
+        className="font-light leading-[1.6] text-papier/60"
+        style={{ fontSize: TAILLE_TEXTE, marginTop: ECART_TITRE_TEXTE }}
+      >
         {domaine.description}
       </p>
     </>
@@ -106,38 +110,44 @@ export default function FluxCompetences() {
   return (
     <>
       {/* ---------------------------------------------------------------- */}
-      {/*  Ordinateur — le fil traverse la page de bord à bord              */}
+      {/*  Ordinateur — pleine largeur, le fil traverse l'écran             */}
       {/* ---------------------------------------------------------------- */}
       <div
-        className="relative hidden w-full lg:block"
-        style={{ aspectRatio: "820 / 330" }}
+        className="relative left-1/2 hidden w-screen -translate-x-1/2 lg:block"
+        style={{ aspectRatio: "1440 / 520" }}
       >
         <svg
-          viewBox="-30 5 820 330"
+          viewBox="0 0 1440 520"
+          preserveAspectRatio="xMidYMid meet"
           aria-hidden="true"
-          className="absolute inset-0 z-0 h-full w-full overflow-visible"
+          className="absolute inset-0 z-0 h-full w-full"
         >
+          <defs>
+            <filter
+              id="emission-flux"
+              x="-5%"
+              y="-15%"
+              width="110%"
+              height="130%"
+            >
+              <feGaussianBlur stdDeviation="7" />
+            </filter>
+          </defs>
+
           <path
             d={TRACE}
             fill="none"
             stroke={ACCENT}
-            strokeWidth={9}
-            opacity={0.09}
+            strokeWidth={5}
+            opacity={0.55}
             strokeLinecap="round"
+            filter="url(#emission-flux)"
           />
           <path
             d={TRACE}
             fill="none"
             stroke={ACCENT}
-            strokeWidth={4.5}
-            opacity={0.22}
-            strokeLinecap="round"
-          />
-          <path
-            d={TRACE}
-            fill="none"
-            stroke={ACCENT}
-            strokeWidth={2}
+            strokeWidth={2.5}
             strokeLinecap="round"
           />
         </svg>
@@ -145,30 +155,32 @@ export default function FluxCompetences() {
         {DOMAINES.map((domaine, index) => (
           <article
             key={domaine.titre}
-            className="absolute z-10 flex flex-col justify-center border border-mine bg-black px-8 py-10"
+            className="absolute z-10 flex flex-col justify-center border border-mine bg-black"
             style={{
               left: CADRES[index].gauche,
               top: CADRES[index].haut,
               width: LARGEUR_CADRE,
               height: HAUTEUR_CADRE,
+              padding: PADDING_CADRE,
             }}
           >
             <ContenuCadre domaine={domaine} />
           </article>
         ))}
 
-        {/* Nœuds au-dessus des cadres : ils doivent rester visibles sur la bordure */}
+        {/* Nœuds au-dessus des cadres, sinon la bordure les recouvre */}
         <svg
-          viewBox="-30 5 820 330"
+          viewBox="0 0 1440 520"
+          preserveAspectRatio="xMidYMid meet"
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-20 h-full w-full overflow-visible"
+          className="pointer-events-none absolute inset-0 z-20 h-full w-full"
         >
           {NOEUDS.map((noeud) => (
             <circle
               key={`${noeud.cx}-${noeud.cy}`}
               cx={noeud.cx}
               cy={noeud.cy}
-              r={3}
+              r={4}
               fill={ACCENT}
             />
           ))}
@@ -176,36 +188,40 @@ export default function FluxCompetences() {
       </div>
 
       {/* ---------------------------------------------------------------- */}
-      {/*  Mobile et tablette — rail vertical à gauche, cadres empilés      */}
+      {/*  Mobile et tablette — rail vertical, cadres empilés               */}
       {/* ---------------------------------------------------------------- */}
       <div className="relative lg:hidden">
-        {/* Rail traversant : il déborde en haut et en bas comme sur ordinateur */}
         <span
           aria-hidden="true"
-          className="absolute -top-16 bottom-[-4rem] left-[7px] w-px bg-orange-500/40"
+          className="absolute -top-20 bottom-[-5rem] left-[7px] w-px bg-orange-500/45"
         />
         <span
           aria-hidden="true"
-          className="absolute -top-16 bottom-[-4rem] left-[5px] w-[5px] bg-orange-500/10"
+          className="absolute -top-20 bottom-[-5rem] left-[4px] w-[7px] bg-orange-500/10 blur-[3px]"
         />
 
         <div className="flex flex-col gap-10 pl-12">
           {DOMAINES.map((domaine) => (
             <article
               key={domaine.titre}
-              className="relative flex flex-col border border-mine bg-black px-8 py-10"
+              className="relative flex flex-col border border-mine bg-black px-7 py-9"
             >
-              {/* Dérivation vers le milieu du cadre + nœud sur la bordure */}
               <span
                 aria-hidden="true"
-                className="absolute -left-12 top-1/2 h-px w-12 bg-orange-500/40"
+                className="absolute -left-12 top-1/2 h-px w-12 bg-orange-500/45"
               />
               <span
                 aria-hidden="true"
                 className="absolute -left-[3px] top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-orange-500"
               />
 
-              <ContenuCadre domaine={domaine} />
+              <h2 className="whitespace-pre-line font-display text-2xl font-light leading-[1.12] tracking-tight text-papier">
+                {domaine.titre}
+              </h2>
+
+              <p className="mt-4 text-sm font-light leading-relaxed text-papier/60">
+                {domaine.description}
+              </p>
             </article>
           ))}
         </div>
