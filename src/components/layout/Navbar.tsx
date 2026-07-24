@@ -96,7 +96,7 @@ export default function Navbar() {
         Couleur = fond de page (#000), pas la couleur de l'îlot.
       */}
       <div
-        className="absolute inset-x-0 top-0 h-24 pointer-events-none md:h-28"
+        className="absolute inset-x-0 top-0 z-0 h-24 pointer-events-none md:h-28"
         style={{
           background: `linear-gradient(to bottom, rgba(0, 0, 0, ${opacite}) 0%, rgba(0, 0, 0, ${
             opacite * 0.92
@@ -108,7 +108,15 @@ export default function Navbar() {
         Le pt-4 décolle la navbar du haut. 
         pointer-events-auto rend la navbar cliquable (car le parent est none).
       */}
-      <div className="pt-4 px-4 sm:px-6 lg:px-8">
+      {/*
+        `relative z-10` : SANS ça, le masque ci-dessus recouvrait l'îlot.
+        Il est `absolute` (donc peint avec les descendants positionnés) tandis que
+        ce conteneur est `static` (peint plus tôt) — l'ordre de peinture CSS le
+        faisait donc passer AU-DESSUS de la navbar. Invisible tant que le masque
+        mesurait `h-6`, flagrant depuis son passage à `h-24/md:h-28` : une fois la
+        page défilée, un voile noir à 92–100 % couvrait logo, liens et survols.
+      */}
+      <div className="relative z-10 pt-4 px-4 sm:px-6 lg:px-8">
         <nav
           aria-label="Navigation principale"
           style={{
@@ -120,7 +128,7 @@ export default function Navbar() {
           <Link
             href="/"
             onClick={surClicLogo}
-            className="flex items-center text-papier transition-colors hover:text-[#FF7F50]"
+            className="flex items-center text-zinc-300 transition-colors duration-200 hover:text-[#FF7F50]"
             aria-label="Accueil — revenir en haut"
           >
             <svg
@@ -152,11 +160,17 @@ export default function Navbar() {
                 <Link
                   href={href}
                   aria-current={estActif(href) ? "page" : undefined}
-                  className={`text-sm transition-colors ${
-                    estActif(href) ? "text-papier" : "text-trait hover:text-papier"
+                  className={`relative inline-block text-sm transition-colors duration-200 ${
+                    estActif(href) ? "text-white" : "text-zinc-400 hover:text-white"
                   }`}
                 >
                   {libelle}
+                  {estActif(href) && (
+                    <span
+                      aria-hidden
+                      className="absolute -bottom-1 left-0 h-px w-full bg-[#FF7F50]"
+                    />
+                  )}
                 </Link>
               </li>
             ))}
