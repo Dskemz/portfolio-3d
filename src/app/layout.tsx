@@ -7,26 +7,28 @@ import "./globals.css";
 /**
  * Sora — police de tout le site (SIL Open Font License, gratuite).
  *
- * Elle est appliquée par `sora.className` sur le <body>, PAS via une classe
- * Tailwind : `font-display` et `font-body` ne génèrent aucun CSS dans ce projet
- * (le design system vit dans `tailwind.config.ts`, que Tailwind v4 ne charge
- * pas sans directive `@config`). Passer par le <body> couvre donc l'ensemble
- * des pages par héritage, quelles que soient les classes utilisées ailleurs.
+ * Les variables exposées ici s'appellent `--font-sora` et `--font-plex-mono`,
+ * PAS `--font-display` / `--font-mono` : ces deux derniers noms sont ceux des
+ * tokens Tailwind déclarés dans le bloc `@theme` de globals.css, et réutiliser
+ * le même nom produirait une référence circulaire
+ * (`--font-display: var(--font-display)`), donc une fonte jamais résolue.
  *
- * La variable `--font-display` est conservée : elle reprendra son rôle le jour
- * où la directive `@config` sera activée.
+ * Depuis la restauration du bloc `@theme`, `font-display`, `font-body` et
+ * `font-mono` génèrent à nouveau du CSS. `sora.className` reste néanmoins sur
+ * le <body> : il garantit la fonte par héritage même sur les éléments qui ne
+ * portent aucune classe de fonte.
  */
 const sora = Sora({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-display",
+  variable: "--font-sora",
 });
 
 const mono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   display: "swap",
-  variable: "--font-mono",
+  variable: "--font-plex-mono",
 });
 
 export const metadata: Metadata = {

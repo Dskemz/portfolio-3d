@@ -118,7 +118,7 @@ export default function PolitiqueConfidentialite() {
               <h3 className="font-semibold mb-2">📋 Consentement (Art. 6.1.a)</h3>
               <p>Formulaire de contact, newsletter, marketing</p>
             </div>
-            <div className="border-l-4 border-green-500 pl-4">
+            <div className="border-l-4 border-bleu-encre pl-4">
               <h3 className="font-semibold mb-2">📜 Contrat (Art. 6.1.b)</h3>
               <p>Données d'utilisation des services Hub_Visite3D, MotionLogo</p>
             </div>

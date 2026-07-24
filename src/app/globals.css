@@ -1,18 +1,138 @@
 @import "./menu-mobile.css";
 @import "tailwindcss";
 
+/**
+ * ─────────────────────────────────────────────────────────────────────────
+ *  Design system « Graphite » — source UNIQUE des tokens.
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ *  Tailwind v4 ne lit PAS `tailwind.config.ts` sans directive `@config`.
+ *  Tant que ce bloc `@theme` était réduit à une poignée de couleurs, toutes
+ *  les classes du design system (`text-papier`, `border-mine`, `font-display`,
+ *  `text-trait`, `ease-sobre`, `bleu-encre`…) ne généraient AUCUN CSS : elles
+ *  étaient écrites dans les composants mais silencieusement ignorées à la
+ *  compilation. Les tokens sont donc réintroduits ici, à leur seule place
+ *  légitime en v4.
+ *
+ *  Accent : la famille « bleu-encre » / « encre-bleue » garde ses NOMS
+ *  (aucun composant à retoucher) mais bascule sur l'orange corail #FF7F50,
+ *  survol #E67E22. Il n'y a plus une seule valeur bleue dans le fichier.
+ */
+
 @theme {
+  /* ── Rampe graphite ─────────────────────────────────────────────────────
+     Les gris ne sont pas neutres : ils tirent vers le bleu-vert, comme la
+     mine. Un gris parfaitement neutre sur fond noir paraît sale.           */
+  --color-graphite-950: #0e1013;
+  --color-graphite-900: #14161a;
+  --color-graphite-800: #1b1e23;
+  --color-graphite-700: #252930;
+  --color-graphite-600: #3c4148;
+  --color-graphite-500: #5a6068;
+  --color-graphite-400: #8b9199;
+  --color-graphite-300: #b4b9bf;
+  --color-graphite-100: #e6e7e5;
+  --color-graphite-50: #f2f2f0;
+
+  /* ── Alias historiques (utilisés partout dans les composants) ────────── */
+  --color-encre: #14161a;
+  --color-mine: #3c4148;
+  --color-trait: #8b9199;
+  --color-papier: #f2f2f0;
+
+  /* ── Accent — orange corail ──────────────────────────────────────────── */
+  --color-orange-500: #ff7f50;
+  --color-orange-600: #e67e22;
+
+  /* Noms conservés, valeurs basculées sur l'orange : « bleu-encre » est
+     désormais un nom d'usage, plus une couleur. */
+  --color-bleu-encre: #ff7f50;
+  --color-bleu-encre-clair: #e67e22;
+  --color-encre-bleue-600: #c85a1e;
+  --color-encre-bleue-500: #e67e22;
+  --color-encre-bleue-400: #ff7f50;
+  --color-encre-bleue-300: #ffa07a;
+  --color-accent-500: #ff7f50;
+
+  /* ── Palette « dark » (formulaire de contact) ────────────────────────── */
+  --color-dark-50: #f2f2f0;
+  --color-dark-500: #5a6068;
+  --color-dark-700: #252930;
+  --color-dark-800: #1b1e23;
+
+  /* ── Zinc conservé (fond des pages workflow) ─────────────────────────── */
   --color-zinc-950: #09090b;
   --color-zinc-900: #18181b;
   --color-zinc-700: #3f3f46;
-  --color-orange-500: #FF7F50;
-  --color-orange-600: #E67E22;
+
   --color-white: #ffffff;
+
+  /* ── Fontes ───────────────────────────────────────────────────────────
+     Les variables next/font sont `--font-sora` et `--font-plex-mono`
+     (cf. layout.tsx). Elles sont volontairement distinctes des tokens
+     Tailwind ci-dessous : réutiliser le même nom créerait une référence
+     circulaire (`--font-display: var(--font-display)`).                   */
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  /* ── Échelle typographique — interlignage lié à la taille ───────────── */
+  --text-etiquette: 0.625rem;
+  --text-etiquette--line-height: 1.2;
+  --text-etiquette--letter-spacing: 0.2em;
+
+  --text-surtitre: 0.6875rem;
+  --text-surtitre--line-height: 1.2;
+  --text-surtitre--letter-spacing: 0.28em;
+
+  --text-corps-sm: 0.875rem;
+  --text-corps-sm--line-height: 1.6;
+
+  --text-corps: 1rem;
+  --text-corps--line-height: 1.7;
+
+  --text-corps-lg: 1.125rem;
+  --text-corps-lg--line-height: 1.65;
+
+  --text-titre-sm: 1.5rem;
+  --text-titre-sm--line-height: 1.2;
+  --text-titre-sm--letter-spacing: -0.01em;
+
+  --text-titre: 2rem;
+  --text-titre--line-height: 1.12;
+  --text-titre--letter-spacing: -0.015em;
+
+  --text-titre-lg: 3rem;
+  --text-titre-lg--line-height: 1.05;
+  --text-titre-lg--letter-spacing: -0.02em;
+
+  --text-affiche: 4rem;
+  --text-affiche--line-height: 1.02;
+  --text-affiche--letter-spacing: -0.025em;
+
+  /* ── Espacements nommés ─────────────────────────────────────────────── */
+  --spacing-cote-decalage: 1.75rem;
+  --spacing-section: 6rem;
+  --spacing-section-lg: 8rem;
+
+  /* ── Courbe d'animation maison ──────────────────────────────────────── */
+  --ease-sobre: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 @layer base {
   body {
     @apply bg-zinc-950 text-white;
+  }
+
+  /**
+   * Tailwind v4 fait passer la couleur de bordure par défaut à
+   * `currentColor` : sans ce rappel, tout `border` sans couleur explicite
+   * hériterait de la couleur du texte (bordures blanches sur fond noir).
+   */
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-graphite-600);
   }
 }
 
