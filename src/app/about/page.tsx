@@ -31,7 +31,7 @@ export default function APropos() {
           <h1 className="mt-8 max-w-3xl font-display text-[clamp(1.4rem,2.1vw,2rem)] font-light leading-[1.35] tracking-tight text-papier lg:mt-0">
             Graphiste 3D généraliste, je conçois des visites virtuelles que
             l&apos;on parcourt{" "}
-            <span className="text-graphite-500">
+            <span className="text-orange-500">
               directement dans le navigateur
             </span>
             . Ma démarche allie la maîtrise du rendu 3D à la fluidité des

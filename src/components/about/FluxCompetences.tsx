@@ -2,19 +2,24 @@
  * FluxCompetences — les quatre domaines traversés par le fil orange.
  *
  * Le tracé est ORTHOGONAL : uniquement des segments horizontaux et verticaux,
- * jamais de diagonale, avec un rayon de 6 unités sur chaque coude. Il démarre
- * hors cadre à gauche et sort hors cadre à droite : le flux ne commence pas ici
- * et ne s'arrête pas ici, il rappelle celui de la page d'accueil.
+ * jamais de diagonale, avec un rayon de 6 unités sur chaque coude. Il part du
+ * bord GAUCHE du repère et ressort au bord DROIT : le fil traverse la page, il
+ * ne commence ni ne s'arrête ici. C'est le rappel du fil de la page d'accueil.
  *
- * Motif régulier : le fil entre par le BAS d'un cadre et ressort par le HAUT,
- * puis redescend dans le suivant par le HAUT et ressort par le BAS. Les cadres
- * sont en quinconce pour que chaque changement de niveau se justifie.
+ * Il entre et ressort TOUJOURS au milieu des cadres : l'entrée et la sortie
+ * sont alignées sur l'axe vertical du cadre, donc le segment caché à
+ * l'intérieur est une droite. Aucun décrochage parasite, le motif se lit comme
+ * un signal carré régulier.
  *
  * Les cadres portent un fond OPAQUE identique à celui de la page : c'est ce qui
- * fait disparaître le fil derrière eux et le fait ressortir ailleurs. Sans ce
- * fond, le tracé traverserait bêtement le texte.
+ * fait disparaître le fil derrière eux et le fait ressortir de l'autre côté.
+ * Sans ce fond, le tracé traverserait le texte.
  *
- * Géométrie figée dans un viewBox normalisé (820 × 320) et cadres positionnés
+ * Émission : TROIS passes du même tracé, de la plus large et la plus diffuse à
+ * la plus fine et la plus dense. Aucun filtre SVG — un `feGaussianBlur` se
+ * rastérise à chaque image au défilement, ce que trois traits ne font pas.
+ *
+ * Géométrie figée dans un viewBox normalisé (820 × 330) et cadres positionnés
  * en pourcentages du MÊME repère : les deux couches restent alignées à toutes
  * les largeurs, sans mesure DOM ni JavaScript.
  */
@@ -22,32 +27,27 @@
 const ACCENT = "#FF7F50";
 
 interface Domaine {
-  numero: string;
   titre: string;
   description: string;
 }
 
 const DOMAINES: readonly Domaine[] = [
   {
-    numero: "01",
     titre: "Visite\nvirtuelle",
     description:
       "Des espaces que l'on parcourt dans le navigateur, sans installation ni plugin.",
   },
   {
-    numero: "02",
     titre: "Modélisation\n3D",
     description:
       "Des modèles haute fidélité, pensés pour rester légers sur le web.",
   },
   {
-    numero: "03",
     titre: "Temps réel\nweb",
     description:
       "Babylon.js, WebGL, intégration sur mesure. La technique disparaît.",
   },
   {
-    numero: "04",
     titre: "Direction\nartistique",
     description:
       "Recherche de matières, d'éclairage et de cadrage. La lumière décide.",
@@ -56,48 +56,46 @@ const DOMAINES: readonly Domaine[] = [
 
 /** Position des quatre cadres dans le repère du viewBox, en pourcentages. */
 const CADRES = [
-  { gauche: "3.66%", haut: "25%" },
-  { gauche: "27.07%", haut: "15.63%" },
-  { gauche: "50.49%", haut: "25%" },
-  { gauche: "73.90%", haut: "15.63%" },
+  { gauche: "3.66%", haut: "24.24%" },
+  { gauche: "27.07%", haut: "15.15%" },
+  { gauche: "50.49%", haut: "24.24%" },
+  { gauche: "73.90%", haut: "15.15%" },
 ] as const;
 
 const LARGEUR_CADRE = "21.46%";
-const HAUTEUR_CADRE = "59.38%";
+const HAUTEUR_CADRE = "60.61%";
 
-/** Le tracé, écrit une seule fois et réutilisé pour le halo et le trait plein. */
+/**
+ * Le tracé, écrit une seule fois et réutilisé par les trois passes.
+ * Axes verticaux : 88, 280, 472, 664 — exactement le milieu de chaque cadre.
+ * Couloirs horizontaux : 25 en haut, 315 en bas, hors de tous les cadres.
+ */
 const TRACE =
-  "M -30 310 H 39 Q 45 310 45 304 V 191 Q 45 185 51 185 H 124 Q 130 185 130 179 " +
-  "V 36 Q 130 30 136 30 H 234 Q 240 30 240 36 V 149 Q 240 155 246 155 " +
-  "H 319 Q 325 155 325 161 V 304 Q 325 310 331 310 H 424 Q 430 310 430 304 " +
-  "V 191 Q 430 185 436 185 H 509 Q 515 185 515 179 V 36 Q 515 30 521 30 " +
-  "H 614 Q 620 30 620 36 V 149 Q 620 155 626 155 H 699 Q 705 155 705 161 " +
-  "V 304 Q 705 310 711 310 H 790";
+  "M -30 315 H 82 Q 88 315 88 309 V 31 Q 88 25 94 25 " +
+  "H 274 Q 280 25 280 31 V 309 Q 280 315 286 315 " +
+  "H 466 Q 472 315 472 309 V 31 Q 472 25 478 25 " +
+  "H 658 Q 664 25 664 31 V 309 Q 664 315 670 315 H 790";
 
-/** Points de perçage des bordures — bas puis haut, en alternance. */
+/** Points de perçage des bordures — toujours sur l'axe médian du cadre. */
 const NOEUDS = [
-  { cx: 45, cy: 280 },
-  { cx: 130, cy: 90 },
-  { cx: 240, cy: 60 },
-  { cx: 325, cy: 250 },
-  { cx: 430, cy: 280 },
-  { cx: 515, cy: 90 },
-  { cx: 620, cy: 60 },
-  { cx: 705, cy: 250 },
+  { cx: 88, cy: 285 },
+  { cx: 88, cy: 85 },
+  { cx: 280, cy: 55 },
+  { cx: 280, cy: 255 },
+  { cx: 472, cy: 285 },
+  { cx: 472, cy: 85 },
+  { cx: 664, cy: 55 },
+  { cx: 664, cy: 255 },
 ] as const;
 
 function ContenuCadre({ domaine }: { domaine: Domaine }) {
   return (
     <>
-      <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-trait">
-        /{domaine.numero}
-      </p>
-
-      <h2 className="mt-5 whitespace-pre-line font-display text-xl font-light leading-[1.2] tracking-tight text-papier lg:text-2xl">
+      <h2 className="whitespace-pre-line font-display text-2xl font-light leading-[1.15] tracking-tight text-papier xl:text-3xl">
         {domaine.titre}
       </h2>
 
-      <p className="mt-4 text-xs font-light leading-relaxed text-papier/60 lg:text-sm">
+      <p className="mt-6 text-sm font-light leading-relaxed text-papier/60">
         {domaine.description}
       </p>
     </>
@@ -108,39 +106,46 @@ export default function FluxCompetences() {
   return (
     <>
       {/* ---------------------------------------------------------------- */}
-      {/*  Ordinateur — flux horizontal, cadres en quinconce                */}
+      {/*  Ordinateur — le fil traverse la page de bord à bord              */}
       {/* ---------------------------------------------------------------- */}
       <div
         className="relative hidden w-full lg:block"
-        style={{ aspectRatio: "820 / 320" }}
+        style={{ aspectRatio: "820 / 330" }}
       >
         <svg
-          viewBox="-30 10 820 320"
+          viewBox="-30 5 820 330"
           aria-hidden="true"
           className="absolute inset-0 z-0 h-full w-full overflow-visible"
         >
-          {/* Halo : élargit le trait sans filtre SVG, donc sans coût au scroll */}
           <path
             d={TRACE}
             fill="none"
             stroke={ACCENT}
-            strokeWidth={7}
-            opacity={0.13}
+            strokeWidth={9}
+            opacity={0.09}
             strokeLinecap="round"
           />
           <path
             d={TRACE}
             fill="none"
             stroke={ACCENT}
-            strokeWidth={2.2}
+            strokeWidth={4.5}
+            opacity={0.22}
+            strokeLinecap="round"
+          />
+          <path
+            d={TRACE}
+            fill="none"
+            stroke={ACCENT}
+            strokeWidth={2}
             strokeLinecap="round"
           />
         </svg>
 
         {DOMAINES.map((domaine, index) => (
           <article
-            key={domaine.numero}
-            className="absolute z-10 flex flex-col border border-mine bg-black px-6 py-6"
+            key={domaine.titre}
+            className="absolute z-10 flex flex-col justify-center border border-mine bg-black px-8 py-10"
             style={{
               left: CADRES[index].gauche,
               top: CADRES[index].haut,
@@ -154,7 +159,7 @@ export default function FluxCompetences() {
 
         {/* Nœuds au-dessus des cadres : ils doivent rester visibles sur la bordure */}
         <svg
-          viewBox="-30 10 820 320"
+          viewBox="-30 5 820 330"
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-20 h-full w-full overflow-visible"
         >
@@ -163,7 +168,7 @@ export default function FluxCompetences() {
               key={`${noeud.cx}-${noeud.cy}`}
               cx={noeud.cx}
               cy={noeud.cy}
-              r={2.8}
+              r={3}
               fill={ACCENT}
             />
           ))}
@@ -174,26 +179,30 @@ export default function FluxCompetences() {
       {/*  Mobile et tablette — rail vertical à gauche, cadres empilés      */}
       {/* ---------------------------------------------------------------- */}
       <div className="relative lg:hidden">
-        {/* Rail : s'arrête au dernier cadre, il ne pend pas dans le vide */}
+        {/* Rail traversant : il déborde en haut et en bas comme sur ordinateur */}
         <span
           aria-hidden="true"
-          className="absolute left-[7px] top-0 bottom-24 w-px bg-orange-500/45"
+          className="absolute -top-16 bottom-[-4rem] left-[7px] w-px bg-orange-500/40"
+        />
+        <span
+          aria-hidden="true"
+          className="absolute -top-16 bottom-[-4rem] left-[5px] w-[5px] bg-orange-500/10"
         />
 
-        <div className="flex flex-col gap-8 pl-10">
+        <div className="flex flex-col gap-10 pl-12">
           {DOMAINES.map((domaine) => (
             <article
-              key={domaine.numero}
-              className="relative flex flex-col border border-mine bg-black px-6 py-6"
+              key={domaine.titre}
+              className="relative flex flex-col border border-mine bg-black px-8 py-10"
             >
-              {/* Dérivation courte du rail vers le cadre + nœud sur la bordure */}
+              {/* Dérivation vers le milieu du cadre + nœud sur la bordure */}
               <span
                 aria-hidden="true"
-                className="absolute -left-10 top-9 h-px w-10 bg-orange-500/45"
+                className="absolute -left-12 top-1/2 h-px w-12 bg-orange-500/40"
               />
               <span
                 aria-hidden="true"
-                className="absolute -left-[3px] top-[33px] h-1.5 w-1.5 rounded-full bg-orange-500"
+                className="absolute -left-[3px] top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-orange-500"
               />
 
               <ContenuCadre domaine={domaine} />
