@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { INTRO, ORIGIN_ID, WORKFLOW_NODES } from "@/content/workflowData";
 import WorkflowCard from "./WorkflowCard";
 import {
+  HOME_JUMP_EVENT,
   INTRO_GRAB_VH,
   LINE_VH,
   STEP_COOLDOWN_MS,
@@ -319,6 +320,15 @@ export default function SkillFlowMobile() {
       if (window.scrollY < 10) stepRef.current = -1;
     };
 
+    /** Clic sur le logo : on abandonne le cran en vol et on oublie l'état de la visite. */
+    const onHomeJump = () => {
+      cancelRef.current?.();
+      cancelRef.current = null;
+      lockRef.current = false;
+      stepRef.current = -1;
+    };
+
+    window.addEventListener(HOME_JUMP_EVENT, onHomeJump);
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: false });
     window.addEventListener("touchend", onTouchEnd, { passive: true });
@@ -331,6 +341,7 @@ export default function SkillFlowMobile() {
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("touchcancel", onTouchEnd);
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener(HOME_JUMP_EVENT, onHomeJump);
       cancelRef.current?.();
       cancelRef.current = null;
     };

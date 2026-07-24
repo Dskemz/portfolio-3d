@@ -107,3 +107,29 @@ export function animateScrollTo(
     if (raf) cancelAnimationFrame(raf);
   };
 }
+
+/**
+ * Émis quand l'utilisateur demande un retour immédiat en haut de la home
+ * (clic sur le logo). Les parcours crantés l'écoutent pour abandonner
+ * l'animation en cours et repartir de zéro : sans ça, un cran encore en vol
+ * continuerait de repousser la page vers sa cible et annulerait le saut.
+ */
+export const HOME_JUMP_EVENT = "skillflow:home-jump";
+
+/**
+ * Retour INSTANTANÉ en haut de page, depuis n'importe quel état.
+ *
+ * `behavior: "auto"` est indispensable : `globals.css` déclare
+ * `html { scroll-behavior: smooth }`, dont hérite tout scroll programmatique
+ * qui ne le contredit pas — c'est ce qui rendait le retour lent et animé.
+ *
+ * Le second passage au frame suivant couvre les cas où un layout tardif
+ * (polices, images, mesure des fiches) décale la page juste après le saut.
+ */
+export function jumpToTop() {
+  window.dispatchEvent(new Event(HOME_JUMP_EVENT));
+
+  const top = () => window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  top();
+  requestAnimationFrame(top);
+}

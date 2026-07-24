@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import MenuMobile, { type LienNav } from "./MenuMobile";
+import { jumpToTop } from "@/components/workflow/stepping";
 
 const LIENS: readonly LienNav[] = [
   { libelle: "Visite Virtuelle", href: "/visite-virtuelle" },
@@ -44,14 +45,46 @@ export default function Navbar() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   /**
-   * Sur l'accueil, un lien vers "/" ne provoque aucune navigation : on remonte
-   * la page à la main. Ailleurs, on laisse Next faire son travail.
+   * Le logo ramène TOUJOURS en haut de l'accueil, instantanément.
+   *
+   * Deux cas distincts :
+   *  · déjà sur "/" → aucune navigation à attendre, on saute tout de suite ;
+   *  · ailleurs → on laisse Next naviguer (prefetch, historique, transitions
+   *    conservés) et on note l'intention ; l'effet ci-dessous remonte la page
+   *    une fois la route commise.
+   *
+   * Next remet bien la page en haut lors d'une navigation, mais en passant par
+   * le lisseur natif de `globals.css` : d'où le second passage explicite en
+   * `behavior: "auto"`, seul moyen d'obtenir un saut réellement instantané.
    */
-  const surClicLogo = (evenement: MouseEvent<HTMLAnchorElement>) => {
-    if (pathname !== "/") return;
-    evenement.preventDefault();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const veutRemonter = useRef(false);
+
+  /**
+   * Menu mobile ouvert ⇒ `body { overflow: hidden }` (menu-mobile.css) et la
+   * page ne peut pas être repositionnée. On le referme d'abord ; le second
+   * passage de `jumpToTop` au frame suivant s'exécute une fois le style relâché.
+   */
+  const fermerMenuMobile = () => {
+    const menu = document.getElementById("menu-mobile");
+    if (menu instanceof HTMLDetailsElement) menu.open = false;
   };
+
+  const surClicLogo = (evenement: MouseEvent<HTMLAnchorElement>) => {
+    fermerMenuMobile();
+
+    if (pathname === "/") {
+      evenement.preventDefault();
+      jumpToTop();
+      return;
+    }
+    veutRemonter.current = true;
+  };
+
+  useEffect(() => {
+    if (pathname !== "/" || !veutRemonter.current) return;
+    veutRemonter.current = false;
+    jumpToTop();
+  }, [pathname]);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 pointer-events-none transition-all duration-150">

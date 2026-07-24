@@ -13,6 +13,7 @@ import {
 import WorkflowCard from "./WorkflowCard";
 import SkillFlowMobile from "./SkillFlowMobile";
 import {
+  HOME_JUMP_EVENT,
   INTRO_GRAB_VH,
   LINE_VH,
   STEP_COOLDOWN_MS,
@@ -610,6 +611,20 @@ export default function SkillFlow() {
       touchStartRef.current = null;
     };
 
+    /**
+     * Clic sur le logo : on abandonne le cran en vol et on oublie l'état de la
+     * visite. `compute()` fait le reste du ménage dès que scrollY repasse sous 10.
+     */
+    const onHomeJump = () => {
+      cancelRef.current?.();
+      cancelRef.current = null;
+      lockRef.current = false;
+      stepRef.current = -1;
+      parkedStepRef.current = -1;
+      parkedRef.current = -1;
+    };
+
+    window.addEventListener(HOME_JUMP_EVENT, onHomeJump);
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchend", onTouchEnd, { passive: false });
@@ -619,6 +634,7 @@ export default function SkillFlow() {
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener(HOME_JUMP_EVENT, onHomeJump);
       cancelRef.current?.();
       cancelRef.current = null;
     };
