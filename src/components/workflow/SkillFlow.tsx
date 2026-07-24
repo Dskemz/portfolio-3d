@@ -381,7 +381,7 @@ export default function SkillFlow() {
       return;
     }
 
-    const steps = 720;
+    const steps = 360; // réduit pour perf sur vieux appareils, visuellement imperceptible
     const ys = new Array<number>(steps + 1);
     const ls = new Array<number>(steps + 1);
     let maxY = -Infinity;

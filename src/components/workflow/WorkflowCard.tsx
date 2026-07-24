@@ -265,7 +265,7 @@ export default function WorkflowCard({
           >
             <defs>
               <filter id={`edge-${node.id}`} x="-30%" y="-30%" width="160%" height="160%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="g" />
+                <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="g" />
                 <feMerge>
                   <feMergeNode in="g" />
                   <feMergeNode in="SourceGraphic" />

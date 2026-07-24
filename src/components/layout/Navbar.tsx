@@ -82,7 +82,7 @@ export default function Navbar() {
             backgroundColor: `rgba(20, 22, 26, ${Math.max(opacite * 0.94, 0.75)})`,
             borderColor: `rgba(60, 65, 72, ${Math.max(opacite, 0.3)})`,
           }}
-          className="pointer-events-auto mx-auto flex h-14 w-full max-w-4xl items-center justify-between rounded-2xl border shadow-2xl backdrop-blur-md px-5 md:h-16 md:px-6 transition-colors duration-150"
+          className="pointer-events-auto mx-auto flex h-14 w-full max-w-4xl items-center justify-between rounded-2xl border shadow-2xl px-5 md:h-16 md:px-6 transition-colors duration-150"
         >
           <Link
             href="/"
