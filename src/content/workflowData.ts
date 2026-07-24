@@ -49,9 +49,20 @@ export const ORIGIN_ID = "wf-origin";
 
 export const INTRO = {
   name: "Denis Masquet",
-  role: "Artiste 3D indépendant & Visites virtuelles",
+  /**
+   * Rendu DANS le <h1> (voir SkillFlow), pas dans un <p> à côté : c'est cette
+   * ligne qui porte les mots-clés. « visites virtuelles 3D » au lieu de
+   * « Visites virtuelles » pour coller exactement à la requête visée.
+   */
+  role: "Artiste 3D indépendant & visites virtuelles 3D",
+  /**
+   * Phrase explicative de la v1, reprise telle quelle à un détail près :
+   * l'amorce « Artiste 3D généraliste — » est retirée, la ligne juste au-dessus
+   * dit déjà le métier (et disait « indépendant » là où celle-ci disait
+   * « généraliste »). « modélisation » est précisée en « modélisation 3D ».
+   */
   quote:
-    "Je ne subis pas le pipeline, je le construis. Du volume brut à la scène navigable dans le navigateur, chaque étape prépare la suivante.",
+    "Modélisation 3D haute fidélité, expériences interactives et visites virtuelles immersives. Spécialisé en optimisation web et Babylon.js pour des solutions performantes et captivantes.",
   hint: "Descendez pour suivre le courant",
 };
 

@@ -106,7 +106,7 @@ function WorkflowCard({
         Étape {node.step}
       </p>
 
-      <h3
+      <h2
         className={`mt-[clamp(0.5rem,1.5svh,1rem)] font-display font-light leading-tight text-white ${
           isTerminal
             ? "text-[clamp(1.4rem,3.4svh,2.6rem)]"
@@ -116,7 +116,7 @@ function WorkflowCard({
         }`}
       >
         {node.title}
-      </h3>
+      </h2>
 
       {node.quote && (
         <p className="mt-[clamp(0.5rem,1.5svh,1rem)] font-body text-[clamp(0.68rem,1.05svh,0.72rem)] italic leading-relaxed text-zinc-500">

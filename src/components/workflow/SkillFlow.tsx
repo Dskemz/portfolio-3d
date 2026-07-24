@@ -777,12 +777,19 @@ export default function SkillFlow() {
   const intro = (
     <header className="px-10 pb-12 pt-44">
       <div className="mx-auto flex w-full max-w-[84rem] flex-col items-center text-center">
+        {/*
+          La ligne de rôle est DANS le <h1>, pas dans un <p> voisin.
+          Rendu strictement identique (le span réinitialise taille, graisse,
+          interlettrage et interlignage hérités), mais les mots-clés passent du
+          corps de texte au seul <h1> de la page — c'est le signal le plus fort
+          que Google lit sur un document.
+        */}
         <h1 className="font-display text-[clamp(2.6rem,6.4vw,5rem)] font-light leading-[1.02] tracking-[-0.02em] text-white">
           {INTRO.name}
+          <span className="mt-5 block text-sm font-normal uppercase leading-normal tracking-[0.2em] text-[#FF7F50] md:text-base">
+            {INTRO.role}
+          </span>
         </h1>
-        <p className="mt-5 text-sm uppercase tracking-[0.2em] text-[#FF7F50] md:text-base">
-          {INTRO.role}
-        </p>
         <p className="mt-10 max-w-2xl text-base leading-relaxed text-zinc-400">
           {INTRO.quote}
         </p>
