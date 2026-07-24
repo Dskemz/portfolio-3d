@@ -25,20 +25,29 @@ export default function ContactPage() {
               Le fil part exactement de la fin du mot, pas du bloc de titre :
               c'est le `inline-block relative` sur « projet » qui donne le point
               d'ancrage, et `left-full` colle le départ au « t ».
+
+              `top: 0.88em` place le trait sur la LIGNE DE BASE, là où la hampe
+              du « t » s'arrête, pour qu'il en soit la continuité et non une
+              barre flottant à mi-hauteur. La valeur est en `em` : elle suit
+              donc la taille du titre entre mobile et grand écran, sans second
+              réglage. (0.125em de demi-interligne + ~0.75em d'ascendante.)
             */}
             <span className="relative inline-block">
               projet
               <span
                 aria-hidden="true"
-                className="absolute left-full top-1/2 ml-5 h-[3px] w-screen -translate-y-1/2 bg-orange-500/25 blur-[3px]"
+                style={{ top: "0.88em" }}
+                className="absolute left-full ml-5 h-[3px] w-screen -translate-y-1/2 bg-orange-500/25 blur-[3px]"
               />
               <span
                 aria-hidden="true"
-                className="absolute left-full top-1/2 ml-5 h-px w-screen -translate-y-1/2 bg-orange-500"
+                style={{ top: "0.88em" }}
+                className="absolute left-full ml-5 h-px w-screen -translate-y-1/2 bg-orange-500"
               />
               <span
                 aria-hidden="true"
-                className="absolute left-full top-1/2 ml-5 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500"
+                style={{ top: "0.88em" }}
+                className="absolute left-full ml-5 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500"
               />
             </span>
           </h1>
