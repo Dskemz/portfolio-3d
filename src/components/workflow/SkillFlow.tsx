@@ -12,10 +12,20 @@ import {
 } from "@/content/workflowData";
 import WorkflowCard from "./WorkflowCard";
 import SkillFlowMobile from "./SkillFlowMobile";
+import {
+  INTRO_GRAB_VH,
+  LINE_VH,
+  STEP_COOLDOWN_MS,
+  SWIPE_MIN_DELTA,
+  WHEEL_MIN_DELTA,
+  animateScrollTo,
+} from "./stepping";
 
 const BREAKPOINT = 1024;
-const LINE_VH = 0.62; // ligne de front du flux dans le viewport
-const DROP = 88; // descente avant le coude à 90°
+/** Descente maximale avant le coude à 90°. Réduite au besoin par segment (voir build). */
+const DROP = 88;
+/** Descente minimale : garantit que le tracé ne remonte jamais sur lui-même. */
+const MIN_DROP = 2;
 /** Rayon des coudes du circuit, en px. Clampé par segment dans emitPolyline. */
 const CORNER_R = 11;
 
@@ -30,75 +40,10 @@ const LEFT_SIDE_IDS = new Set<string>(["uv-pbr"]);
 
 /* ─────────── Mode cranté (« QTE ») ─────────── */
 
-/** Durée de l'avancée d'une fiche à la suivante, en ms. C'est LE réglage de vitesse. */
-const STEP_MS = 1000;
-/** Petit silence après l'animation avant d'accepter un nouveau cran (anti-rafale trackpad). */
-const STEP_COOLDOWN_MS = 140;
-/** Molette : en dessous de ce delta, l'événement est ignoré (micro-inertie trackpad). */
-const WHEEL_MIN_DELTA = 2;
-/**
- * Hauteur (en fraction de viewport) à laquelle l'ancre de la 1re fiche déclenche
- * la visite guidée. Au-dessus : molette libre, tu peux empiler ce que tu veux dans l'accueil.
- */
-const INTRO_GRAB_VH = 0.95;
-/**
- * Marge (px) conservée sous l'ancre de la fiche suivante quand on centre la fiche
- * courante : garantit qu'aucune fiche ne s'allume en avance.
- */
 /** Marge de franchissement d'un seuil (le front doit dépasser l'ancre, pas l'effleurer). */
 const THRESHOLD_EPS = 0.0005;
 /** Tolérance (px) pour considérer qu'on est encore posé sur la fiche courante. */
 const PARK_TOL = 6;
-/** Seuil minimal de swipe (px) pour déclencher un cran. */
-const SWIPE_MIN_DELTA = 24;
-
-/**
- * Courbe du cran, en coordonnées cubic-bézier [x1, y1, x2, y2] — même convention
- * que le CSS. Départ franc, freinage long : monte y1 et rapproche x1 de 0 pour
- * partir plus vite, tire x2 vers 0 pour freiner plus longtemps.
- */
-const STEP_BEZIER: [number, number, number, number] = [0.3, 0.72, 0.24, 1];
-
-/** Solveur cubic-bézier (Newton-Raphson, repli par dichotomie). */
-function cubicBezier(x1: number, y1: number, x2: number, y2: number) {
-  const A = (a: number, b: number) => 1 - 3 * b + 3 * a;
-  const B = (a: number, b: number) => 3 * b - 6 * a;
-  const C = (a: number) => 3 * a;
-
-  const calc = (t: number, a: number, b: number) =>
-    ((A(a, b) * t + B(a, b)) * t + C(a)) * t;
-  const slope = (t: number, a: number, b: number) =>
-    3 * A(a, b) * t * t + 2 * B(a, b) * t + C(a);
-
-  return (x: number) => {
-    if (x <= 0) return 0;
-    if (x >= 1) return 1;
-
-    let t = x;
-    for (let i = 0; i < 6; i++) {
-      const d = slope(t, x1, x2);
-      if (Math.abs(d) < 1e-6) break;
-      t -= (calc(t, x1, x2) - x) / d;
-    }
-
-    if (t < 0 || t > 1) {
-      let lo = 0;
-      let hi = 1;
-      t = x;
-      for (let i = 0; i < 24; i++) {
-        const v = calc(t, x1, x2);
-        if (Math.abs(v - x) < 1e-5) break;
-        if (v > x) hi = t;
-        else lo = t;
-        t = (lo + hi) / 2;
-      }
-    }
-
-    return calc(t, y1, y2);
-  };
-}
-
-const STEP_EASE = cubicBezier(...STEP_BEZIER);
 
 type Mode = "desktop" | "mobile";
 interface Point { x: number; y: number }
@@ -117,9 +62,16 @@ const EMPTY: Built = { d: "", length: 0, thresholds: {} };
 
 function emitPolyline(points: Point[], cornerRadius = CORNER_R) {
   const pts: Point[] = [];
+  /**
+   * mapIdx[i] = index, dans `pts`, du point issu de points[i]. Sans cette table,
+   * une seule déduplication décalait toutes les estimations de longueur d'un cran
+   * et faisait chercher les seuils au mauvais endroit du tracé.
+   */
+  const mapIdx: number[] = [];
   for (const p of points) {
     const last = pts[pts.length - 1];
     if (!last || Math.abs(last.x - p.x) > 0.5 || Math.abs(last.y - p.y) > 0.5) pts.push(p);
+    mapIdx.push(pts.length - 1);
   }
   if (pts.length < 2) return { d: "", length: 0, at: [0] };
 
@@ -186,11 +138,11 @@ function emitPolyline(points: Point[], cornerRadius = CORNER_R) {
         const pt = points[k];
         let bestL = 0;
         let minD = Infinity;
-        const est = nodeLengths[k] || 0;
-        const startSearch = Math.max(0, est - 50);
-        const endSearch = Math.min(length, est + 50);
+        const est = nodeLengths[mapIdx[k]] || 0;
+        const startSearch = Math.max(0, est - 20);
+        const endSearch = Math.min(length, est + 20);
 
-        for (let l = startSearch; l <= endSearch; l += 2) {
+        for (let l = startSearch; l <= endSearch; l += 1) {
           const p = pathTemp.getPointAtLength(l);
           const dXY = Math.hypot(p.x - pt.x, p.y - pt.y);
           if (dXY < minD) {
@@ -223,37 +175,44 @@ function build(origin: Point, geo: Record<string, Geometry>): Built {
 
   const marks: Record<string, number> = {};
 
+  /** Sortie de la fiche précédente, en attente du raccord vers la suivante. */
+  let pendingExit: Point | null = null;
+
   for (let i = 0; i < WORKFLOW_NODES.length; i++) {
     const node = WORKFLOW_NODES[i];
     const g = geo[node.id];
     if (!g) return EMPTY;
 
-    if (i > 0) {
-      const from = points[points.length - 1];
-      if (Math.abs(from.x - g.entry.x) > 0.5) {
-        points.push({ x: from.x, y: g.entry.y - DROP });
-        points.push({ x: g.entry.x, y: g.entry.y - DROP });
+    if (i > 0 && pendingExit) {
+      const gap = g.entry.y - pendingExit.y;
+
+      if (Math.abs(pendingExit.x - g.entry.x) > 0.5) {
+        /**
+         * Le décrochage latéral se fait à mi-chemin, jamais plus bas.
+         * Avant, la descente valait DROP des deux côtés : dès que l'écart
+         * vertical entre deux fiches passait sous 2 × DROP, le point haut du
+         * raccord se retrouvait AU-DESSUS du point bas et le tracé remontait
+         * sur lui-même (la « boucle »). Le plafond à gap / 2 rend ce cas
+         * impossible quelle que soit la hauteur de viewport.
+         */
+        const drop = Math.max(MIN_DROP, Math.min(DROP, gap / 2));
+        const jogY = pendingExit.y + drop;
+        points.push({ x: pendingExit.x, y: jogY });
+        points.push({ x: g.entry.x, y: jogY });
       }
+
       points.push({ x: g.entry.x, y: g.entry.y });
-    } else {
-      marks[node.id] = points.length - 1;
     }
 
-    if (i > 0) {
-      marks[node.id] = points.length - 1;
-    } else {
-      marks[node.id] = 1;
-    }
+    marks[node.id] = i > 0 ? points.length - 1 : 1;
 
     if (node.kind === "terminal") {
-      marks[node.id] = points.length - 1;
-      points.push({ x: g.entry.x, y: g.entry.y });
       points.push({ x: g.entry.x, y: g.entry.y + 400 });
       break;
     }
 
     points.push({ x: g.exit.x, y: g.exit.y });
-    points.push({ x: g.exit.x, y: g.exit.y + DROP });
+    pendingExit = { x: g.exit.x, y: g.exit.y };
   }
 
   const { d, length, at } = emitPolyline(points);
@@ -292,11 +251,19 @@ export default function SkillFlow() {
 
   /** Fiche courante : -1 = accueil, 0…n = index dans WORKFLOW_NODES */
   const stepRef = useRef(-1);
+  /**
+   * Fiche sur laquelle un cran nous a délibérément posés. Distinct de stepRef,
+   * qui est recalculé depuis le scroll : le cap doux se basait sur stepRef, lui-même
+   * dérivé de la valeur plafonnée par ce cap — la boucle de rétroaction faisait
+   * osciller l'allumage à chaque frame (clignotement + re-render permanent).
+   */
+  const parkedStepRef = useRef(-1);
   /** Une animation de cran est en cours : toute nouvelle entrée est ignorée */
   const lockRef = useRef(false);
   /** Position de scroll du dernier cran abouti (-1 = jamais crantée) */
   const parkedRef = useRef(-1);
-  const animRef = useRef(0);
+  /** Annulation de l'animation de cran en cours, s'il y en a une. */
+  const cancelRef = useRef<(() => void) | null>(null);
   /** Suivi du swipe sur mobile/tablette : {x, y} de touchstart. */
   const touchStartRef = useRef<{x: number; y: number} | null>(null);
 
@@ -489,32 +456,20 @@ export default function SkillFlow() {
       if (target === null) return;
 
       stepRef.current = clamped;
-
-      const start = window.scrollY;
-      const delta = target - start;
+      parkedStepRef.current = clamped;
       parkedRef.current = target;
-      if (Math.abs(delta) < 1) return;
+
+      if (Math.abs(target - window.scrollY) < 1) return;
 
       lockRef.current = true;
-      if (animRef.current) cancelAnimationFrame(animRef.current);
-      const t0 = performance.now();
+      cancelRef.current?.();
 
-      const tick = (now: number) => {
-        const p = Math.min(1, (now - t0) / STEP_MS);
-        // behavior "auto" : sans lui, le `scroll-behavior: smooth` de globals.css
-        // superposerait son propre lissage à la courbe de cran.
-        window.scrollTo({ top: start + delta * STEP_EASE(p), behavior: "auto" });
-        if (p < 1) {
-          animRef.current = requestAnimationFrame(tick);
-          return;
-        }
-        animRef.current = 0;
+      cancelRef.current = animateScrollTo(target, () => {
+        cancelRef.current = null;
         window.setTimeout(() => {
           lockRef.current = false;
         }, STEP_COOLDOWN_MS);
-      };
-
-      animRef.current = requestAnimationFrame(tick);
+      });
     },
     [scrollTargetFor]
   );
@@ -646,7 +601,8 @@ export default function SkillFlow() {
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("keydown", onKey);
-      if (animRef.current) cancelAnimationFrame(animRef.current);
+      cancelRef.current?.();
+      cancelRef.current = null;
     };
   }, [mode, goToStep, scrollTargetFor]);
 
@@ -688,6 +644,7 @@ export default function SkillFlow() {
         previous.current = 0;
         if (!lockRef.current) {
           stepRef.current = -1;
+          parkedStepRef.current = -1;
           parkedRef.current = -1;
         }
         return;
@@ -709,16 +666,21 @@ export default function SkillFlow() {
 
       // Cap doux : posé sur une fiche, le front s'arrête à son ancre. La page peut
       // descendre davantage pour la centrer sans que le fil ressorte par-dessous.
-      const step = stepRef.current;
+      // Le cap se base sur parkedStepRef (le cran VISÉ), jamais sur stepRef, qui est
+      // dérivé de `value` : sinon le cap se resserrerait sur sa propre sortie.
       const parked =
-        lockRef.current || Math.abs(window.scrollY - parkedRef.current) <= PARK_TOL;
-      if (parked && step >= 0) {
-        const t = table[WORKFLOW_NODES[step]?.id ?? ""];
+        lockRef.current ||
+        (parkedRef.current >= 0 &&
+          Math.abs(window.scrollY - parkedRef.current) <= PARK_TOL);
+
+      if (parked && parkedStepRef.current >= 0) {
+        const t = table[WORKFLOW_NODES[parkedStepRef.current]?.id ?? ""];
         if (t !== undefined) value = Math.min(value, t + THRESHOLD_EPS);
       }
 
       progress.set(value);
-      setArmed((p) => (p === value > 0.0003 ? p : value > 0.0003));
+      const nextArmed = value > 0.0003;
+      setArmed((p) => (p === nextArmed ? p : nextArmed));
 
       const nextLit: string[] = [];
       for (const node of WORKFLOW_NODES) {
@@ -729,12 +691,16 @@ export default function SkillFlow() {
       const goingBack = value < previous.current - 0.0002;
       previous.current = value;
 
-      // Barre de défilement manipulée à la main : on recale le cran courant.
-      if (!lockRef.current) {
+      // Hors des crans (barre de défilement, sas d'accueil, descente vers le footer),
+      // on recale le cran courant sur ce qui est réellement allumé. Tant qu'on est
+      // posé, on n'y touche pas : c'est le cran qui fait autorité, pas l'inverse.
+      if (!parked) {
         const last = nextLit.length ? nextLit[nextLit.length - 1] : null;
-        stepRef.current = last
+        const derived = last
           ? WORKFLOW_NODES.findIndex((n) => n.id === last)
           : -1;
+        stepRef.current = derived;
+        parkedStepRef.current = derived;
       }
 
       setReceding((p) => (p === goingBack ? p : goingBack));
@@ -841,41 +807,33 @@ export default function SkillFlow() {
           xmlns="http://www.w3.org/2000/svg"
           style={{ overflow: "visible" }}
         >
-          <defs>
-            <filter id="sf-emission" x="-70%" y="-70%" width="240%" height="240%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1" />
-              <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="b2" />
-              <feMerge>
-                <feMergeNode in="b2" />
-                <feMergeNode in="b1" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-
-          <motion.path
-            d={built.d}
-            fill="none"
-            stroke="#FF7F50"
-            strokeWidth={4.4}
-            strokeLinecap="butt"
-            strokeLinejoin="miter"
-            strokeDasharray={dash}
-            style={{ strokeDashoffset: trailOffset, opacity: trailOpacity }}
-            filter="url(#sf-emission)"
-            opacity={0.16}
-          />
-          <motion.path
-            d={built.d}
-            fill="none"
-            stroke="#FF7F50"
-            strokeWidth={1.3}
-            strokeLinecap="butt"
-            strokeLinejoin="miter"
-            strokeDasharray={dash}
-            style={{ strokeDashoffset: trailOffset, opacity: trailOpacity }}
-            filter="url(#sf-emission)"
-          />
+          {/*
+            Halo par traits empilés, PLUS AUCUN filtre SVG.
+            L'ancien `sf-emission` empilait deux feGaussianBlur (dont un à 7) sur une
+            région de 240 % de la bbox — soit toute la hauteur de page — et le
+            navigateur la rastérisait à CHAQUE frame, puisque strokeDashoffset change
+            en continu pendant un cran. C'était le poste de coût principal du lag.
+            Trois traits concentriques donnent le même rendu pour un trait de 1,3 px,
+            à un coût négligeable.
+          */}
+          {[
+            { w: 9, o: 0.07 },
+            { w: 4.4, o: 0.14 },
+            { w: 1.3, o: 1 },
+          ].map((layer) => (
+            <motion.path
+              key={layer.w}
+              d={built.d}
+              fill="none"
+              stroke="#FF7F50"
+              strokeWidth={layer.w}
+              strokeLinecap="butt"
+              strokeLinejoin="miter"
+              strokeDasharray={dash}
+              strokeOpacity={layer.o}
+              style={{ strokeDashoffset: trailOffset, opacity: trailOpacity }}
+            />
+          ))}
         </svg>
       )}
 
@@ -886,11 +844,19 @@ export default function SkillFlow() {
         <div className="relative z-10 mx-auto flex w-full max-w-[84rem] flex-col">
           {WORKFLOW_NODES.map((node, index) => {
             const isSecondary = node.kind === "secondaire";
+            /*
+              Tailwind est mobile-first : `md:` = min-width 768px, SANS borne haute.
+              Les variantes `md:mt-[20vh] / md:mt-[28vh]` censées viser la tablette
+              s'appliquaient donc aussi au desktop et divisaient les espacements par
+              ~1,7. Elles étaient de surcroît inutiles ici : sous BREAKPOINT (1024px)
+              c'est SkillFlowMobile qui rend, ce composant ne voit jamais 768–1023px.
+              Une seule valeur, celle du desktop.
+            */
             const spacing = index === 0
               ? "mt-[16vh]"
               : isSecondary
-                ? "mt-[34vh] md:mt-[20vh]"
-                : "mt-[44vh] md:mt-[28vh]";
+                ? "mt-[34vh]"
+                : "mt-[44vh]";
             const width = isSecondary
               ? LEFT_SIDE_IDS.has(node.id)
                 ? "mr-auto w-[32%]"

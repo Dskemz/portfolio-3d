@@ -4,9 +4,26 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { INTRO, ORIGIN_ID, WORKFLOW_NODES } from "@/content/workflowData";
 import WorkflowCard from "./WorkflowCard";
+import {
+  INTRO_GRAB_VH,
+  LINE_VH,
+  STEP_COOLDOWN_MS,
+  SWIPE_MIN_DELTA,
+  animateScrollTo,
+} from "./stepping";
 
-/** Ligne de front du flux dans le viewport (62 % de la hauteur). */
-const LINE_VH = 0.62;
+/**
+ * ⚙️ INTERRUPTEUR — scroll cranté au doigt sur smartphone.
+ *
+ *   true  : un flick = une fiche, comme sur desktop (essai en cours).
+ *   false : scroll natif avec inertie, comportement d'origine.
+ *
+ * Repasser cette seule ligne à `false` suffit à faire marche arrière :
+ * tout le reste du composant est inchangé et le bloc ci-dessous se
+ * désactive intégralement (aucun listener posé).
+ */
+const MOBILE_STEPPED = true;
+
 /** Épaisseur du trait, en pixels. */
 const TRAIT = 2;
 
@@ -135,6 +152,170 @@ export default function SkillFlowMobile() {
     };
   }, [startY, endY, anchors]);
 
+  /* ── Scroll cranté au doigt (désactivable par MOBILE_STEPPED) ── */
+
+  /** Fiche courante : -1 = accueil, 0…n = index dans WORKFLOW_NODES */
+  const stepRef = useRef(-1);
+  /** Une animation de cran est en cours : toute nouvelle entrée est ignorée */
+  const lockRef = useRef(false);
+  const cancelRef = useRef<(() => void) | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    if (!MOBILE_STEPPED) return;
+
+    const LAST = WORKFLOW_NODES.length - 1;
+
+    /** Position de scroll qui pose la fiche `index` dans le viewport. */
+    const targetFor = (index: number): number | null => {
+      if (index < 0) return 0;
+      const node = WORKFLOW_NODES[index];
+      const el = node && cardRefs.current.get(node.id);
+      if (!el) return null;
+
+      const vh = window.innerHeight || 1;
+      const rect = el.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+
+      // Une fiche plus haute que l'écran ne peut pas être centrée : on cale son
+      // haut sous la navbar, sinon on n'en verrait jamais le début.
+      const wanted =
+        rect.height > vh * 0.9
+          ? top - vh * 0.14
+          : top + rect.height / 2 - vh / 2;
+
+      const maxScroll = Math.max(
+        0,
+        document.documentElement.scrollHeight - vh
+      );
+      return Math.round(Math.min(maxScroll, Math.max(0, wanted)));
+    };
+
+    /** Accueil : défilement libre tant que la 1re fiche n'est pas en approche. */
+    const introStillFree = () => {
+      if (stepRef.current !== -1) return false;
+      const first = WORKFLOW_NODES[0];
+      const el = first && cardRefs.current.get(first.id);
+      if (!el) return true;
+      return el.getBoundingClientRect().top > window.innerHeight * INTRO_GRAB_VH;
+    };
+
+    const tailReached = () => {
+      if (stepRef.current !== LAST) return false;
+      const t = targetFor(LAST);
+      return t !== null && window.scrollY >= t - 2;
+    };
+
+    /** Sous la fiche terminale : la descente vers le footer redevient libre. */
+    const belowTail = () => {
+      const t = targetFor(LAST);
+      return t !== null && window.scrollY > t + 2;
+    };
+
+    /** La visite guidée prend-elle la main pour ce sens de défilement ? */
+    const guided = (direction: 1 | -1) => {
+      if (!cardRefs.current.size) return false;
+      if (direction === 1) {
+        if (introStillFree()) return false;
+        if (tailReached()) return false;
+      } else {
+        if (stepRef.current === -1) return false;
+        if (belowTail()) return false;
+      }
+      return true;
+    };
+
+    const goToStep = (index: number) => {
+      const clamped = Math.max(-1, Math.min(LAST, index));
+      if (clamped === stepRef.current) return;
+
+      const target = targetFor(clamped);
+      if (target === null) return;
+
+      stepRef.current = clamped;
+      if (Math.abs(target - window.scrollY) < 1) return;
+
+      lockRef.current = true;
+      cancelRef.current?.();
+      cancelRef.current = animateScrollTo(target, () => {
+        cancelRef.current = null;
+        window.setTimeout(() => {
+          lockRef.current = false;
+        }, STEP_COOLDOWN_MS);
+      });
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      // Pincement / multi-touch : on laisse le navigateur faire.
+      if (!t || e.touches.length > 1) {
+        touchStartRef.current = null;
+        return;
+      }
+      touchStartRef.current = { x: t.clientX, y: t.clientY };
+    };
+
+    /**
+     * Bloque le défilement natif dans la zone guidée. Indispensable : sans ça, le
+     * doigt fait défiler la page en même temps que le cran l'anime, et les deux
+     * mouvements se battent. Hors zone guidée (accueil, bas de page), on ne
+     * touche à rien et l'inertie native est intacte.
+     */
+    const onTouchMove = (e: TouchEvent) => {
+      const start = touchStartRef.current;
+      const t = e.touches[0];
+      if (!start || !t) return;
+
+      const dy = start.y - t.clientY; // positif = le doigt remonte = la page descend
+      if (Math.abs(dy) < 2) return;
+
+      if (lockRef.current || guided(dy > 0 ? 1 : -1)) {
+        if (e.cancelable) e.preventDefault();
+      }
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      const start = touchStartRef.current;
+      touchStartRef.current = null;
+      if (!start) return;
+
+      const end = e.changedTouches[0];
+      if (!end) return;
+
+      const dy = start.y - end.clientY;
+      if (Math.abs(dy) < SWIPE_MIN_DELTA) return;
+
+      if (lockRef.current) return;
+
+      const direction: 1 | -1 = dy > 0 ? 1 : -1;
+      if (!guided(direction)) return;
+
+      goToStep(stepRef.current + direction);
+    };
+
+    /** Retour en haut de page : on relâche la visite guidée. */
+    const onScroll = () => {
+      if (lockRef.current) return;
+      if (window.scrollY < 10) stepRef.current = -1;
+    };
+
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", onTouchEnd, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
+      window.removeEventListener("scroll", onScroll);
+      cancelRef.current?.();
+      cancelRef.current = null;
+    };
+  }, []);
+
   const litSet = new Set(litIds);
 
   return (
@@ -220,6 +401,7 @@ export default function SkillFlowMobile() {
               lit={litSet.has(node.id)}
               isHead={headId === node.id}
               receding={receding}
+              stepped={MOBILE_STEPPED}
             />
           </div>
         ))}

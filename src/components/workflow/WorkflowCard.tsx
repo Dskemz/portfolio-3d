@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -29,7 +29,7 @@ const METAL =
   "linear-gradient(150deg, #171717 0%, #121212 44%, #0d0d0d 74%, #151515 100%)";
 const PERIMETER_S = 0.6;
 
-export default function WorkflowCard({
+function WorkflowCard({
   node,
   lit,
   isHead,
@@ -298,3 +298,10 @@ export default function WorkflowCard({
     </div>
   );
 }
+/**
+ * Le parent (SkillFlow / SkillFlowMobile) se re-rend à chaque frame de scroll.
+ * Sans mémoïsation, les 7 fiches et leurs sous-arbres framer-motion étaient
+ * reconstruits 60 fois par seconde pour rien : seuls `lit`, `isHead` et
+ * `receding` changent réellement, et rarement.
+ */
+export default memo(WorkflowCard);
