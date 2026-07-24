@@ -51,18 +51,16 @@ export const INTRO = {
   name: "Denis Masquet",
   /**
    * Rendu DANS le <h1> (voir SkillFlow), pas dans un <p> à côté : c'est cette
-   * ligne qui porte les mots-clés. « visites virtuelles 3D » au lieu de
-   * « Visites virtuelles » pour coller exactement à la requête visée.
+   * ligne qui porte les mots-clés du document. Elle contient « 3D » et
+   * « visites virtuelles », les deux termes que la page doit revendiquer.
    */
-  role: "Artiste 3D indépendant & visites virtuelles 3D",
-  /**
-   * Phrase explicative de la v1, reprise telle quelle à un détail près :
-   * l'amorce « Artiste 3D généraliste — » est retirée, la ligne juste au-dessus
-   * dit déjà le métier (et disait « indépendant » là où celle-ci disait
-   * « généraliste »). « modélisation » est précisée en « modélisation 3D ».
-   */
+  role: "Artiste 3D indépendant & visites virtuelles interactives",
   quote:
-    "Modélisation 3D haute fidélité, expériences interactives et visites virtuelles immersives. Spécialisé en optimisation web et Babylon.js pour des solutions performantes et captivantes.",
+    "Modélisations haute qualité et rendu photoréaliste pour la vente retail. " +
+    "Création d'expériences interactives, de visites virtuelles immersives " +
+    "développées sur Babylon.js pour des solutions performantes et captivantes. " +
+    "Je vous propose un accompagnement pas à pas de votre projet pour une " +
+    "personnalisation sur mesure.",
   hint: "Descendez pour suivre le courant",
 };
 
