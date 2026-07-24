@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import MenuMobile, { type LienNav } from "./MenuMobile";
 
 const LIENS: readonly LienNav[] = [
@@ -43,17 +43,31 @@ export default function Navbar() {
   const estActif = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  /**
+   * Sur l'accueil, un lien vers "/" ne provoque aucune navigation : on remonte
+   * la page à la main. Ailleurs, on laisse Next faire son travail.
+   */
+  const surClicLogo = (evenement: MouseEvent<HTMLAnchorElement>) => {
+    if (pathname !== "/") return;
+    evenement.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 pointer-events-none transition-all duration-150">
       
-      {/* 
-        Dégradé supérieur invisible pour cacher le contenu qui défile 
-        dans la marge au-dessus de la navbar flottante.
+      {/*
+        Masque supérieur : couvre toute la hauteur de l'îlot puis se fond vers le
+        bas, pour que le flux de la home s'évanouisse en approchant du haut au
+        lieu de rester visible dans les marges autour de la navbar.
+        Couleur = fond de page (#000), pas la couleur de l'îlot.
       */}
-      <div 
-        className="absolute inset-x-0 top-0 h-6 pointer-events-none transition-opacity duration-150"
+      <div
+        className="absolute inset-x-0 top-0 h-24 pointer-events-none md:h-28"
         style={{
-          background: `linear-gradient(to bottom, rgba(20, 22, 26, ${opacite}) 0%, rgba(20, 22, 26, 0) 100%)`,
+          background: `linear-gradient(to bottom, rgba(0, 0, 0, ${opacite}) 0%, rgba(0, 0, 0, ${
+            opacite * 0.92
+          }) 62%, rgba(0, 0, 0, 0) 100%)`,
         }}
       />
 
@@ -68,43 +82,38 @@ export default function Navbar() {
             backgroundColor: `rgba(20, 22, 26, ${Math.max(opacite * 0.94, 0.75)})`,
             borderColor: `rgba(60, 65, 72, ${Math.max(opacite, 0.3)})`,
           }}
-          className="pointer-events-auto mx-auto flex h-16 w-full max-w-6xl items-center justify-between rounded-2xl border shadow-2xl backdrop-blur-md px-6 md:h-20 md:px-8 transition-colors duration-150"
+          className="pointer-events-auto mx-auto flex h-14 w-full max-w-4xl items-center justify-between rounded-2xl border shadow-2xl backdrop-blur-md px-5 md:h-16 md:px-6 transition-colors duration-150"
         >
           <Link
-  href="/"
-  className="flex items-center text-papier transition-colors hover:text-[#FF7F50]"
-  aria-label="Accueil"
->
-  <svg
-    className="h-6 w-24"
-    fill="none"
-    viewBox="0 0 96 24"
-    stroke="currentColor"
-    strokeWidth={1.5}
-  >
-    {/* Premier segment horizontal avec un point à chaque extrémité */}
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M4 16h32"
-    />
-    <circle cx="4" cy="16" r="2" fill="currentColor" />
-    <circle cx="36" cy="16" r="2" fill="currentColor" />
-
-    {/* Liaison en diagonale et second segment horizontal plus haut */}
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M42 16l8-8h42"
-    />
-    
-    {/* Point final à l'extrémité haute */}
-    <circle cx="92" cy="8" r="2" fill="currentColor" />
-  </svg>
-</Link>
+            href="/"
+            onClick={surClicLogo}
+            className="flex items-center text-papier transition-colors hover:text-[#FF7F50]"
+            aria-label="Accueil — revenir en haut"
+          >
+            <svg
+              className="h-5 w-20"
+              fill="none"
+              viewBox="0 0 96 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              {/* Ligne principale avec une cassure de progression */}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 12h32m8 0h48"
+              />
+              {/* Point de départ */}
+              <circle cx="4" cy="12" r="2" fill="currentColor" />
+              {/* Nœud central "étape" */}
+              <circle cx="36" cy="12" r="2" fill="currentColor" />
+              {/* Point d'arrivée final */}
+              <circle cx="92" cy="12" r="2" fill="currentColor" />
+            </svg>
+          </Link>
 
           {/* Navigation desktop */}
-          <ul className="hidden items-center gap-8 md:flex">
+          <ul className="hidden items-center gap-7 md:flex">
             {LIENS.map(({ libelle, href }) => (
               <li key={href}>
                 <Link

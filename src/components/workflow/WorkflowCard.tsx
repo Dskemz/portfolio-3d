@@ -212,7 +212,9 @@ export default function WorkflowCard({
     <div className="relative h-auto">
       {/* Ancre supérieure : déclenche l'allumage au contact exact du flux */}
       {dot(getNodeAnchorId(node.id), "left-1/2 top-0 -translate-x-1/2 -translate-y-1/2", isHead)}
-      {dot(getNodeExitId(node.id), "left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2", false)}
+      {/* La fiche terminale n'a pas de sortie : la visite s'arrête sur elle. */}
+      {!isTerminal &&
+        dot(getNodeExitId(node.id), "left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2", false)}
 
       <motion.article
         ref={frameRef}

@@ -45,7 +45,10 @@ const INTRO_GRAB_VH = 0.95;
  * Marge (px) conservée sous l'ancre de la fiche suivante quand on centre la fiche
  * courante : garantit qu'aucune fiche ne s'allume en avance.
  */
-const NEXT_SAFE_GAP = 24;
+/** Marge de franchissement d'un seuil (le front doit dépasser l'ancre, pas l'effleurer). */
+const THRESHOLD_EPS = 0.0005;
+/** Tolérance (px) pour considérer qu'on est encore posé sur la fiche courante. */
+const PARK_TOL = 6;
 
 /**
  * Courbe du cran, en coordonnées cubic-bézier [x1, y1, x2, y2] — même convention
@@ -289,6 +292,8 @@ export default function SkillFlow() {
   const stepRef = useRef(-1);
   /** Une animation de cran est en cours : toute nouvelle entrée est ignorée */
   const lockRef = useRef(false);
+  /** Position de scroll du dernier cran abouti (-1 = jamais crantée) */
+  const parkedRef = useRef(-1);
   const animRef = useRef(0);
 
   /* ── Mesure (desktop uniquement) ── */
@@ -455,23 +460,18 @@ export default function SkillFlow() {
       const floor = anchorScrollFor(index);
       if (floor === null) return null;
 
-      const nextAnchor =
-        index < WORKFLOW_NODES.length - 1 ? anchorScrollFor(index + 1) : null;
-      const ceiling =
-        nextAnchor === null ? Infinity : Math.max(floor, nextAnchor - NEXT_SAFE_GAP);
-
+      // La fiche est centrée, mais jamais avant sa position d'allumage.
+      // Le front, lui, est plafonné à son ancre dans compute() : la page peut
+      // donc continuer de descendre pour centrer sans que le fil déborde.
       const centered = centerScrollFor(index);
-      const wanted = centered === null ? floor : centered;
+      const wanted = centered === null ? floor : Math.max(centered, floor);
 
       const maxScroll = Math.max(
         0,
         document.documentElement.scrollHeight - window.innerHeight
       );
 
-      return Math.min(
-        maxScroll,
-        Math.max(0, Math.min(Math.max(wanted, floor), ceiling))
-      );
+      return Math.min(maxScroll, Math.max(0, wanted));
     },
     [anchorScrollFor, centerScrollFor]
   );
@@ -488,6 +488,7 @@ export default function SkillFlow() {
 
       const start = window.scrollY;
       const delta = target - start;
+      parkedRef.current = target;
       if (Math.abs(delta) < 1) return;
 
       lockRef.current = true;
@@ -496,7 +497,9 @@ export default function SkillFlow() {
 
       const tick = (now: number) => {
         const p = Math.min(1, (now - t0) / STEP_MS);
-        window.scrollTo(0, start + delta * STEP_EASE(p));
+        // behavior "auto" : sans lui, le `scroll-behavior: smooth` de globals.css
+        // superposerait son propre lissage à la courbe de cran.
+        window.scrollTo({ top: start + delta * STEP_EASE(p), behavior: "auto" });
         if (p < 1) {
           animRef.current = requestAnimationFrame(tick);
           return;
@@ -652,7 +655,10 @@ export default function SkillFlow() {
         setHeadId(null);
         setReceding(false);
         previous.current = 0;
-        if (!lockRef.current) stepRef.current = -1;
+        if (!lockRef.current) {
+          stepRef.current = -1;
+          parkedRef.current = -1;
+        }
         return;
       }
 
@@ -660,12 +666,29 @@ export default function SkillFlow() {
       const rect = container.getBoundingClientRect();
       const lineY = vh * LINE_VH - rect.top;
       const total = ruler.current.total;
-      const value = total > 0 ? Math.min(1, Math.max(0, lengthAtY(lineY) / total)) : 0;
+      let value = total > 0 ? Math.min(1, Math.max(0, lengthAtY(lineY) / total)) : 0;
+
+      const table = builtRef.current.thresholds;
+
+      // Cap dur : le flux s'arrête NET sur la fiche terminale, quoi qu'il arrive
+      // en dessous (descente libre vers le footer).
+      const lastNode = WORKFLOW_NODES[WORKFLOW_NODES.length - 1];
+      const hardCap = lastNode ? table[lastNode.id] : undefined;
+      if (hardCap !== undefined) value = Math.min(value, hardCap + THRESHOLD_EPS);
+
+      // Cap doux : posé sur une fiche, le front s'arrête à son ancre. La page peut
+      // descendre davantage pour la centrer sans que le fil ressorte par-dessous.
+      const step = stepRef.current;
+      const parked =
+        lockRef.current || Math.abs(window.scrollY - parkedRef.current) <= PARK_TOL;
+      if (parked && step >= 0) {
+        const t = table[WORKFLOW_NODES[step]?.id ?? ""];
+        if (t !== undefined) value = Math.min(value, t + THRESHOLD_EPS);
+      }
 
       progress.set(value);
       setArmed((p) => (p === value > 0.0003 ? p : value > 0.0003));
 
-      const table = builtRef.current.thresholds;
       const nextLit: string[] = [];
       for (const node of WORKFLOW_NODES) {
         const t = table[node.id];
