@@ -1,17 +1,20 @@
 /**
  * BandeauConfiance — « Ils m'ont fait confiance ».
  *
- * Un défilement horizontal continu de logos clients. La piste est dupliquée
- * deux fois et translatée de -50 % en boucle : la couture est invisible car la
- * seconde moitié est la copie exacte de la première.
+ * Les logos ne sont plus pris entre deux filets gris : ils reposent sur un
+ * BANDEAU FLOU. Deux panneaux superposés très floutés (un graphite large, un
+ * voile orange discret pour le rappel d'accent) forment une bande aux bords
+ * fondus, sans arête nette. Les logos défilent par-dessus.
  *
- * Rendu en wordmarks (noms typographiés) plutôt qu'en images : aucun asset à
- * fournir, et le rendu reste net à toute densité d'écran. Pour passer à de
- * vrais logos, remplacer le contenu de la boucle par une balise <img> pointant
- * vers /public/images/logos/ — le reste (piste, animation) ne change pas.
+ * Défilement : la piste est dupliquée deux fois et translatée de -50 % en
+ * boucle ; la couture est invisible car la seconde moitié copie la première.
  *
- * L'animation est neutralisée sous `prefers-reduced-motion` (règle dans le
- * <style> ci-dessous), la bande devient alors simplement statique.
+ * Wordmarks (noms typographiés) plutôt qu'images : aucun asset requis, rendu
+ * net à toute densité. Pour de vrais logos, remplacer le contenu de la boucle
+ * par une balise <img> vers /public/images/logos/ — piste et animation
+ * inchangées.
+ *
+ * Animation neutralisée sous `prefers-reduced-motion`.
  */
 
 const CLIENTS: readonly string[] = [
@@ -30,28 +33,38 @@ export default function BandeauConfiance() {
   const piste = [...CLIENTS, ...CLIENTS];
 
   return (
-    <section className="w-full overflow-hidden py-16 lg:py-20">
-      <p className="mb-10 px-6 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-trait lg:px-16">
+    <section className="w-full py-20 lg:py-24">
+      <p className="mb-12 px-6 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-trait lg:px-16">
         Ils m&apos;ont fait confiance
       </p>
 
-      <div className="bandeau-confiance relative flex overflow-hidden">
-        {/* Fondu sur les deux bords pour que les logos naissent et meurent en douceur */}
+      <div className="bandeau-confiance relative flex items-center overflow-hidden">
+        {/* Bandeau flou : deux panneaux superposés, bords fondus par le blur */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-black to-transparent"
+          className="pointer-events-none absolute left-1/2 top-1/2 h-24 w-[92%] max-w-6xl -translate-x-1/2 -translate-y-1/2 rounded-[3rem] bg-graphite-800/50 blur-2xl"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-black to-transparent"
+          className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-[70%] max-w-4xl -translate-x-1/2 -translate-y-1/2 rounded-[3rem] bg-orange-500/10 blur-[40px]"
         />
 
-        <ul className="bandeau-piste flex shrink-0 items-center gap-16 pr-16 lg:gap-24 lg:pr-24">
+        {/* Fondus latéraux pour que les logos naissent et meurent en douceur */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-28 bg-gradient-to-r from-black to-transparent"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-gradient-to-l from-black to-transparent"
+        />
+
+        <ul className="bandeau-piste relative z-[5] flex shrink-0 items-center gap-16 pr-16 lg:gap-24 lg:pr-24">
           {piste.map((nom, index) => (
             <li
               key={`${nom}-${index}`}
               aria-hidden={index >= CLIENTS.length}
-              className="shrink-0 font-display text-lg font-light tracking-tight text-papier/35 transition-colors duration-300 hover:text-papier/70 lg:text-xl"
+              className="shrink-0 font-display text-lg font-light tracking-tight text-papier/40 transition-colors duration-300 hover:text-papier/80 lg:text-xl"
             >
               {nom}
             </li>

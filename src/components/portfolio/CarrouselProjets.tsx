@@ -149,39 +149,43 @@ export default function CarrouselProjets() {
   return (
     <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,34%)_minmax(0,1fr)] lg:gap-16">
       {/* ---------------------------------------------------------------- */}
-      {/*  Colonne de texte — alignée sur le HAUT du visuel                 */}
+      {/*  Colonne de texte — titre en HAUT, détails alignés sur le BAS     */}
+      {/*  du carrousel (la colonne s'étire à la hauteur de la scène).      */}
       {/* ---------------------------------------------------------------- */}
       <div className="flex flex-col">
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-orange-500">
-          /{String(courant + 1).padStart(2, "0")}
-          <span className="text-trait">
-            {" "}
-            — {String(PROJETS.length).padStart(2, "0")}
-          </span>
-        </p>
-
-        <h2 className="mt-5 font-display text-[clamp(1.5rem,2.6vw,2.2rem)] font-light leading-[1.1] tracking-tight text-papier">
+        <h2 className="font-display text-[clamp(1.5rem,2.6vw,2.2rem)] font-light leading-[1.1] tracking-tight text-papier">
           {projet.titre}
         </h2>
 
-        <p className="mt-5 max-w-md text-sm font-light leading-relaxed text-papier/60">
-          {projet.resume}
-        </p>
+        {/* mt-auto : ce bloc descend au bas de la colonne, donc au bas du visuel */}
+        <div className="mt-auto pt-12">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-orange-500">
+            /{String(courant + 1).padStart(2, "0")}
+            <span className="text-trait">
+              {" "}
+              — {String(PROJETS.length).padStart(2, "0")}
+            </span>
+          </p>
 
-        <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.18em] text-trait">
-          {projet.categorie} · {projet.client} · {projet.annee}
-        </p>
+          <p className="mt-5 max-w-md text-sm font-light leading-relaxed text-papier/60">
+            {projet.resume}
+          </p>
 
-        <Link
-          href={`/portfolio/${projet.slug}`}
-          className="group mt-8 inline-flex items-center gap-4 self-start font-mono text-[10px] uppercase tracking-[0.2em] text-orange-500 transition-colors duration-300 ease-sobre hover:text-bleu-encre-clair"
-        >
-          Voir le projet
-          <span
-            aria-hidden="true"
-            className="h-px w-10 bg-orange-500 transition-[width] duration-300 ease-sobre group-hover:w-16"
-          />
-        </Link>
+          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.18em] text-trait">
+            {projet.categorie} · {projet.client} · {projet.annee}
+          </p>
+
+          <Link
+            href={`/portfolio/${projet.slug}`}
+            className="group mt-8 inline-flex items-center gap-4 self-start font-mono text-[10px] uppercase tracking-[0.2em] text-orange-500 transition-colors duration-300 ease-sobre hover:text-bleu-encre-clair"
+          >
+            Voir le projet
+            <span
+              aria-hidden="true"
+              className="h-px w-10 bg-orange-500 transition-[width] duration-300 ease-sobre group-hover:w-16"
+            />
+          </Link>
+        </div>
       </div>
 
       {/* ---------------------------------------------------------------- */}
