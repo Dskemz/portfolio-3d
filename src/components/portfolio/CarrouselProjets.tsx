@@ -153,7 +153,7 @@ export default function CarrouselProjets() {
       {/*  du carrousel (la colonne s'étire à la hauteur de la scène).      */}
       {/* ---------------------------------------------------------------- */}
       <div className="flex flex-col">
-        <h2 className="font-display text-[clamp(1.4rem,2.4vw,2rem)] font-light leading-[1.1] tracking-tight text-papier">
+        <h2 className="font-display text-[clamp(1.35rem,2.2vw,1.85rem)] font-light leading-[1.1] tracking-tight text-papier">
           {projet.titre}
         </h2>
 
@@ -185,6 +185,14 @@ export default function CarrouselProjets() {
               className="h-px w-10 bg-orange-500 transition-[width] duration-300 ease-sobre group-hover:w-16"
             />
           </Link>
+
+          <Link
+            href="/portfolio/tous"
+            className="mt-4 inline-flex items-center gap-3 self-start font-mono text-[10px] uppercase tracking-[0.2em] text-trait transition-colors duration-300 ease-sobre hover:text-papier"
+          >
+            Voir la grille complète
+            <span aria-hidden="true">↗</span>
+          </Link>
         </div>
       </div>
 
@@ -193,7 +201,7 @@ export default function CarrouselProjets() {
       {/* ---------------------------------------------------------------- */}
       <div
         ref={scene}
-        className="relative h-[clamp(15rem,31vw,24rem)] select-none"
+        className="relative h-[clamp(14rem,28vw,22rem)] select-none"
         style={{ touchAction: "pan-x" }}
       >
         {PROJETS.map((entree, index) => {

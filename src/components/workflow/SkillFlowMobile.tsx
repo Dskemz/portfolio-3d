@@ -352,7 +352,15 @@ export default function SkillFlowMobile() {
   return (
     <div ref={containerRef} className="relative w-full overflow-hidden">
       {/* ═══ Accueil ═══ */}
-      <header className="px-6 pb-10 pt-24">
+      {/*
+        Sur téléphone, le bloc d'accueil occupe toute la hauteur visible et se
+        centre verticalement : de l'air entre la navbar et « Denis Masquet »,
+        puis titre / rôle / citation / amorce groupés au milieu de l'écran.
+        `min-h-[100svh]` suit la hauteur réelle du viewport mobile (barres
+        d'URL comprises) ; `pt-24` garantit un dégagement sous la navbar fixe
+        même sur les écrans très courts.
+      */}
+      <header className="flex min-h-[100svh] flex-col justify-center px-6 pb-16 pt-24">
         <div className="flex w-full flex-col items-center text-center">
           <h1 className="font-display text-[clamp(2.2rem,8vw,3rem)] font-light leading-[1.05] tracking-[-0.02em] text-white">
             Denis Masquet

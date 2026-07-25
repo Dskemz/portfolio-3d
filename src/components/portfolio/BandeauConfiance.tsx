@@ -2,17 +2,17 @@
  * BandeauConfiance — « Ils m'ont fait confiance ».
  *
  * Les logos ne sont plus pris entre deux filets gris : ils reposent sur un
- * BANDEAU FLOU. Deux panneaux superposés très floutés (un graphite large, un
- * voile orange discret pour le rappel d'accent) forment une bande aux bords
- * fondus, sans arête nette. Les logos défilent par-dessus.
+ * BANDEAU FLOU épais. La bande est un conteneur de hauteur fixe (`overflow-hidden`)
+ * dans lequel deux panneaux très floutés (un graphite large, un voile orange
+ * pour le rappel d'accent) forment une nappe aux bords fondus, sans arête. Les
+ * logos défilent par-dessus, centrés dans l'épaisseur.
  *
- * Défilement : la piste est dupliquée deux fois et translatée de -50 % en
- * boucle ; la couture est invisible car la seconde moitié copie la première.
+ * Défilement : piste dupliquée deux fois, translatée de -50 % en boucle ; la
+ * couture est invisible car la seconde moitié copie la première.
  *
- * Wordmarks (noms typographiés) plutôt qu'images : aucun asset requis, rendu
- * net à toute densité. Pour de vrais logos, remplacer le contenu de la boucle
- * par une balise <img> vers /public/images/logos/ — piste et animation
- * inchangées.
+ * Wordmarks (noms typographiés) plutôt qu'images : aucun asset requis. Pour de
+ * vrais logos, remplacer le contenu de la boucle par une balise <img> vers
+ * /public/images/logos/ — piste et animation inchangées.
  *
  * Animation neutralisée sous `prefers-reduced-motion`.
  */
@@ -33,20 +33,24 @@ export default function BandeauConfiance() {
   const piste = [...CLIENTS, ...CLIENTS];
 
   return (
-    <section className="w-full py-20 lg:py-24">
-      <p className="mb-12 px-6 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-trait lg:px-16">
+    <section className="w-full py-10 lg:py-12">
+      <p className="mb-8 px-6 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-trait lg:px-16">
         Ils m&apos;ont fait confiance
       </p>
 
-      <div className="bandeau-confiance relative flex items-center overflow-hidden">
-        {/* Bandeau flou : deux panneaux superposés, bords fondus par le blur */}
+      {/*
+        Épaisseur du bandeau ≈ triplée : la hauteur du conteneur définit la
+        nappe, `overflow-hidden` fond les panneaux dans cette bande.
+      */}
+      <div className="bandeau-confiance relative flex h-48 items-center overflow-hidden lg:h-56">
+        {/* Nappe floue : deux panneaux superposés */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-[94%] max-w-6xl -translate-x-1/2 -translate-y-1/2 rounded-[3rem] bg-graphite-800/50 blur-2xl"
+          className="pointer-events-none absolute left-1/2 top-1/2 h-full w-[94%] max-w-6xl -translate-x-1/2 -translate-y-1/2 rounded-[4rem] bg-graphite-800/50 blur-[64px]"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 h-28 w-[72%] max-w-4xl -translate-x-1/2 -translate-y-1/2 rounded-[3rem] bg-orange-500/10 blur-[48px]"
+          className="pointer-events-none absolute left-1/2 top-1/2 h-3/4 w-[72%] max-w-4xl -translate-x-1/2 -translate-y-1/2 rounded-[4rem] bg-orange-500/10 blur-[60px]"
         />
 
         {/* Fondus latéraux pour que les logos naissent et meurent en douceur */}

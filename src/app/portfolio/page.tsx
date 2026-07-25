@@ -24,15 +24,15 @@ export default function PortfolioPage() {
       {/*
         Intro + carrousel + bandeau réunis dans UNE section (relative) : le fil,
         tracé par FilPortfolio en un seul path SVG, court du « j » du titre
-        jusqu'au couloir bouton/logos sans coupure. `overflow-x-clip` borne le
-        fil au bord de l'écran.
+        jusqu'au couloir carrousel/logos sans coupure. `overflow-x-clip` borne
+        le fil au bord de l'écran.
       */}
       <main className="relative flex-grow overflow-x-clip">
         <FilPortfolio />
 
         {/* Titre */}
-        <div className="relative z-10 w-full px-6 pt-44 md:pt-52 lg:px-16 xl:px-24">
-          <h1 className="font-display text-[clamp(2.3rem,6.4vw,4.6rem)] font-light leading-[1.05] tracking-tight text-papier">
+        <div className="relative z-10 w-full px-6 pt-36 md:pt-44 lg:px-16 xl:px-24">
+          <h1 className="font-display text-[clamp(2.1rem,5.6vw,4rem)] font-light leading-[1.05] tracking-tight text-papier">
             Mes Pro
             {/* Ancre du fil : le path démarre au bas de cette lettre */}
             <span id="fil-depart-j" className="relative inline-block">
@@ -42,21 +42,16 @@ export default function PortfolioPage() {
           </h1>
         </div>
 
-        {/* Carrousel */}
-        <div className="relative z-10 w-full px-6 pb-28 pt-20 lg:px-16 lg:pb-32 lg:pt-24 xl:px-24">
+        {/* Carrousel (le lien « Voir la grille » vit désormais dans sa colonne) */}
+        <div className="relative z-10 w-full px-6 pb-16 pt-14 lg:px-16 lg:pb-20 lg:pt-16 xl:px-24">
           <CarrouselProjets />
         </div>
 
-        {/* Lien vers la grille */}
-        <div className="relative z-10 flex w-full justify-center px-6 lg:px-16">
-          <LienSobre href="/portfolio/tous">Voir la grille complète</LienSobre>
-        </div>
-
         {/*
-          Couloir : bande vide entre le bouton et les logos. Son centre donne
+          Couloir : bande vide entre le carrousel et les logos. Son centre donne
           la hauteur à laquelle le fil repart horizontalement vers la droite.
         */}
-        <div id="fil-couloir" aria-hidden className="h-20 lg:h-24" />
+        <div id="fil-couloir" aria-hidden className="h-12 lg:h-14" />
 
         {/* Bandeau logos — le fil passe juste au-dessus */}
         <div className="relative z-10">
@@ -64,10 +59,10 @@ export default function PortfolioPage() {
         </div>
       </main>
 
-      {/* CTA final */}
-      <section className="py-24 md:py-32">
+      {/* CTA final — remonté */}
+      <section className="pb-24 pt-12 md:pb-28 md:pt-16">
         <div className="flex w-full flex-col gap-10 px-6 lg:flex-row lg:items-end lg:justify-between lg:px-16 xl:px-24">
-          <h2 className="max-w-xl font-display text-[clamp(1.7rem,3.6vw,2.6rem)] font-light leading-tight text-papier">
+          <h2 className="max-w-xl font-display text-[clamp(1.6rem,3.4vw,2.4rem)] font-light leading-tight text-papier">
             Un projet de visite virtuelle 3D&nbsp;?
           </h2>
 
