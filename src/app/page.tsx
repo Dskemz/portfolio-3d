@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import HomeIntro from "@/components/home/HomeIntro";
 import SkillFlow from "@/components/workflow/SkillFlow";
 
 export const metadata: Metadata = {
@@ -18,7 +19,9 @@ export const metadata: Metadata = {
 export default function Accueil() {
   return (
     <div className="flex flex-1 flex-col bg-black text-white">
-      <SkillFlow />
+      <HomeIntro>
+        <SkillFlow />
+      </HomeIntro>
     </div>
   );
 }
