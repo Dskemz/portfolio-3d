@@ -153,7 +153,7 @@ export default function CarrouselProjets() {
       {/*  du carrousel (la colonne s'étire à la hauteur de la scène).      */}
       {/* ---------------------------------------------------------------- */}
       <div className="flex flex-col">
-        <h2 className="font-display text-[clamp(1.5rem,2.6vw,2.2rem)] font-light leading-[1.1] tracking-tight text-papier">
+        <h2 className="font-display text-[clamp(1.4rem,2.4vw,2rem)] font-light leading-[1.1] tracking-tight text-papier">
           {projet.titre}
         </h2>
 
@@ -193,7 +193,7 @@ export default function CarrouselProjets() {
       {/* ---------------------------------------------------------------- */}
       <div
         ref={scene}
-        className="relative h-[clamp(16rem,34vw,27rem)] select-none"
+        className="relative h-[clamp(15rem,31vw,24rem)] select-none"
         style={{ touchAction: "pan-x" }}
       >
         {PROJETS.map((entree, index) => {

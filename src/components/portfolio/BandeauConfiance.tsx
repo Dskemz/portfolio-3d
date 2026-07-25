@@ -42,11 +42,11 @@ export default function BandeauConfiance() {
         {/* Bandeau flou : deux panneaux superposés, bords fondus par le blur */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 h-24 w-[92%] max-w-6xl -translate-x-1/2 -translate-y-1/2 rounded-[3rem] bg-graphite-800/50 blur-2xl"
+          className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-[94%] max-w-6xl -translate-x-1/2 -translate-y-1/2 rounded-[3rem] bg-graphite-800/50 blur-2xl"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-[70%] max-w-4xl -translate-x-1/2 -translate-y-1/2 rounded-[3rem] bg-orange-500/10 blur-[40px]"
+          className="pointer-events-none absolute left-1/2 top-1/2 h-28 w-[72%] max-w-4xl -translate-x-1/2 -translate-y-1/2 rounded-[3rem] bg-orange-500/10 blur-[48px]"
         />
 
         {/* Fondus latéraux pour que les logos naissent et meurent en douceur */}
