@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { PROJETS } from "@/content/projets";
 
 /**
@@ -56,6 +56,7 @@ function ImageCardWrapper({
   isCurrent,
   tabIndex,
 }: ImageCardWrapperProps) {
+  const reduceMotion = useReducedMotion();
   const frameRef = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState({ w: 0, h: 0 });
   /**
@@ -66,6 +67,18 @@ function ImageCardWrapper({
    */
   const [redraw, setRedraw] = useState(0);
   const prevCurrent = useRef(isCurrent);
+  /**
+   * Premier montage de la page : le périmètre attend que la carte ait fini de
+   * glisser depuis la droite avant de se tracer (enchaînement carte → contour,
+   * comme les fiches home). Les redessins suivants (changement de projet) sont
+   * immédiats.
+   */
+  const [premierMontage, setPremierMontage] = useState(true);
+
+  useEffect(() => {
+    const t = window.setTimeout(() => setPremierMontage(false), 1000);
+    return () => window.clearTimeout(t);
+  }, []);
 
   useEffect(() => {
     // Passage false → true : on relance l'animation du périmètre.
@@ -163,7 +176,11 @@ function ImageCardWrapper({
             vectorEffect="non-scaling-stroke"
             initial={{ pathLength: 0, opacity: 0 }}
             animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+            transition={{
+              duration: 0.7,
+              ease: [0.4, 0, 0.2, 1],
+              delay: premierMontage && !reduceMotion ? 0.95 : 0,
+            }}
             style={{
               filter: `url(#edge-${project.slug}) drop-shadow(0 0 4px rgba(255,127,80,0.55))`,
             }}
@@ -178,6 +195,7 @@ export default function CarrouselProjets() {
   const [courant, setCourant] = useState(0);
   const scene = useRef<HTMLDivElement>(null);
   const verrou = useRef(false);
+  const reduceMotion = useReducedMotion();
 
   const aller = useCallback((pas: number) => {
     if (verrou.current) return;
@@ -285,13 +303,37 @@ export default function CarrouselProjets() {
 
   const projet = PROJETS[courant];
 
+  // Animation d'entrée : le bloc entre au chargement de la page, la colonne
+  // carrousel glissant depuis la droite comme si elle « rentrait » dans la
+  // page. Rappel de l'apparition des fiches en home (slide + léger scale de
+  // profondeur). Respecte reduced-motion.
+  const entreeTexte = reduceMotion
+    ? { initial: false as const, animate: {} }
+    : {
+        initial: { opacity: 0, x: -32 },
+        animate: { opacity: 1, x: 0 },
+        transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const, delay: 0.15 },
+      };
+
+  const entreeCarrousel = reduceMotion
+    ? { initial: false as const, animate: {} }
+    : {
+        initial: { opacity: 0, x: 180, scale: 0.92 },
+        animate: { opacity: 1, x: 0, scale: 1 },
+        transition: {
+          duration: 0.95,
+          ease: [0.16, 1, 0.3, 1] as const,
+          delay: 0.1,
+        },
+      };
+
   return (
     <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,34%)_minmax(0,1fr)] lg:gap-16">
       {/* ---------------------------------------------------------------- */}
       {/*  Colonne de texte — titre en HAUT, détails alignés sur le BAS     */}
       {/*  du carrousel (la colonne s'étire à la hauteur de la scène).      */}
       {/* ---------------------------------------------------------------- */}
-      <div className="flex flex-col">
+      <motion.div className="flex flex-col" {...entreeTexte}>
         <h2 className="font-display text-[clamp(1.35rem,2.2vw,1.85rem)] font-light leading-tight tracking-tight text-papier">
           {projet.titre}
         </h2>
@@ -325,12 +367,12 @@ export default function CarrouselProjets() {
             />
           </Link>
         </div>
-      </div>
+      </motion.div>
 
       {/* ---------------------------------------------------------------- */}
       {/*  Carrousel — le visuel avec traitement glow + lien grille dessous */}
       {/* ---------------------------------------------------------------- */}
-      <div className="flex flex-col">
+      <motion.div className="flex flex-col" {...entreeCarrousel}>
         <div
           ref={scene}
           className="relative h-[clamp(14rem,28vw,22rem)] select-none"
