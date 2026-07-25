@@ -118,9 +118,9 @@ function ContenuCadre({ domaine }: { domaine: Domaine }) {
 export default function FluxCompetences() {
   const reduceMotion = useReducedMotion();
 
-  // Le trait net se dessine (pathLength 0→1) une seule fois, quand la section
-  // des cadres entre dans le viewport. Invisible avant. L'émission floutée
-  // n'anime que son opacité (un pathLength sur un flou clignoterait).
+  // Le trait net ET son émission floutée se dessinent ENSEMBLE (pathLength
+  // 0→1), invisibles avant. Le fil apparaît donc progressivement, flou et net
+  // synchronisés — jamais de halo qui précède le tracé.
   const traitAnime = reduceMotion
     ? { initial: false as const }
     : {
@@ -136,11 +136,31 @@ export default function FluxCompetences() {
   const emissionAnime = reduceMotion
     ? { initial: false as const }
     : {
-        initial: { opacity: 0 },
-        whileInView: { opacity: 0.55 },
+        initial: { pathLength: 0, opacity: 0 },
+        whileInView: { pathLength: 1, opacity: 0.55 },
         viewport: { once: true, amount: 0.55 as const },
-        transition: { duration: 0.5 },
+        transition: {
+          pathLength: { duration: 2.6, ease: [0.4, 0, 0.2, 1] as const },
+          opacity: { duration: 0.3 },
+        },
       };
+
+  // Chaque cadre se « connecte » quand le fil arrive à son niveau. Le tracé
+  // dure 2.6s et traverse les 4 cadres de gauche à droite → délais échelonnés.
+  const CADRE_DELAIS = [0.45, 1.1, 1.75, 2.35] as const;
+  const cadreAnime = (index: number) =>
+    reduceMotion
+      ? { initial: false as const }
+      : {
+          initial: { opacity: 0, scale: 0.965 },
+          whileInView: { opacity: 1, scale: 1 },
+          viewport: { once: true, amount: 0.55 as const },
+          transition: {
+            duration: 0.5,
+            ease: [0.16, 1, 0.3, 1] as const,
+            delay: CADRE_DELAIS[index] ?? 0,
+          },
+        };
 
   return (
     <>
@@ -189,7 +209,7 @@ export default function FluxCompetences() {
         </svg>
 
         {DOMAINES.map((domaine, index) => (
-          <article
+          <motion.article
             key={domaine.titre}
             className="absolute z-10 flex flex-col justify-center border border-mine bg-black"
             style={{
@@ -199,9 +219,10 @@ export default function FluxCompetences() {
               height: HAUTEUR_CADRE,
               padding: PADDING_CADRE,
             }}
+            {...cadreAnime(index)}
           >
             <ContenuCadre domaine={domaine} />
-          </article>
+          </motion.article>
         ))}
 
         {/* Nœuds au-dessus des cadres, sinon la bordure les recouvre */}
@@ -211,19 +232,25 @@ export default function FluxCompetences() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-20 h-full w-full"
         >
-          {NOEUDS.map((noeud) => (
-            <motion.circle
-              key={`${noeud.cx}-${noeud.cy}`}
-              cx={noeud.cx}
-              cy={noeud.cy}
-              r={4}
-              fill={ACCENT}
-              initial={reduceMotion ? false : { opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, amount: 0.55 }}
-              transition={{ duration: 0.4, delay: reduceMotion ? 0 : 1.6 }}
-            />
-          ))}
+          {NOEUDS.map((noeud, i) => {
+            // Nœud i appartient au cadre Math.floor(i/2) (2 nœuds par cadre).
+            // Il s'allume quand le fil atteint son axe — calé sur le cadre.
+            const cadreIndex = Math.floor(i / 2);
+            const delai = reduceMotion ? 0 : (CADRE_DELAIS[cadreIndex] ?? 0) + 0.15;
+            return (
+              <motion.circle
+                key={`${noeud.cx}-${noeud.cy}`}
+                cx={noeud.cx}
+                cy={noeud.cy}
+                r={4}
+                fill={ACCENT}
+                initial={reduceMotion ? false : { opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.55 }}
+                transition={{ duration: 0.35, ease: "easeOut", delay: delai }}
+              />
+            );
+          })}
         </svg>
       </div>
 
