@@ -48,6 +48,12 @@ export default function SkillFlowMobile() {
   const [receding, setReceding] = useState(false);
 
   const previous = useRef(0);
+  /**
+   * Flag : au moins une fiche a été mesurée dans measure(). Élimine le
+   * problème du premier swipe qui échouerait si les refs ne sont pas encore
+   * remplies. Une fois true, on ne revient pas en arrière.
+   */
+  const cardsReadyRef = useRef(false);
 
   /* ── Mesure : position de l'amorce et de chaque fiche ── */
   const measure = () => {
@@ -69,6 +75,11 @@ export default function SkillFlowMobile() {
       // Le courant « touche » la fiche quand il atteint son bord haut
       next[node.id] = r.top - box.top;
       last = r.bottom - box.top;
+    }
+
+    // ✓ Marque que les cartes sont prêtes dès qu'on en a au moins une
+    if (Object.keys(next).length > 0) {
+      cardsReadyRef.current = true;
     }
 
     setStartY(start);
@@ -246,7 +257,13 @@ export default function SkillFlowMobile() {
      * vers la fin du document.
      */
     const guided = (direction: 1 | -1) => {
-      if (!cardRefs.current.size) return false;
+      // Au premier chargement, les cartes peuvent ne pas être mesurées.
+      // Si elles ne sont pas prêtes, on reste optimiste pour le premier swipe.
+      if (!cardsReadyRef.current) {
+        // Les cartes ne sont pas encore chargées : ne pas bloquer le premier swipe
+        return true;
+      }
+
       if (overflowFree(direction)) return false;
 
       // Si on est déjà entré en mode stepped, capturer tout sauf tail.
