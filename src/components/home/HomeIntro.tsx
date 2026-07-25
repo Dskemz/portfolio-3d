@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { animate } from "framer-motion";
 import { ORIGIN_ID } from "@/content/workflowData";
 
 /**
@@ -14,6 +13,16 @@ import { ORIGIN_ID } from "@/content/workflowData";
  * de liaison) et vient se poser en « goutte d'eau » EXACTEMENT sur l'amorce de
  * la home (`#wf-origin`), le point qui lance le storytelling. Le contenu
  * apparaît alors en fondu, puis le défilement est débloqué.
+ *
+ * ── Poids / vieux matériel ──────────────────────────────────────────────────
+ * L'animation est pilotée par le MOTEUR CSS NATIF du navigateur (`@keyframes`
+ * sur `stroke-dashoffset`), plus par framer-motion. Auparavant chaque image
+ * était calculée en JavaScript puis réécrite dans le DOM, pour 8 animations en
+ * parallèle : sur un processeur ancien ce temps JS mangeait le budget de frame
+ * en plus du rendu, d'où les saccades. Désormais aucun JS ne s'exécute par
+ * image — le navigateur anime les tracés en code natif ; le JS ne fait que
+ * poser la géométrie et enchaîner les étapes via l'événement `animationend`.
+ * Rendu strictement identique : mêmes tracés, mêmes durées, mêmes courbes.
  *
  * Points de conception importants :
  * – Le point d'arrivée est la position RÉELLE de l'amorce, mesurée dans le DOM
@@ -36,6 +45,10 @@ const CORNER_R = 12;
 const ACCENT = "#FF7F50";
 /** Longueur du segment lumineux (comète), en fraction du tracé (pathLength=1). */
 const SEG = 0.4;
+
+/** Courbes d'accélération (identiques aux valeurs framer précédentes). */
+const EASE_FLUX = "cubic-bezier(0.4, 0, 0.2, 1)";
+const EASE_GOUTTE = "cubic-bezier(0.34, 1.56, 0.64, 1)";
 
 /** Pistes sources : point de départ en haut (x) et hauteur du palier (y). */
 const SOURCES = [
@@ -103,25 +116,34 @@ export default function HomeIntro({ children }: { children: React.ReactNode }) {
       return c;
     };
 
-    const filerVers = (p: SVGPathElement | null, duree: number, retard = 0) =>
+    /**
+     * Lance une comète le long d'un <path> via une ANIMATION CSS native
+     * (`stroke-dashoffset` de SEG → -1) et résout quand elle est terminée.
+     * Aucun JavaScript n'est exécuté par image : c'est le moteur du navigateur
+     * qui anime — d'où le gain sur matériel ancien. `both` fige l'état de
+     * départ pendant le `delay` et l'état final après.
+     */
+    const filerVers = (
+      p: SVGPathElement | null,
+      duree: number,
+      retard = 0,
+      ease = EASE_FLUX,
+    ) =>
       new Promise<void>((resolve) => {
         if (!p) {
           resolve();
           return;
         }
-        // Forme NUMÉRIQUE de framer (from, to, { onUpdate }) : la seule qui
-        // pilote réellement `stroke-dashoffset` sur un <path>. La forme
-        // « élément » (animate(el, { strokeDashoffset: [...] })) ne l'animait
-        // pas → plus aucune animation visible.
-        const controls = animate(SEG, -1, {
-          duration: duree,
-          delay: retard,
-          ease: [0.4, 0, 0.2, 1],
-          onUpdate: (v) => {
-            p.style.strokeDashoffset = String(v);
-          },
-        });
-        controls.finished.then(() => resolve()).catch(() => resolve());
+        const fin = (e: AnimationEvent) => {
+          if (e.animationName !== "hi-flux") return;
+          p.removeEventListener("animationend", fin);
+          resolve();
+        };
+        p.addEventListener("animationend", fin);
+        // Reflow pour garantir le (re)démarrage même si l'animation est réappliquée.
+        p.style.animation = "none";
+        void p.getBoundingClientRect();
+        p.style.animation = `hi-flux ${duree}s ${ease} ${retard}s both`;
       });
 
     const jouer = async () => {
@@ -139,75 +161,90 @@ export default function HomeIntro({ children }: { children: React.ReactNode }) {
 
       try {
         const w = dim.w;
-      const h = dim.h;
-      const mx = MERGE.x * w;
-      const my = MERGE.y * h;
-      const ori0 = cible();
+        const h = dim.h;
+        const mx = MERGE.x * w;
+        const my = MERGE.y * h;
+        const ori0 = cible();
 
-      // ── Géométrie des pistes sources (style circuit, coudes à 90°) ──────
-      sources.current.forEach((el, i) => {
-        if (!el) return;
-        const xi = SOURCES[i].x * w;
-        const yi = SOURCES[i].y * h;
-        const dir = mx >= xi ? 1 : -1;
-        const d =
-          xi === mx
-            ? `M ${xi} 0 V ${my}` // piste centrale : tout droit
-            : `M ${xi} 0 V ${yi - CORNER_R} ` +
-              `Q ${xi} ${yi} ${xi + dir * CORNER_R} ${yi} ` +
-              `H ${mx - dir * CORNER_R} ` +
-              `Q ${mx} ${yi} ${mx} ${yi + CORNER_R} V ${my}`;
-        el.setAttribute("d", d);
-      });
+        // ── Géométrie des pistes sources (style circuit, coudes à 90°) ──────
+        sources.current.forEach((el, i) => {
+          if (!el) return;
+          const xi = SOURCES[i].x * w;
+          const yi = SOURCES[i].y * h;
+          const dir = mx >= xi ? 1 : -1;
+          const d =
+            xi === mx
+              ? `M ${xi} 0 V ${my}` // piste centrale : tout droit
+              : `M ${xi} 0 V ${yi - CORNER_R} ` +
+                `Q ${xi} ${yi} ${xi + dir * CORNER_R} ${yi} ` +
+                `H ${mx - dir * CORNER_R} ` +
+                `Q ${mx} ${yi} ${mx} ${yi + CORNER_R} V ${my}`;
+          el.setAttribute("d", d);
+        });
 
-      // Continuation : du point de convergence, descente → coude → sortie gauche.
-      cont.setAttribute(
-        "d",
-        `M ${mx} ${my} V ${ori0.y - CORNER_R} ` +
-          `Q ${mx} ${ori0.y} ${mx - CORNER_R} ${ori0.y} H 0`,
-      );
+        // Continuation : du point de convergence, descente → coude → sortie gauche.
+        cont.setAttribute(
+          "d",
+          `M ${mx} ${my} V ${ori0.y - CORNER_R} ` +
+            `Q ${mx} ${ori0.y} ${mx - CORNER_R} ${ori0.y} H 0`,
+        );
 
-      // 1. Les nombreux flux convergent (départs légèrement décalés).
-      await Promise.all(
-        sources.current.map((el, i) => filerVers(el, 0.6, i * 0.06)),
-      );
-      if (annule) return;
-      // Masque les sources pour éviter tout point résiduel aux extrémités.
-      sources.current.forEach((el) => el && (el.style.opacity = "0"));
+        // 1. Les nombreux flux convergent (départs légèrement décalés).
+        await Promise.all(
+          sources.current.map((el, i) => filerVers(el, 0.6, i * 0.06)),
+        );
+        if (annule) return;
+        // Masque les sources pour éviter tout point résiduel aux extrémités.
+        sources.current.forEach((el) => el && (el.style.opacity = "0"));
 
-      // 2. Le flux unique descend et sort par la gauche.
-      await filerVers(cont, 0.7);
-      if (annule) return;
-      cont.style.opacity = "0";
+        // 2. Le flux unique descend et sort par la gauche.
+        await filerVers(cont, 0.7);
+        if (annule) return;
+        cont.style.opacity = "0";
 
-      // 3. Liaison : re-mesure de l'amorce puis rentrée par la droite → point.
-      const ori = cible();
-      ret.setAttribute("d", `M ${w} ${ori.y} H ${ori.x}`);
-      gBox.style.left = `${ori.x}px`;
-      gBox.style.top = `${ori.y}px`;
+        // 3. Liaison : re-mesure de l'amorce puis rentrée par la droite → point.
+        const ori = cible();
+        ret.setAttribute("d", `M ${w} ${ori.y} H ${ori.x}`);
+        gBox.style.left = `${ori.x}px`;
+        gBox.style.top = `${ori.y}px`;
 
-      await filerVers(ret, 0.55);
-      if (annule) return;
-      ret.style.opacity = "0";
+        await filerVers(ret, 0.55);
+        if (annule) return;
+        ret.style.opacity = "0";
 
-      // 4. Goutte d'eau : enfle puis se stabilise (back-out), sur l'amorce.
-      await animate(
-        g,
-        { opacity: [0, 1, 1], scale: [0, 1.35, 1] },
-        { duration: 0.55, ease: [0.34, 1.56, 0.64, 1] },
-      ).finished;
-      if (annule) return;
+        // 4. Goutte d'eau : enfle puis se stabilise (back-out), sur l'amorce.
+        await new Promise<void>((resolve) => {
+          const fin = (e: AnimationEvent) => {
+            if (e.animationName !== "hi-goutte") return;
+            g.removeEventListener("animationend", fin);
+            resolve();
+          };
+          g.addEventListener("animationend", fin);
+          g.style.animation = `hi-goutte 0.55s ${EASE_GOUTTE} both`;
+        });
+        if (annule) return;
 
-      // 5. Révélation progressive du contenu.
-      setReveal(true);
+        // 5. Révélation progressive du contenu.
+        setReveal(true);
 
-      await animate(ov, { opacity: [1, 0] }, { duration: 0.6, ease: "easeInOut" })
-        .finished;
-      if (annule) return;
+        // Fondu de l'overlay via une simple transition CSS (pas de JS/frame).
+        await new Promise<void>((resolve) => {
+          const fin = (e: TransitionEvent) => {
+            if (e.propertyName !== "opacity") return;
+            ov.removeEventListener("transitionend", fin);
+            resolve();
+          };
+          ov.addEventListener("transitionend", fin);
+          ov.style.transition = "opacity 0.6s ease-in-out";
+          requestAnimationFrame(() => {
+            ov.style.opacity = "0";
+          });
+        });
+        if (annule) return;
 
-      // 6. Fin : retrait de l'écran + déblocage du défilement.
-      setFini(true);
-      debloquer();
+        // 6. Fin : retrait de l'écran + déblocage du défilement.
+        setFini(true);
+        debloquer();
       } catch {
         // Filet de sécurité : jamais bloqué sur l'écran noir.
         if (!annule) {
@@ -230,6 +267,19 @@ export default function HomeIntro({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      {/* Keyframes natives : le navigateur anime, zéro JS par image. */}
+      <style>{`
+        @keyframes hi-flux {
+          from { stroke-dashoffset: ${SEG}; }
+          to   { stroke-dashoffset: -1; }
+        }
+        @keyframes hi-goutte {
+          0%   { opacity: 0; transform: scale(0); }
+          50%  { opacity: 1; transform: scale(1.35); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
+
       <div
         className={`transition-opacity duration-700 ease-out ${
           reveal ? "opacity-100" : "opacity-0"
