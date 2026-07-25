@@ -14,9 +14,17 @@ import { PROJETS } from "@/content/projets";
  * Aucune écriture sur le visuel — le texte vit entièrement dans la colonne de
  * gauche, alignée sur le HAUT de l'image.
  *
+ * Le carrousel BOUCLE : après le dernier projet on revient au premier, et
+ * inversement. Il n'y a donc plus de « bord ».
+ *
  * Navigation : molette sur ordinateur, glissement vertical du doigt sur
  * tablette et téléphone (sens naturel : on tire le visuel vers le haut pour
  * remonter aux projets précédents).
+ *
+ * Pour que la page reste franchissable malgré la boucle, on ne capte le geste
+ * que pendant un cycle complet d'affilée : au-delà de PROJETS.length crans
+ * consommés sans pause, la molette et le doigt repassent la main au
+ * défilement de la page. Une pause (500 ms) réarme le cycle.
  */
 
 const DUREE = 640;
@@ -34,47 +42,57 @@ export default function CarrouselProjets() {
 
   const aller = useCallback((pas: number) => {
     if (verrou.current) return;
-    setCourant((index) => {
-      const suivant = index + pas;
-      if (suivant < 0 || suivant >= PROJETS.length) return index;
-      verrou.current = true;
-      window.setTimeout(() => {
-        verrou.current = false;
-      }, DUREE);
-      return suivant;
-    });
+    verrou.current = true;
+    window.setTimeout(() => {
+      verrou.current = false;
+    }, DUREE);
+    setCourant(
+      (index) => (index + pas + PROJETS.length) % PROJETS.length,
+    );
   }, []);
 
   useEffect(() => {
     const noeud = scene.current;
     if (!noeud) return;
 
-    const possible = (pas: number) => {
-      const suivant = courant + pas;
-      return suivant >= 0 && suivant < PROJETS.length;
+    /*
+      Budget de cycle : nombre de crans qu'on s'autorise à capter d'affilée.
+      À zéro, on rend la main à la page (molette) ou on laisse le navigateur
+      défiler (tactile, via touch-action). Une pause de 500 ms réarme le
+      budget à un cycle complet.
+    */
+    let budget = PROJETS.length;
+    let dernier = 0;
+
+    const rearmer = () => {
+      const maintenant = Date.now();
+      if (maintenant - dernier > 500) budget = PROJETS.length;
+      dernier = maintenant;
     };
 
     /* ---------------------------- Molette ---------------------------- */
     const onWheel = (evenement: WheelEvent) => {
       if (Math.abs(evenement.deltaY) < 4) return;
-      const pas = evenement.deltaY > 0 ? 1 : -1;
-      if (!possible(pas)) return;
+      rearmer();
+      if (budget <= 0) return; // cycle épuisé : la page défile
       evenement.preventDefault();
-      aller(pas);
+      budget -= 1;
+      aller(evenement.deltaY > 0 ? 1 : -1);
     };
 
     /* ---------------------------- Tactile ----------------------------
-       On ne confisque le geste QUE s'il est vertical et qu'un projet
-       existe dans cette direction. Sinon on laisse la page défiler : au
-       premier et au dernier projet, le doigt doit pouvoir sortir du
-       carrousel. `passive: false` est indispensable, sans quoi
-       preventDefault est ignoré sur mobile.                             */
+       `touch-action` est basculé à chaque touchstart : `pan-x` tant qu'il
+       reste du budget (on capte le vertical), `pan-y` une fois le cycle
+       épuisé (le navigateur reprend le défilement de la page). C'est le
+       seul réglage fiable cross-navigateur pour rendre la main sur mobile. */
     let departY = 0;
     let departX = 0;
     let ecart = 0;
     let capture: boolean | null = null;
 
     const onTouchStart = (evenement: TouchEvent) => {
+      rearmer();
+      noeud.style.touchAction = budget > 0 ? "pan-x" : "pan-y";
       const doigt = evenement.touches[0];
       departY = doigt.clientY;
       departX = doigt.clientX;
@@ -88,14 +106,14 @@ export default function CarrouselProjets() {
       const lateral = doigt.clientX - departX;
 
       if (capture === null) {
-        if (Math.abs(ecart) < SEUIL_DECISION && Math.abs(lateral) < SEUIL_DECISION) {
+        if (
+          Math.abs(ecart) < SEUIL_DECISION &&
+          Math.abs(lateral) < SEUIL_DECISION
+        ) {
           return;
         }
-        // Geste horizontal, ou vertical sans destination : on rend la main.
-        // Glissement vers le HAUT (ecart < 0) = revenir au projet précédent,
-        // comme le défilement naturel d'une page.
-        const pas = ecart < 0 ? -1 : 1;
-        capture = Math.abs(ecart) > Math.abs(lateral) && possible(pas);
+        // Vertical et budget disponible → on prend la main ; sinon on laisse.
+        capture = Math.abs(ecart) > Math.abs(lateral) && budget > 0;
       }
 
       if (capture) evenement.preventDefault();
@@ -103,6 +121,8 @@ export default function CarrouselProjets() {
 
     const onTouchEnd = () => {
       if (capture && Math.abs(ecart) > SEUIL_GLISSEMENT) {
+        budget -= 1;
+        // Doigt vers le HAUT (ecart < 0) → projet précédent.
         aller(ecart < 0 ? -1 : 1);
       }
       capture = null;
@@ -122,7 +142,7 @@ export default function CarrouselProjets() {
       noeud.removeEventListener("touchend", onTouchEnd);
       noeud.removeEventListener("touchcancel", onTouchEnd);
     };
-  }, [courant, aller]);
+  }, [aller]);
 
   const projet = PROJETS[courant];
 
@@ -173,7 +193,15 @@ export default function CarrouselProjets() {
         style={{ touchAction: "pan-x" }}
       >
         {PROJETS.map((entree, index) => {
-          const ecartIndex = index - courant;
+          /*
+            Écart circulaire : au dernier projet, le premier est « juste après »
+            (il arrive par le haut), pas à l'autre bout. C'est ce qui fait
+            boucler l'animation sans téléportation visible.
+          */
+          let ecartIndex = index - courant;
+          const moitie = PROJETS.length / 2;
+          if (ecartIndex > moitie) ecartIndex -= PROJETS.length;
+          else if (ecartIndex < -moitie) ecartIndex += PROJETS.length;
 
           /*
             0  → premier plan, net
