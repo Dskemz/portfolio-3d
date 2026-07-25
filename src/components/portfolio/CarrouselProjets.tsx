@@ -462,7 +462,7 @@ export default function CarrouselProjets() {
             </span>
           </Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
