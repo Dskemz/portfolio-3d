@@ -1,25 +1,30 @@
 "use client";
 
 /**
- * FluxCompetences — les quatre domaines, reliés par un fil orange qui SE DESSINE
- * au scroll et fait le TOUR de chaque cadre.
+ * FluxCompetences — les quatre domaines traversés par le fil orange.
  *
- * Concept (demande de D, juillet 2026) :
- *  - le fil part du bord GAUCHE de l'écran et ressort au bord DROIT ;
- *  - il ne saute jamais un cadre : arrivé à un cadre, il se DÉDOUBLE en deux
- *    branches symétriques qui épousent le contour (gauche + droite EN MÊME
- *    TEMPS), se rejoignent de l'autre côté, puis le fil continue sa route ;
- *  - tout se trace progressivement quand la section entre dans le viewport
- *    (`whileInView` + `pathLength`), rappel de la home et du portfolio ;
- *  - les cadres eux-mêmes font partie de l'animation (apparition au scroll).
+ * Le fil est INVISIBLE au repos et SE DESSINE une seule fois quand la section
+ * des quatre cadres entre dans le viewport (`whileInView` + `pathLength`).
+ * La mise en page, la géométrie du tracé et les cadres sont inchangés : seule
+ * l'apparition du trait est animée.
  *
- * PLEINE LARGEUR : le bloc sort de son conteneur (`left-1/2 w-screen
- * -translate-x-1/2`) pour toucher les deux bords de l'écran.
+ * PLEINE LARGEUR. Le bloc sort de son conteneur (`left-1/2 w-screen
+ * -translate-x-1/2`) pour que le fil parte réellement du bord gauche de
+ * l'écran et ressorte au bord droit. Enfermé dans le `max-w-6xl` de la
+ * section, il s'arrêtait au milieu de nulle part.
  *
- * Repère commun tracé + cadres : 1440 × 520.
- *  - Couloir horizontal du fil : y = 210 (centre vertical des cadres).
- *  - Axes médians des cadres : x = 240, 560, 880, 1200.
- *  - Chaque cadre : 300 de large, 300 de haut. Bords G/D à ±150 de l'axe.
+ * Le tracé est ORTHOGONAL : segments horizontaux et verticaux uniquement,
+ * rayon de 8 unités sur chaque coude. Il entre et ressort TOUJOURS sur l'axe
+ * médian des cadres, donc le segment caché à l'intérieur est une droite.
+ *
+ * ⚠️ Tailles en `clamp(..vw..)` et NON en rem : le repère SVG se met à
+ * l'échelle avec la largeur de l'écran, la typographie doit suivre la même
+ * loi. Avec des tailles fixes, le texte débordait des cadres en dessous de
+ * 1280 px — les cadres ont une hauteur imposée par la géométrie du tracé.
+ *
+ * Émission : un `feGaussianBlur` sur une copie du tracé, plus le trait plein
+ * par-dessus. Le filtre est appliqué à un chemin unique et statique, il n'est
+ * rastérisé qu'une fois.
  */
 
 import { motion, useReducedMotion } from "framer-motion";
@@ -50,75 +55,41 @@ const DOMAINES: readonly Domaine[] = [
   },
 ] as const;
 
-/* Géométrie du repère 1440 × 520. */
-const AXES = [240, 560, 880, 1200] as const;
-const COULOIR = 210; // y du fil horizontal (centre des cadres)
-const DEMI_L = 150; // demi-largeur du cadre
-const DEMI_H = 150; // demi-hauteur du cadre
-const HAUT = COULOIR - DEMI_H; // bord haut du cadre (60)
-const BAS = COULOIR + DEMI_H; // bord bas du cadre (360)
-const R = 14; // rayon des arrondis
-
-/* Cadres en pourcentages du même repère (300×300 dans 1440×520). */
-const LARGEUR_CADRE = `${(300 / 1440) * 100}%`; // 20.83%
-const HAUTEUR_CADRE = `${(300 / 520) * 100}%`; // 57.69%
-const CADRES = AXES.map((ax) => ({
-  gauche: `${((ax - DEMI_L) / 1440) * 100}%`,
-  haut: `${(HAUT / 520) * 100}%`,
-}));
-
 /**
- * SEGMENTS DROITS du fil, entre les cadres, sur le couloir y=210.
- * Premier : bord gauche écran → bord gauche du 1er cadre.
- * Intermédiaires : bord droit cadre N → bord gauche cadre N+1.
- * Dernier : bord droit du 4e cadre → bord droit écran.
+ * Repère commun au tracé et aux cadres : 1440 × 520.
+ * Axes médians des cadres : 240, 560, 880, 1200.
+ * Couloirs horizontaux : 25 en haut, 490 en bas — hors de tous les cadres.
  */
-const SEGMENTS: string[] = [];
-SEGMENTS.push(`M 0 ${COULOIR} H ${AXES[0] - DEMI_L}`);
-for (let i = 0; i < AXES.length - 1; i++) {
-  SEGMENTS.push(`M ${AXES[i] + DEMI_L} ${COULOIR} H ${AXES[i + 1] - DEMI_L}`);
-}
-SEGMENTS.push(`M ${AXES[AXES.length - 1] + DEMI_L} ${COULOIR} H 1440`);
+const TRACE =
+  "M 0 490 H 232 Q 240 490 240 482 V 33 Q 240 25 248 25 " +
+  "H 552 Q 560 25 560 33 V 482 Q 560 490 568 490 " +
+  "H 872 Q 880 490 880 482 V 33 Q 880 25 888 25 " +
+  "H 1192 Q 1200 25 1200 33 V 482 Q 1200 490 1208 490 H 1440";
 
-/**
- * CONTOUR d'un cadre : deux branches symétriques de l'entrée (bord gauche, sur
- * le couloir) à la sortie (bord droit, sur le couloir). Branche HAUTE par le
- * dessus, branche BASSE par le dessous. Elles se tracent EN MÊME TEMPS →
- * « le fil fait le tour par la droite et par la gauche à la fois ».
- */
-function contourCadre(ax: number) {
-  const gx = ax - DEMI_L;
-  const dx = ax + DEMI_L;
-  const entree = `${gx} ${COULOIR}`;
-  const sortie = `${dx} ${COULOIR}`;
+/** Position des cadres, en pourcentages du MÊME repère. */
+const CADRES = [
+  { gauche: "6.25%", haut: "26.92%" },
+  { gauche: "28.47%", haut: "11.54%" },
+  { gauche: "50.69%", haut: "26.92%" },
+  { gauche: "72.92%", haut: "11.54%" },
+] as const;
 
-  const haute =
-    `M ${entree} ` +
-    `V ${HAUT + R} Q ${gx} ${HAUT} ${gx + R} ${HAUT} ` +
-    `H ${dx - R} Q ${dx} ${HAUT} ${dx} ${HAUT + R} ` +
-    `L ${sortie}`;
+const LARGEUR_CADRE = "20.83%";
+const HAUTEUR_CADRE = "57.69%";
 
-  const basse =
-    `M ${entree} ` +
-    `V ${BAS - R} Q ${gx} ${BAS} ${gx + R} ${BAS} ` +
-    `H ${dx - R} Q ${dx} ${BAS} ${dx} ${BAS - R} ` +
-    `L ${sortie}`;
+/** Perçages des bordures, toujours sur l'axe médian. */
+const NOEUDS = [
+  { cx: 240, cy: 440 },
+  { cx: 240, cy: 140 },
+  { cx: 560, cy: 60 },
+  { cx: 560, cy: 360 },
+  { cx: 880, cy: 440 },
+  { cx: 880, cy: 140 },
+  { cx: 1200, cy: 60 },
+  { cx: 1200, cy: 360 },
+] as const;
 
-  return { haute, basse };
-}
-
-const CONTOURS = AXES.map(contourCadre);
-
-/** Durée d'un tronçon (s). Le suivant démarre quand le précédent finit. */
-const PAS = 0.5;
-
-/* Nœuds aux points d'entrée / sortie de chaque cadre. */
-const NOEUDS = AXES.flatMap((ax) => [
-  { cx: ax - DEMI_L, cy: COULOIR },
-  { cx: ax + DEMI_L, cy: COULOIR },
-]);
-
-/* Tailles indexées sur la largeur d'écran. */
+/* Tailles indexées sur la largeur d'écran, comme le repère SVG. */
 const PADDING_CADRE = "clamp(1rem, 1.7vw, 2.125rem)";
 const TAILLE_TITRE = "clamp(1.0625rem, 2.1vw, 2rem)";
 const TAILLE_TEXTE = "clamp(0.6875rem, 0.95vw, 0.9375rem)";
@@ -147,40 +118,29 @@ function ContenuCadre({ domaine }: { domaine: Domaine }) {
 export default function FluxCompetences() {
   const reduceMotion = useReducedMotion();
 
-  const traceProps = (delai: number, duree = PAS) =>
-    reduceMotion
-      ? { initial: false as const, animate: { pathLength: 1, opacity: 1 } }
-      : {
-          initial: { pathLength: 0, opacity: 0 },
-          whileInView: { pathLength: 1, opacity: 1 },
-          viewport: { once: true, amount: 0.35 as const },
-          transition: {
-            pathLength: { duration: duree, ease: [0.4, 0, 0.2, 1] as const, delay: delai },
-            opacity: { duration: 0.15, delay: delai },
-          },
-        };
+  // Le trait net se dessine (pathLength 0→1) une seule fois, quand la section
+  // des cadres entre dans le viewport. Invisible avant. L'émission floutée
+  // n'anime que son opacité (un pathLength sur un flou clignoterait).
+  const traitAnime = reduceMotion
+    ? { initial: false as const }
+    : {
+        initial: { pathLength: 0, opacity: 0 },
+        whileInView: { pathLength: 1, opacity: 1 },
+        viewport: { once: true, amount: 0.55 as const },
+        transition: {
+          pathLength: { duration: 2.6, ease: [0.4, 0, 0.2, 1] as const },
+          opacity: { duration: 0.3 },
+        },
+      };
 
-  const cadreProps = (index: number) => {
-    const delai = index * 2 * PAS + PAS * 0.5;
-    return reduceMotion
-      ? { initial: false as const, animate: { opacity: 1, y: 0 } }
-      : {
-          initial: { opacity: 0, y: 18 },
-          whileInView: { opacity: 1, y: 0 },
-          viewport: { once: true, amount: 0.35 as const },
-          transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] as const, delay: delai },
-        };
-  };
-
-  const noeudProps = (delai: number) =>
-    reduceMotion
-      ? { initial: false as const, animate: { opacity: 1, scale: 1 } }
-      : {
-          initial: { opacity: 0, scale: 0 },
-          whileInView: { opacity: 1, scale: 1 },
-          viewport: { once: true, amount: 0.35 as const },
-          transition: { duration: 0.3, ease: "easeOut" as const, delay: delai },
-        };
+  const emissionAnime = reduceMotion
+    ? { initial: false as const }
+    : {
+        initial: { opacity: 0 },
+        whileInView: { opacity: 0.55 },
+        viewport: { once: true, amount: 0.55 as const },
+        transition: { duration: 0.5 },
+      };
 
   return (
     <>
@@ -198,62 +158,38 @@ export default function FluxCompetences() {
           className="absolute inset-0 z-0 h-full w-full"
         >
           <defs>
-            <filter id="emission-flux" x="-5%" y="-40%" width="110%" height="180%">
-              <feGaussianBlur stdDeviation="6" />
+            <filter
+              id="emission-flux"
+              x="-5%"
+              y="-15%"
+              width="110%"
+              height="130%"
+            >
+              <feGaussianBlur stdDeviation="7" />
             </filter>
           </defs>
 
-          <g strokeLinecap="round" fill="none">
-            {/* Émission : tout le parcours, apparition en opacité seulement */}
-            <motion.path
-              d={[...SEGMENTS, ...CONTOURS.flatMap((c) => [c.haute, c.basse])].join(" ")}
-              stroke={ACCENT}
-              strokeWidth={5}
-              filter="url(#emission-flux)"
-              initial={reduceMotion ? false : { opacity: 0 }}
-              whileInView={{ opacity: 0.5 }}
-              viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.4 }}
-            />
-
-            {/* Tracé net, tronçon par tronçon (gauche → droite) */}
-            {SEGMENTS.map((d, i) => {
-              const delai = i * 2 * PAS;
-              return (
-                <motion.path
-                  key={`seg-${i}`}
-                  d={d}
-                  stroke={ACCENT}
-                  strokeWidth={2.5}
-                  {...traceProps(delai)}
-                />
-              );
-            })}
-
-            {CONTOURS.map((c, i) => {
-              const delai = (i * 2 + 1) * PAS;
-              return (
-                <g key={`contour-${i}`}>
-                  <motion.path
-                    d={c.haute}
-                    stroke={ACCENT}
-                    strokeWidth={2.5}
-                    {...traceProps(delai)}
-                  />
-                  <motion.path
-                    d={c.basse}
-                    stroke={ACCENT}
-                    strokeWidth={2.5}
-                    {...traceProps(delai)}
-                  />
-                </g>
-              );
-            })}
-          </g>
+          <motion.path
+            d={TRACE}
+            fill="none"
+            stroke={ACCENT}
+            strokeWidth={5}
+            strokeLinecap="round"
+            filter="url(#emission-flux)"
+            {...emissionAnime}
+          />
+          <motion.path
+            d={TRACE}
+            fill="none"
+            stroke={ACCENT}
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            {...traitAnime}
+          />
         </svg>
 
         {DOMAINES.map((domaine, index) => (
-          <motion.article
+          <article
             key={domaine.titre}
             className="absolute z-10 flex flex-col justify-center border border-mine bg-black"
             style={{
@@ -263,42 +199,52 @@ export default function FluxCompetences() {
               height: HAUTEUR_CADRE,
               padding: PADDING_CADRE,
             }}
-            {...cadreProps(index)}
           >
             <ContenuCadre domaine={domaine} />
-          </motion.article>
+          </article>
         ))}
 
-        {/* Nœuds au-dessus des cadres */}
+        {/* Nœuds au-dessus des cadres, sinon la bordure les recouvre */}
         <svg
           viewBox="0 0 1440 520"
           preserveAspectRatio="xMidYMid meet"
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-20 h-full w-full"
         >
-          {NOEUDS.map((noeud, i) => {
-            const cadreIndex = Math.floor(i / 2);
-            const estEntree = i % 2 === 0;
-            const delai = estEntree
-              ? cadreIndex * 2 * PAS + PAS * 0.9
-              : (cadreIndex * 2 + 1) * PAS + PAS * 0.9;
-            return (
-              <motion.circle
-                key={`${noeud.cx}-${noeud.cy}`}
-                cx={noeud.cx}
-                cy={noeud.cy}
-                r={4}
-                fill={ACCENT}
-                {...noeudProps(delai)}
-              />
-            );
-          })}
+          {NOEUDS.map((noeud) => (
+            <motion.circle
+              key={`${noeud.cx}-${noeud.cy}`}
+              cx={noeud.cx}
+              cy={noeud.cy}
+              r={4}
+              fill={ACCENT}
+              initial={reduceMotion ? false : { opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, amount: 0.55 }}
+              transition={{ duration: 0.4, delay: reduceMotion ? 0 : 1.6 }}
+            />
+          ))}
         </svg>
       </div>
 
       {/* ---------------------------------------------------------------- */}
       {/*  Mobile et tablette — rail vertical, cadres empilés               */}
       {/* ---------------------------------------------------------------- */}
+      {/*
+        Le rail ne flotte plus dans le vide : il ARRIVE du bord gauche de
+        l'écran par un coude en haut, descend le long des cadres, puis REPART
+        vers le bord droit par un coude en bas. Même principe que sur
+        ordinateur — le fil traverse la page, il ne naît pas ici.
+
+        Les coudes sont des boîtes dont on ne peint que deux bordures : la
+        bordure haute + droite dessine « j'arrive de la gauche puis je
+        descends », la bordure gauche + basse dessine « je descends puis je
+        pars à droite ». Le rayon vit sur le coin correspondant. Zéro SVG,
+        zéro JavaScript, et ça suit la hauteur réelle de la pile de cadres.
+
+        `-left-6` / `-right-6` compensent exactement le `px-6` de la section :
+        les deux extrémités atteignent donc le bord de l'écran.
+      */}
       <div className="relative overflow-x-clip lg:hidden">
         {/* Émission */}
         <span
