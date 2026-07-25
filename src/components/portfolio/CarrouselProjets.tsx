@@ -103,7 +103,6 @@ function ImageCardWrapper({
           scale: isCurrent ? 1 : 1,
         }}
         transition={{ duration: 0.3 }}
-        ref={frameRef}
       />
 
       {/* Ombre portée dynamique */}
