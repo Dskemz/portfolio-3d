@@ -1,11 +1,10 @@
 /**
  * BandeauConfiance — « Ils m'ont fait confiance ».
  *
- * Les logos ne sont plus pris entre deux filets gris : ils reposent sur un
- * BANDEAU FLOU épais. La bande est un conteneur de hauteur fixe (`overflow-hidden`)
- * dans lequel deux panneaux très floutés (un graphite large, un voile orange
- * pour le rappel d'accent) forment une nappe aux bords fondus, sans arête. Les
- * logos défilent par-dessus, centrés dans l'épaisseur.
+ * Plus de nappe floue derrière les logos (retirée à la demande de D) : il ne
+ * reste que le libellé et la piste qui défile, resserrés l'un contre l'autre.
+ * Le fil orange qui passe juste au-dessus (tracé dans page.tsx) tient lieu de
+ * séparation — inutile d'ajouter un fond.
  *
  * Défilement : piste dupliquée deux fois, translatée de -50 % en boucle ; la
  * couture est invisible car la seconde moitié copie la première.
@@ -33,26 +32,12 @@ export default function BandeauConfiance() {
   const piste = [...CLIENTS, ...CLIENTS];
 
   return (
-    <section className="w-full py-10 lg:py-12">
-      <p className="mb-8 px-6 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-trait lg:px-16">
+    <section className="w-full pb-14 pt-8 lg:pb-16 lg:pt-10">
+      <p className="mb-6 px-6 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-trait lg:px-16">
         Ils m&apos;ont fait confiance
       </p>
 
-      {/*
-        Épaisseur du bandeau ≈ triplée : la hauteur du conteneur définit la
-        nappe, `overflow-hidden` fond les panneaux dans cette bande.
-      */}
-      <div className="bandeau-confiance relative flex h-48 items-center overflow-hidden lg:h-56">
-        {/* Nappe floue : deux panneaux superposés */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 h-full w-[94%] max-w-6xl -translate-x-1/2 -translate-y-1/2 rounded-[4rem] bg-graphite-800/50 blur-[64px]"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 h-3/4 w-[72%] max-w-4xl -translate-x-1/2 -translate-y-1/2 rounded-[4rem] bg-orange-500/10 blur-[60px]"
-        />
-
+      <div className="bandeau-confiance relative flex items-center overflow-hidden">
         {/* Fondus latéraux pour que les logos naissent et meurent en douceur */}
         <div
           aria-hidden="true"
@@ -63,7 +48,7 @@ export default function BandeauConfiance() {
           className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-gradient-to-l from-black to-transparent"
         />
 
-        <ul className="bandeau-piste relative z-[5] flex shrink-0 items-center gap-16 pr-16 lg:gap-24 lg:pr-24">
+        <ul className="bandeau-piste flex shrink-0 items-center gap-16 pr-16 lg:gap-24 lg:pr-24">
           {piste.map((nom, index) => (
             <li
               key={`${nom}-${index}`}

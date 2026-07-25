@@ -48,10 +48,23 @@ export default function PortfolioPage() {
         </div>
 
         {/*
-          Couloir : bande vide entre le carrousel et les logos. Son centre donne
-          la hauteur à laquelle le fil repart horizontalement vers la droite.
+          Couloir : bande entre le carrousel et les logos. Son centre donne la
+          hauteur à laquelle passe le fil, juste au-dessus de « Ils m'ont fait
+          confiance ».
+          – Sur ORDINATEUR, FilPortfolio y amène son tracé (venu du « j »).
+          – Sur TÉLÉPHONE, où ce tracé n'existe pas, on peint ici un fil
+            horizontal d'un bord à l'autre de la page (`lg:hidden`).
         */}
-        <div id="fil-couloir" aria-hidden className="h-12 lg:h-14" />
+        <div id="fil-couloir" aria-hidden className="relative h-12 lg:h-14">
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 bg-orange-500/25 blur-[3px] lg:hidden"
+          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-orange-500/80 lg:hidden"
+          />
+        </div>
 
         {/* Bandeau logos — le fil passe juste au-dessus */}
         <div className="relative z-10">
