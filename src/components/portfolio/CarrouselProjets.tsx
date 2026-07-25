@@ -15,7 +15,8 @@ import { PROJETS } from "@/content/projets";
  * gauche, alignée sur le HAUT de l'image.
  *
  * Navigation : molette sur ordinateur, glissement vertical du doigt sur
- * tablette et téléphone.
+ * tablette et téléphone (sens naturel : on tire le visuel vers le haut pour
+ * remonter aux projets précédents).
  */
 
 const DUREE = 640;
@@ -91,7 +92,9 @@ export default function CarrouselProjets() {
           return;
         }
         // Geste horizontal, ou vertical sans destination : on rend la main.
-        const pas = ecart < 0 ? 1 : -1;
+        // Glissement vers le HAUT (ecart < 0) = revenir au projet précédent,
+        // comme le défilement naturel d'une page.
+        const pas = ecart < 0 ? -1 : 1;
         capture = Math.abs(ecart) > Math.abs(lateral) && possible(pas);
       }
 
@@ -100,7 +103,7 @@ export default function CarrouselProjets() {
 
     const onTouchEnd = () => {
       if (capture && Math.abs(ecart) > SEUIL_GLISSEMENT) {
-        aller(ecart < 0 ? 1 : -1);
+        aller(ecart < 0 ? -1 : 1);
       }
       capture = null;
       ecart = 0;
@@ -137,7 +140,7 @@ export default function CarrouselProjets() {
           </span>
         </p>
 
-        <h2 className="mt-5 font-display text-[clamp(1.7rem,3.2vw,2.6rem)] font-light leading-[1.1] tracking-tight text-papier">
+        <h2 className="mt-5 font-display text-[clamp(1.5rem,2.6vw,2.2rem)] font-light leading-[1.1] tracking-tight text-papier">
           {projet.titre}
         </h2>
 
@@ -166,7 +169,7 @@ export default function CarrouselProjets() {
       {/* ---------------------------------------------------------------- */}
       <div
         ref={scene}
-        className="relative h-[clamp(20rem,42vw,34rem)] select-none"
+        className="relative h-[clamp(16rem,34vw,27rem)] select-none"
         style={{ touchAction: "pan-x" }}
       >
         {PROJETS.map((entree, index) => {
