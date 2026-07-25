@@ -161,6 +161,12 @@ export default function SkillFlowMobile() {
   const lockRef = useRef(false);
   const cancelRef = useRef<(() => void) | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  /**
+   * Flag stable : une fois qu'on a VRAIMENT entré en mode stepped (premier swipe
+   * vers le bas détecté et capturé), on y reste. Élimine le problème du premier
+   * swipe qui passe libre quand il devrait déclencher la visite.
+   */
+  const enteredSteppedRef = useRef(false);
 
   useEffect(() => {
     if (!MOBILE_STEPPED) return;
@@ -192,13 +198,15 @@ export default function SkillFlowMobile() {
       return Math.round(Math.min(maxScroll, Math.max(0, wanted)));
     };
 
-    /** Accueil : défilement libre tant que la 1re fiche n'est pas en approche. */
-    const introStillFree = () => {
-      if (stepRef.current !== -1) return false;
+    /**
+     * Vérifie si la première fiche approche du viewport. Utilisé seulement
+     * lors de la détection du premier swipe vers le bas.
+     */
+    const firstFicheApproaches = () => {
       const first = WORKFLOW_NODES[0];
       const el = first && cardRefs.current.get(first.id);
       if (!el) return true;
-      return el.getBoundingClientRect().top > window.innerHeight * INTRO_GRAB_VH;
+      return el.getBoundingClientRect().top <= window.innerHeight * INTRO_GRAB_VH;
     };
 
     const tailReached = () => {
@@ -232,18 +240,30 @@ export default function SkillFlowMobile() {
       return direction === 1 ? rect.bottom > vh - 8 : rect.top < 8;
     };
 
-    /** La visite guidée prend-elle la main pour ce sens de défilement ? */
+    /**
+     * La visite guidée prend-elle la main pour ce sens de défilement ?
+     * Une fois entré en mode stepped, on capture TOUS les swipes sauf ceux
+     * vers la fin du document.
+     */
     const guided = (direction: 1 | -1) => {
       if (!cardRefs.current.size) return false;
       if (overflowFree(direction)) return false;
-      if (direction === 1) {
-        if (introStillFree()) return false;
-        if (tailReached()) return false;
-      } else {
-        if (stepRef.current === -1) return false;
-        if (belowTail()) return false;
+
+      // Si on est déjà entré en mode stepped, capturer tout sauf tail.
+      if (enteredSteppedRef.current) {
+        if (direction === 1 && tailReached()) return false;
+        if (direction === -1 && belowTail()) return false;
+        return true;
       }
-      return true;
+
+      // Avant d'entrer : vérifier seulement un swipe vers le bas ET première fiche approche.
+      if (direction === 1) {
+        if (firstFicheApproaches()) return true; // Déclencher l'entrée
+        return false;
+      }
+
+      // Swipe vers le haut sans être en mode stepped = ignoré
+      return false;
     };
 
     const goToStep = (index: number) => {
@@ -254,6 +274,12 @@ export default function SkillFlowMobile() {
       if (target === null) return;
 
       stepRef.current = clamped;
+
+      // ✓ Marque qu'on est VRAIMENT entré en mode stepped (première fiche atteinte).
+      if (clamped >= 0) {
+        enteredSteppedRef.current = true;
+      }
+
       if (Math.abs(target - window.scrollY) < 1) return;
 
       lockRef.current = true;
@@ -317,7 +343,11 @@ export default function SkillFlowMobile() {
     /** Retour en haut de page : on relâche la visite guidée. */
     const onScroll = () => {
       if (lockRef.current) return;
-      if (window.scrollY < 10) stepRef.current = -1;
+      if (window.scrollY < 10) {
+        stepRef.current = -1;
+        // ✓ Réinitialise aussi l'entrée en mode stepped.
+        enteredSteppedRef.current = false;
+      }
     };
 
     /** Clic sur le logo : on abandonne le cran en vol et on oublie l'état de la visite. */
@@ -326,6 +356,8 @@ export default function SkillFlowMobile() {
       cancelRef.current = null;
       lockRef.current = false;
       stepRef.current = -1;
+      // ✓ Réinitialise l'entrée en mode stepped, pour recommencer depuis zéro.
+      enteredSteppedRef.current = false;
     };
 
     window.addEventListener(HOME_JUMP_EVENT, onHomeJump);
