@@ -104,13 +104,25 @@ export default function HomeIntro({ children }: { children: React.ReactNode }) {
     };
 
     const filerVers = (p: SVGPathElement | null, duree: number, retard = 0) =>
-      p
-        ? animate(
-            p,
-            { strokeDashoffset: [SEG, -1] },
-            { duration: duree, delay: retard, ease: [0.4, 0, 0.2, 1] },
-          ).finished
-        : Promise.resolve();
+      new Promise<void>((resolve) => {
+        if (!p) {
+          resolve();
+          return;
+        }
+        // Forme NUMÉRIQUE de framer (from, to, { onUpdate }) : la seule qui
+        // pilote réellement `stroke-dashoffset` sur un <path>. La forme
+        // « élément » (animate(el, { strokeDashoffset: [...] })) ne l'animait
+        // pas → plus aucune animation visible.
+        const controls = animate(SEG, -1, {
+          duration: duree,
+          delay: retard,
+          ease: [0.4, 0, 0.2, 1],
+          onUpdate: (v) => {
+            p.style.strokeDashoffset = String(v);
+          },
+        });
+        controls.finished.then(() => resolve()).catch(() => resolve());
+      });
 
     const jouer = async () => {
       const cont = continuation.current;
@@ -125,7 +137,8 @@ export default function HomeIntro({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      const w = dim.w;
+      try {
+        const w = dim.w;
       const h = dim.h;
       const mx = MERGE.x * w;
       const my = MERGE.y * h;
@@ -195,6 +208,14 @@ export default function HomeIntro({ children }: { children: React.ReactNode }) {
       // 6. Fin : retrait de l'écran + déblocage du défilement.
       setFini(true);
       debloquer();
+      } catch {
+        // Filet de sécurité : jamais bloqué sur l'écran noir.
+        if (!annule) {
+          setReveal(true);
+          setFini(true);
+          debloquer();
+        }
+      }
     };
 
     jouer();
