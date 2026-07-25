@@ -33,7 +33,7 @@ export default function BandeauConfiance() {
 
   return (
     <section className="w-full pb-14 pt-8 lg:pb-16 lg:pt-10">
-      <p className="mb-6 px-6 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-trait lg:px-16">
+      <p className="mb-6 px-6 text-left font-mono text-[10px] uppercase tracking-[0.28em] text-trait lg:px-16">
         Ils m&apos;ont fait confiance
       </p>
 

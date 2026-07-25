@@ -75,8 +75,8 @@ export default function PortfolioPage() {
       {/* CTA final — remonté */}
       <section className="pb-24 pt-12 md:pb-28 md:pt-16">
         <div className="flex w-full flex-col gap-10 px-6 lg:flex-row lg:items-end lg:justify-between lg:px-16 xl:px-24">
-          <h2 className="max-w-xl font-display text-[clamp(1.6rem,3.4vw,2.4rem)] font-light leading-tight text-papier">
-            Un projet de visite virtuelle 3D&nbsp;?
+          <h2 className="font-display text-[clamp(1.6rem,3.4vw,2.4rem)] font-light leading-tight text-papier">
+            Un <span className="text-orange-500">projet</span> en tête, discutons-en
           </h2>
 
           <LienSobre href="/contact" className="self-start">
