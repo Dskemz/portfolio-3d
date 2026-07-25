@@ -118,9 +118,8 @@ function ContenuCadre({ domaine }: { domaine: Domaine }) {
 export default function FluxCompetences() {
   const reduceMotion = useReducedMotion();
 
-  // Le trait net ET son émission floutée se dessinent ENSEMBLE (pathLength
-  // 0→1), invisibles avant. Le fil apparaît donc progressivement, flou et net
-  // synchronisés — jamais de halo qui précède le tracé.
+  // Le trait net se dessine (pathLength 0→1) une seule fois, quand la section
+  // des cadres entre dans le viewport. Invisible avant.
   const traitAnime = reduceMotion
     ? { initial: false as const }
     : {
@@ -133,34 +132,16 @@ export default function FluxCompetences() {
         },
       };
 
-  const emissionAnime = reduceMotion
+  // Les cadres pairs (0, 2) arrivent du bas en fondu transparent → visible.
+  // Les cadres impairs (1, 3) restent fixes (pas d'animation).
+  const cadreArriveeBasAnime = reduceMotion
     ? { initial: false as const }
     : {
-        initial: { pathLength: 0, opacity: 0 },
-        whileInView: { pathLength: 1, opacity: 0.55 },
+        initial: { opacity: 0, y: 24 },
+        whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, amount: 0.55 as const },
-        transition: {
-          pathLength: { duration: 2.6, ease: [0.4, 0, 0.2, 1] as const },
-          opacity: { duration: 0.3 },
-        },
+        transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const, delay: 0.15 },
       };
-
-  // Chaque cadre se « connecte » quand le fil arrive à son niveau. Le tracé
-  // dure 2.6s et traverse les 4 cadres de gauche à droite → délais échelonnés.
-  const CADRE_DELAIS = [0.45, 1.1, 1.75, 2.35] as const;
-  const cadreAnime = (index: number) =>
-    reduceMotion
-      ? { initial: false as const }
-      : {
-          initial: { opacity: 0, scale: 0.965 },
-          whileInView: { opacity: 1, scale: 1 },
-          viewport: { once: true, amount: 0.55 as const },
-          transition: {
-            duration: 0.5,
-            ease: [0.16, 1, 0.3, 1] as const,
-            delay: CADRE_DELAIS[index] ?? 0,
-          },
-        };
 
   return (
     <>
@@ -189,14 +170,14 @@ export default function FluxCompetences() {
             </filter>
           </defs>
 
-          <motion.path
+          <path
             d={TRACE}
             fill="none"
             stroke={ACCENT}
             strokeWidth={5}
+            opacity={0.55}
             strokeLinecap="round"
             filter="url(#emission-flux)"
-            {...emissionAnime}
           />
           <motion.path
             d={TRACE}
@@ -208,22 +189,28 @@ export default function FluxCompetences() {
           />
         </svg>
 
-        {DOMAINES.map((domaine, index) => (
-          <motion.article
-            key={domaine.titre}
-            className="absolute z-10 flex flex-col justify-center border border-mine bg-black"
-            style={{
-              left: CADRES[index].gauche,
-              top: CADRES[index].haut,
-              width: LARGEUR_CADRE,
-              height: HAUTEUR_CADRE,
-              padding: PADDING_CADRE,
-            }}
-            {...cadreAnime(index)}
-          >
-            <ContenuCadre domaine={domaine} />
-          </motion.article>
-        ))}
+        {DOMAINES.map((domaine, index) => {
+          // Cadres pairs (0, 2) : arrivée du bas en fondu
+          // Cadres impairs (1, 3) : fixes
+          const isPair = index % 2 === 0;
+
+          return (
+            <motion.article
+              key={domaine.titre}
+              className="absolute z-10 flex flex-col justify-center border border-mine bg-black"
+              style={{
+                left: CADRES[index].gauche,
+                top: CADRES[index].haut,
+                width: LARGEUR_CADRE,
+                height: HAUTEUR_CADRE,
+                padding: PADDING_CADRE,
+              }}
+              {...(isPair ? cadreArriveeBasAnime : {})}
+            >
+              <ContenuCadre domaine={domaine} />
+            </motion.article>
+          );
+        })}
 
         {/* Nœuds au-dessus des cadres, sinon la bordure les recouvre */}
         <svg
@@ -232,25 +219,19 @@ export default function FluxCompetences() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-20 h-full w-full"
         >
-          {NOEUDS.map((noeud, i) => {
-            // Nœud i appartient au cadre Math.floor(i/2) (2 nœuds par cadre).
-            // Il s'allume quand le fil atteint son axe — calé sur le cadre.
-            const cadreIndex = Math.floor(i / 2);
-            const delai = reduceMotion ? 0 : (CADRE_DELAIS[cadreIndex] ?? 0) + 0.15;
-            return (
-              <motion.circle
-                key={`${noeud.cx}-${noeud.cy}`}
-                cx={noeud.cx}
-                cy={noeud.cy}
-                r={4}
-                fill={ACCENT}
-                initial={reduceMotion ? false : { opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, amount: 0.55 }}
-                transition={{ duration: 0.35, ease: "easeOut", delay: delai }}
-              />
-            );
-          })}
+          {NOEUDS.map((noeud) => (
+            <motion.circle
+              key={`${noeud.cx}-${noeud.cy}`}
+              cx={noeud.cx}
+              cy={noeud.cy}
+              r={4}
+              fill={ACCENT}
+              initial={reduceMotion ? false : { opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, amount: 0.55 }}
+              transition={{ duration: 0.4, delay: reduceMotion ? 0 : 1.6 }}
+            />
+          ))}
         </svg>
       </div>
 
