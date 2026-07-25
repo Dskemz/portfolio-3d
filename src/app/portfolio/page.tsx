@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import CarrouselProjets from "@/components/portfolio/CarrouselProjets";
 import BandeauConfiance from "@/components/portfolio/BandeauConfiance";
-import FilPortfolio from "@/components/portfolio/FilPortfolio";
 import LienSobre from "@/components/portfolio/LienSobre";
 
 export const metadata: Metadata = {
@@ -22,25 +21,32 @@ export default function PortfolioPage() {
   return (
     <div className="flex flex-1 flex-col bg-black text-white">
       {/*
-        Intro + carrousel + bandeau réunis dans UNE section (relative) : le fil,
-        tracé par FilPortfolio en un seul path SVG, court du « j » du titre
-        jusqu'au couloir carrousel/logos sans coupure. `overflow-x-clip` borne
-        le fil au bord de l'écran.
+        Intro + carrousel + bandeau réunis dans UNE section (relative).
+        Un trait fin vertical relie visuellement le titre à l'image.
       */}
       <main className="relative flex-grow overflow-x-clip">
-        <FilPortfolio />
-
         {/* Titre */}
         <div className="relative z-10 w-full px-6 pt-36 md:pt-44 lg:px-16 xl:px-24">
           <h1 className="font-display text-[clamp(2.1rem,5.6vw,4rem)] font-light leading-[1.05] tracking-tight text-papier">
             Mes Pro
-            {/* Ancre du fil : le path démarre au bas de cette lettre */}
-            <span id="fil-depart-j" className="relative inline-block">
+            {/* Ancre du trait : le path démarre au bas de cette lettre */}
+            <span id="trait-depart-j" className="relative inline-block">
               j
             </span>
             ets
           </h1>
         </div>
+
+        {/* Trait fin vertical reliant titre à image */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-0 z-0 w-px -translate-x-1/2"
+          style={{
+            height: "clamp(6rem, 24vh, 18rem)",
+            background:
+              "linear-gradient(180deg, rgba(255,127,80,0) 0%, rgba(255,127,80,0.3) 50%, rgba(255,127,80,0.1) 100%)",
+          }}
+        />
 
         {/* Carrousel (le lien « Voir la grille » vit désormais dans sa colonne) */}
         <div className="relative z-10 w-full px-6 pb-16 pt-14 lg:px-16 lg:pb-20 lg:pt-16 xl:px-24">
@@ -49,11 +55,8 @@ export default function PortfolioPage() {
 
         {/*
           Couloir : bande entre le carrousel et les logos. Son centre donne la
-          hauteur à laquelle passe le fil, juste au-dessus de « Ils m'ont fait
-          confiance ».
-          – Sur ORDINATEUR, FilPortfolio y amène son tracé (venu du « j »).
-          – Sur TÉLÉPHONE, où ce tracé n'existe pas, on peint ici un fil
-            horizontal d'un bord à l'autre de la page (`lg:hidden`).
+          hauteur de transition visuelle. Sur TÉLÉPHONE, on peint ici un fil
+          horizontal d'un bord à l'autre de la page.
         */}
         <div id="fil-couloir" aria-hidden className="relative h-12 lg:h-14">
           <span
@@ -66,7 +69,7 @@ export default function PortfolioPage() {
           />
         </div>
 
-        {/* Bandeau logos — le fil passe juste au-dessus */}
+        {/* Bandeau logos */}
         <div className="relative z-10">
           <BandeauConfiance />
         </div>

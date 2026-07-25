@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { PROJETS } from "@/content/projets";
 
 /**
@@ -12,7 +13,8 @@ import { PROJETS } from "@/content/projets";
  * gauche et flouté : on l'aperçoit, on ne le lit pas.
  *
  * Aucune écriture sur le visuel — le texte vit entièrement dans la colonne de
- * gauche, alignée sur le HAUT de l'image.
+ * gauche, alignée sur le HAUT de l'image. L'image bénéficie du même traitement
+ * que les fiches de la home : halo orange, gradient radial, périmètre animé SVG.
  *
  * Le carrousel BOUCLE : après le dernier projet on revient au premier, et
  * inversement. Il n'y a donc plus de « bord ».
@@ -34,6 +36,123 @@ const SEUIL_GLISSEMENT = 45;
 
 /** Au-delà de ce déplacement, le geste est considéré comme vertical. */
 const SEUIL_DECISION = 8;
+
+/**
+ * ImageCardWrapper — enveloppe l'image du carrousel avec le traitement glow
+ * identique aux fiches de la home page : halo, gradient radial, périmètre SVG,
+ * ombre portée. S'assure la cohérence visuelle globale du site.
+ */
+interface ImageCardWrapperProps {
+  project: (typeof PROJETS)[0];
+  isCurrent: boolean;
+  tabIndex: number;
+}
+
+const METAL =
+  "linear-gradient(150deg, #171717 0%, #121212 44%, #0d0d0d 74%, #151515 100%)";
+
+function ImageCardWrapper({
+  project,
+  isCurrent,
+  tabIndex,
+}: ImageCardWrapperProps) {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [box, setBox] = useState({ w: 0, h: 0 });
+
+  useEffect(() => {
+    const el = frameRef.current;
+    if (!el) return;
+    const read = () => setBox({ w: el.offsetWidth, h: el.offsetHeight });
+    read();
+    const observer = new ResizeObserver(read);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const perimeter =
+    box.w > 0 && box.h > 0 ? `M ${box.w / 2} 0 H ${box.w} V ${box.h} H 0 V 0 Z` : "";
+
+  return (
+    <Link
+      href={`/portfolio/${project.slug}`}
+      className="relative block h-full w-full border border-white/[0.07] overflow-hidden"
+      style={{ background: METAL }}
+      aria-hidden={!isCurrent}
+      tabIndex={tabIndex}
+    >
+      {/* Gradient radial de glow */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(120% 90% at 50% 0%, rgba(255,127,80,0.14), rgba(255,127,80,0) 62%)",
+        }}
+      />
+
+      {/* Image */}
+      <motion.img
+        src={project.couverture}
+        alt={project.titre}
+        loading="lazy"
+        draggable={false}
+        className="h-full w-full object-cover"
+        initial={false}
+        animate={{
+          opacity: isCurrent ? 1 : 0.6,
+          scale: isCurrent ? 1 : 1,
+        }}
+        transition={{ duration: 0.3 }}
+        ref={frameRef}
+      />
+
+      {/* Ombre portée dynamique */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-10"
+        initial={false}
+        animate={{
+          boxShadow: isCurrent
+            ? "0 0 48px rgba(255,127,80,0.26), 0 24px 50px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.07)"
+            : "0 0 24px rgba(255,127,80,0.12), 0 20px 42px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)",
+        }}
+        transition={{ duration: 0.3 }}
+      />
+
+      {/* Périmètre SVG animé */}
+      {perimeter && (
+        <svg
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-20"
+          width={box.w}
+          height={box.h}
+          viewBox={`0 0 ${box.w} ${box.h}`}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <filter id={`edge-${project.slug}`} x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="g" />
+              <feMerge>
+                <feMergeNode in="g" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <motion.path
+            d={perimeter}
+            fill="none"
+            stroke="#FF7F50"
+            strokeWidth={1.2}
+            vectorEffect="non-scaling-stroke"
+            initial={false}
+            animate={{ pathLength: isCurrent ? 1 : 0, opacity: isCurrent ? 1 : 0 }}
+            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+            filter={`url(#edge-${project.slug})`}
+          />
+        </svg>
+      )}
+    </Link>
+  );
+}
 
 export default function CarrouselProjets() {
   const [courant, setCourant] = useState(0);
@@ -197,7 +316,7 @@ export default function CarrouselProjets() {
       </div>
 
       {/* ---------------------------------------------------------------- */}
-      {/*  Carrousel — le visuel seul, sans surcharge                       */}
+      {/*  Carrousel — le visuel seul, avec traitement glow cohérent home   */}
       {/* ---------------------------------------------------------------- */}
       <div
         ref={scene}
@@ -245,12 +364,9 @@ export default function CarrouselProjets() {
           const estCourant = ecartIndex === 0;
 
           return (
-            <Link
+            <motion.div
               key={entree.slug}
-              href={`/portfolio/${entree.slug}`}
-              aria-hidden={!estCourant}
-              tabIndex={estCourant ? 0 : -1}
-              className="absolute inset-y-0 left-10 right-0 block overflow-hidden border border-mine bg-graphite-950"
+              className="absolute inset-y-0 left-10 right-0 overflow-hidden"
               style={{
                 transform: transformation,
                 filter: flou,
@@ -261,15 +377,13 @@ export default function CarrouselProjets() {
                 pointerEvents: estCourant ? "auto" : "none",
               }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={entree.couverture}
-                alt={entree.titre}
-                loading={index < 2 ? "eager" : "lazy"}
-                draggable={false}
-                className="h-full w-full object-cover"
+              {/* Conteneur avec traitement glow comme WorkflowCard */}
+              <ImageCardWrapper
+                project={entree}
+                isCurrent={estCourant}
+                tabIndex={estCourant ? 0 : -1}
               />
-            </Link>
+            </motion.div>
           );
         })}
       </div>
