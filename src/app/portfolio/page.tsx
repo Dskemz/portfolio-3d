@@ -37,12 +37,13 @@ export default function PortfolioPage() {
           </h1>
         </div>
 
-        {/* Trait fin vertical reliant titre à image */}
+        {/* Trait fin vertical reliant titre à image — démarre sous la navbar */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 z-0 w-px -translate-x-1/2"
+          className="pointer-events-none absolute left-1/2 z-0 w-px -translate-x-1/2"
           style={{
-            height: "clamp(6rem, 24vh, 18rem)",
+            top: "clamp(9rem, 20vh, 12rem)",
+            height: "clamp(5rem, 18vh, 14rem)",
             background:
               "linear-gradient(180deg, rgba(255,127,80,0) 0%, rgba(255,127,80,0.3) 50%, rgba(255,127,80,0.1) 100%)",
           }}

@@ -58,6 +58,22 @@ function ImageCardWrapper({
 }: ImageCardWrapperProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState({ w: 0, h: 0 });
+  /**
+   * Compteur incrémenté à chaque fois que le projet DEVIENT courant. Sert de
+   * `key` au tracé du périmètre : changer la key remonte le path, donc le
+   * redessine depuis 0 → 1. C'est ce qui donne l'animation « le flux se
+   * redessine à chaque changement de projet », en rappel des fiches home.
+   */
+  const [redraw, setRedraw] = useState(0);
+  const prevCurrent = useRef(isCurrent);
+
+  useEffect(() => {
+    // Passage false → true : on relance l'animation du périmètre.
+    if (isCurrent && !prevCurrent.current) {
+      setRedraw((n) => n + 1);
+    }
+    prevCurrent.current = isCurrent;
+  }, [isCurrent]);
 
   useEffect(() => {
     const el = frameRef.current;
@@ -80,6 +96,9 @@ function ImageCardWrapper({
       aria-hidden={!isCurrent}
       tabIndex={tabIndex}
     >
+      {/* Mesure du cadre pour le périmètre */}
+      <div ref={frameRef} className="absolute inset-0 z-0" aria-hidden />
+
       {/* Gradient radial de glow */}
       <span
         aria-hidden
@@ -100,7 +119,6 @@ function ImageCardWrapper({
         initial={false}
         animate={{
           opacity: isCurrent ? 1 : 0.6,
-          scale: isCurrent ? 1 : 1,
         }}
         transition={{ duration: 0.3 }}
       />
@@ -117,8 +135,8 @@ function ImageCardWrapper({
         transition={{ duration: 0.3 }}
       />
 
-      {/* Périmètre SVG animé */}
-      {perimeter && (
+      {/* Périmètre SVG animé — se redessine à chaque passage courant */}
+      {perimeter && isCurrent && (
         <svg
           aria-hidden
           className="pointer-events-none absolute inset-0 z-20"
@@ -137,14 +155,15 @@ function ImageCardWrapper({
             </filter>
           </defs>
           <motion.path
+            key={redraw}
             d={perimeter}
             fill="none"
             stroke="#FF7F50"
             strokeWidth={1.2}
             vectorEffect="non-scaling-stroke"
-            initial={false}
-            animate={{ pathLength: isCurrent ? 1 : 0, opacity: isCurrent ? 1 : 0 }}
-            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
             filter={`url(#edge-${project.slug})`}
           />
         </svg>
@@ -303,88 +322,98 @@ export default function CarrouselProjets() {
               className="h-px w-10 bg-orange-500 transition-[width] duration-300 ease-sobre group-hover:w-16"
             />
           </Link>
+        </div>
+      </div>
 
+      {/* ---------------------------------------------------------------- */}
+      {/*  Carrousel — le visuel avec traitement glow + lien grille dessous */}
+      {/* ---------------------------------------------------------------- */}
+      <div className="flex flex-col">
+        <div
+          ref={scene}
+          className="relative h-[clamp(14rem,28vw,22rem)] select-none"
+          style={{ touchAction: "pan-x" }}
+        >
+          {PROJETS.map((entree, index) => {
+            /*
+              Écart circulaire : au dernier projet, le premier est « juste après »
+              (il arrive par le haut), pas à l'autre bout. C'est ce qui fait
+              boucler l'animation sans téléportation visible.
+            */
+            let ecartIndex = index - courant;
+            const moitie = PROJETS.length / 2;
+            if (ecartIndex > moitie) ecartIndex -= PROJETS.length;
+            else if (ecartIndex < -moitie) ecartIndex += PROJETS.length;
+
+            /*
+              0  → premier plan, net
+              1  → le suivant : moitié moins grand, décalé à gauche, flouté
+              -1 → celui qu'on quitte : part vers le bas
+            */
+            let transformation = "translate3d(-32%,-16%,0) scale(0.5)";
+            let flou = "blur(9px)";
+            let opacite = 0;
+            let plan = 0;
+
+            if (ecartIndex === 0) {
+              transformation = "translate3d(0,0,0) scale(1)";
+              flou = "blur(0px)";
+              opacite = 1;
+              plan = 3;
+            } else if (ecartIndex === 1) {
+              transformation = "translate3d(-32%,-14%,0) scale(0.5)";
+              flou = "blur(7px)";
+              opacite = 0.45;
+              plan = 2;
+            } else if (ecartIndex === -1) {
+              transformation = "translate3d(0,120%,0) scale(0.96)";
+              flou = "blur(10px)";
+              opacite = 0;
+              plan = 1;
+            }
+
+            const estCourant = ecartIndex === 0;
+
+            return (
+              <motion.div
+                key={entree.slug}
+                className="absolute inset-y-0 left-10 right-0 overflow-hidden"
+                style={{
+                  transform: transformation,
+                  filter: flou,
+                  opacity: opacite,
+                  zIndex: plan,
+                  transition: `transform ${DUREE}ms var(--ease-sobre), filter ${DUREE}ms var(--ease-sobre), opacity ${DUREE}ms var(--ease-sobre)`,
+                  willChange: "transform, opacity",
+                  pointerEvents: estCourant ? "auto" : "none",
+                }}
+              >
+                {/* Conteneur avec traitement glow comme WorkflowCard */}
+                <ImageCardWrapper
+                  project={entree}
+                  isCurrent={estCourant}
+                  tabIndex={estCourant ? 0 : -1}
+                />
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/*
+          Lien « Voir la grille complète » sous le carrousel, aligné à droite
+          de l'image principale (l'image part à left-10, donc on aligne le
+          bloc de lien sur la même colonne via pl-10). Sur mobile, l'image
+          n'est pas décalée, on garde l'alignement à droite pour cohérence.
+        */}
+        <div className="mt-6 flex justify-end pl-10">
           <Link
             href="/portfolio/tous"
-            className="mt-4 inline-flex items-center gap-3 self-start font-mono text-[10px] uppercase tracking-[0.2em] text-trait transition-colors duration-300 ease-sobre hover:text-papier"
+            className="inline-flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.2em] text-trait transition-colors duration-300 ease-sobre hover:text-papier"
           >
             Voir la grille complète
             <span aria-hidden="true">↗</span>
           </Link>
         </div>
-      </div>
-
-      {/* ---------------------------------------------------------------- */}
-      {/*  Carrousel — le visuel seul, avec traitement glow cohérent home   */}
-      {/* ---------------------------------------------------------------- */}
-      <div
-        ref={scene}
-        className="relative h-[clamp(14rem,28vw,22rem)] select-none"
-        style={{ touchAction: "pan-x" }}
-      >
-        {PROJETS.map((entree, index) => {
-          /*
-            Écart circulaire : au dernier projet, le premier est « juste après »
-            (il arrive par le haut), pas à l'autre bout. C'est ce qui fait
-            boucler l'animation sans téléportation visible.
-          */
-          let ecartIndex = index - courant;
-          const moitie = PROJETS.length / 2;
-          if (ecartIndex > moitie) ecartIndex -= PROJETS.length;
-          else if (ecartIndex < -moitie) ecartIndex += PROJETS.length;
-
-          /*
-            0  → premier plan, net
-            1  → le suivant : moitié moins grand, décalé à gauche, flouté
-            -1 → celui qu'on quitte : part vers le bas
-          */
-          let transformation = "translate3d(-32%,-16%,0) scale(0.5)";
-          let flou = "blur(9px)";
-          let opacite = 0;
-          let plan = 0;
-
-          if (ecartIndex === 0) {
-            transformation = "translate3d(0,0,0) scale(1)";
-            flou = "blur(0px)";
-            opacite = 1;
-            plan = 3;
-          } else if (ecartIndex === 1) {
-            transformation = "translate3d(-32%,-14%,0) scale(0.5)";
-            flou = "blur(7px)";
-            opacite = 0.45;
-            plan = 2;
-          } else if (ecartIndex === -1) {
-            transformation = "translate3d(0,120%,0) scale(0.96)";
-            flou = "blur(10px)";
-            opacite = 0;
-            plan = 1;
-          }
-
-          const estCourant = ecartIndex === 0;
-
-          return (
-            <motion.div
-              key={entree.slug}
-              className="absolute inset-y-0 left-10 right-0 overflow-hidden"
-              style={{
-                transform: transformation,
-                filter: flou,
-                opacity: opacite,
-                zIndex: plan,
-                transition: `transform ${DUREE}ms var(--ease-sobre), filter ${DUREE}ms var(--ease-sobre), opacity ${DUREE}ms var(--ease-sobre)`,
-                willChange: "transform, opacity",
-                pointerEvents: estCourant ? "auto" : "none",
-              }}
-            >
-              {/* Conteneur avec traitement glow comme WorkflowCard */}
-              <ImageCardWrapper
-                project={entree}
-                isCurrent={estCourant}
-                tabIndex={estCourant ? 0 : -1}
-              />
-            </motion.div>
-          );
-        })}
       </div>
     </div>
   );
