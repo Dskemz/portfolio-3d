@@ -164,7 +164,9 @@ function ImageCardWrapper({
             initial={{ pathLength: 0, opacity: 0 }}
             animate={{ pathLength: 1, opacity: 1 }}
             transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
-            filter={`url(#edge-${project.slug})`}
+            style={{
+              filter: `url(#edge-${project.slug}) drop-shadow(0 0 4px rgba(255,127,80,0.55))`,
+            }}
           />
         </svg>
       )}
@@ -290,13 +292,13 @@ export default function CarrouselProjets() {
       {/*  du carrousel (la colonne s'étire à la hauteur de la scène).      */}
       {/* ---------------------------------------------------------------- */}
       <div className="flex flex-col">
-        <h2 className="font-display text-[clamp(1.35rem,2.2vw,1.85rem)] font-light leading-[1.1] tracking-tight text-papier">
+        <h2 className="font-display text-[clamp(1.35rem,2.2vw,1.85rem)] font-light leading-tight tracking-tight text-papier">
           {projet.titre}
         </h2>
 
         {/* mt-auto : ce bloc descend au bas de la colonne, donc au bas du visuel */}
         <div className="mt-auto pt-12">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-orange-500">
+          <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-orange-500">
             /{String(courant + 1).padStart(2, "0")}
             <span className="text-trait">
               {" "}
@@ -304,17 +306,17 @@ export default function CarrouselProjets() {
             </span>
           </p>
 
-          <p className="mt-5 max-w-md text-sm font-light leading-relaxed text-papier/60">
+          <p className="mt-5 max-w-md font-body text-sm font-light leading-relaxed text-papier/60">
             {projet.resume}
           </p>
 
-          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.18em] text-trait">
+          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.32em] text-trait">
             {projet.categorie} · {projet.client} · {projet.annee}
           </p>
 
           <Link
             href={`/portfolio/${projet.slug}`}
-            className="group mt-8 inline-flex items-center gap-4 self-start font-mono text-[10px] uppercase tracking-[0.2em] text-orange-500 transition-colors duration-300 ease-sobre hover:text-bleu-encre-clair"
+            className="group mt-8 inline-flex items-center gap-4 self-start font-mono text-[10px] uppercase tracking-[0.24em] text-orange-500 transition-colors duration-300 ease-sobre hover:text-[#E67E22]"
           >
             Voir le projet
             <span
@@ -402,16 +404,20 @@ export default function CarrouselProjets() {
         {/*
           Lien « Voir la grille complète » sous le carrousel, aligné à droite
           de l'image principale (l'image part à left-10, donc on aligne le
-          bloc de lien sur la même colonne via pl-10). Sur mobile, l'image
-          n'est pas décalée, on garde l'alignement à droite pour cohérence.
+          bloc de lien sur la même colonne via pl-10).
         */}
         <div className="mt-6 flex justify-end pl-10">
           <Link
             href="/portfolio/tous"
-            className="inline-flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.2em] text-trait transition-colors duration-300 ease-sobre hover:text-papier"
+            className="group inline-flex items-center gap-3 border border-white/[0.14] px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.24em] text-trait transition-all duration-300 ease-sobre hover:border-[#FF7F50]/60 hover:text-papier hover:shadow-[0_0_20px_rgba(255,127,80,0.18)]"
           >
             Voir la grille complète
-            <span aria-hidden="true">↗</span>
+            <span
+              aria-hidden="true"
+              className="text-[#FF7F50] transition-transform duration-300 ease-sobre group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            >
+              ↗
+            </span>
           </Link>
         </div>
       </div>
