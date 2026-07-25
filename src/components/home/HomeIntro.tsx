@@ -2,35 +2,52 @@
 
 import { useEffect, useRef, useState } from "react";
 import { animate } from "framer-motion";
+import { ORIGIN_ID } from "@/content/workflowData";
 
 /**
  * HomeIntro — séquence d'introduction (loader) de la page d'accueil.
  *
- * Déroulé :
- *   1. Écran totalement noir, défilement bloqué, aucun contenu visible.
- *   2. Le fil orange arrive du HAUT, fait un coude à angle droit légèrement
- *      arrondi et SORT par la gauche.
- *   3. Effet de liaison : il rentre aussitôt par la DROITE et revient au
- *      CENTRE de l'écran.
- *   4. Au centre, animation « goutte d'eau » : il ralentit, enfle légèrement
- *      et s'immobilise (easing back-out).
- *   5. À cet instant, le cœur orange se matérialise et le contenu de la home
- *      apparaît progressivement (fondu).
- *   6. La séquence terminée, le défilement est débloqué.
+ * Récit : de NOMBREUX flux (les workflows éprouvés au fil de la carrière)
+ * entrent par le haut comme les pistes d'un circuit imprimé, à angles droits,
+ * et CONVERGENT en un seul point. De ce point, un unique flux — le workflow
+ * affiné, optimisé — descend, sort par la gauche, rentre par la droite (effet
+ * de liaison) et vient se poser en « goutte d'eau » EXACTEMENT sur l'amorce de
+ * la home (`#wf-origin`), le point qui lance le storytelling. Le contenu
+ * apparaît alors en fondu, puis le défilement est débloqué.
  *
- * Le contenu (children) est TOUJOURS monté, seulement masqué en opacité : le
- * HTML reste présent pour le SEO et il n'y a aucun clignotement au reveal.
+ * Points de conception importants :
+ * – Le point d'arrivée est la position RÉELLE de l'amorce, mesurée dans le DOM
+ *   (le contenu est monté dès le départ, masqué en opacité), re-mesurée juste
+ *   avant la goutte pour un raccord parfait.
+ * – Aucun `await document.fonts.ready` en tête : sur une machine lente il
+ *   retardait tout le lancement (l'utilisateur « ratait » l'animation). On
+ *   démarre immédiatement.
+ * – Aucun filtre CSS `drop-shadow` (rastérisé à CHAQUE image) : coûteux sur
+ *   vieux matériel. Les pistes sont des traits nets ; la lueur est portée par
+ *   la goutte finale.
+ * – Chaque piste est MASQUÉE (opacity 0) dès que sa comète a fini : sinon un
+ *   `stroke-linecap: round` laisse un point orange résiduel à l'extrémité —
+ *   c'était le point fantôme qui restait au bord gauche sur téléphone.
  *
- * `prefers-reduced-motion` : la séquence est sautée, le contenu est affiché
- * immédiatement et le défilement n'est jamais bloqué.
- *
- * Le fil est tracé en pixels réels (viewBox = dimensions de la fenêtre,
- * `preserveAspectRatio="none"` → échelle 1:1, donc coude non déformé) : pas de
- * distorsion et les extrémités touchent vraiment les bords de l'écran.
+ * `prefers-reduced-motion` : séquence sautée, contenu affiché, scroll libre.
  */
 
-const CORNER_R = 14;
+const CORNER_R = 12;
 const ACCENT = "#FF7F50";
+/** Longueur du segment lumineux (comète), en fraction du tracé (pathLength=1). */
+const SEG = 0.4;
+
+/** Pistes sources : point de départ en haut (x) et hauteur du palier (y). */
+const SOURCES = [
+  { x: 0.14, y: 0.15 },
+  { x: 0.33, y: 0.22 },
+  { x: 0.5, y: 0.12 },
+  { x: 0.67, y: 0.22 },
+  { x: 0.86, y: 0.15 },
+] as const;
+
+/** Point de convergence (haut-centre), en fractions du viewport. */
+const MERGE = { x: 0.5, y: 0.31 } as const;
 
 export default function HomeIntro({ children }: { children: React.ReactNode }) {
   const [reveal, setReveal] = useState(false);
@@ -38,8 +55,10 @@ export default function HomeIntro({ children }: { children: React.ReactNode }) {
   const [dim, setDim] = useState({ w: 0, h: 0 });
 
   const overlay = useRef<HTMLDivElement>(null);
-  const filArrivee = useRef<SVGPathElement>(null);
-  const filRetour = useRef<SVGPathElement>(null);
+  const sources = useRef<(SVGPathElement | null)[]>([]);
+  const continuation = useRef<SVGPathElement>(null);
+  const retour = useRef<SVGPathElement>(null);
+  const goutteBox = useRef<HTMLDivElement>(null);
   const goutte = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -65,70 +84,115 @@ export default function HomeIntro({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    // Blocage du défilement pendant toute la séquence.
     html.style.overflow = "hidden";
-
     let annule = false;
 
+    const cible = () => {
+      // Position réelle de l'amorce ; fallback = centre. X ≈ centre (héros centré).
+      const el = document.getElementById(ORIGIN_ID);
+      const c = { x: dim.w / 2, y: dim.h / 2 };
+      if (el) {
+        const r = el.getBoundingClientRect();
+        const x = r.left + r.width / 2;
+        const y = r.top + r.height / 2;
+        if (x > 0 && x < dim.w && y > 0 && y < dim.h) {
+          c.x = x;
+          c.y = y;
+        }
+      }
+      return c;
+    };
+
+    const filerVers = (p: SVGPathElement | null, duree: number, retard = 0) =>
+      p
+        ? animate(
+            p,
+            { strokeDashoffset: [SEG, -1] },
+            { duration: duree, delay: retard, ease: [0.4, 0, 0.2, 1] },
+          ).finished
+        : Promise.resolve();
+
     const jouer = async () => {
-      const a = filArrivee.current;
-      const b = filRetour.current;
+      const cont = continuation.current;
+      const ret = retour.current;
+      const gBox = goutteBox.current;
       const g = goutte.current;
       const ov = overlay.current;
-      if (!a || !b || !g || !ov) {
+      if (!cont || !ret || !gBox || !g || !ov) {
         setReveal(true);
         setFini(true);
         debloquer();
         return;
       }
 
-      const lenA = a.getTotalLength();
-      const lenB = b.getTotalLength();
-      const seg = Math.min(180, lenA * 0.55);
+      const w = dim.w;
+      const h = dim.h;
+      const mx = MERGE.x * w;
+      const my = MERGE.y * h;
+      const ori0 = cible();
 
-      // Comète = un segment visible qui parcourt le tracé (aucune traînée fixe).
-      a.style.strokeDasharray = `${seg} ${lenA + seg}`;
-      a.style.strokeDashoffset = `${seg}`;
-      b.style.strokeDasharray = `${seg} ${lenB + seg}`;
-      b.style.strokeDashoffset = `${seg}`;
+      // ── Géométrie des pistes sources (style circuit, coudes à 90°) ──────
+      sources.current.forEach((el, i) => {
+        if (!el) return;
+        const xi = SOURCES[i].x * w;
+        const yi = SOURCES[i].y * h;
+        const dir = mx >= xi ? 1 : -1;
+        const d =
+          xi === mx
+            ? `M ${xi} 0 V ${my}` // piste centrale : tout droit
+            : `M ${xi} 0 V ${yi - CORNER_R} ` +
+              `Q ${xi} ${yi} ${xi + dir * CORNER_R} ${yi} ` +
+              `H ${mx - dir * CORNER_R} ` +
+              `Q ${mx} ${yi} ${mx} ${yi + CORNER_R} V ${my}`;
+        el.setAttribute("d", d);
+      });
 
-      // 2. Arrivée du haut → coude → sortie à gauche.
-      await animate(seg, -lenA, {
-        duration: 0.85,
-        ease: [0.4, 0, 0.2, 1],
-        onUpdate: (v) => {
-          a.style.strokeDashoffset = String(v);
-        },
-      }).finished;
+      // Continuation : du point de convergence, descente → coude → sortie gauche.
+      cont.setAttribute(
+        "d",
+        `M ${mx} ${my} V ${ori0.y - CORNER_R} ` +
+          `Q ${mx} ${ori0.y} ${mx - CORNER_R} ${ori0.y} H 0`,
+      );
+
+      // 1. Les nombreux flux convergent (départs légèrement décalés).
+      await Promise.all(
+        sources.current.map((el, i) => filerVers(el, 0.6, i * 0.06)),
+      );
       if (annule) return;
+      // Masque les sources pour éviter tout point résiduel aux extrémités.
+      sources.current.forEach((el) => el && (el.style.opacity = "0"));
 
-      // 3. Liaison : rentrée par la droite → retour au centre.
-      await animate(seg, -lenB, {
-        duration: 0.62,
-        ease: [0.22, 0.61, 0.36, 1],
-        onUpdate: (v) => {
-          b.style.strokeDashoffset = String(v);
-        },
-      }).finished;
+      // 2. Le flux unique descend et sort par la gauche.
+      await filerVers(cont, 0.7);
       if (annule) return;
+      cont.style.opacity = "0";
 
-      // 4. Goutte d'eau : enfle puis se stabilise (back-out).
+      // 3. Liaison : re-mesure de l'amorce puis rentrée par la droite → point.
+      const ori = cible();
+      ret.setAttribute("d", `M ${w} ${ori.y} H ${ori.x}`);
+      gBox.style.left = `${ori.x}px`;
+      gBox.style.top = `${ori.y}px`;
+
+      await filerVers(ret, 0.55);
+      if (annule) return;
+      ret.style.opacity = "0";
+
+      // 4. Goutte d'eau : enfle puis se stabilise (back-out), sur l'amorce.
       await animate(
         g,
         { opacity: [0, 1, 1], scale: [0, 1.35, 1] },
-        { duration: 0.6, ease: [0.34, 1.56, 0.64, 1] },
+        { duration: 0.55, ease: [0.34, 1.56, 0.64, 1] },
       ).finished;
       if (annule) return;
 
       // 5. Révélation progressive du contenu.
       setReveal(true);
 
-      // Fondu de l'écran noir par-dessus le contenu qui apparaît.
-      await animate(ov, { opacity: [1, 0] }, { duration: 0.65, ease: "easeInOut" })
+      await animate(ov, { opacity: [1, 0] }, { duration: 0.6, ease: "easeInOut" })
         .finished;
       if (annule) return;
 
-      // 6. Fin : on retire l'écran et on débloque le défilement.
+      // 6. Fin : retrait de l'écran + déblocage du défilement.
       setFini(true);
       debloquer();
     };
@@ -141,10 +205,7 @@ export default function HomeIntro({ children }: { children: React.ReactNode }) {
     };
   }, [dim.w, dim.h]);
 
-  const cx = dim.w / 2;
-  const cy = dim.h / 2;
-  const traceArrivee = `M ${cx} 0 V ${cy - CORNER_R} Q ${cx} ${cy} ${cx - CORNER_R} ${cy} H 0`;
-  const traceRetour = `M ${dim.w} ${cy} H ${cx}`;
+  const dashInit = { strokeDasharray: `${SEG} 1`, strokeDashoffset: SEG };
 
   return (
     <>
@@ -168,38 +229,51 @@ export default function HomeIntro({ children }: { children: React.ReactNode }) {
                 viewBox={`0 0 ${dim.w} ${dim.h}`}
                 preserveAspectRatio="none"
                 className="absolute inset-0 h-full w-full"
-                style={{ filter: "drop-shadow(0 0 6px rgba(255,127,80,0.55))" }}
               >
+                {SOURCES.map((_, i) => (
+                  <path
+                    key={i}
+                    ref={(el) => {
+                      sources.current[i] = el;
+                    }}
+                    pathLength={1}
+                    fill="none"
+                    stroke={ACCENT}
+                    strokeWidth={1.4}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    vectorEffect="non-scaling-stroke"
+                    style={dashInit}
+                  />
+                ))}
                 <path
-                  ref={filArrivee}
-                  d={traceArrivee}
+                  ref={continuation}
+                  pathLength={1}
                   fill="none"
                   stroke={ACCENT}
-                  strokeWidth={2}
+                  strokeWidth={2.2}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   vectorEffect="non-scaling-stroke"
+                  style={dashInit}
                 />
                 <path
-                  ref={filRetour}
-                  d={traceRetour}
+                  ref={retour}
+                  pathLength={1}
                   fill="none"
                   stroke={ACCENT}
-                  strokeWidth={2}
+                  strokeWidth={2.2}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   vectorEffect="non-scaling-stroke"
+                  style={dashInit}
                 />
               </svg>
 
-              {/* Goutte au centre : conteneur positionné, enfant animé en échelle */}
               <div
+                ref={goutteBox}
                 className="absolute"
-                style={{
-                  left: cx,
-                  top: cy,
-                  transform: "translate(-50%, -50%)",
-                }}
+                style={{ transform: "translate(-50%, -50%)" }}
               >
                 <div
                   ref={goutte}
