@@ -278,6 +278,12 @@ export default function SkillFlow() {
   const parkedRef = useRef(-1);
   /** Annulation de l'animation de cran en cours, s'il y en a une. */
   const cancelRef = useRef<(() => void) | null>(null);
+  /**
+   * Flag stable : une fois qu'on a VRAIMENT entré en mode stepped (première fiche
+   * allumée via goToStep), on y reste. Élimine les bascules aléatoires dues aux
+   * variations micrométriques de scrollY au démarrage.
+   */
+  const enteredSteppedRef = useRef(false);
   /** Suivi du swipe sur mobile/tablette : {x, y} de touchstart. */
   const touchStartRef = useRef<{x: number; y: number} | null>(null);
 
@@ -478,6 +484,12 @@ export default function SkillFlow() {
       parkedStepRef.current = clamped;
       parkedRef.current = target;
 
+      // ✓ Marque qu'on est VRAIMENT entré en mode stepped (première fiche atteinte).
+      // Une fois posé, ce flag ne se réinitialise que via HOME_JUMP_EVENT.
+      if (clamped >= 0) {
+        enteredSteppedRef.current = true;
+      }
+
       if (Math.abs(target - window.scrollY) < 1) return;
 
       lockRef.current = true;
@@ -498,13 +510,15 @@ export default function SkillFlow() {
 
     const LAST_INDEX = WORKFLOW_NODES.length - 1;
 
-    /** Accueil : molette libre tant que la 1re fiche n'est pas en approche. */
-    const introStillFree = () => {
-      if (stepRef.current !== -1) return false;
+    /**
+     * Vérifie si la première fiche est assez proche pour qu'on capture le scroll.
+     * Utilisé UNIQUEMENT avant d'avoir entré en mode stepped (première vérification).
+     */
+    const firstFicheApproaches = () => {
       const first = WORKFLOW_NODES[0];
       const anchor = first && document.getElementById(getNodeAnchorId(first.id));
       if (!anchor) return true;
-      return anchor.getBoundingClientRect().top > window.innerHeight * INTRO_GRAB_VH;
+      return anchor.getBoundingClientRect().top <= window.innerHeight * INTRO_GRAB_VH;
     };
 
     /** Position d'accroche de la fiche terminale. */
@@ -523,15 +537,30 @@ export default function SkillFlow() {
       return target !== null && window.scrollY > target + 2;
     };
 
-    /** Renvoie true si l'événement est consommé par la visite guidée. */
+    /**
+     * Renvoie true si l'événement est consommé par la visite guidée.
+     * Une fois qu'on a VRAIMENT entré en mode stepped (première fiche allumée),
+     * on capture TOUS les scrolls sauf ceux vers la fin du document.
+     * Avant d'y entrer, on vérifie seulement que la première fiche approche.
+     */
     const consume = (direction: 1 | -1) => {
       if (!builtRef.current.length) return false;
 
+      // Avant d'être entré en mode stepped : vérifier que la 1re fiche approche.
+      if (!enteredSteppedRef.current) {
+        // Si on scroll vers le bas ET la première fiche approche, on entre.
+        if (direction === 1 && firstFicheApproaches()) {
+          goToStep(0); // Cela posera enteredSteppedRef = true
+          return true;
+        }
+        // Sinon, la molette est libre.
+        return false;
+      }
+
+      // En mode stepped : capturer tous les scrolls sauf ceux qui libèrent explicitement.
       if (direction === 1) {
-        if (introStillFree()) return false;
         if (tailReached()) return false;
       } else {
-        if (stepRef.current === -1) return false;
         if (belowTail()) return false;
       }
 
@@ -622,6 +651,8 @@ export default function SkillFlow() {
       stepRef.current = -1;
       parkedStepRef.current = -1;
       parkedRef.current = -1;
+      // ✓ Réinitialise l'entrée en mode stepped, pour recommencer depuis zéro.
+      enteredSteppedRef.current = false;
     };
 
     window.addEventListener(HOME_JUMP_EVENT, onHomeJump);
@@ -680,6 +711,8 @@ export default function SkillFlow() {
           stepRef.current = -1;
           parkedStepRef.current = -1;
           parkedRef.current = -1;
+          // ✓ Réinitialise aussi l'entrée en mode stepped : la visite recommence.
+          enteredSteppedRef.current = false;
         }
         return;
       }
