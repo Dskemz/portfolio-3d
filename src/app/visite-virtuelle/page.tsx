@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
+import VisiteEmbed from "@/components/visite/VisiteEmbed";
 
 export const metadata: Metadata = {
   title: "Visite virtuelle interactive dans le navigateur | Graphite 3D",
@@ -16,13 +17,9 @@ export const metadata: Metadata = {
   },
 };
 
-// La page HTML chargée dans l'iframe : fausse annonce + bouton qui bascule vers
-// le viewer 3D. Tout se passe DANS l'iframe, aucune redirection externe.
-const SRC = "https://hub-visite-3d.vercel.app/index-laforet.html";
-
 export default function VisiteVirtuelle() {
   return (
-    <div className="flex flex-1 flex-col bg-black text-white">
+    <div className="flex flex-1 flex-col overflow-x-clip bg-black text-white">
       {/* Hero — titre + sous-titre en continuité, aucun trait de coupure */}
       <section className="pt-32 pb-16 md:pt-40 md:pb-20">
         <div className="mx-auto w-full max-w-3xl px-6 text-center md:px-10">
@@ -54,34 +51,15 @@ export default function VisiteVirtuelle() {
         </div>
       </section>
 
-      {/* Mise en abyme — fenêtre plus étroite que la page, hauteur immersive.
-          Le bouton d'entrée dans le viewer vit DANS l'iframe : la bascule
-          annonce → viewer se fait entièrement à l'intérieur, sans redirection. */}
-      <section className="pb-24 md:pb-32">
-        <div className="mx-auto w-full max-w-6xl px-6 md:px-10">
-          <Reveal>
-            <div className="relative mx-auto w-full max-w-5xl">
-              {/* Glow subtil derrière la fenêtre pour la détacher du fond noir */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -inset-8 -z-10 rounded-[2rem] bg-[radial-gradient(ellipse_at_center,rgba(255,127,80,0.14),transparent_70%)] blur-2xl"
-              />
-              <div className="w-full overflow-hidden rounded-2xl border border-white/10 bg-black shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9),0_0_50px_-12px_rgba(255,127,80,0.12)]">
-                <iframe
-                  src={SRC}
-                  title="Visite virtuelle interactive"
-                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                  allowFullScreen
-                  scrolling="no"
-                  className="block min-h-[1100px] w-full border-none"
-                  style={{ overflow: "hidden" }}
-                />
-              </div>
-            </div>
-          </Reveal>
+      {/* Visite embarquée — pleine largeur en annonce, se ramène aux dimensions
+          du viewer quand on ouvre la visite 3D. Aucun fichier distant touché :
+          le dimensionnement est géré ici (voir VisiteEmbed). */}
+      <VisiteEmbed />
 
-          {/* Points clés */}
-          <div className="mt-24 grid grid-cols-1 gap-12 md:grid-cols-3">
+      {/* Points clés */}
+      <section className="pt-24 pb-24 md:pb-32">
+        <div className="mx-auto w-full max-w-6xl px-6 md:px-10">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
             <Reveal>
               <div>
                 <h3 className="font-display text-sm font-medium tracking-tight text-papier">
@@ -122,7 +100,7 @@ export default function VisiteVirtuelle() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 md:py-32">
+      <section className="pb-24 md:pb-32">
         <div className="mx-auto w-full max-w-3xl px-6 text-center md:px-10">
           <Reveal>
             <h2 className="font-display text-[clamp(1.8rem,4vw,2.8rem)] font-semibold tracking-tight text-papier">
