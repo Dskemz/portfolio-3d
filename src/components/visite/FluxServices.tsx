@@ -16,6 +16,7 @@
  */
 
 import { motion, useReducedMotion, type MotionProps } from "framer-motion";
+import RailMobile from "@/components/flux/RailMobile";
 
 const ACCENT = "#ed8936";
 
@@ -244,69 +245,8 @@ export default function FluxServices() {
         </svg>
       </div>
 
-      {/* ================= MOBILE / TABLETTE — rail vertical ================ */}
-      <div className="relative overflow-x-clip lg:hidden">
-        {/* Émission (coudes) */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -left-6 bottom-[6px] top-0 w-[calc(1.5rem+7px)] rounded-tr-[6px] border-r-[3px] border-t-[3px] blur-[3px]"
-          style={{ borderColor: `${ACCENT}40` }}
-        />
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-6 bottom-0 left-[7px] h-[6px] rounded-bl-[6px] border-b-[3px] border-l-[3px] blur-[3px]"
-          style={{ borderColor: `${ACCENT}40` }}
-        />
-        {/* Trait plein */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -left-6 bottom-[6px] top-0 w-[calc(1.5rem+7px)] rounded-tr-[6px] border-r border-t"
-          style={{ borderColor: `${ACCENT}99` }}
-        />
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-6 bottom-0 left-[7px] h-[6px] rounded-bl-[6px] border-b border-l"
-          style={{ borderColor: `${ACCENT}99` }}
-        />
-
-        <div className="flex flex-col gap-10 py-10 pl-12">
-          {SERVICES.map((service, index) => (
-            <motion.article
-              key={service.titre}
-              className="relative flex flex-col border border-mine bg-black px-7 py-8"
-              {...(reduceMotion
-                ? { initial: false as const }
-                : {
-                    initial: { opacity: 0, y: ENTREE_DIR[index] },
-                    whileInView: { opacity: 1, y: 0 },
-                    viewport: { once: true, amount: 0.4 as const },
-                    transition: {
-                      duration: 0.5,
-                      ease: [0.16, 1, 0.3, 1] as const,
-                      delay: (index % 2) * 0.08,
-                    },
-                  })}
-            >
-              <span
-                aria-hidden="true"
-                className="absolute -left-12 top-1/2 h-px w-12"
-                style={{ backgroundColor: `${ACCENT}99` }}
-              />
-              <span
-                aria-hidden="true"
-                className="absolute -left-[3px] top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full"
-                style={{ backgroundColor: ACCENT }}
-              />
-              <h3 className="font-display text-xl font-light leading-[1.14] tracking-tight text-papier">
-                {service.titre}
-              </h3>
-              <p className="mt-3 text-sm font-light leading-relaxed text-papier/60">
-                {service.description}
-              </p>
-            </motion.article>
-          ))}
-        </div>
-      </div>
+      {/* Mobile et tablette — fil mesuré partagé (serpente + sort au bord) */}
+      <RailMobile items={SERVICES} accent={ACCENT} heading="h3" />
     </>
   );
 }

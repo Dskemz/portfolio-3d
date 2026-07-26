@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function APropos() {
   return (
-    <div className="flex flex-1 flex-col bg-black text-white">
+    <div className="flex flex-1 flex-col overflow-x-clip bg-black text-white">
       {/* ------------------------------------------------------------------ */}
       {/*  Déclaration d'intention — inchangée                                */}
       {/* ------------------------------------------------------------------ */}
