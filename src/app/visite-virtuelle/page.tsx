@@ -66,13 +66,15 @@ export default function VisiteVirtuelle() {
                 aria-hidden="true"
                 className="pointer-events-none absolute -inset-8 -z-10 rounded-[2rem] bg-[radial-gradient(ellipse_at_center,rgba(255,127,80,0.14),transparent_70%)] blur-2xl"
               />
-              <div className="h-[720px] w-full overflow-hidden rounded-2xl border border-white/10 bg-black shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9),0_0_50px_-12px_rgba(255,127,80,0.12)] md:h-[1000px]">
+              <div className="w-full overflow-hidden rounded-2xl border border-white/10 bg-black shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9),0_0_50px_-12px_rgba(255,127,80,0.12)]">
                 <iframe
                   src={SRC}
                   title="Visite virtuelle interactive"
                   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                   allowFullScreen
-                  className="block h-full w-full border-none"
+                  scrolling="no"
+                  className="block min-h-[1100px] w-full border-none"
+                  style={{ overflow: "hidden" }}
                 />
               </div>
             </div>
