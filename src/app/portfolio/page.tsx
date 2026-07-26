@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { CarrouselProjets } from '@/components/portfolio/CarrouselProjets';
-import { BandeauConfiance } from '@/components/portfolio/BandeauConfiance';
+import BandeauConfiance from '@/components/portfolio/BandeauConfiance';
 import { TheVault } from '@/components/portfolio/TheVault';
 
 export const metadata: Metadata = {
