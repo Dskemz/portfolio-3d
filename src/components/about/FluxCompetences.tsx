@@ -4,37 +4,22 @@
  * FluxCompetences — les quatre domaines traversés par le fil orange.
  *
  * Le fil est INVISIBLE au repos et SE DESSINE une seule fois quand la section
- * des quatre cadres entre dans le viewport (`whileInView` + `pathLength`).
- * La mise en page, la géométrie du tracé et les cadres sont inchangés : seule
- * l'apparition du trait est animée.
+ * entre dans le viewport (`whileInView` + `pathLength`). Les cadres apparaissent
+ * D'ABORD en séquence (fondu + glissée, alternance haut/bas), PUIS le flux part
+ * et serpente à travers eux ; au passage du courant chaque cadre s'illumine
+ * puis S'ÉTEINT. Émission = 3 traits concentriques animés par le même
+ * `pathLength` (zéro filtre SVG, zéro flicker). Tracé ORTHOGONAL (coudes r=8),
+ * entrée/sortie sur l'axe médian → le segment interne, masqué par le fond opaque
+ * des cadres, donne l'illusion du courant qui traverse.
  *
- * PLEINE LARGEUR. Le bloc sort de son conteneur (`left-1/2 w-screen
- * -translate-x-1/2`) pour que le fil parte réellement du bord gauche de
- * l'écran et ressorte au bord droit. Enfermé dans le `max-w-6xl` de la
- * section, il s'arrêtait au milieu de nulle part.
- *
- * Le tracé est ORTHOGONAL : segments horizontaux et verticaux uniquement,
- * rayon de 8 unités sur chaque coude. Il entre et ressort TOUJOURS sur l'axe
- * médian des cadres, donc le segment caché à l'intérieur est une droite.
- *
- * ⚠️ Tailles en `clamp(..vw..)` et NON en rem : le repère SVG se met à
- * l'échelle avec la largeur de l'écran, la typographie doit suivre la même
- * loi. Avec des tailles fixes, le texte débordait des cadres en dessous de
- * 1280 px — les cadres ont une hauteur imposée par la géométrie du tracé.
- *
- * Émission : TROIS traits concentriques (halo large + halo moyen + trait net),
- * tous animés par le même `pathLength 0→1`. Aucun filtre SVG, aucune empreinte
- * visible avant le passage du front — le glow se révèle en même temps que le
- * trait (même technique que la home, zéro rastérisation par image, zéro
- * flicker).
- *
- * Cadres : tous invisibles au repos. Ils apparaissent D'ABORD en séquence
- * (fondu + glissée, alternance haut/bas) ; UNE FOIS en place, le flux part et
- * serpente à travers eux. Au passage du courant, le contour s'illumine (les
- * deux côtés en même temps) puis S'ÉTEINT dès que le flux le quitte — aucune
- * lueur résiduelle.
+ * DESKTOP : repère fixe 1440×520, cadres positionnés en %. MOBILE : les cadres
+ * sont empilés à hauteur variable, donc le fil est MESURÉ (offsetTop/Height,
+ * insensibles aux transforms d'entrée) et serpente verticalement d'un cadre à
+ * l'autre — même esprit que sur ordinateur, plus aucun trait parasite sur le
+ * bord gauche.
  */
 
+import { useLayoutEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, type MotionProps } from "framer-motion";
 
 const ACCENT = "#FF7F50";
@@ -97,27 +82,13 @@ const NOEUDS = [
   { cx: 1200, cy: 360 },
 ] as const;
 
-/**
- * Chorégraphie en DEUX temps, déclenchée à l'entrée de la section dans le
- * viewport (`whileInView`, une seule fois).
- *
- * 1. ENTREE — les 4 cadres, invisibles au repos, apparaissent en séquence
- *    (fondu + glissée, alternance haut/bas). Terminé vers 1 s.
- * 2. FLUX — une fois les cadres en place (`FLUX_DELAI`), le trait se dessine
- *    de gauche à droite (2.6 s) et serpente à travers les cadres. Le front
- *    atteint le centre de chaque cadre à ~0.35 / 0.95 / 1.58 / 2.19 s après le
- *    départ du flux.
- *
- * ILLUM — au passage du front, le cadre s'allume puis S'ÉTEINT dès que le flux
- * le quitte (pic bref calé sur le centre, aucune lueur résiduelle).
- */
 const FLUX_DELAI = 0.9;
 const ENTREE_DELAIS = [0.0, 0.15, 0.3, 0.45] as const;
 const ENTREE_DIR = [30, -30, 30, -30] as const; // +y = arrive du bas, -y = du haut
-// FLUX_DELAI + centre du cadre − demi-pulse (0.3) → pic calé sur le passage.
 const ILLUM_DELAIS = [0.95, 1.55, 2.18, 2.79] as const;
 
-/* Tailles indexées sur la largeur d'écran, comme le repère SVG. */
+const DUREE_TRACE = 2.6;
+
 const PADDING_CADRE = "clamp(1rem, 1.7vw, 2.125rem)";
 const TAILLE_TITRE = "clamp(1.0625rem, 2.1vw, 2rem)";
 const TAILLE_TEXTE = "clamp(0.6875rem, 0.95vw, 0.9375rem)";
@@ -146,12 +117,6 @@ function ContenuCadre({ domaine }: { domaine: Domaine }) {
 export default function FluxCompetences() {
   const reduceMotion = useReducedMotion();
 
-  // Le tracé (net + halos) se dessine par pathLength UNIQUEMENT, APRÈS l'entrée
-  // des cadres (`FLUX_DELAI`). Le stroke est masqué (dashoffset plein) tant que
-  // le front ne l'a pas atteint : aucune empreinte, aucun halo n'est visible
-  // avant le passage. Les trois épaisseurs partagent la même animation → elles
-  // se révèlent ensemble, en parfaite synchro (technique concentrique de la
-  // home, zéro filtre SVG, zéro flicker).
   const traitAnime = reduceMotion
     ? { initial: false as const }
     : {
@@ -159,14 +124,12 @@ export default function FluxCompetences() {
         whileInView: { pathLength: 1 },
         viewport: { once: true, amount: 0.55 as const },
         transition: {
-          duration: 2.6,
+          duration: DUREE_TRACE,
           ease: [0.4, 0, 0.2, 1] as const,
           delay: FLUX_DELAI,
         },
       };
 
-  // Entrée d'un cadre : invisible → glisse à sa place. Direction et délai
-  // passés par le cadre (alternance haut/bas, calé avant le passage du flux).
   const entreeCadre = (index: number): MotionProps =>
     reduceMotion
       ? { initial: false }
@@ -181,10 +144,6 @@ export default function FluxCompetences() {
           },
         };
 
-  // Illumination d'un cadre : contour éteint → pic orange bref AU PASSAGE du
-  // flux → ÉTEINT dès que le flux le quitte. Un seul voile qui monte puis
-  // retombe à zéro (les deux côtés s'allument en même temps, pas de tour
-  // complet, aucune lueur résiduelle).
   const illumCadre = (index: number): MotionProps =>
     reduceMotion
       ? { initial: false }
@@ -215,7 +174,6 @@ export default function FluxCompetences() {
           aria-hidden="true"
           className="absolute inset-0 z-0 h-full w-full"
         >
-          {/* Halo large — révélé par le front, jamais avant */}
           <motion.path
             d={TRACE}
             fill="none"
@@ -225,7 +183,6 @@ export default function FluxCompetences() {
             strokeLinecap="round"
             {...traitAnime}
           />
-          {/* Halo moyen */}
           <motion.path
             d={TRACE}
             fill="none"
@@ -235,7 +192,6 @@ export default function FluxCompetences() {
             strokeLinecap="round"
             {...traitAnime}
           />
-          {/* Trait net */}
           <motion.path
             d={TRACE}
             fill="none"
@@ -259,9 +215,6 @@ export default function FluxCompetences() {
             }}
             {...entreeCadre(index)}
           >
-            {/* Voile d'illumination : s'allume au passage du flux puis
-                s'éteint dès qu'il le quitte. Les deux côtés brillent en même
-                temps, aucune lueur résiduelle. */}
             <motion.span
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 border"
@@ -275,7 +228,6 @@ export default function FluxCompetences() {
           </motion.article>
         ))}
 
-        {/* Nœuds au-dessus des cadres, sinon la bordure les recouvre */}
         <svg
           viewBox="0 0 1440 520"
           preserveAspectRatio="xMidYMid meet"
@@ -283,8 +235,6 @@ export default function FluxCompetences() {
           className="pointer-events-none absolute inset-0 z-20 h-full w-full"
         >
           {NOEUDS.map((noeud, i) => {
-            // Nœud i → cadre floor(i/2) : il s'allume quand le flux traverse
-            // ce cadre (perçage de la bordure au passage du courant).
             const cadre = Math.floor(i / 2);
             return (
               <motion.circle
@@ -307,82 +257,214 @@ export default function FluxCompetences() {
       </div>
 
       {/* ---------------------------------------------------------------- */}
-      {/*  Mobile et tablette — rail vertical, cadres empilés               */}
+      {/*  Mobile et tablette — fil MESURÉ qui serpente dans la pile        */}
       {/* ---------------------------------------------------------------- */}
-      {/*
-        Le rail ne flotte plus dans le vide : il ARRIVE du bord gauche de
-        l'écran par un coude en haut, descend le long des cadres, puis REPART
-        vers le bord droit par un coude en bas. Même principe que sur
-        ordinateur — le fil traverse la page, il ne naît pas ici.
+      <RailMobile reduceMotion={!!reduceMotion} />
+    </>
+  );
+}
 
-        Les coudes sont des boîtes dont on ne peint que deux bordures : la
-        bordure haute + droite dessine « j'arrive de la gauche puis je
-        descends », la bordure gauche + basse dessine « je descends puis je
-        pars à droite ». Le rayon vit sur le coin correspondant. Zéro SVG,
-        zéro JavaScript, et ça suit la hauteur réelle de la pile de cadres.
+/**
+ * Fil mobile : mesuré sur la pile réelle de cadres. Le tracé descend, entre
+ * dans chaque cadre par le haut (masqué par le fond opaque), ressort en bas,
+ * puis fait un coude orthogonal dans l'interstice pour rejoindre le cadre
+ * suivant en zigzag. Animé exactement comme l'ordinateur (pathLength +
+ * illumination transitoire). Les positions sont lues en offsetTop/offsetHeight
+ * → insensibles aux transforms d'apparition des cadres.
+ */
+function RailMobile({ reduceMotion }: { reduceMotion: boolean }) {
+  const contRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLElement | null)[]>([]);
+  const [geo, setGeo] = useState<{
+    w: number;
+    h: number;
+    d: string;
+    noeuds: { x: number; y: number; cadre: number }[];
+    illum: number[];
+  } | null>(null);
 
-        `-left-6` / `-right-6` compensent exactement le `px-6` de la section :
-        les deux extrémités atteignent donc le bord de l'écran.
-      */}
-      <div className="relative overflow-x-clip lg:hidden">
-        {/* Émission */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -left-6 bottom-[6px] top-0 w-[calc(1.5rem+7px)] rounded-tr-[6px] border-r-[3px] border-t-[3px] border-orange-500/25 blur-[3px]"
-        />
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-6 bottom-0 left-[7px] h-[6px] rounded-bl-[6px] border-b-[3px] border-l-[3px] border-orange-500/25 blur-[3px]"
-        />
+  useLayoutEffect(() => {
+    const cont = contRef.current;
+    if (!cont) return;
 
-        {/* Trait plein */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -left-6 bottom-[6px] top-0 w-[calc(1.5rem+7px)] rounded-tr-[6px] border-r border-t border-orange-500/60"
-        />
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-6 bottom-0 left-[7px] h-[6px] rounded-bl-[6px] border-b border-l border-orange-500/60"
-        />
+    const mesurer = () => {
+      const w = cont.offsetWidth;
+      const h = cont.offsetHeight;
+      const cartes = cardRefs.current.filter(Boolean) as HTMLElement[];
+      if (w === 0 || cartes.length < DOMAINES.length) return;
 
-        <div className="flex flex-col gap-10 py-10 pl-12">
-          {DOMAINES.map((domaine, index) => (
-            <motion.article
-              key={domaine.titre}
-              className="relative flex flex-col border border-mine bg-black px-7 py-9"
-              {...(reduceMotion
+      const bandes = cartes.map((c) => ({
+        top: c.offsetTop,
+        bottom: c.offsetTop + c.offsetHeight,
+      }));
+      const xs = bandes.map((_, i) => (i % 2 === 0 ? w * 0.3 : w * 0.7));
+      const f = (n: number) => n.toFixed(1);
+      const R = 8;
+
+      let d = `M ${f(xs[0])} 0`;
+      const noeuds: { x: number; y: number; cadre: number }[] = [];
+
+      bandes.forEach((b, i) => {
+        const x = xs[i];
+        noeuds.push({ x, y: b.top, cadre: i });
+        noeuds.push({ x, y: b.bottom, cadre: i });
+        d += ` L ${f(x)} ${f(b.bottom)}`;
+        if (i < bandes.length - 1) {
+          const nx = xs[i + 1];
+          const dir = Math.sign(nx - x) || 1;
+          const gapMid = (b.bottom + bandes[i + 1].top) / 2;
+          const r = Math.max(
+            0,
+            Math.min(
+              R,
+              Math.abs(nx - x) / 2,
+              gapMid - b.bottom,
+              bandes[i + 1].top - gapMid,
+            ),
+          );
+          d +=
+            ` L ${f(x)} ${f(gapMid - r)} Q ${f(x)} ${f(gapMid)} ${f(x + dir * r)} ${f(gapMid)}` +
+            ` L ${f(nx - dir * r)} ${f(gapMid)} Q ${f(nx)} ${f(gapMid)} ${f(nx)} ${f(gapMid + r)}` +
+            ` L ${f(nx)} ${f(bandes[i + 1].top)}`;
+        }
+      });
+      d += ` L ${f(xs[xs.length - 1])} ${f(h)}`;
+
+      const illum = bandes.map((b) =>
+        Math.max(0, FLUX_DELAI + ((b.top + b.bottom) / 2 / h) * DUREE_TRACE - 0.3),
+      );
+
+      setGeo({ w, h, d, noeuds, illum });
+    };
+
+    mesurer();
+    const ro = new ResizeObserver(mesurer);
+    ro.observe(cont);
+    cardRefs.current.forEach((c) => c && ro.observe(c));
+    if (typeof document !== "undefined" && document.fonts?.ready) {
+      document.fonts.ready.then(mesurer).catch(() => {});
+    }
+    return () => ro.disconnect();
+  }, []);
+
+  const traitAnime =
+    reduceMotion || !geo
+      ? {}
+      : {
+          initial: { pathLength: 0 },
+          whileInView: { pathLength: 1 },
+          viewport: { once: true, amount: 0.25 as const },
+          transition: {
+            duration: DUREE_TRACE,
+            ease: [0.4, 0, 0.2, 1] as const,
+            delay: FLUX_DELAI,
+          },
+        };
+
+  return (
+    <div ref={contRef} className="relative lg:hidden">
+      {geo && (
+        <svg
+          viewBox={`0 0 ${geo.w} ${geo.h}`}
+          aria-hidden="true"
+          className="absolute inset-0 z-0 h-full w-full"
+        >
+          {[
+            { sw: 7, op: 0.1 },
+            { sw: 4, op: 0.18 },
+            { sw: 2, op: 1 },
+          ].map(({ sw, op }) => (
+            <motion.path
+              key={sw}
+              d={geo.d}
+              fill="none"
+              stroke={ACCENT}
+              strokeWidth={sw}
+              opacity={op}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              {...traitAnime}
+            />
+          ))}
+        </svg>
+      )}
+
+      <div className="relative z-10 flex flex-col gap-10 py-6">
+        {DOMAINES.map((domaine, index) => (
+          <motion.article
+            key={domaine.titre}
+            ref={(el) => {
+              cardRefs.current[index] = el;
+            }}
+            className="relative border border-mine bg-black px-7 py-8"
+            {...(reduceMotion
+              ? { initial: false as const }
+              : {
+                  initial: { opacity: 0, y: ENTREE_DIR[index] },
+                  whileInView: { opacity: 1, y: 0 },
+                  viewport: { once: true, amount: 0.4 as const },
+                  transition: {
+                    duration: 0.55,
+                    ease: [0.16, 1, 0.3, 1] as const,
+                    delay: ENTREE_DELAIS[index],
+                  },
+                })}
+          >
+            <motion.span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 border"
+              style={{
+                borderColor: ACCENT,
+                boxShadow: `0 0 22px 2px ${ACCENT}66, inset 0 0 26px ${ACCENT}22`,
+              }}
+              {...(reduceMotion || !geo
                 ? { initial: false as const }
                 : {
-                    initial: { opacity: 0, y: ENTREE_DIR[index] },
-                    whileInView: { opacity: 1, y: 0 },
+                    initial: { opacity: 0 },
+                    whileInView: { opacity: [0, 1, 0] },
                     viewport: { once: true, amount: 0.4 as const },
                     transition: {
-                      duration: 0.5,
-                      ease: [0.16, 1, 0.3, 1] as const,
-                      delay: (index % 2) * 0.08,
+                      duration: 0.6,
+                      delay: geo.illum[index],
+                      times: [0, 0.5, 1] as const,
+                      ease: "easeInOut" as const,
                     },
                   })}
-            >
-              <span
-                aria-hidden="true"
-                className="absolute -left-12 top-1/2 h-px w-12 bg-orange-500/60"
-              />
-              <span
-                aria-hidden="true"
-                className="absolute -left-[3px] top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-orange-500"
-              />
-
-              <h2 className="whitespace-pre-line font-display text-2xl font-light leading-[1.12] tracking-tight text-papier">
-                {domaine.titre}
-              </h2>
-
-              <p className="mt-4 text-sm font-light leading-relaxed text-papier/60">
-                {domaine.description}
-              </p>
-            </motion.article>
-          ))}
-        </div>
+            />
+            <h2 className="whitespace-pre-line font-display text-2xl font-light leading-[1.12] tracking-tight text-papier">
+              {domaine.titre}
+            </h2>
+            <p className="mt-3 text-sm font-light leading-relaxed text-papier/60">
+              {domaine.description}
+            </p>
+          </motion.article>
+        ))}
       </div>
-    </>
+
+      {geo && (
+        <svg
+          viewBox={`0 0 ${geo.w} ${geo.h}`}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-20 h-full w-full"
+        >
+          {geo.noeuds.map((n, i) => (
+            <motion.circle
+              key={i}
+              cx={n.x}
+              cy={n.y}
+              r={3.5}
+              fill={ACCENT}
+              initial={reduceMotion ? false : { opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{
+                duration: 0.35,
+                delay: reduceMotion ? 0 : geo.illum[n.cadre] + 0.15,
+              }}
+            />
+          ))}
+        </svg>
+      )}
+    </div>
   );
 }
