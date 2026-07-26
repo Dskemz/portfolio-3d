@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
-import VisiteMiseEnAbyme from "@/components/visite/VisiteMiseEnAbyme";
 
 export const metadata: Metadata = {
   title: "Visite virtuelle interactive dans le navigateur | Graphite 3D",
@@ -16,6 +15,10 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
+
+// La page HTML chargée dans l'iframe : fausse annonce + bouton qui bascule vers
+// le viewer 3D. Tout se passe DANS l'iframe, aucune redirection externe.
+const SRC = "https://hub-visite-3d.vercel.app/viewer.html";
 
 export default function VisiteVirtuelle() {
   return (
@@ -51,11 +54,21 @@ export default function VisiteVirtuelle() {
         </div>
       </section>
 
-      {/* Mise en abyme — fenêtre plus étroite que la page */}
+      {/* Mise en abyme — fenêtre plus étroite que la page, hauteur immersive.
+          Le bouton d'entrée dans le viewer vit DANS l'iframe : la bascule
+          annonce → viewer se fait entièrement à l'intérieur, sans redirection. */}
       <section className="pb-24 md:pb-32">
         <div className="mx-auto w-full max-w-6xl px-6 md:px-10">
           <Reveal>
-            <VisiteMiseEnAbyme />
+            <div className="mx-auto h-[600px] w-full max-w-5xl overflow-hidden rounded-2xl border border-white/10 bg-black md:h-[820px]">
+              <iframe
+                src={SRC}
+                title="Visite virtuelle interactive"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                allowFullScreen
+                className="block h-full w-full border-none"
+              />
+            </div>
           </Reveal>
 
           {/* Points clés */}
@@ -107,8 +120,8 @@ export default function VisiteVirtuelle() {
               Prêt à transformer votre bien en expérience virtuelle ?
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-papier/75">
-              Envoyez-moi le plan ou les photos : je vous conseille sur l&apos;impact
-              d&apos;une visite 3D et les délais de mise en place.
+              Envoyez-moi le plan ou les photos : je vous conseille sur
+              l&apos;impact d&apos;une visite 3D et les délais de mise en place.
             </p>
             <Link
               href="/contact"
