@@ -1,76 +1,78 @@
-import type { Metadata } from "next";
-import CarrouselProjets from "@/components/portfolio/CarrouselProjets";
-import BandeauConfiance from "@/components/portfolio/BandeauConfiance";
-import LienSobre from "@/components/portfolio/LienSobre";
+import { Metadata } from 'next';
+import { CarrouselProjets } from '@/components/portfolio/CarrouselProjets';
+import { BandeauConfiance } from '@/components/portfolio/BandeauConfiance';
+import { TheVault } from '@/components/portfolio/TheVault';
 
 export const metadata: Metadata = {
-  title: "Projets — visites virtuelles et modélisation 3D",
-  description:
-    "L'ensemble des projets de visites virtuelles 3D et de modélisation : immobilier, produit et direction artistique.",
-  alternates: { canonical: "/portfolio" },
+  title: 'Mes Projets | Denis Masquet',
+  description: 'Découvrez mes projets en 3D : visites virtuelles immersives, modélisations produits et expériences temps réel.',
   openGraph: {
-    title: "Projets — visites virtuelles et modélisation 3D",
-    description:
-      "Visites virtuelles 3D et modélisation : immobilier, produit et direction artistique.",
-    url: "/portfolio",
-    type: "website",
+    title: 'Mes Projets | Denis Masquet',
+    description: 'Visites virtuelles 3D • Modélisations • Temps réel web',
   },
 };
 
 export default function PortfolioPage() {
   return (
-    <div className="flex flex-1 flex-col bg-black text-white">
-      {/*
-        Intro + carrousel + bandeau réunis dans UNE section (relative).
-        Un trait fin vertical relie visuellement le titre à l'image.
-      */}
-      <main className="relative flex-grow overflow-x-clip">
-        {/* Titre */}
-        <div className="relative z-10 w-full px-6 pt-36 md:pt-44 lg:px-16 xl:px-24">
-          <h1 className="font-display text-[clamp(2.1rem,5.6vw,4rem)] font-light leading-[1.02] tracking-[-0.02em] text-papier">
-            Mes Projets
-          </h1>
-        </div>
+    <>
+      {/* Hero + Carrousel */}
+      <main className="relative space-y-24 overflow-x-clip px-6 pt-20 lg:px-8 lg:pt-28">
+        <section className="space-y-8">
+          <div className="space-y-4">
+            <h1 className="font-display text-[clamp(2.1rem,5.6vw,4rem)] leading-[1.02] tracking-[-0.02em]">
+              Mes Projets
+            </h1>
+            <p className="max-w-2xl font-body text-trait">
+              Une sélection de réalisations emblématiques : visite virtuelle interactive, modélisation produit haute définition, et expériences temps réel web. Chaque projet est une opportunité d'explorer les possibilités du digital 3D immersif.
+            </p>
+          </div>
 
-        {/* Carrousel (le lien « Voir la grille » vit désormais dans sa colonne) */}
-        <div className="relative z-10 w-full px-6 pb-16 pt-14 lg:px-16 lg:pb-20 lg:pt-16 xl:px-24">
+          {/* Carrousel principal */}
           <CarrouselProjets />
-        </div>
+        </section>
 
-        {/*
-          Couloir : bande entre le carrousel et les logos. Son centre donne la
-          hauteur de transition visuelle. Sur TÉLÉPHONE, on peint ici un fil
-          horizontal d'un bord à l'autre de la page.
-        */}
-        <div id="fil-couloir" aria-hidden className="relative h-12 lg:h-14">
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 bg-orange-500/25 blur-[3px] lg:hidden"
-          />
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-orange-500/80 lg:hidden"
-          />
-        </div>
-
-        {/* Bandeau logos */}
-        <div className="relative z-10">
+        {/* Bandeau défilant - Ils m'ont fait confiance */}
+        <section className="space-y-6 py-12 lg:py-0">
+          <h2 className="text-center font-body text-sm tracking-[0.24em] text-trait">
+            ILS M'ONT FAIT CONFIANCE
+          </h2>
           <BandeauConfiance />
-        </div>
+        </section>
       </main>
 
-      {/* CTA final — remonté */}
-      <section className="pb-24 pt-12 md:pb-28 md:pt-16">
-        <div className="flex w-full flex-col gap-10 px-6 lg:flex-row lg:items-end lg:justify-between lg:px-16 xl:px-24">
-          <h2 className="font-display text-[clamp(1.6rem,3.4vw,2.4rem)] font-light leading-tight tracking-[-0.01em] text-papier">
-            Un <span className="text-orange-500">projet</span> en tête, discutons-en
+      {/* The Vault - Grille complète */}
+      <section className="space-y-16 border-t border-mine bg-noir px-6 py-24 lg:px-8 lg:py-32">
+        <div className="mx-auto max-w-7xl space-y-6">
+          <h2 className="font-display text-[clamp(1.75rem,4vw,3rem)] leading-tight tracking-[-0.01em]">
+            The Vault
           </h2>
-
-          <LienSobre href="/contact" className="self-start">
-            Parler de vos besoins
-          </LienSobre>
+          <p className="max-w-2xl font-body text-trait">
+            L'intégralité de mon portfolio : explorez par domaine, filtrez par technologie, découvrez chaque projet en détail.
+          </p>
         </div>
+        <TheVault />
       </section>
-    </div>
+
+      {/* CTA Signature */}
+      <footer className="border-t border-mine bg-noir px-6 py-24 lg:px-8 lg:py-32">
+        <div className="mx-auto max-w-7xl space-y-8 text-center">
+          <div className="space-y-4">
+            <h2 className="font-display text-[clamp(1.5rem,3vw,2.4rem)] leading-tight">
+              Un projet en tête, discutons-en
+            </h2>
+            <div className="h-px w-12 bg-gradient-to-r from-[#ed8936] to-transparent opacity-60 blur-[1px] mx-auto" />
+          </div>
+          <p className="mx-auto max-w-md font-body text-trait">
+            Vous avez une vision, je l'amène en 3D. Prêt à transformer votre idée en réalité immersive ?
+          </p>
+          <a
+            href="/contact"
+            className="inline-block border border-white/[0.14] px-6 py-3 font-mono text-xs tracking-[0.24em] text-papier transition-all hover:border-[#ed8936] hover:shadow-[0_0_20px_rgba(237,137,54,0.18)]"
+          >
+            Commençons
+          </a>
+        </div>
+      </footer>
+    </>
   );
 }
