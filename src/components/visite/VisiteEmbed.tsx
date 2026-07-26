@@ -1,28 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Écrin de la visite. L'iframe (annonce Laforêt → viewer 3D, tout se passe à
  * l'intérieur) est habillée pour donner une stature de logiciel SaaS. Aucun
  * fichier distant n'est touché : tout est géré dans cette page hôte.
  *
- * DESKTOP / TABLETTE — mockup d'ordinateur portable FIXE (image PNG, écran
- * transparent). L'iframe est posée DERRIÈRE l'image, calée pile dans le trou
- * de l'écran ; le châssis (opaque) l'encadre, l'écran (transparent) la révèle.
- * L'image est en `pointer-events:none` → clics/molette atteignent l'iframe.
+ * DESKTOP / TABLETTE — mockup d'ordinateur portable FIXE (PNG, écran = trou
+ * transparent). L'écran ne fait que ~770 px de large : si on y mettait l'iframe
+ * à 100 %, la page distante afficherait sa mise en page MOBILE (effet loupe).
+ * On rend donc l'iframe à une LARGEUR LOGIQUE DESKTOP (1440 px) puis on la
+ * réduit avec un simple `transform: scale()` 2D (PAS de perspective 3D → les
+ * clics restent précis au pixel) pour remplir exactement la dalle. Résultat :
+ * la vraie mise en page desktop 16/9, à l'échelle, nette et centrée.
  *
- * MOBILE — le châssis s'efface au profit d'un conteneur fluide arrondi. Un
- * BOUCLIER tactile garde le défilement de la page prioritaire : par défaut le
- * doigt fait défiler la page (iframe `pointer-events:none`), on n'active le
- * tactile de la visite que sur un tap explicite, et un bouton « Terminer » le
- * relâche — l'utilisateur n'est jamais piégé par le tactile du viewer 3D.
+ * MOBILE — châssis effacé → carte fluide au format téléphone. L'iframe est en
+ * largeur native (pas de mise à l'échelle : la page rend sa version mobile, ce
+ * qui est le rendu voulu). Un BOUCLIER tactile garde le défilement de la page
+ * prioritaire : iframe `pointer-events:none` par défaut (le doigt défile la
+ * PAGE), un tap sur « Toucher pour explorer » active la visite, « Terminer »
+ * la relâche — jamais piégé par le tactile du viewer 3D.
  */
 
 const SRC = "https://hub-visite-3d.vercel.app/index-laforet.html";
 
 // Position de l'écran dans l'image rognée (public/images/laptop.png, 4758×3094).
 const ECRAN = { left: 13.661, top: 5.301, width: 71.648, height: 67.453 };
+// Ratio de la dalle (bbox mesurée 3409×2087) → l'iframe logique le reprend
+// pour remplir sans marge.
+const ECRAN_RATIO = 3409 / 2087; // ≈ 1.6334
+const LOGIQUE_W = 1440; // largeur logique = mise en page desktop
+const LOGIQUE_H = Math.round(LOGIQUE_W / ECRAN_RATIO); // 882
 
 function Iframe() {
   return (
@@ -38,15 +47,31 @@ function Iframe() {
 
 export default function VisiteEmbed() {
   const [actif, setActif] = useState(false); // interaction tactile mobile
+  const ecranRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0);
+
+  // Échelle = largeur réelle de la dalle / largeur logique (1440). Recalculée
+  // à chaque redimensionnement pour rester responsive.
+  useEffect(() => {
+    const el = ecranRef.current;
+    if (!el) return;
+    const maj = () => setScale(el.clientWidth / LOGIQUE_W);
+    maj();
+    const ro = new ResizeObserver(maj);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   return (
     <div className="w-full">
       {/* ================= DESKTOP / TABLETTE — écrin laptop ================= */}
       <div className="mx-auto hidden w-full max-w-[1080px] px-6 lg:block">
         <div className="relative mx-auto aspect-[4758/3094] w-full">
-          {/* Écran : l'iframe, posée dans le trou transparent du mockup */}
+          {/* Dalle : cadre rectangulaire aux coins subtilement arrondis, calé
+              pile dans l'écran, rempli par l'iframe mise à l'échelle */}
           <div
-            className="absolute overflow-hidden bg-white"
+            ref={ecranRef}
+            className="absolute overflow-hidden rounded-[8px] bg-white"
             style={{
               left: `${ECRAN.left}%`,
               top: `${ECRAN.top}%`,
@@ -54,7 +79,17 @@ export default function VisiteEmbed() {
               height: `${ECRAN.height}%`,
             }}
           >
-            <Iframe />
+            <div
+              style={{
+                width: `${LOGIQUE_W}px`,
+                height: `${LOGIQUE_H}px`,
+                transform: `scale(${scale || 0})`,
+                transformOrigin: "top left",
+                opacity: scale ? 1 : 0,
+              }}
+            >
+              <Iframe />
+            </div>
           </div>
           {/* Châssis par-dessus, transparent aux clics */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -71,8 +106,8 @@ export default function VisiteEmbed() {
       {/* ===================== MOBILE — carte fluide ======================== */}
       <div className="px-4 lg:hidden">
         <div
-          className="relative mx-auto w-full overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_20px_60px_-24px_rgba(0,0,0,0.85)]"
-          style={{ height: "min(72vh, 600px)" }}
+          className="relative mx-auto w-full max-w-[440px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-white shadow-[0_20px_60px_-24px_rgba(0,0,0,0.85)]"
+          style={{ height: "min(78svh, 720px)" }}
         >
           <div className="h-full" style={{ pointerEvents: actif ? "auto" : "none" }}>
             <Iframe />
