@@ -25,13 +25,13 @@ import { useEffect, useRef, useState } from "react";
 
 const SRC = "https://hub-visite-3d.vercel.app/index-laforet.html";
 
-// Position de l'écran dans l'image rognée (public/images/laptop.png, 4758×3094).
-const ECRAN = { left: 13.661, top: 5.301, width: 71.648, height: 67.453 };
-// Ratio de la dalle (bbox mesurée 3409×2087) → l'iframe logique le reprend
+// Position de l'écran dans l'image rognée (public/images/laptop.png, 2332×1500).
+const ECRAN = { left: 13.979, top: 5.133, width: 71.998, height: 61.267 };
+// Ratio de la dalle (bbox mesurée 1679×919) → l'iframe logique le reprend
 // pour remplir sans marge.
-const ECRAN_RATIO = 3409 / 2087; // ≈ 1.6334
+const ECRAN_RATIO = 1679 / 919; // ≈ 1.827
 const LOGIQUE_W = 1440; // largeur logique = mise en page desktop
-const LOGIQUE_H = Math.round(LOGIQUE_W / ECRAN_RATIO); // 882
+const LOGIQUE_H = Math.round(LOGIQUE_W / ECRAN_RATIO); // 788
 
 function Iframe() {
   return (
@@ -66,7 +66,7 @@ export default function VisiteEmbed() {
     <div className="w-full">
       {/* ================= DESKTOP / TABLETTE — écrin laptop ================= */}
       <div className="mx-auto hidden w-full max-w-[1080px] px-6 lg:block">
-        <div className="relative mx-auto aspect-[4758/3094] w-full">
+        <div className="relative mx-auto aspect-[2332/1500] w-full">
           {/* Dalle : cadre rectangulaire aux coins subtilement arrondis, calé
               pile dans l'écran, rempli par l'iframe mise à l'échelle */}
           <div

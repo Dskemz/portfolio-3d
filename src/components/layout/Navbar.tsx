@@ -161,16 +161,16 @@ export default function Navbar() {
             backgroundColor: `rgba(20, 22, 26, ${Math.max(opacite * 0.94, 0.75)})`,
             borderColor: `rgba(60, 65, 72, ${Math.max(opacite, 0.3)})`,
           }}
-          className="pointer-events-auto mx-auto flex h-14 w-full max-w-4xl items-center gap-8 rounded-2xl border px-5 shadow-2xl transition-colors duration-150 md:h-16 md:px-6"
+          className="pointer-events-auto relative mx-auto flex h-14 w-full max-w-4xl items-center justify-between rounded-2xl border px-5 shadow-2xl transition-colors duration-150 md:h-16 md:px-6"
         >
           <Link
             href="/"
             onClick={surClicLogo}
-            className="flex shrink-0 items-center text-zinc-300 transition-colors duration-200 hover:text-[#FF7F50]"
+            className="flex shrink-0 items-center text-white transition-colors duration-200 hover:text-[#ed8936]"
             aria-label="Accueil — revenir en haut"
           >
             <svg
-              className="h-6 w-auto text-orange-500"
+              className="h-6 w-auto"
               viewBox="0 0 40 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -194,8 +194,8 @@ export default function Navbar() {
             </svg>
           </Link>
 
-          {/* Onglets — collés au logo, comme sur la référence fournie */}
-          <ul className="hidden items-center gap-7 md:flex">
+          {/* Onglets — parfaitement centrés au milieu de la barre */}
+          <ul className="absolute inset-y-0 left-1/2 hidden -translate-x-1/2 items-center gap-7 md:flex">
             {LIENS.map(({ libelle, href }) => (
               <li key={href}>
                 <Link
@@ -228,8 +228,8 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Réseaux — poussés à droite par `ml-auto`, l'espace prévu sur le PDF */}
-          <div className="ml-auto hidden items-center gap-4 md:flex">
+          {/* Réseaux — tout à droite de la barre */}
+          <div className="hidden items-center gap-4 md:flex">
             {RESEAUX.map(({ nom, href }) => (
               <a
                 key={nom}
