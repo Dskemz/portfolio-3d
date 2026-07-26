@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 // La page HTML chargée dans l'iframe : fausse annonce + bouton qui bascule vers
 // le viewer 3D. Tout se passe DANS l'iframe, aucune redirection externe.
-const SRC = "https://hub-visite-3d.vercel.app/viewer.html";
+const SRC = "https://hub-visite-3d.vercel.app/index-laforet.html";
 
 export default function VisiteVirtuelle() {
   return (
