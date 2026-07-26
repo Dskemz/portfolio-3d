@@ -170,20 +170,27 @@ export default function Navbar() {
             aria-label="Accueil — revenir en haut"
           >
             <svg
-              className="h-5 w-20"
+              className="h-6 w-auto text-orange-500"
+              viewBox="0 0 40 24"
               fill="none"
-              viewBox="0 0 96 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
+              xmlns="http://www.w3.org/2000/svg"
             >
-              {/* Ligne principale avec une cassure de progression */}
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 12h32m8 0h48" />
               {/* Point de départ */}
-              <circle cx="4" cy="12" r="2" fill="currentColor" />
-              {/* Nœud central "étape" */}
-              <circle cx="36" cy="12" r="2" fill="currentColor" />
-              {/* Point d'arrivée final */}
-              <circle cx="92" cy="12" r="2" fill="currentColor" />
+              <circle cx="4" cy="4" r="2" fill="currentColor" />
+              {/* Trait avec coude arrondi, espace et raccord */}
+              <path
+                d="M4 6V14C4 16 6 18 8 18H14"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+              <path
+                d="M18 18H22C24 18 26 20 26 22V24"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+              <circle cx="26" cy="22" r="2" fill="currentColor" />
             </svg>
           </Link>
 
