@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import VisiteEmbed from "@/components/visite/VisiteEmbed";
+import FluxServices from "@/components/visite/FluxServices";
 
 export const metadata: Metadata = {
   title: "Visite virtuelle interactive dans le navigateur | Graphite 3D",
@@ -56,47 +57,9 @@ export default function VisiteVirtuelle() {
           le dimensionnement est géré ici (voir VisiteEmbed). */}
       <VisiteEmbed />
 
-      {/* Points clés */}
-      <section className="pt-24 pb-24 md:pb-32">
-        <div className="mx-auto w-full max-w-6xl px-6 md:px-10">
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
-            <Reveal>
-              <div>
-                <h3 className="font-display text-sm font-medium tracking-tight text-papier">
-                  Écosystème tout-en-un
-                </h3>
-                <p className="mt-4 text-base leading-relaxed text-papier/75">
-                  Viewer haute performance et éditeur propriétaire intégré : vous
-                  maîtrisez votre contenu sans dépendre d&apos;outils externes.
-                </p>
-              </div>
-            </Reveal>
-
-            <Reveal>
-              <div>
-                <h3 className="font-display text-sm font-medium tracking-tight text-papier">
-                  Contrôle total
-                </h3>
-                <p className="mt-4 text-base leading-relaxed text-papier/75">
-                  Intégration adaptée à votre charte graphique, hébergement
-                  sécurisé et support continu.
-                </p>
-              </div>
-            </Reveal>
-
-            <Reveal>
-              <div>
-                <h3 className="font-display text-sm font-medium tracking-tight text-papier">
-                  Déploiement simple
-                </h3>
-                <p className="mt-4 text-base leading-relaxed text-papier/75">
-                  Solution prête à vendre avec tous les outils nécessaires pour
-                  démarrer immédiatement.
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </div>
+      {/* Points clés — flux électrique traversant les 3 atouts (cf. /about) */}
+      <section className="px-6 pt-20 pb-24 md:pb-32">
+        <FluxServices />
       </section>
 
       {/* CTA */}
