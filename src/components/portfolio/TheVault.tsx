@@ -1,104 +1,102 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { PROJETS, TYPES_PROJETS } from '@/content/projets';
-import { motion } from 'framer-motion';
+import { useState, useMemo } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { PROJETS, TYPES_PROJETS } from "@/content/projets";
 
-export function TheVault() {
-  const [activeFilter, setActiveFilter] = useState<string>('all');
+/**
+ * The Vault — grille globale filtrable par typologie.
+ *
+ * Filtres : « Tous » + les quatre typologies de TYPES_PROJETS. Un projet
+ * apparaît dès qu'il porte le type sélectionné (un projet peut en cumuler
+ * plusieurs). Le survol révèle un liseré orange émissif (bord net + halo
+ * flouté), sur le modèle du traitement des fiches ailleurs sur le site.
+ */
+export default function TheVault() {
+  const [filtre, setFiltre] = useState<string>("tous");
 
-  const filteredProjets = useMemo(() => {
-    if (activeFilter === 'all') return PROJETS;
-    return PROJETS.filter((p) => p.types.includes(activeFilter));
-  }, [activeFilter]);
+  const projetsFiltres = useMemo(() => {
+    if (filtre === "tous") return PROJETS;
+    return PROJETS.filter((p) => p.types.includes(filtre as never));
+  }, [filtre]);
 
   return (
-    <div className="mx-auto max-w-7xl space-y-12">
+    <div className="space-y-12">
       {/* Filtres */}
-      <div className="flex flex-wrap gap-3 border-b border-mine pb-8">
-        <motion.button
-          onClick={() => setActiveFilter('all')}
-          className={`font-mono text-xs tracking-[0.24em] transition-all ${
-            activeFilter === 'all'
-              ? 'border-b-2 border-[#ed8936] text-papier'
-              : 'text-trait hover:text-papier'
-          }`}
-          whileHover={{ y: -2 }}
-          whileTap={{ y: 0 }}
-        >
-          TOUS
-        </motion.button>
-
+      <div className="flex flex-wrap gap-x-8 gap-y-4 border-b border-mine pb-6">
+        <FiltreBouton
+          actif={filtre === "tous"}
+          onClick={() => setFiltre("tous")}
+          label="Tous"
+        />
         {TYPES_PROJETS.map((type) => (
-          <motion.button
+          <FiltreBouton
             key={type.id}
-            onClick={() => setActiveFilter(type.id)}
-            className={`font-mono text-xs tracking-[0.24em] transition-all ${
-              activeFilter === type.id
-                ? 'border-b-2 border-[#ed8936] text-papier'
-                : 'text-trait hover:text-papier'
-            }`}
-            whileHover={{ y: -2 }}
-            whileTap={{ y: 0 }}
-          >
-            {type.label}
-          </motion.button>
+            actif={filtre === type.id}
+            onClick={() => setFiltre(type.id)}
+            label={type.label}
+          />
         ))}
       </div>
 
-      {/* Grille de projets */}
-      <motion.div
-        className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
-        layout
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        {filteredProjets.map((projet, idx) => (
-          <motion.div
-            key={projet.slug}
-            layout
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ delay: idx * 0.05 }}
-          >
-            <Link href={`/portfolio/${projet.slug}`}>
-              <div className="group relative space-y-4 cursor-pointer">
-                {/* Image avec overlay */}
-                <div className="relative overflow-hidden rounded-lg aspect-video bg-graphite-900">
+      {/* Grille */}
+      <motion.div layout className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <AnimatePresence mode="popLayout">
+          {projetsFiltres.map((projet) => (
+            <motion.div
+              key={projet.slug}
+              layout
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.4, ease: [0.22, 0.61, 0.36, 1] }}
+            >
+              <Link href={`/portfolio/${projet.slug}`} className="group block">
+                {/* Visuel + liseré émissif au survol */}
+                <div className="relative aspect-[4/3] overflow-hidden bg-graphite-800">
                   <Image
                     src={projet.couverture}
-                    alt={projet.nom}
+                    alt={projet.titre}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-500 ease-sobre group-hover:scale-[1.04]"
                   />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300" />
-                  {/* Halo au survol */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="absolute inset-0 border border-[#ed8936]/30 rounded-lg" />
-                    <div className="absolute inset-0 border border-[#ed8936]/10 rounded-lg blur-[2px]" />
-                  </div>
+                  <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/30" />
+                  {/* Liseré : bord net + halo flouté */}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 border border-orange-500/0 transition-colors duration-300 group-hover:border-orange-500/50"
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 border border-orange-500/0 blur-[3px] transition-colors duration-300 group-hover:border-orange-500/30"
+                  />
                 </div>
 
                 {/* Métadonnées */}
-                <div className="space-y-2">
-                  <div className="flex items-baseline gap-3">
-                    <h3 className="font-display text-lg leading-tight group-hover:text-[#ed8936] transition-colors">
-                      {projet.nom}
+                <div className="mt-5 space-y-3">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h3 className="font-display text-lg font-light leading-tight tracking-tight text-papier transition-colors duration-300 group-hover:text-orange-500">
+                      {projet.titre}
                     </h3>
-                    <span className="text-xs text-trait font-mono">{projet.annee}</span>
+                    <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.24em] text-trait">
+                      {projet.annee}
+                    </span>
                   </div>
-                  <p className="text-sm text-trait">{projet.client}</p>
-                  <div className="flex flex-wrap gap-2 pt-2">
+
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-trait">
+                    {projet.client}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 pt-1">
                     {projet.types.map((typeId) => {
                       const type = TYPES_PROJETS.find((t) => t.id === typeId);
                       return (
                         <span
                           key={typeId}
-                          className="inline-block border border-graphite-600 px-2 py-1 text-xs text-trait group-hover:border-[#ed8936] group-hover:text-[#ed8936] transition-all"
+                          className="inline-block border border-mine px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.2em] text-trait transition-colors duration-300 group-hover:border-orange-500/40"
                         >
                           {type?.label}
                         </span>
@@ -106,22 +104,46 @@ export function TheVault() {
                     })}
                   </div>
                 </div>
-
-                {/* Lien avec flèche */}
-                <div className="inline-flex items-center gap-2 text-xs font-mono tracking-[0.24em] text-trait group-hover:text-[#ed8936] transition-colors pt-2">
-                  Découvrir <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </div>
-              </div>
-            </Link>
-          </motion.div>
-        ))}
+              </Link>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </motion.div>
 
-      {filteredProjets.length === 0 && (
-        <div className="py-20 text-center">
-          <p className="text-trait">Aucun projet pour ce filtre.</p>
-        </div>
+      {projetsFiltres.length === 0 && (
+        <p className="py-16 text-center font-mono text-[10px] uppercase tracking-[0.24em] text-trait">
+          Aucun projet pour ce filtre
+        </p>
       )}
     </div>
+  );
+}
+
+function FiltreBouton({
+  actif,
+  onClick,
+  label,
+}: {
+  actif: boolean;
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`font-mono text-[10px] uppercase tracking-[0.24em] transition-colors duration-300 ease-sobre ${
+        actif
+          ? "text-orange-500"
+          : "text-trait hover:text-papier"
+      }`}
+    >
+      {label}
+      <span
+        aria-hidden="true"
+        className={`mt-1 block h-px origin-left transition-transform duration-300 ease-sobre ${
+          actif ? "scale-x-100 bg-orange-500" : "scale-x-0 bg-transparent"
+        }`}
+      />
+    </button>
   );
 }

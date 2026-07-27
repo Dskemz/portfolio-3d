@@ -1,23 +1,46 @@
+/**
+ * Données des projets — source unique lue par TOUS les composants portfolio.
+ *
+ * Champs HISTORIQUES (lus par CarrouselProjets, GrilleProjets, IndexProjets) :
+ *   slug · titre · client · resume · categorie · annee · couverture
+ * NE PAS renommer ni retirer ces champs : les composants existants s'appuient
+ * dessus (un renommage casse silencieusement le carrousel et les grilles).
+ *
+ * Champs ÉTENDUS (lus par la page projet /portfolio/[slug]) :
+ *   role · outils · types · viewer · hasIframe · ratioViewer ·
+ *   defi · solution · resultats · wireframe · final · galerie …
+ *
+ * `categorie` est le libellé lisible affiché tel quel (« Visite Virtuelle »).
+ * `types` est la liste d'identifiants machine servant aux FILTRES de The Vault
+ * (voir TYPES_PROJETS). Un projet peut relever de plusieurs typologies.
+ */
+
 export const TYPES_PROJETS = [
-  { id: 'temps-reel', label: 'Temps Réel' },
-  { id: 'visite-virtuelle', label: 'Visite Virtuelle' },
-  { id: 'modelisation', label: 'Modélisation' },
-  { id: 'architecture', label: 'Architecture' },
+  { id: "temps-reel", label: "Temps Réel" },
+  { id: "visite-virtuelle", label: "Visite Virtuelle" },
+  { id: "modelisation", label: "Modélisation" },
+  { id: "architecture", label: "Architecture" },
 ] as const;
 
+export type TypeProjetId = (typeof TYPES_PROJETS)[number]["id"];
+
 export interface ProjetData {
+  // — Champs historiques —
   slug: string;
-  nom: string;
+  titre: string;
   client: string;
   resume: string;
+  categorie: string;
+  annee: number;
+  couverture: string;
+
+  // — Champs étendus (page projet) —
   role: string;
   outils: string[];
-  annee: number;
-  types: string[];
-  couverture: string;
+  types: TypeProjetId[];
   viewer?: string;
   hasIframe?: boolean;
-  ratioViewer?: '16/9' | '4/3' | '1/1' | '9/16';
+  ratioViewer?: "16/9" | "4/3" | "1/1" | "9/16";
   defi: string;
   solution: string;
   resultats?: string;
@@ -30,176 +53,184 @@ export interface ProjetData {
 
 export const PROJETS: ProjetData[] = [
   {
-    slug: 'nexity-visite-virtuelle',
-    nom: 'Visite Virtuelle Interactive',
-    client: 'Nexity',
-    resume: 'Plateforme de visite virtuelle 360° temps réel pour portefeuille immobilier premium',
-    role: 'Direction technique 3D • Babylon.js • Architecture WebGL',
-    outils: ['Babylon.js', 'WebGL', 'Three.js', 'Node.js'],
+    slug: "nexity-visite-virtuelle",
+    titre: "Visite Virtuelle Interactive",
+    client: "Nexity",
+    resume:
+      "Plateforme de visite virtuelle 360° temps réel pour portefeuille immobilier premium.",
+    categorie: "Visite Virtuelle",
     annee: 2024,
-    types: ['visite-virtuelle', 'temps-reel'],
-    couverture: '/images/projets/nexity-cover.jpg',
-    viewer: 'https://viewer.exemple.com/nexity',
+    couverture: "/images/projets/nexity-cover.jpg",
+    role: "Direction technique 3D · Babylon.js · Architecture WebGL",
+    outils: ["Babylon.js", "WebGL", "Three.js", "Node.js"],
+    types: ["visite-virtuelle", "temps-reel"],
+    viewer: "https://viewer.exemple.com/nexity",
     hasIframe: true,
-    defi:
-      'Créer une expérience immersive permettant aux visiteurs d\'explorer des propriétés haut de gamme en temps réel, avec des chargements optimisés pour des connexions variables et une compatibilité cross-device.',
+    defi: "Créer une expérience immersive permettant d'explorer des propriétés haut de gamme en temps réel, avec des chargements optimisés pour des connexions variables et une compatibilité multi-appareils.",
     solution:
-      'Développement d\'une architecture Babylon.js optimisée avec streaming progressif des actifs 3D, gestion des LOD (Levels of Detail), et implémentation de shaders personnalisés pour une qualité visuelle cinématographique. Interface de contrôle épurée favorisant l\'exploration intuitive.',
+      "Architecture Babylon.js optimisée avec streaming progressif des actifs 3D, gestion des niveaux de détail (LOD) et shaders personnalisés pour une qualité visuelle cinématographique. Interface de contrôle épurée favorisant l'exploration intuitive.",
     resultats:
-      'Réduction du temps de chargement de 68%, amélioration du taux d\'engagement visiteur de 45%, et augmentation des demandes de visite physique de 32%.',
+      "Temps de chargement réduit de 68 %, engagement visiteur en hausse de 45 %, demandes de visite physique en hausse de 32 %.",
     galerie: [
-      { url: '/images/projets/nexity-detail-1.jpg', alt: 'Matière du marbre', caption: 'Détail des textures' },
-      { url: '/images/projets/nexity-detail-2.jpg', alt: 'Éclairage ambiant', caption: 'Éclairage temps réel' },
-      { url: '/images/projets/nexity-detail-3.jpg', alt: 'Interface utilisateur', caption: 'Contrôles immersifs' },
+      { url: "/images/projets/nexity-detail-1.jpg", alt: "Détail des matières" },
+      { url: "/images/projets/nexity-detail-2.jpg", alt: "Éclairage temps réel" },
+      { url: "/images/projets/nexity-detail-3.jpg", alt: "Contrôles immersifs" },
     ],
   },
   {
-    slug: 'bouygues-modelisation-3d',
-    nom: 'Modélisation Architecturale',
-    client: 'Bouygues Immobilier',
-    resume: 'Modélisation 3D photogrammétrique d\'un complexe résidentiel de 15 000 m²',
-    role: 'Modélisateur 3D lead • Post-production visuelles',
-    outils: ['Cinema 4D', 'Octane Render', 'Substance Designer', 'Photogrammetry'],
+    slug: "bouygues-modelisation-3d",
+    titre: "Modélisation Architecturale",
+    client: "Bouygues Immobilier",
+    resume:
+      "Modélisation 3D photogrammétrique d'un complexe résidentiel de 15 000 m².",
+    categorie: "Modélisation",
     annee: 2023,
-    types: ['modelisation', 'architecture'],
-    couverture: '/images/projets/bouygues-cover.jpg',
-    wireframe: '/images/projets/bouygues-wireframe.jpg',
-    wireframeLabel: 'Modèle brut',
-    final: '/images/projets/bouygues-final.jpg',
-    finalLabel: 'Rendu final',
-    defi:
-      'Créer une représentation 3D fidèle d\'une architecture existante complexe pour un marketing pré-vente, en respectant les contraintes réglementaires et en livrant des visuels photoréalistes pour campagne commerciale.',
+    couverture: "/images/projets/bouygues-cover.jpg",
+    role: "Modélisateur 3D lead · Post-production visuelle",
+    outils: ["Cinema 4D", "Octane Render", "Substance Designer", "Photogrammétrie"],
+    types: ["modelisation", "architecture"],
+    wireframe: "/images/projets/bouygues-wireframe.jpg",
+    wireframeLabel: "Modèle brut",
+    final: "/images/projets/bouygues-final.jpg",
+    finalLabel: "Rendu final",
+    defi: "Produire une représentation 3D fidèle d'une architecture complexe pour un marketing pré-vente, en respectant les contraintes réglementaires et en livrant des visuels photoréalistes.",
     solution:
-      'Acquisition photogrammétrique sur site, nettoyage et optimisation du maillage, texture procédurale haute définition via Substance. Rendu temps réel optimisé pour présentation client et export pour supports de communication.',
+      "Acquisition photogrammétrique sur site, nettoyage et optimisation du maillage, texture procédurale haute définition via Substance. Rendu optimisé pour présentation client et supports de communication.",
     resultats:
-      'Visuels utilisés dans campagne marketing multi-canal, augmentation du taux de conversion pré-vente de 28%.',
+      "Visuels déployés en campagne multi-canal, taux de conversion pré-vente en hausse de 28 %.",
     galerie: [
-      { url: '/images/projets/bouygues-detail-1.jpg', alt: 'Façade détail', caption: 'Détail façade' },
-      { url: '/images/projets/bouygues-detail-2.jpg', alt: 'Matériaux', caption: 'Palette matériaux' },
+      { url: "/images/projets/bouygues-detail-1.jpg", alt: "Détail façade" },
+      { url: "/images/projets/bouygues-detail-2.jpg", alt: "Palette matériaux" },
     ],
   },
   {
-    slug: 'withings-configurateur-produit',
-    nom: 'Configurateur 3D Produit',
-    client: 'Withings',
-    resume: 'Outil de configuration et visualisation 3D temps réel pour gamme santé connectée',
-    role: 'Direction artistique • Optimisation shader WebGL',
-    outils: ['Three.js', 'React', 'GLSL', 'TypeScript'],
+    slug: "withings-configurateur-produit",
+    titre: "Configurateur 3D Produit",
+    client: "Withings",
+    resume:
+      "Outil de configuration et visualisation 3D temps réel pour gamme santé connectée.",
+    categorie: "Temps Réel",
     annee: 2024,
-    types: ['temps-reel', 'modelisation'],
-    couverture: '/images/projets/withings-cover.jpg',
+    couverture: "/images/projets/withings-cover.jpg",
+    role: "Direction artistique · Optimisation shader WebGL",
+    outils: ["Three.js", "React", "GLSL", "TypeScript"],
+    types: ["temps-reel", "modelisation"],
     hasIframe: true,
-    defi:
-      'Permettre aux utilisateurs de personnaliser et visualiser leurs produits santé en temps réel directement sur le site e-commerce, tout en maintenant une performance optimale sur appareils mobiles.',
+    defi: "Permettre aux utilisateurs de personnaliser et visualiser leurs produits santé en temps réel sur le site e-commerce, avec une performance optimale sur mobile.",
     solution:
-      'Développement d\'un viewer Three.js avec système de matériaux paramétriques, rendu PBR temps réel, et système de customisation intuitive. Optimisation agressive des shaders et des modèles 3D pour mobile.',
+      "Viewer Three.js avec matériaux paramétriques, rendu PBR temps réel et système de customisation intuitif. Optimisation agressive des shaders et des modèles pour mobile.",
     resultats:
-      'Diminution du taux de retour de 18%, augmentation du panier moyen de 24%, et 92% de satisfaction utilisateur.',
+      "Taux de retour en baisse de 18 %, panier moyen en hausse de 24 %, 92 % de satisfaction utilisateur.",
     galerie: [
-      { url: '/images/projets/withings-detail-1.jpg', alt: 'Rendu produit', caption: 'Qualité rendu' },
-      { url: '/images/projets/withings-detail-2.jpg', alt: 'Customization UI', caption: 'Interface personnalisation' },
+      { url: "/images/projets/withings-detail-1.jpg", alt: "Qualité de rendu" },
+      { url: "/images/projets/withings-detail-2.jpg", alt: "Interface de personnalisation" },
     ],
   },
   {
-    slug: 'laforet-visite-3d',
-    nom: 'Hub Visite 3D Multi-Agences',
-    client: 'Laforêt Immobilier',
-    resume: 'Plateforme centralisée pour gestion et déploiement de visites virtuelles immobilières',
-    role: 'Architecte système • Lead développement front',
-    outils: ['Next.js', 'Babylon.js', 'PostgreSQL', 'AWS'],
+    slug: "laforet-visite-3d",
+    titre: "Hub Visite 3D Multi-Agences",
+    client: "Laforêt Immobilier",
+    resume:
+      "Plateforme centralisée de gestion et déploiement de visites virtuelles immobilières.",
+    categorie: "Visite Virtuelle",
     annee: 2024,
-    types: ['visite-virtuelle', 'temps-reel'],
-    couverture: '/images/projets/laforet-cover.jpg',
-    viewer: '/portfolio/visite-3d',
+    couverture: "/images/projets/laforet-cover.jpg",
+    role: "Architecte système · Lead développement front",
+    outils: ["Next.js", "Babylon.js", "PostgreSQL", "AWS"],
+    types: ["visite-virtuelle", "temps-reel"],
+    viewer: "/portfolio/visite-3d",
     hasIframe: true,
-    defi:
-      'Concevoir une infrastructure de visite virtuelle permettant à 200+ agences immobilières de déployer et gérer leurs propres visites sans compétences techniques, avec support multi-device et performances robustes.',
+    defi: "Concevoir une infrastructure permettant à plus de 200 agences de déployer et gérer leurs visites sans compétences techniques, avec support multi-appareils et performances robustes.",
     solution:
-      'Architecture Next.js avec CMS intégré, générateur de tours 3D automatisé, système de permissions par agence, et deployment simplifié. Viewer Babylon.js ultra-optimisé pour appareils variés.',
+      "Architecture Next.js avec CMS intégré, générateur de tours 3D automatisé, permissions par agence et déploiement simplifié. Viewer Babylon.js ultra-optimisé pour appareils variés.",
     resultats:
-      '200+ agences actives, 50 000+ visites déployées, temps de mise en ligne réduit de 90%, réduction des coûts de support de 65%.',
+      "200+ agences actives, 50 000+ visites déployées, mise en ligne 90 % plus rapide, coûts de support réduits de 65 %.",
     galerie: [
-      { url: '/images/projets/laforet-detail-1.jpg', alt: 'Interface admin', caption: 'Dashboard de gestion' },
-      { url: '/images/projets/laforet-detail-2.jpg', alt: 'Viewer immobilier', caption: 'Viewer optimisé' },
-      { url: '/images/projets/laforet-detail-3.jpg', alt: 'Mobile experience', caption: 'Expérience mobile' },
+      { url: "/images/projets/laforet-detail-1.jpg", alt: "Dashboard de gestion" },
+      { url: "/images/projets/laforet-detail-2.jpg", alt: "Viewer optimisé" },
+      { url: "/images/projets/laforet-detail-3.jpg", alt: "Expérience mobile" },
     ],
   },
   {
-    slug: 'btp-simulation-dynamique',
-    nom: 'Simulation Dynamique BTP',
-    client: 'Grand Groupe BTP',
-    resume: 'Moteur de simulation 3D pour analyse d\'impact structurel et optimisation de chantier',
-    role: 'Développeur 3D temps réel • Physics engine',
-    outils: ['Babylon.js', 'Cannon.js', 'WebWorkers', 'THREE.js'],
+    slug: "btp-simulation-dynamique",
+    titre: "Simulation Dynamique BTP",
+    client: "Grand Groupe BTP",
+    resume:
+      "Moteur de simulation 3D pour analyse d'impact structurel et optimisation de chantier.",
+    categorie: "Temps Réel",
     annee: 2023,
-    types: ['temps-reel', 'architecture'],
-    couverture: '/images/projets/btp-cover.jpg',
-    defi:
-      'Créer un outil interactif permettant aux ingénieurs BTP de simuler et visualiser en temps réel l\'impact de charges structurelles et d\'optimiser les configurations de chantier.',
+    couverture: "/images/projets/btp-cover.jpg",
+    role: "Développeur 3D temps réel · Moteur physique",
+    outils: ["Babylon.js", "Cannon.js", "Web Workers", "Three.js"],
+    types: ["temps-reel", "architecture"],
+    defi: "Offrir aux ingénieurs BTP un outil interactif pour simuler et visualiser en temps réel l'impact de charges structurelles et optimiser les configurations de chantier.",
     solution:
-      'Moteur de physique basé sur Cannon.js avec workers web pour calculs parallèles, visualisation Babylon.js avec géométries dynamiques, et système d\'annotation 3D pour mesures précises.',
+      "Moteur physique Cannon.js avec workers web pour calculs parallèles, visualisation Babylon.js à géométries dynamiques et annotation 3D pour mesures précises.",
     resultats:
-      'Réduction du temps d\'analyse de 40%, amélioration de la précision de 92%, et adoption par 15+ équipes d\'ingénierie.',
+      "Temps d'analyse réduit de 40 %, précision améliorée de 92 %, adoption par 15+ équipes d'ingénierie.",
   },
   {
-    slug: 'ecommerce-ar-produit',
-    nom: 'Expérience AR pour E-commerce',
-    client: 'Marque de Luxe',
-    resume: 'Viewer 3D avec mode AR WebXR pour essayage virtuel de produits premium',
-    role: 'Direction créative • Implémentation AR WebXR',
-    outils: ['Three.js', 'WebXR', 'React Three Fiber', 'TensorFlow'],
+    slug: "ecommerce-ar-produit",
+    titre: "Expérience AR pour E-commerce",
+    client: "Marque de Luxe",
+    resume:
+      "Viewer 3D avec mode AR WebXR pour essayage virtuel de produits premium.",
+    categorie: "Temps Réel",
     annee: 2024,
-    types: ['temps-reel', 'modelisation'],
-    couverture: '/images/projets/ar-luxury-cover.jpg',
+    couverture: "/images/projets/ar-luxury-cover.jpg",
+    role: "Direction créative · Implémentation AR WebXR",
+    outils: ["Three.js", "WebXR", "React Three Fiber", "TensorFlow"],
+    types: ["temps-reel", "modelisation"],
     hasIframe: true,
-    defi:
-      'Développer une expérience AR immersive permettant aux clients de visualiser des produits de luxe en leur environnement réel avant achat, compatible avec des appareils AR mobiles grand public.',
+    defi: "Développer une expérience AR immersive permettant de visualiser des produits de luxe dans leur environnement réel avant achat, compatible avec les appareils AR mobiles grand public.",
     solution:
-      'Implémentation WebXR avec Three.js et React Three Fiber, modèles 3D ultra-optimisés (LOD système), étalonnage chromatique pour rendu fidèle, et détection d\'environnement IA pour placement intelligent.',
+      "Implémentation WebXR avec Three.js et React Three Fiber, modèles 3D ultra-optimisés (système LOD), étalonnage chromatique fidèle et détection d'environnement par IA pour un placement intelligent.",
     resultats:
-      'Taux d\'utilisation de 67%, augmentation de la confiance achat de 44%, retours réduits de 31%.',
+      "Taux d'utilisation de 67 %, confiance à l'achat en hausse de 44 %, retours en baisse de 31 %.",
     galerie: [
-      { url: '/images/projets/ar-detail-1.jpg', alt: 'Rendu AR', caption: 'Qualité visuelle AR' },
-      { url: '/images/projets/ar-detail-2.jpg', alt: 'Expérience mobile', caption: 'Compatibilité mobile' },
+      { url: "/images/projets/ar-detail-1.jpg", alt: "Qualité visuelle AR" },
+      { url: "/images/projets/ar-detail-2.jpg", alt: "Compatibilité mobile" },
     ],
   },
   {
-    slug: 'data-visualization-3d',
-    nom: 'Visualisation de Données 3D',
-    client: 'Groupe Financier',
-    resume: 'Dashboard analytique 3D temps réel pour visualisation de métriques complexes',
-    role: 'Développeur WebGL • Data visualization',
-    outils: ['Three.js', 'D3.js', 'WebGL', 'Node.js'],
+    slug: "data-visualization-3d",
+    titre: "Visualisation de Données 3D",
+    client: "Groupe Financier",
+    resume:
+      "Dashboard analytique 3D temps réel pour visualisation de métriques complexes.",
+    categorie: "Temps Réel",
     annee: 2023,
-    types: ['temps-reel'],
-    couverture: '/images/projets/dataviz-cover.jpg',
+    couverture: "/images/projets/dataviz-cover.jpg",
+    role: "Développeur WebGL · Data visualization",
+    outils: ["Three.js", "D3.js", "WebGL", "Node.js"],
+    types: ["temps-reel"],
     hasIframe: true,
-    defi:
-      'Transformer des données financières complexes en visualisations 3D interactives permettant aux analystes de détecter rapidement les tendances et anomalies.',
+    defi: "Transformer des données financières complexes en visualisations 3D interactives permettant aux analystes de détecter rapidement tendances et anomalies.",
     solution:
-      'Système de shaders personnalisés pour rendu haute performance, librairie de graphiques 3D modulaire, synchronisation temps réel avec données backend, et interaction intuitive aux gestes.',
+      "Shaders personnalisés pour un rendu haute performance, librairie de graphiques 3D modulaire, synchronisation temps réel avec le backend et interaction aux gestes.",
     resultats:
-      'Temps de détection d\'anomalies réduit de 60%, adoption par 40+ analystes, économie estimée en détection d\'erreur de 2M€/an.',
+      "Détection d'anomalies 60 % plus rapide, adoption par 40+ analystes, économies estimées à 2 M€/an.",
   },
   {
-    slug: 'patrimoine-numerique-archive',
-    nom: 'Archivage Numérique Patrimonial',
-    client: 'Ministère de la Culture',
-    resume: 'Plateforme de numérisation 3D et d\'archivage pour patrimoine culturel',
-    role: 'Lead développement • Archéologie numérique',
-    outils: ['Photogrammetry', 'Cinema 4D', 'PostgreSQL', 'WebGL'],
+    slug: "patrimoine-numerique-archive",
+    titre: "Archivage Numérique Patrimonial",
+    client: "Ministère de la Culture",
+    resume:
+      "Plateforme de numérisation 3D et d'archivage pour le patrimoine culturel.",
+    categorie: "Modélisation",
     annee: 2023,
-    types: ['modelisation', 'architecture'],
-    couverture: '/images/projets/patrimoine-cover.jpg',
-    defi:
-      'Créer une infrastructure de numérisation 3D haute-précision et d\'archivage à long terme pour monuments et artefacts patrimoniaux, avec accès public et outils de recherche avancée.',
+    couverture: "/images/projets/patrimoine-cover.jpg",
+    role: "Lead développement · Archéologie numérique",
+    outils: ["Photogrammétrie", "Cinema 4D", "PostgreSQL", "WebGL"],
+    types: ["modelisation", "architecture"],
+    defi: "Créer une infrastructure de numérisation 3D haute-précision et d'archivage à long terme pour monuments et artefacts patrimoniaux, avec accès public et outils de recherche avancée.",
     solution:
-      'Pipeline photogrammétrique optimisé, compression 3D lossless, système d\'indexation spatiale, viewer Web performant avec outils de mesure historiques, et métadonnées CIDOC-CRM complètes.',
+      "Pipeline photogrammétrique optimisé, compression 3D sans perte, indexation spatiale, viewer web performant avec outils de mesure et métadonnées CIDOC-CRM complètes.",
     resultats:
-      '500+ artefacts numérisés, 200 000+ utilisateurs/an, certification OAIS pour archivage pérenne.',
+      "500+ artefacts numérisés, 200 000+ utilisateurs/an, certification OAIS pour archivage pérenne.",
     galerie: [
-      { url: '/images/projets/patrimoine-detail-1.jpg', alt: 'Détail sculpture', caption: 'Precision haute-définition' },
-      { url: '/images/projets/patrimoine-detail-2.jpg', alt: 'Interface archive', caption: 'Système d\'archivage' },
+      { url: "/images/projets/patrimoine-detail-1.jpg", alt: "Précision haute-définition" },
+      { url: "/images/projets/patrimoine-detail-2.jpg", alt: "Système d'archivage" },
     ],
   },
 ];
