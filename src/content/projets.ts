@@ -55,6 +55,23 @@ export interface ProjetData {
 
 export const PROJETS: ProjetData[] = [
   {
+    slug: "withings-scanwatch",
+    titre: "ScanWatch 2, Light et Nova",
+    client: "Withings",
+    resume:
+      "Création de toute la gamme de montres ScanWatch 2, ScanWatch Light et ScanWatch Nova : vidéos 360° pour le shop interactif et packshots pour la grande distribution.",
+    categorie: "Modélisation",
+    annee: 2025,
+    couverture: "/images/projets/withings-cover.jpg",
+    role: "Graphiste 3D indépendant",
+    outils: ["Visuels", "Packshots", "Vidéos 360°"],
+    types: ["modelisation"],
+    etudeCas: true,
+    defi: "Créer une gamme complète de montres connectées en 3D, décliner chaque boîtier, cadran et bracelet, et produire visuels et packshots homogènes pour le shop interactif comme pour la grande distribution.",
+    solution:
+      "Modélisation des boîtiers 37 à 43 mm avec déclinaisons de cadrans, matières industrielles en valeurs de gris et textures dédiées pour cuir et tissu. Mise en scène studio soignée puis composition finale calque par calque.",
+  },
+  {
     slug: "nexity-visite-virtuelle",
     titre: "Visite Virtuelle Interactive",
     client: "Nexity",
@@ -104,23 +121,6 @@ export const PROJETS: ProjetData[] = [
       { url: "/images/projets/bouygues-detail-1.jpg", alt: "Détail façade" },
       { url: "/images/projets/bouygues-detail-2.jpg", alt: "Palette matériaux" },
     ],
-  },
-  {
-    slug: "withings-scanwatch",
-    titre: "ScanWatch 2, Light et Nova",
-    client: "Withings",
-    resume:
-      "Création de toute la gamme de montres ScanWatch 2, ScanWatch Light et ScanWatch Nova : vidéos 360° pour le shop interactif et packshots pour la grande distribution.",
-    categorie: "Modélisation",
-    annee: 2025,
-    couverture: "/images/projets/withings-cover.jpg",
-    role: "Graphiste 3D indépendant",
-    outils: ["Visuels", "Packshots", "Vidéos 360°"],
-    types: ["modelisation"],
-    etudeCas: true,
-    defi: "Créer une gamme complète de montres connectées en 3D, décliner chaque boîtier, cadran et bracelet, et produire visuels et packshots homogènes pour le shop interactif comme pour la grande distribution.",
-    solution:
-      "Modélisation des boîtiers 37 à 43 mm avec déclinaisons de cadrans, matières industrielles en valeurs de gris et textures dédiées pour cuir et tissu. Mise en scène studio soignée puis composition finale calque par calque.",
   },
   {
     slug: "laforet-visite-3d",

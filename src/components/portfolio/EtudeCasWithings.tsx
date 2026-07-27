@@ -1,8 +1,8 @@
-import { Reveal } from "@/components/ui/Reveal";
-import { PlaceholderVisuel } from "@/components/portfolio/PlaceholderVisuel";
-import { ProjectNavigation } from "@/components/portfolio/ProjectNavigation";
-import { CtaSignature } from "@/components/portfolio/CtaSignature";
-import type { ProjetData } from "@/content/projets";
+import { Reveal } from "../ui/Reveal";
+import { VisuelWithings } from "./VisuelWithings";
+import { ProjectNavigation } from "./ProjectNavigation";
+import { CtaSignature } from "./CtaSignature";
+import type { ProjetData } from "../../content/projets";
 
 interface EtudeCasWithingsProps {
   projet: ProjetData;
@@ -90,7 +90,8 @@ export function EtudeCasWithings({
       {/* Placeholder 1 — grand visuel maître horizontal */}
       <div className="mx-auto w-full max-w-6xl px-6 lg:px-16 xl:px-24">
         <Reveal>
-          <PlaceholderVisuel
+          <VisuelWithings
+            name="01-hero"
             label="Visuel maître — gamme ScanWatch 2"
             ratio="21/9"
             teinte="#14161a"
@@ -119,11 +120,13 @@ export function EtudeCasWithings({
               </p>
             </div>
 
-            {/* Placeholder 2 — triptyque produits sous différents angles */}
-            <div className="mt-10 grid grid-cols-3 gap-4 lg:mt-0">
-              <PlaceholderVisuel label="Face" ratio="3/4" teinte="#1b1e23" />
-              <PlaceholderVisuel label="3/4" ratio="3/4" teinte="#20242a" />
-              <PlaceholderVisuel label="Profil" ratio="3/4" teinte="#1b1e23" />
+            {/* Placeholder 2 — 5 montres sous différents angles */}
+            <div className="mt-10 grid grid-cols-5 gap-2 lg:gap-4 lg:mt-0">
+              <VisuelWithings name="02-face" label="37mm" ratio="3/4" teinte="#1b1e23" />
+              <VisuelWithings name="02b-face-38" label="38mm" ratio="3/4" teinte="#20242a" />
+              <VisuelWithings name="02c-face-42" label="42mm" ratio="3/4" teinte="#1b1e23" />
+              <VisuelWithings name="02d-face-43" label="43mm" ratio="3/4" teinte="#20242a" />
+              <VisuelWithings name="03-3quart" label="3/4" ratio="3/4" teinte="#1b1e23" />
             </div>
           </Reveal>
         </section>
@@ -147,16 +150,17 @@ export function EtudeCasWithings({
 
           {/* Placeholder 3 — grille asymétrique de gros plans */}
           <Reveal className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:grid-rows-2" cascade>
-            <PlaceholderVisuel
+            <VisuelWithings
+              name="05-boucle"
               label="Boucle déployante"
               ratio="1/1"
               teinte="#1b1e23"
               className="lg:col-span-2 lg:row-span-2 lg:aspect-auto"
             />
-            <PlaceholderVisuel label="Couture cuir" ratio="1/1" teinte="#252930" />
-            <PlaceholderVisuel label="Tissage" ratio="1/1" teinte="#20242a" />
-            <PlaceholderVisuel label="Sablage métal" ratio="1/1" teinte="#252930" />
-            <PlaceholderVisuel label="Silicone" ratio="1/1" teinte="#1b1e23" />
+            <VisuelWithings name="06-couture" label="Couture cuir" ratio="1/1" teinte="#252930" />
+            <VisuelWithings name="07-tissage" label="Tissage" ratio="1/1" teinte="#20242a" />
+            <VisuelWithings name="08-sablage" label="Sablage métal" ratio="1/1" teinte="#252930" />
+            <VisuelWithings name="09-silicone" label="Silicone" ratio="1/1" teinte="#1b1e23" />
           </Reveal>
         </section>
 
@@ -166,7 +170,8 @@ export function EtudeCasWithings({
         <section className="border-t border-mine pt-16">
           {/* Placeholder 4 — profil + reflets spéculaires, texte en dessous */}
           <Reveal>
-            <PlaceholderVisuel
+            <VisuelWithings
+              name="10-studio"
               label="Mise en scène studio — reflets spéculaires sur verre et biseaux"
               ratio="16/9"
               teinte="#0e1013"
@@ -209,18 +214,21 @@ export function EtudeCasWithings({
 
           {/* Placeholder 5 — vue éclatée large + déclinaisons cadrans */}
           <Reveal className="mt-10 grid gap-4 lg:grid-cols-[1.6fr_1fr]" cascade>
-            <PlaceholderVisuel
+            <VisuelWithings
+              name="11-eclate"
               label="Vue éclatée — exploded view"
               ratio="4/3"
               teinte="#0e1013"
             />
             <div className="grid grid-rows-2 gap-4">
-              <PlaceholderVisuel
+              <VisuelWithings
+                name="12-cadran-vert"
                 label="Cadran vert"
                 ratio="16/9"
                 teinte="#1b1e23"
               />
-              <PlaceholderVisuel
+              <VisuelWithings
+                name="13-cadran-noir"
                 label="Cadran noir"
                 ratio="16/9"
                 teinte="#14161a"
