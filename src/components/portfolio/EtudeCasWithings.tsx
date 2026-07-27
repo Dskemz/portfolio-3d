@@ -220,28 +220,37 @@ export function EtudeCasWithings({
             </div>
           </Reveal>
 
-          {/* Placeholder 5 — vue éclatée large + déclinaisons cadrans */}
-          <Reveal className="mt-10 grid gap-4 lg:grid-cols-[1.6fr_1fr]" cascade>
+          {/* Grande vue éclatée */}
+          <Reveal className="mt-12 lg:mt-16">
             <VisuelWithings
               name="11-eclate"
               label="Vue éclatée — exploded view"
-              ratio="4/3"
+              ratio="21/9"
               teinte="#0e1013"
             />
-            <div className="grid grid-rows-2 gap-4">
-              <VisuelWithings
-                name="12-cadran-vert"
-                label="Cadran vert"
-                ratio="16/9"
-                teinte="#1b1e23"
-              />
-              <VisuelWithings
-                name="13-cadran-noir"
-                label="Cadran noir"
-                ratio="16/9"
-                teinte="#14161a"
-              />
-            </div>
+          </Reveal>
+
+          {/* 4 variations compactes */}
+          <Reveal className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:gap-4 lg:mt-8" cascade>
+            <VisuelWithings name="12-cadran-vert" label="Cadran vert" ratio="1/1" teinte="#1b1e23" />
+            <VisuelWithings name="13-cadran-noir" label="Cadran noir" ratio="1/1" teinte="#14161a" />
+            <VisuelWithings name="14-bracelet-noir" label="Bracelet noir" ratio="1/1" teinte="#20242a" />
+            <VisuelWithings name="15-bracelet-metal" label="Bracelet metal" ratio="1/1" teinte="#1b1e23" />
+          </Reveal>
+
+          {/* Grille asymétrique de détails */}
+          <Reveal className="mt-6 grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:grid-rows-2 lg:gap-4 lg:mt-8" cascade>
+            <VisuelWithings
+              name="16-detail-cadran-1"
+              label="Cadran détail 1"
+              ratio="1/1"
+              teinte="#1b1e23"
+              className="md:col-span-2 md:row-span-2 lg:col-span-2 lg:row-span-2 md:aspect-auto"
+            />
+            <VisuelWithings name="17-detail-bracelet-1" label="Bracelet 1" ratio="1/1" teinte="#20242a" />
+            <VisuelWithings name="18-detail-boitier-1" label="Boîtier 1" ratio="1/1" teinte="#252930" />
+            <VisuelWithings name="19-detail-cadran-2" label="Cadran détail 2" ratio="1/1" teinte="#1b1e23" />
+            <VisuelWithings name="20-detail-bracelet-2" label="Bracelet 2" ratio="1/1" teinte="#20242a" />
           </Reveal>
         </section>
 
