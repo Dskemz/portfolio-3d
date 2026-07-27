@@ -32,23 +32,25 @@ export default function BandeauConfiance() {
   const piste = [...CLIENTS, ...CLIENTS];
 
   return (
-    <section className="w-full pb-14 pt-8 lg:pb-16 lg:pt-10">
-      <p className="mb-6 px-6 text-left font-mono text-[10px] uppercase tracking-[0.28em] text-trait lg:px-16">
-        Ils m&apos;ont fait confiance
-      </p>
+    <section className="w-full py-12 lg:py-16">
+      <div className="mx-auto w-full max-w-6xl px-6 lg:px-16 xl:px-24">
+        <p className="mb-8 font-mono text-[10px] uppercase tracking-[0.28em] text-trait">
+          Ils m&apos;ont fait confiance
+        </p>
+      </div>
 
-      <div className="bandeau-confiance relative flex items-center overflow-hidden">
+      <div className="bandeau-confiance relative flex w-full items-center overflow-hidden">
         {/* Fondus latéraux pour que les logos naissent et meurent en douceur */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-28 bg-gradient-to-r from-black to-transparent"
+          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-black to-transparent sm:w-24 lg:w-32"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-gradient-to-l from-black to-transparent"
+          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-black to-transparent sm:w-24 lg:w-32"
         />
 
-        <ul className="bandeau-piste flex shrink-0 items-center gap-16 pr-16 lg:gap-24 lg:pr-24">
+        <ul className="bandeau-piste flex w-max shrink-0 items-center gap-12 pr-12 sm:gap-16 sm:pr-16 lg:gap-24 lg:pr-24">
           {piste.map((nom, index) => (
             <li
               key={`${nom}-${index}`}

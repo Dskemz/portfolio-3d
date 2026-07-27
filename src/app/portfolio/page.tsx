@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import CarrouselProjets from "@/components/portfolio/CarrouselProjets";
 import BandeauConfiance from "@/components/portfolio/BandeauConfiance";
-import TheVault from "@/components/portfolio/TheVault";
+import LienSobre from "@/components/portfolio/LienSobre";
 import { CtaSignature } from "@/components/portfolio/CtaSignature";
 
 export const metadata: Metadata = {
@@ -55,24 +55,23 @@ export default function PortfolioPage() {
       </div>
 
       {/* ------------------------------------------------------------------ */}
-      {/*  The Vault — grille globale filtrable                              */}
+      {/*  Accès à la grille complète — page dédiée /portfolio/tous          */}
       {/* ------------------------------------------------------------------ */}
       <section className="mx-auto w-full max-w-6xl border-t border-mine px-6 py-16 lg:px-16 lg:py-24 xl:px-24">
-        <div className="lg:grid lg:grid-cols-[8rem_1fr] lg:gap-8">
-          <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-trait lg:pt-2">
-            The Vault
-          </p>
-
-          <div className="mt-8 max-w-2xl lg:mt-0">
-            <h2 className="font-display text-[clamp(1.4rem,2.1vw,2rem)] font-light leading-[1.35] tracking-tight text-papier">
-              L&apos;intégralité du travail, réuni au même endroit. Filtrez par
-              typologie pour aller droit à ce qui vous intéresse.
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-xl">
+            <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-trait">
+              Tout le travail
+            </p>
+            <h2 className="mt-8 font-display text-[clamp(1.4rem,2.1vw,2rem)] font-light leading-[1.35] tracking-tight text-papier">
+              Au-delà des projets phares, retrouvez l&apos;intégralité des
+              réalisations, filtrables par typologie.
             </h2>
           </div>
-        </div>
 
-        <div className="mt-12 lg:mt-16">
-          <TheVault />
+          <LienSobre href="/portfolio/tous" className="self-start lg:self-auto">
+            Voir tous les projets
+          </LienSobre>
         </div>
       </section>
 

@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import GrilleProjets from "@/components/portfolio/GrilleProjets";
-import LienSobre from "@/components/portfolio/LienSobre";
+import TheVault from "@/components/portfolio/TheVault";
+import { CtaSignature } from "@/components/portfolio/CtaSignature";
 
 export const metadata: Metadata = {
   title: "Tous les projets",
   description:
-    "L'ensemble des projets en mosaïque : visites virtuelles 3D, modélisation et direction artistique.",
+    "L'ensemble des réalisations 3D, filtrables par typologie : visites virtuelles interactives, temps réel web, modélisation produit et architecture.",
   alternates: { canonical: "/portfolio/tous" },
   openGraph: {
-    title: "Tous les projets",
+    title: "Tous les projets — graphiste 3D généraliste",
     description:
-      "Visites virtuelles 3D, modélisation et direction artistique.",
+      "Visites virtuelles interactives, temps réel web, modélisation et architecture.",
     url: "/portfolio/tous",
     type: "website",
   },
@@ -18,24 +18,29 @@ export const metadata: Metadata = {
 
 export default function TousLesProjetsPage() {
   return (
-    <div className="flex flex-1 flex-col bg-black text-white">
-      {/* La colonne de gauche porte le titre : pas d'en-tête au-dessus. */}
-      <main className="flex-grow pt-24 lg:pt-0">
-        <GrilleProjets />
-      </main>
+    <div className="flex flex-1 flex-col overflow-x-clip bg-black text-white">
+      {/* En-tête */}
+      <section className="mx-auto w-full max-w-6xl px-6 pb-12 pt-36 md:pt-40 lg:px-16 xl:px-24">
+        <div className="lg:grid lg:grid-cols-[8rem_1fr] lg:gap-8">
+          <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-trait lg:pt-4">
+            Tous les projets
+          </p>
 
-      {/* CTA final */}
-      <section className="border-t border-mine py-24 md:py-32">
-        <div className="flex w-full flex-col gap-10 px-6 lg:flex-row lg:items-end lg:justify-between lg:px-16 xl:px-24">
-          <h2 className="max-w-xl font-display text-[clamp(1.8rem,4vw,2.8rem)] font-light leading-tight text-papier">
-            Votre bien mérite mieux qu'une galerie photo
-          </h2>
-
-          <LienSobre href="/contact" className="self-start">
-            Demander un devis
-          </LienSobre>
+          <h1 className="mt-8 max-w-3xl font-display text-[clamp(1.4rem,2.1vw,2rem)] font-light leading-[1.35] tracking-tight text-papier lg:mt-0">
+            L&apos;intégralité du travail, réuni au même endroit.{" "}
+            <span className="text-orange-500">Filtrez par typologie</span> pour
+            aller droit à ce qui vous intéresse.
+          </h1>
         </div>
       </section>
+
+      {/* Grille filtrable */}
+      <section className="mx-auto w-full max-w-6xl px-6 pb-24 lg:px-16 lg:pb-32 xl:px-24">
+        <TheVault />
+      </section>
+
+      {/* CTA signature partagé */}
+      <CtaSignature />
     </div>
   );
 }
