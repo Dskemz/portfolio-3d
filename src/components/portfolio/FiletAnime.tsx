@@ -2,6 +2,15 @@
 
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
+import { CustomEase } from "gsap/CustomEase";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(CustomEase);
+  // Enregistrée une seule fois : départ franc, longue décélération.
+  if (!CustomEase.get("filet")) {
+    CustomEase.create("filet", "0.16, 0.9, 0.3, 1");
+  }
+}
 
 interface FiletAnimeProps {
   /** Position verticale du trait, en em, relative au titre (défaut : 0.7em). */
@@ -37,8 +46,10 @@ export function FiletAnime({ top = "0.7em" }: FiletAnimeProps) {
 
       gsap.to(traits, {
         scaleX: 1,
-        duration: 0.9,
-        ease: "power3.out",
+        duration: 1.4,
+        delay: 0.35,
+        // Départ franc puis relâchement long : dynamique sans être brusque.
+        ease: "filet",
         scrollTrigger: {
           trigger: hote,
           start: "top 85%",
