@@ -12,17 +12,17 @@ export const STEP_MS = 1000;
 export const STEP_COOLDOWN_MS = 140;
 
 /** Molette : en dessous de ce delta, l'événement est ignoré (micro-inertie trackpad). */
-export const WHEEL_MIN_DELTA = 2;
+export const WHEEL_MIN_DELTA = 3;
 
 /** Seuil minimal de swipe (px) pour déclencher un cran. */
-export const SWIPE_MIN_DELTA = 24;
+export const SWIPE_MIN_DELTA = 6;
 
 /**
  * Hauteur (en fraction de viewport) à laquelle l'ancre de la 1re fiche déclenche
  * la visite guidée. Au-dessus : défilement libre, on peut empiler ce qu'on veut
  * dans l'accueil.
  */
-export const INTRO_GRAB_VH = 0.95;
+export const INTRO_GRAB_VH = 0.68;
 
 /** Ligne de front du flux dans le viewport. */
 export const LINE_VH = 0.62;
