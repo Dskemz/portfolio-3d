@@ -19,8 +19,9 @@ import { useEffect, useRef, useState } from "react";
  * largeur native (pas de mise à l'échelle : la page rend sa version mobile, ce
  * qui est le rendu voulu). Un BOUCLIER tactile garde le défilement de la page
  * prioritaire : iframe `pointer-events:none` par défaut (le doigt défile la
- * PAGE), un tap sur « Toucher pour explorer » active la visite, « Terminer »
- * la relâche — jamais piégé par le tactile du viewer 3D.
+ * PAGE), un tap sur « Toucher pour explorer » active la visite en FULLSCREEN,
+ * « Terminer » la relâche — jamais piégé par le tactile du viewer 3D.
+ * En fullscreen, la navbar se rétracte et l'iframe occupe tout l'écran.
  */
 
 const SRC = "https://hub-visite-3d.vercel.app/index-laforet.html";
@@ -47,6 +48,7 @@ function Iframe() {
 
 export default function VisiteEmbed() {
   const [actif, setActif] = useState(false); // interaction tactile mobile
+  const containerRef = useRef<HTMLDivElement>(null);
   const ecranRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0);
 
@@ -61,6 +63,18 @@ export default function VisiteEmbed() {
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
+
+  // Fullscreen sur mobile quand actif = true
+  useEffect(() => {
+    if (!actif || !containerRef.current) return;
+
+    // Masquer scrollbar de la page
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.documentElement.style.overflow = "";
+    };
+  }, [actif]);
 
   return (
     <div className="w-full">
@@ -104,10 +118,26 @@ export default function VisiteEmbed() {
       </div>
 
       {/* ===================== MOBILE — carte fluide ======================== */}
-      <div className="px-4 lg:hidden">
+      {/* Quand actif = true : fullscreen immersif, navbar masquée */}
+      <div
+        ref={containerRef}
+        className={`lg:hidden ${
+          actif
+            ? "fixed inset-0 z-[9999] flex flex-col bg-black"
+            : "relative px-4"
+        }`}
+      >
         <div
-          className="relative mx-auto w-full max-w-[440px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-white shadow-[0_20px_60px_-24px_rgba(0,0,0,0.85)]"
-          style={{ height: "min(92svh, 1000px)" }}
+          className={`relative mx-auto overflow-hidden rounded-[1.75rem] border border-white/10 bg-white shadow-[0_20px_60px_-24px_rgba(0,0,0,0.85)] ${
+            actif
+              ? "h-full w-full max-w-none flex-1 rounded-none border-0 shadow-none"
+              : "w-full max-w-[440px]"
+          }`}
+          style={
+            actif
+              ? { height: "100%" }
+              : { height: "min(92svh, 1000px)" }
+          }
         >
           <div className="h-full" style={{ pointerEvents: actif ? "auto" : "none" }}>
             <Iframe />
@@ -137,7 +167,7 @@ export default function VisiteEmbed() {
               onClick={() => setActif(false)}
               className="absolute right-3 top-3 z-10 rounded-full border border-white/30 bg-black/65 px-3 py-1.5 text-xs font-medium text-white"
             >
-              Terminer · défiler la page
+              Terminer
             </button>
           )}
         </div>
