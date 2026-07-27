@@ -52,7 +52,7 @@ export default function APropos() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/*  Parcours — avec photo cerclée                                      */}
+      {/*  Parcours — avec photo cerclée responsive                           */}
       {/* ------------------------------------------------------------------ */}
       <section className="mx-auto w-full max-w-6xl border-t border-mine px-6 py-14 lg:px-16 lg:py-20 xl:px-24">
         <div className="lg:grid lg:grid-cols-[8rem_1fr] lg:gap-8">
@@ -60,40 +60,43 @@ export default function APropos() {
             En deux mots
           </p>
 
-          <div className="mt-8 space-y-8 lg:mt-0">
-            {/* Photo cerclée */}
-            <div className="flex justify-start">
-              <div className="aspect-square w-48 flex-shrink-0 overflow-hidden rounded-full border border-mine/30">
-                <img
-                  src="/images/denis-about.jpg"
-                  alt="Denis Masquet"
-                  className="h-full w-full object-cover"
-                />
+          <div className="mt-8 lg:mt-0">
+            {/* Layout responsive: flexbox col sur mobile, grid row sur desktop */}
+            <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[280px_1fr] lg:gap-12">
+              {/* Photo cerclée */}
+              <div className="flex justify-center lg:justify-start">
+                <div className="aspect-square w-56 flex-shrink-0 overflow-hidden rounded-full border border-mine/30 lg:w-72">
+                  <img
+                    src="/images/denis-about.jpg"
+                    alt="Denis Masquet"
+                    className="h-full w-full object-contain"
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Texte */}
-            <div className="max-w-2xl space-y-5 text-base font-light leading-relaxed text-papier/70">
-              <p>
-                Passionné par les détails, la lumière et l'ingénierie, je mets
-                depuis plus de 10 ans mon expertise en graphisme 3D au service
-                de projets exigeants où précision et esthétique se rencontrent.
-              </p>
-              <p>
-                Mon parcours m'a conduit à collaborer avec les secteurs de
-                l'horlogerie de luxe, du médical et de la conservation
-                numérique d'œuvres d'art d'envergure mondiale. Ces expériences
-                m'ont permis de développer une approche alliant rigueur
-                technique, sens artistique et maîtrise des technologies de
-                visualisation.
-              </p>
-              <p>
-                Qu'il s'agisse de concevoir des rendus photoréalistes, de
-                valoriser un produit d'exception ou de préserver numériquement
-                un patrimoine unique, je m'attache à créer des images qui
-                racontent une histoire, révèlent chaque détail et donnent vie
-                aux projets les plus ambitieux.
-              </p>
+              {/* Texte */}
+              <div className="max-w-2xl space-y-5 text-base font-light leading-relaxed text-papier/70">
+                <p>
+                  Passionné par les détails, la lumière et l'ingénierie, je mets
+                  depuis plus de 10 ans mon expertise en graphisme 3D au service
+                  de projets exigeants où précision et esthétique se rencontrent.
+                </p>
+                <p>
+                  Mon parcours m'a conduit à collaborer avec les secteurs de
+                  l'horlogerie de luxe, du médical et de la conservation
+                  numérique d'œuvres d'art d'envergure mondiale. Ces expériences
+                  m'ont permis de développer une approche alliant rigueur
+                  technique, sens artistique et maîtrise des technologies de
+                  visualisation.
+                </p>
+                <p>
+                  Qu'il s'agisse de concevoir des rendus photoréalistes, de
+                  valoriser un produit d'exception ou de préserver numériquement
+                  un patrimoine unique, je m'attache à créer des images qui
+                  racontent une histoire, révèlent chaque détail et donnent vie
+                  aux projets les plus ambitieux.
+                </p>
+              </div>
             </div>
           </div>
         </div>
