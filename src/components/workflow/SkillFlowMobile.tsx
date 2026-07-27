@@ -179,6 +179,12 @@ export default function SkillFlowMobile() {
   /** Un cran a déjà été émis pour le geste tactile en cours (un seul par swipe). */
   const firedRef = useRef(false);
   /**
+   * Le geste tactile en cours a démarré dans une zone LIBRE (footer sous la fiche
+   * terminale, ou fiche trop haute en cours de lecture) : on n'y capture rien et
+   * le défilement natif reste intact pour toute la durée du geste.
+   */
+  const gestureFreeRef = useRef(false);
+  /**
    * Flag stable : une fois qu'on a VRAIMENT entré en mode stepped (premier swipe
    * vers le bas détecté et capturé), on y reste. Élimine le problème du premier
    * swipe qui passe libre quand il devrait déclencher la visite.
@@ -329,27 +335,39 @@ export default function SkillFlowMobile() {
         return;
       }
       touchStartRef.current = { x: t.clientX, y: t.clientY };
+      firedRef.current = false;
+      // Geste démarré sous la fiche terminale ? → défilement natif libre (footer).
+      gestureFreeRef.current = belowTail();
     };
 
     /**
-     * Bloque le défilement natif dans la zone guidée ET déclenche le cran DÈS que
-     * le seuil de swipe est franchi — sans attendre le relâchement du doigt.
-     * Indispensable : sans ça, le doigt fait défiler la page en même temps que le
-     * cran l'anime, et les deux mouvements se battent. Hors zone guidée (accueil,
-     * bas de page), on ne touche à rien et l'inertie native est intacte.
+     * Cœur du correctif mobile. Dans la zone guidée, on appelle `preventDefault`
+     * DÈS LE PREMIER PIXEL du geste — pas seulement après le seuil de swipe.
      *
-     * `firedRef` garantit un seul cran par geste : une fois le cran émis, les
-     * touchmove suivants du même doigt ne font que bloquer le natif.
+     * Pourquoi c'est indispensable : sur iOS/Android, dès qu'on laisse passer les
+     * quelques premiers pixels d'un `touchmove` au défilement natif, le navigateur
+     * s'engage dans SON scroll et rend les `touchmove` suivants NON annulables
+     * (`e.cancelable === false`) — nos `preventDefault` deviennent alors inertes.
+     * Résultat : le doigt lançait le scroll natif, dépassait la 1re fiche, et le
+     * `animateScrollTo` du cran était écrasé. En tuant le natif dès le pixel 1,
+     * le scroll automatique du cran n'est plus jamais concurrencé.
      */
     const onTouchMove = (e: TouchEvent) => {
       const start = touchStartRef.current;
       const t = e.touches[0];
       if (!start || !t) return;
 
-      const dy = start.y - t.clientY; // positif = le doigt remonte = la page descend
-      if (Math.abs(dy) < SWIPE_MIN_DELTA) return;
+      const dx = t.clientX - start.x;
+      const dy = start.y - t.clientY; // + = le doigt remonte = la page descend
 
-      const direction: 1 | -1 = dy > 0 ? 1 : -1;
+      // Geste horizontal (swipe latéral, retour navigateur…) : on ne capture pas.
+      if (Math.abs(dx) > Math.abs(dy)) return;
+
+      // Geste démarré en zone libre (footer / lecture d'une fiche haute) : natif intact.
+      if (gestureFreeRef.current) return;
+
+      // Cartes pas encore mesurées : repli sur le natif pour ne pas geler la page.
+      if (!cardsReadyRef.current) return;
 
       // Pendant l'animation d'un cran : on gèle le natif, rien d'autre.
       if (lockRef.current) {
@@ -357,24 +375,31 @@ export default function SkillFlowMobile() {
         return;
       }
 
-      if (!guided(direction)) return;
+      const direction: 1 | -1 = dy >= 0 ? 1 : -1;
 
-      // Bloquer le scroll natif IMMÉDIATEMENT.
-      if (e.cancelable) e.preventDefault();
-
-      // Émettre le cran une seule fois par geste, dès le franchissement du seuil.
-      if (!firedRef.current) {
-        firedRef.current = true;
-        goToStep(stepRef.current + direction);
+      if (guided(direction)) {
+        // Tuer le natif immédiatement (pixel 1 du geste).
+        if (e.cancelable) e.preventDefault();
+        // Émettre le cran une seule fois, dès le franchissement du seuil.
+        if (Math.abs(dy) >= SWIPE_MIN_DELTA && !firedRef.current) {
+          firedRef.current = true;
+          goToStep(stepRef.current + direction);
+        }
+      } else {
+        // Sortie de zone guidée (fiche terminale → footer, ou fiche haute à lire) :
+        // on libère ce geste pour toute sa durée, défilement natif rendu.
+        gestureFreeRef.current = true;
       }
     };
 
     const onTouchEnd = (e: TouchEvent) => {
       const start = touchStartRef.current;
       const alreadyFired = firedRef.current;
+      const wasFree = gestureFreeRef.current;
       touchStartRef.current = null;
       firedRef.current = false;
-      if (!start || alreadyFired) return;
+      gestureFreeRef.current = false;
+      if (!start || alreadyFired || wasFree) return;
 
       const end = e.changedTouches[0];
       if (!end) return;
