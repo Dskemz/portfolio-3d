@@ -107,7 +107,7 @@ export default function VisiteEmbed() {
       <div className="px-4 lg:hidden">
         <div
           className="relative mx-auto w-full max-w-[440px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-white shadow-[0_20px_60px_-24px_rgba(0,0,0,0.85)]"
-          style={{ height: "min(85svh, 820px)" }}
+          style={{ height: "min(92svh, 1000px)" }}
         >
           <div className="h-full" style={{ pointerEvents: actif ? "auto" : "none" }}>
             <Iframe />
