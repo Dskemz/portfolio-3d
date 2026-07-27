@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FiletAnime } from "@/components/portfolio/FiletAnime";
 
 /**
  * Bloc d'appel à l'action signature — « Un projet en tête, discutons-en ».
@@ -18,16 +19,7 @@ export function CtaSignature() {
             Un projet en tête,{" "}
             <span className="relative inline-block">
               discutons-en
-              <span
-                aria-hidden="true"
-                style={{ top: "0.7em" }}
-                className="absolute left-full ml-5 h-[3px] w-screen -translate-y-1/2 bg-orange-500/25 blur-[3px]"
-              />
-              <span
-                aria-hidden="true"
-                style={{ top: "0.7em" }}
-                className="absolute left-full ml-5 h-px w-screen -translate-y-1/2 bg-orange-500"
-              />
+              <FiletAnime top="0.7em" />
             </span>
           </h2>
 

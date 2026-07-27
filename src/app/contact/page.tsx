@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import ContactFormClient from '@/components/ContactFormClient';
+import { FiletAnime } from '@/components/portfolio/FiletAnime';
 
 export const metadata: Metadata = {
   title: 'Contact | Denis Masquet',
@@ -32,16 +33,7 @@ export default function ContactPage() {
             */}
             <span className="relative inline-block">
               projet
-              <span
-                aria-hidden="true"
-                style={{ top: "0.93em" }}
-                className="absolute left-full ml-5 h-[3px] w-screen -translate-y-1/2 bg-orange-500/25 blur-[3px]"
-              />
-              <span
-                aria-hidden="true"
-                style={{ top: "0.93em" }}
-                className="absolute left-full ml-5 h-px w-screen -translate-y-1/2 bg-orange-500"
-              />
+              <FiletAnime top="0.93em" />
             </span>
           </h1>
 
