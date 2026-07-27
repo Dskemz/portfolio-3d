@@ -38,6 +38,8 @@ export interface ProjetData {
   role: string;
   outils: string[];
   types: TypeProjetId[];
+  /** true si le projet dispose d'une page d'étude de cas éditoriale sur-mesure. */
+  etudeCas?: boolean;
   viewer?: string;
   hasIframe?: boolean;
   ratioViewer?: "16/9" | "4/3" | "1/1" | "9/16";
@@ -104,27 +106,21 @@ export const PROJETS: ProjetData[] = [
     ],
   },
   {
-    slug: "withings-configurateur-produit",
-    titre: "Configurateur 3D Produit",
+    slug: "withings-scanwatch",
+    titre: "ScanWatch 2, Light et Nova",
     client: "Withings",
     resume:
-      "Outil de configuration et visualisation 3D temps réel pour gamme santé connectée.",
-    categorie: "Temps Réel",
-    annee: 2024,
+      "Création de toute la gamme de montres ScanWatch 2, ScanWatch Light et ScanWatch Nova : vidéos 360° pour le shop interactif et packshots pour la grande distribution.",
+    categorie: "Modélisation",
+    annee: 2025,
     couverture: "/images/projets/withings-cover.jpg",
-    role: "Direction artistique · Optimisation shader WebGL",
-    outils: ["Three.js", "React", "GLSL", "TypeScript"],
-    types: ["temps-reel", "modelisation"],
-    hasIframe: true,
-    defi: "Permettre aux utilisateurs de personnaliser et visualiser leurs produits santé en temps réel sur le site e-commerce, avec une performance optimale sur mobile.",
+    role: "Graphiste 3D indépendant",
+    outils: ["Visuels", "Packshots", "Vidéos 360°"],
+    types: ["modelisation"],
+    etudeCas: true,
+    defi: "Créer une gamme complète de montres connectées en 3D, décliner chaque boîtier, cadran et bracelet, et produire visuels et packshots homogènes pour le shop interactif comme pour la grande distribution.",
     solution:
-      "Viewer Three.js avec matériaux paramétriques, rendu PBR temps réel et système de customisation intuitif. Optimisation agressive des shaders et des modèles pour mobile.",
-    resultats:
-      "Taux de retour en baisse de 18 %, panier moyen en hausse de 24 %, 92 % de satisfaction utilisateur.",
-    galerie: [
-      { url: "/images/projets/withings-detail-1.jpg", alt: "Qualité de rendu" },
-      { url: "/images/projets/withings-detail-2.jpg", alt: "Interface de personnalisation" },
-    ],
+      "Modélisation des boîtiers 37 à 43 mm avec déclinaisons de cadrans, matières industrielles en valeurs de gris et textures dédiées pour cuir et tissu. Mise en scène studio soignée puis composition finale calque par calque.",
   },
   {
     slug: "laforet-visite-3d",

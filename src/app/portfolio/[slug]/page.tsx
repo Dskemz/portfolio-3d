@@ -8,6 +8,7 @@ import { ProjectComparison } from "@/components/portfolio/ProjectComparison";
 import { ProjectGallery } from "@/components/portfolio/ProjectGallery";
 import { ProjectNavigation } from "@/components/portfolio/ProjectNavigation";
 import { CtaSignature } from "@/components/portfolio/CtaSignature";
+import { EtudeCasWithings } from "@/components/portfolio/EtudeCasWithings";
 
 export function generateStaticParams() {
   return PROJETS.map((projet) => ({ slug: projet.slug }));
@@ -48,6 +49,17 @@ export default async function ProjetPage({
   const projet = PROJETS[index];
   const precedent = PROJETS[(index - 1 + PROJETS.length) % PROJETS.length];
   const suivant = PROJETS[(index + 1) % PROJETS.length];
+
+  // Étude de cas éditoriale sur-mesure (ex. Withings ScanWatch).
+  if (projet.etudeCas) {
+    return (
+      <EtudeCasWithings
+        projet={projet}
+        precedent={precedent}
+        suivant={suivant}
+      />
+    );
+  }
 
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black text-white">
