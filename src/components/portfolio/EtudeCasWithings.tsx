@@ -121,13 +121,13 @@ export function EtudeCasWithings({
             </div>
           </Reveal>
 
-          {/* 5 montres — grille généreuse */}
-          <Reveal className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-6 lg:mt-16" cascade>
-            <VisuelWithings name="02-face" label="37mm" ratio="16/9" teinte="#1b1e23" />
-            <VisuelWithings name="02b-face-38" label="38mm" ratio="16/9" teinte="#20242a" />
-            <VisuelWithings name="02c-face-42" label="42mm" ratio="16/9" teinte="#1b1e23" />
-            <VisuelWithings name="02d-face-43" label="43mm" ratio="16/9" teinte="#20242a" />
-            <VisuelWithings name="03-3quart" label="3/4" ratio="16/9" teinte="#1b1e23" className="md:col-span-3 md:max-w-md" />
+          {/* 5 montres — une seule ligne élégante sur desktop */}
+          <Reveal className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 lg:gap-4 lg:mt-16" cascade>
+            <VisuelWithings name="02-face" label="37mm" ratio="4/3" teinte="#1b1e23" />
+            <VisuelWithings name="02b-face-38" label="38mm" ratio="4/3" teinte="#20242a" />
+            <VisuelWithings name="02c-face-42" label="42mm" ratio="4/3" teinte="#1b1e23" />
+            <VisuelWithings name="02d-face-43" label="43mm" ratio="4/3" teinte="#20242a" />
+            <VisuelWithings name="03-3quart" label="3/4" ratio="4/3" teinte="#1b1e23" />
           </Reveal>
         </section>
 
