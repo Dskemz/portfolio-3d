@@ -230,9 +230,20 @@ export default function CarrouselProjets() {
     /* ---------------------------- Molette ---------------------------- */
     const onWheel = (evenement: WheelEvent) => {
       if (Math.abs(evenement.deltaY) < 4) return;
-      rearmer();
-      if (budget <= 0) return; // cycle épuisé : la page défile
+      
+      // Vérifier si l'événement vient d'une enfant du carrousel
+      const estSurCarrousel =
+        evenement.target instanceof Node && noeud.contains(evenement.target);
+      
+      if (!estSurCarrousel) return; // Pas sur le carrousel, laisser la page scroller
+      
+      // On est sur le carrousel : empêcher le scroll de la page
       evenement.preventDefault();
+      
+      // Gérer la navigation du carrousel selon le budget
+      rearmer();
+      if (budget <= 0) return; // cycle épuisé : pas de navigation carrousel
+      
       budget -= 1;
       aller(evenement.deltaY > 0 ? 1 : -1);
     };
