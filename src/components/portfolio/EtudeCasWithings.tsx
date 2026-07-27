@@ -121,13 +121,21 @@ export function EtudeCasWithings({
             </div>
           </Reveal>
 
-          {/* 5 montres — une seule ligne élégante sur desktop */}
-          <Reveal className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 lg:gap-4 lg:mt-16" cascade>
-            <VisuelWithings name="02-face" label="37mm" ratio="4/3" teinte="#1b1e23" />
+          {/* Grande image maître */}
+          <Reveal className="mt-12 lg:mt-16">
+            <VisuelWithings
+              name="02-face"
+              label="Gamme complète ScanWatch 2"
+              ratio="21/9"
+              teinte="#14161a"
+            />
+          </Reveal>
+
+          {/* 3 images en dessous */}
+          <Reveal className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3 lg:gap-6 lg:mt-8" cascade>
             <VisuelWithings name="02b-face-38" label="38mm" ratio="4/3" teinte="#20242a" />
             <VisuelWithings name="02c-face-42" label="42mm" ratio="4/3" teinte="#1b1e23" />
             <VisuelWithings name="02d-face-43" label="43mm" ratio="4/3" teinte="#20242a" />
-            <VisuelWithings name="03-3quart" label="3/4" ratio="4/3" teinte="#1b1e23" />
           </Reveal>
         </section>
 
