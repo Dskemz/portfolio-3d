@@ -6,7 +6,6 @@ import { INTRO, ORIGIN_ID, WORKFLOW_NODES } from "@/content/workflowData";
 import WorkflowCard from "./WorkflowCard";
 import {
   HOME_JUMP_EVENT,
-  INTRO_GRAB_VH,
   LINE_VH,
   STEP_COOLDOWN_MS,
   SWIPE_MIN_DELTA,
@@ -90,12 +89,17 @@ export default function SkillFlowMobile() {
   useLayoutEffect(() => {
     measure();
 
+    // Mesure supplémentaire rapide après le layout pour capturer les bonnes positions
+    // avant que l'utilisateur n'interagisse
+    const timeoutId = setTimeout(measure, 16);
+
     const observer = new ResizeObserver(measure);
     if (containerRef.current) observer.observe(containerRef.current);
     document.fonts?.ready.then(measure).catch(() => {});
     window.addEventListener("resize", measure);
 
     return () => {
+      clearTimeout(timeoutId);
       observer.disconnect();
       window.removeEventListener("resize", measure);
     };
@@ -172,6 +176,8 @@ export default function SkillFlowMobile() {
   const lockRef = useRef(false);
   const cancelRef = useRef<(() => void) | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  /** Un cran a déjà été émis pour le geste tactile en cours (un seul par swipe). */
+  const firedRef = useRef(false);
   /**
    * Flag stable : une fois qu'on a VRAIMENT entré en mode stepped (premier swipe
    * vers le bas détecté et capturé), on y reste. Élimine le problème du premier
@@ -212,12 +218,19 @@ export default function SkillFlowMobile() {
     /**
      * Vérifie si la première fiche approche du viewport. Utilisé seulement
      * lors de la détection du premier swipe vers le bas.
+     *
+     * Engage dès le TOUT PREMIER swipe vers le bas tant que la première fiche
+     * n'a pas encore été dépassée (son bord haut est toujours sous le haut du
+     * viewport). Sur mobile l'accueil fait 100svh : la fiche est un plein écran
+     * plus bas (top ≈ vh), donc l'ancien seuil 0.68·vh la ratait au premier
+     * geste — le scroll natif la dépassait et la visite ne s'enclenchait qu'au
+     * second swipe. Le seuil `top > 0` supprime ce "premier scroll libre".
      */
     const firstFicheApproaches = () => {
       const first = WORKFLOW_NODES[0];
       const el = first && cardRefs.current.get(first.id);
       if (!el) return true;
-      return el.getBoundingClientRect().top <= window.innerHeight * INTRO_GRAB_VH;
+      return el.getBoundingClientRect().top > 0;
     };
 
     const tailReached = () => {
@@ -257,11 +270,10 @@ export default function SkillFlowMobile() {
      * vers la fin du document.
      */
     const guided = (direction: 1 | -1) => {
-      // Au premier chargement, les cartes peuvent ne pas être mesurées.
-      // Si elles ne sont pas prêtes, on reste optimiste pour le premier swipe.
+      // Les cartes doivent être mesurées pour pouvoir calculer les cibles correctement.
+      // Si elles ne sont pas prêtes, on laisse le scroll natif passer.
       if (!cardsReadyRef.current) {
-        // Les cartes ne sont pas encore chargées : ne pas bloquer le premier swipe
-        return true;
+        return false;
       }
 
       if (overflowFree(direction)) return false;
@@ -320,10 +332,14 @@ export default function SkillFlowMobile() {
     };
 
     /**
-     * Bloque le défilement natif dans la zone guidée. Indispensable : sans ça, le
-     * doigt fait défiler la page en même temps que le cran l'anime, et les deux
-     * mouvements se battent. Hors zone guidée (accueil, bas de page), on ne
-     * touche à rien et l'inertie native est intacte.
+     * Bloque le défilement natif dans la zone guidée ET déclenche le cran DÈS que
+     * le seuil de swipe est franchi — sans attendre le relâchement du doigt.
+     * Indispensable : sans ça, le doigt fait défiler la page en même temps que le
+     * cran l'anime, et les deux mouvements se battent. Hors zone guidée (accueil,
+     * bas de page), on ne touche à rien et l'inertie native est intacte.
+     *
+     * `firedRef` garantit un seul cran par geste : une fois le cran émis, les
+     * touchmove suivants du même doigt ne font que bloquer le natif.
      */
     const onTouchMove = (e: TouchEvent) => {
       const start = touchStartRef.current;
@@ -331,17 +347,34 @@ export default function SkillFlowMobile() {
       if (!start || !t) return;
 
       const dy = start.y - t.clientY; // positif = le doigt remonte = la page descend
-      if (Math.abs(dy) < 2) return;
+      if (Math.abs(dy) < SWIPE_MIN_DELTA) return;
 
-      if (lockRef.current || guided(dy > 0 ? 1 : -1)) {
+      const direction: 1 | -1 = dy > 0 ? 1 : -1;
+
+      // Pendant l'animation d'un cran : on gèle le natif, rien d'autre.
+      if (lockRef.current) {
         if (e.cancelable) e.preventDefault();
+        return;
+      }
+
+      if (!guided(direction)) return;
+
+      // Bloquer le scroll natif IMMÉDIATEMENT.
+      if (e.cancelable) e.preventDefault();
+
+      // Émettre le cran une seule fois par geste, dès le franchissement du seuil.
+      if (!firedRef.current) {
+        firedRef.current = true;
+        goToStep(stepRef.current + direction);
       }
     };
 
     const onTouchEnd = (e: TouchEvent) => {
       const start = touchStartRef.current;
+      const alreadyFired = firedRef.current;
       touchStartRef.current = null;
-      if (!start) return;
+      firedRef.current = false;
+      if (!start || alreadyFired) return;
 
       const end = e.changedTouches[0];
       if (!end) return;

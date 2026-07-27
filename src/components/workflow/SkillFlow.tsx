@@ -14,7 +14,6 @@ import WorkflowCard from "./WorkflowCard";
 import SkillFlowMobile from "./SkillFlowMobile";
 import {
   HOME_JUMP_EVENT,
-  INTRO_GRAB_VH,
   LINE_VH,
   STEP_COOLDOWN_MS,
   SWIPE_MIN_DELTA,
@@ -522,21 +521,18 @@ export default function SkillFlow() {
      * Vérifie si la première fiche est assez proche pour qu'on capture le scroll.
      * Utilisé UNIQUEMENT avant d'avoir entré en mode stepped (première vérification).
      *
-     * Capture TRÈS agressivement dès que l'utilisateur scroll vers le bas :
-     * - Après ~30px de scroll, ou
-     * - Si l'ancre est dans le viewport (vérification géométrique)
-     *
-     * Cela élimine le "premier scroll libre" qui dépasse la première fiche.
+     * Engage dès le TOUT PREMIER geste vers le bas tant que la première fiche
+     * n'a pas encore été dépassée (son ancre est toujours sous le haut du
+     * viewport). Depuis l'accueil la fiche est à ~1 écran de distance ; l'ancien
+     * seuil 0.68·vh la ratait au premier scroll, laissant le défilement natif la
+     * dépasser — d'où le déclenchement au second geste. Le seuil `top > 0`
+     * supprime ce "premier scroll libre".
      */
     const firstFicheApproaches = () => {
-      // Dès 30px de scroll vers le bas, on capture immédiatement
-      // Élimine l'inertie du trackpad et les micro-gestes
-      if (window.scrollY > 30) return true;
-
       const first = WORKFLOW_NODES[0];
       const anchor = first && document.getElementById(getNodeAnchorId(first.id));
       if (!anchor) return true;
-      return anchor.getBoundingClientRect().top <= window.innerHeight * INTRO_GRAB_VH;
+      return anchor.getBoundingClientRect().top > 0;
     };
 
     /** Position d'accroche de la fiche terminale. */
