@@ -34,8 +34,10 @@ const DUREE = 640;
 /** Amplitude minimale d'un glissement pour valider un changement de projet. */
 const SEUIL_GLISSEMENT = 45;
 
-/** Au-delà de ce déplacement, le geste est considéré comme vertical. */
-const SEUIL_DECISION = 8;
+/** Au-delà de ce déplacement, le geste est considéré comme vertical.
+    Bas volontairement : capter la verticalité tôt réduit la fenêtre pendant
+    laquelle la page pourrait bouger avant que le carrousel ne prenne la main. */
+const SEUIL_DECISION = 4;
 
 /**
  * ImageCardWrapper — enveloppe l'image du carrousel avec le traitement glow
@@ -212,55 +214,37 @@ export default function CarrouselProjets() {
     const noeud = scene.current;
     if (!noeud) return;
 
-    /*
-      Budget de cycle : nombre de crans qu'on s'autorise à capter d'affilée.
-      À zéro, on rend la main à la page (molette) ou on laisse le navigateur
-      défiler (tactile, via touch-action). Une pause de 500 ms réarme le
-      budget à un cycle complet.
-    */
-    let budget = PROJETS.length;
-    let dernier = 0;
+    /* ---------------------------- Molette / trackpad ----------------------------
+       Tant que le pointeur est sur le carrousel, la page ne défile JAMAIS : c'est
+       le comportement voulu (seul le carrousel s'anime). Pour continuer à défiler
+       la page, l'utilisateur sort le pointeur du visuel (colonne de texte, marges).
 
-    const rearmer = () => {
-      const maintenant = Date.now();
-      if (maintenant - dernier > 500) budget = PROJETS.length;
-      dernier = maintenant;
-    };
-
-    /* ---------------------------- Molette ---------------------------- */
+       preventDefault() est appelé EN PREMIER, avant tout seuil. C'est le point
+       clé du correctif trackpad : les pavés tactiles émettent une rafale de
+       micro-deltas (1, 2, 3 px) en début et fin de geste. Si on les filtrait
+       avant preventDefault (comme avant), ces micro-deltas passaient au travers
+       et faisaient défiler la page « en même temps ». Une molette classique,
+       elle, envoie un seul grand delta discret et ne déclenchait pas le bug. */
     const onWheel = (evenement: WheelEvent) => {
-      if (Math.abs(evenement.deltaY) < 4) return;
-      
-      // Vérifier si l'événement vient d'une enfant du carrousel
-      const estSurCarrousel =
-        evenement.target instanceof Node && noeud.contains(evenement.target);
-      
-      if (!estSurCarrousel) return; // Pas sur le carrousel, laisser la page scroller
-      
-      // On est sur le carrousel : empêcher le scroll de la page
       evenement.preventDefault();
-      
-      // Gérer la navigation du carrousel selon le budget
-      rearmer();
-      if (budget <= 0) return; // cycle épuisé : pas de navigation carrousel
-      
-      budget -= 1;
+      // Bruit sous le seuil : on ne navigue pas. `aller` possède déjà un verrou
+      // temporel (un seul cran par DUREE) qui absorbe l'inertie macOS.
+      if (Math.abs(evenement.deltaY) < 2) return;
       aller(evenement.deltaY > 0 ? 1 : -1);
     };
 
     /* ---------------------------- Tactile ----------------------------
-       `touch-action` est basculé à chaque touchstart : `pan-x` tant qu'il
-       reste du budget (on capte le vertical), `pan-y` une fois le cycle
-       épuisé (le navigateur reprend le défilement de la page). C'est le
-       seul réglage fiable cross-navigateur pour rendre la main sur mobile. */
+       Le conteneur porte `touch-action: pan-x` : le navigateur ne prend donc
+       jamais en charge le défilement vertical au-dessus du carrousel, ce qui
+       rend notre preventDefault fiable. On détecte la direction dès les
+       premiers pixels ; un geste vertical pilote le carrousel, un geste
+       horizontal est ignoré. */
     let departY = 0;
     let departX = 0;
     let ecart = 0;
     let capture: boolean | null = null;
 
     const onTouchStart = (evenement: TouchEvent) => {
-      rearmer();
-      noeud.style.touchAction = budget > 0 ? "pan-x" : "pan-y";
       const doigt = evenement.touches[0];
       departY = doigt.clientY;
       departX = doigt.clientX;
@@ -280,17 +264,16 @@ export default function CarrouselProjets() {
         ) {
           return;
         }
-        // Vertical et budget disponible → on prend la main ; sinon on laisse.
-        capture = Math.abs(ecart) > Math.abs(lateral) && budget > 0;
+        // Geste majoritairement vertical → le carrousel prend la main.
+        capture = Math.abs(ecart) > Math.abs(lateral);
       }
 
-      if (capture) evenement.preventDefault();
+      if (capture && evenement.cancelable) evenement.preventDefault();
     };
 
     const onTouchEnd = () => {
       if (capture && Math.abs(ecart) > SEUIL_GLISSEMENT) {
-        budget -= 1;
-        // Doigt vers le HAUT (ecart < 0) → projet précédent.
+        // Doigt vers le HAUT (ecart < 0) → projet précédent (sens naturel).
         aller(ecart < 0 ? -1 : 1);
       }
       capture = null;
