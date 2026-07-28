@@ -51,7 +51,14 @@ export const SECTION_DETAILS: SectionGrid = {
       colSpan: 1,
     },
     {
-      name: "04-detail-2",
+      name: "04-detail-1",
+      label: "Détail 1",
+      ratio: "1/1",
+      teinte: "#14161a",
+      colSpan: 1,
+    },
+    {
+      name: "05-detail-2",
       label: "Détail 2",
       ratio: "1/1",
       teinte: "#20242a",
