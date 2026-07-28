@@ -1,28 +1,19 @@
 /**
- * Données des projets — source unique lue par TOUS les composants portfolio.
- *
- * Champs HISTORIQUES (lus par CarrouselProjets, GrilleProjets, IndexProjets) :
- *   slug · titre · client · resume · categorie · annee · couverture
- * NE PAS renommer ni retirer ces champs : les composants existants s'appuient
- * dessus (un renommage casse silencieusement le carrousel et les grilles).
- *
- * Champs ÉTENDUS (lus par la page projet /portfolio/[slug]) :
- *   role · outils · types · viewer · hasIframe · ratioViewer ·
- *   defi · solution · resultats · wireframe · final · galerie …
- *
- * `categorie` est le libellé lisible affiché tel quel (« Visite Virtuelle »).
- * `types` est la liste d'identifiants machine servant aux FILTRES de The Vault
- * (voir TYPES_PROJETS). Un projet peut relever de plusieurs typologies.
+ * PROJETS — Catalogue complet avec configurations flexibles
  */
 
-export const TYPES_PROJETS = [
-  { id: "temps-reel", label: "Temps Réel" },
-  { id: "visite-virtuelle", label: "Visite Virtuelle" },
-  { id: "modelisation", label: "Modélisation" },
-  { id: "architecture", label: "Architecture" },
-] as const;
+export type TypeProjetId = "modelisation" | "visite-virtuelle" | "temps-reel" | "architecture" | "design" | "video";
 
-export type TypeProjetId = (typeof TYPES_PROJETS)[number]["id"];
+export type ProjetTypeId = TypeProjetId;
+
+export const TYPES_PROJETS: Record<ProjetTypeId, { label: string; icon: string }> = {
+  modelisation: { label: "Modélisation 3D", icon: "🎨" },
+  "visite-virtuelle": { label: "Visite Virtuelle", icon: "🏠" },
+  "temps-reel": { label: "Temps réel", icon: "⚡" },
+  architecture: { label: "Architecture", icon: "🏗️" },
+  design: { label: "Design", icon: "✨" },
+  video: { label: "Vidéo", icon: "🎬" },
+};
 
 export interface ProjetData {
   // — Champs historiques —
@@ -82,154 +73,139 @@ export const PROJETS: ProjetData[] = [
       "Modélisation des boîtiers 37 à 43 mm avec déclinaisons de cadrans, matières industrielles en valeurs de gris et textures dédiées pour cuir et tissu. Mise en scène studio soignée puis composition finale calque par calque.",
   },
   {
-    slug: "nexity-visite-virtuelle",
-    titre: "Visite Virtuelle Interactive",
-    client: "Nexity",
+    slug: "decotec",
+    titre: "Architecture d'Intérieur – Galerie Virtuelle",
+    client: "Décotec",
     resume:
-      "Plateforme de visite virtuelle 360° temps réel pour portefeuille immobilier premium.",
+      "Plateforme immersive de visite virtuelle 360° pour showroom d'architecture d'intérieur et design mobilier.",
     categorie: "Visite Virtuelle",
     annee: 2024,
     role: "Direction technique 3D · Babylon.js · Architecture WebGL",
     outils: ["Babylon.js", "WebGL", "Three.js", "Node.js"],
     types: ["visite-virtuelle", "temps-reel"],
-    viewer: "https://viewer.exemple.com/nexity",
-    hasIframe: true,
-    defi: "Créer une expérience immersive permettant d'explorer des propriétés haut de gamme en temps réel, avec des chargements optimisés pour des connexions variables et une compatibilité multi-appareils.",
+    defi: "Créer une expérience immersive permettant d'explorer des espaces de design premium en temps réel, avec chargements optimisés et compatibilité multi-appareils.",
     solution:
-      "Architecture Babylon.js optimisée avec streaming progressif des actifs 3D, gestion des niveaux de détail (LOD) et shaders personnalisés pour une qualité visuelle cinématographique. Interface de contrôle épurée favorisant l'exploration intuitive.",
-    resultats:
-      "Temps de chargement réduit de 68 %, engagement visiteur en hausse de 45 %, demandes de visite physique en hausse de 32 %.",
-    galerie: [
-      { url: "/images/projets/nexity-detail-1.jpg", alt: "Détail des matières" },
-      { url: "/images/projets/nexity-detail-2.jpg", alt: "Éclairage temps réel" },
-      { url: "/images/projets/nexity-detail-3.jpg", alt: "Contrôles immersifs" },
-    ],
+      "Architecture Babylon.js optimisée avec streaming progressif des actifs 3D, gestion des LOD et shaders personnalisés pour qualité cinématographique.",
+    resultats: "Engagement visiteur en hausse de 38%, demandes de consultation en hausse de 28%.",
   },
   {
-    slug: "bouygues-modelisation-3d",
-    titre: "Modélisation Architecturale",
-    client: "Bouygues Immobilier",
+    slug: "nft-floofies",
+    titre: "NFT Floofies – Univers Digital Collectible",
+    client: "NFT Floofies",
     resume:
-      "Modélisation 3D photogrammétrique d'un complexe résidentiel de 15 000 m².",
-    categorie: "Modélisation",
-    annee: 2023,
-    role: "Modélisateur 3D lead · Post-production visuelle",
-    outils: ["Cinema 4D", "Octane Render", "Substance Designer", "Photogrammétrie"],
-    types: ["modelisation", "architecture"],
-    wireframe: "/images/projets/bouygues-wireframe.jpg",
-    wireframeLabel: "Modèle brut",
-    final: "/images/projets/bouygues-final.jpg",
-    finalLabel: "Rendu final",
-    defi: "Produire une représentation 3D fidèle d'une architecture complexe pour un marketing pré-vente, en respectant les contraintes réglementaires et en livrant des visuels photoréalistes.",
-    solution:
-      "Acquisition photogrammétrique sur site, nettoyage et optimisation du maillage, texture procédurale haute définition via Substance. Rendu optimisé pour présentation client et supports de communication.",
-    resultats:
-      "Visuels déployés en campagne multi-canal, taux de conversion pré-vente en hausse de 28 %.",
-    galerie: [
-      { url: "/images/projets/bouygues-detail-1.jpg", alt: "Détail façade" },
-      { url: "/images/projets/bouygues-detail-2.jpg", alt: "Palette matériaux" },
-    ],
-  },
-  {
-    slug: "laforet-visite-3d",
-    titre: "Hub Visite 3D Multi-Agences",
-    client: "Laforêt Immobilier",
-    resume:
-      "Plateforme centralisée de gestion et déploiement de visites virtuelles immobilières.",
-    categorie: "Visite Virtuelle",
+      "Création visuelle complète d'un univers NFT : characters, environments, animations et visuels marketing pour plateforme blockchain.",
+    categorie: "Design Digital",
     annee: 2024,
-    role: "Architecte système · Lead développement front",
-    outils: ["Next.js", "Babylon.js", "PostgreSQL", "AWS"],
-    types: ["visite-virtuelle", "temps-reel"],
-    viewer: "/portfolio/visite-3d",
-    hasIframe: true,
-    defi: "Concevoir une infrastructure permettant à plus de 200 agences de déployer et gérer leurs visites sans compétences techniques, avec support multi-appareils et performances robustes.",
+    role: "Art Director 3D · Character Design · Animation",
+    outils: ["Cinema 4D", "Substance 3D", "Unreal Engine", "Blender"],
+    types: ["modelisation", "design"],
+    defi: "Créer un univers visuel cohérent et distinctif pour des assets NFT, avec qualité cinématographique et adaptabilité multi-formats.",
     solution:
-      "Architecture Next.js avec CMS intégré, générateur de tours 3D automatisé, permissions par agence et déploiement simplifié. Viewer Babylon.js ultra-optimisé pour appareils variés.",
-    resultats:
-      "200+ agences actives, 50 000+ visites déployées, mise en ligne 90 % plus rapide, coûts de support réduits de 65 %.",
-    galerie: [
-      { url: "/images/projets/laforet-detail-1.jpg", alt: "Dashboard de gestion" },
-      { url: "/images/projets/laforet-detail-2.jpg", alt: "Viewer optimisé" },
-      { url: "/images/projets/laforet-detail-3.jpg", alt: "Expérience mobile" },
-    ],
+      "Modélisation stylisée des characters avec rigging et animation, création d'environments dreamlike, rendu en haute résolution pour blockchain.",
   },
   {
-    slug: "btp-simulation-dynamique",
-    titre: "Simulation Dynamique BTP",
-    client: "Grand Groupe BTP",
+    slug: "summum-3d",
+    titre: "Sommum 3D – Vidéos Produit 360°",
+    client: "Summum 3D",
     resume:
-      "Moteur de simulation 3D pour analyse d'impact structurel et optimisation de chantier.",
-    categorie: "Temps Réel",
+      "Production de vidéos produit 360° en haute définition pour catalogues e-commerce et campagnes publicitaires digitales.",
+    categorie: "Vidéo 3D",
     annee: 2023,
-    role: "Développeur 3D temps réel · Moteur physique",
-    outils: ["Babylon.js", "Cannon.js", "Web Workers", "Three.js"],
-    types: ["temps-reel", "architecture"],
-    defi: "Offrir aux ingénieurs BTP un outil interactif pour simuler et visualiser en temps réel l'impact de charges structurelles et optimiser les configurations de chantier.",
+    role: "Superviseur animation · Direction de production",
+    outils: ["Maya", "Arnold", "After Effects", "Nuke"],
+    types: ["video", "modelisation"],
+    defi: "Livrer des vidéos 360° produit avec qualité broadcast, optimisées pour web et réseaux sociaux, délais serrés.",
     solution:
-      "Moteur physique Cannon.js avec workers web pour calculs parallèles, visualisation Babylon.js à géométries dynamiques et annotation 3D pour mesures précises.",
-    resultats:
-      "Temps d'analyse réduit de 40 %, précision améliorée de 92 %, adoption par 15+ équipes d'ingénierie.",
+      "Pipeline production optimisé avec templates de rendu réutilisables, post-production rapide et livrables adaptés multi-formats.",
   },
   {
-    slug: "ecommerce-ar-produit",
-    titre: "Expérience AR pour E-commerce",
-    client: "Marque de Luxe",
+    slug: "velyv-elo",
+    titre: "VélyVélo – Conception de Vélo Électrique",
+    client: "VélyVélo",
     resume:
-      "Viewer 3D avec mode AR WebXR pour essayage virtuel de produits premium.",
-    categorie: "Temps Réel",
-    annee: 2024,
-    role: "Direction créative · Implémentation AR WebXR",
-    outils: ["Three.js", "WebXR", "React Three Fiber", "TensorFlow"],
-    types: ["temps-reel", "modelisation"],
-    hasIframe: true,
-    defi: "Développer une expérience AR immersive permettant de visualiser des produits de luxe dans leur environnement réel avant achat, compatible avec les appareils AR mobiles grand public.",
-    solution:
-      "Implémentation WebXR avec Three.js et React Three Fiber, modèles 3D ultra-optimisés (système LOD), étalonnage chromatique fidèle et détection d'environnement par IA pour un placement intelligent.",
-    resultats:
-      "Taux d'utilisation de 67 %, confiance à l'achat en hausse de 44 %, retours en baisse de 31 %.",
-    galerie: [
-      { url: "/images/projets/ar-detail-1.jpg", alt: "Qualité visuelle AR" },
-      { url: "/images/projets/ar-detail-2.jpg", alt: "Compatibilité mobile" },
-    ],
-  },
-  {
-    slug: "data-visualization-3d",
-    titre: "Visualisation de Données 3D",
-    client: "Groupe Financier",
-    resume:
-      "Dashboard analytique 3D temps réel pour visualisation de métriques complexes.",
-    categorie: "Temps Réel",
+      "Conception et modélisation 3D complète d'une gamme de vélos électriques, packshots et animations de présentation produit.",
+    categorie: "Modélisation Produit",
     annee: 2023,
-    role: "Développeur WebGL · Data visualization",
-    outils: ["Three.js", "D3.js", "WebGL", "Node.js"],
+    role: "Modélisateur 3D lead · Designer produit",
+    outils: ["Cinema 4D", "Substance Designer", "Octane Render", "Photoshop"],
+    types: ["modelisation"],
+    defi: "Modéliser une gamme de vélos avec précision technique et rendu réaliste, générer assets pour site e-commerce et matériel marketing.",
+    solution:
+      "Modélisation paramétrique pour déclinaisons multiples (tailles, couleurs), matériaux techniques fidèles, packshots optimisés.",
+  },
+  {
+    slug: "agences-georges",
+    titre: "Application Showroom 3D – Fashion Luxury",
+    client: "Agences Georges",
+    resume:
+      "Application interactive 3D pour présentation de collections haute couture, essayage virtuel et personnalisation en temps réel.",
+    categorie: "Application 3D",
+    annee: 2023,
+    role: "Lead 3D · Architecture WebGL",
+    outils: ["Three.js", "Babylon.js", "React", "Tailwind"],
     types: ["temps-reel"],
-    hasIframe: true,
-    defi: "Transformer des données financières complexes en visualisations 3D interactives permettant aux analystes de détecter rapidement tendances et anomalies.",
+    defi: "Créer une expérience d'essayage virtuel fluide et intuitive pour collections de luxe, performante sur mobile et desktop.",
     solution:
-      "Shaders personnalisés pour un rendu haute performance, librairie de graphiques 3D modulaire, synchronisation temps réel avec le backend et interaction aux gestes.",
-    resultats:
-      "Détection d'anomalies 60 % plus rapide, adoption par 40+ analystes, économies estimées à 2 M€/an.",
+      "Pipeline optimisé pour assets mode, shaders custom pour matières (soie, cuir, verre), interface épurée et responsive.",
   },
   {
-    slug: "patrimoine-numerique-archive",
-    titre: "Archivage Numérique Patrimonial",
-    client: "Ministère de la Culture",
+    slug: "alquyme",
+    titre: "Alquyme – Data Visualization 3D Interactive",
+    client: "Alquyme",
     resume:
-      "Plateforme de numérisation 3D et d'archivage pour le patrimoine culturel.",
-    categorie: "Modélisation",
+      "Plateforme de visualisation de données chimiques et moléculaires en 3D temps réel, avec interaction et animation scientifique.",
+    categorie: "Data Visualization",
     annee: 2023,
-    role: "Lead développement · Archéologie numérique",
-    outils: ["Photogrammétrie", "Cinema 4D", "PostgreSQL", "WebGL"],
-    types: ["modelisation", "architecture"],
-    defi: "Créer une infrastructure de numérisation 3D haute-précision et d'archivage à long terme pour monuments et artefacts patrimoniaux, avec accès public et outils de recherche avancée.",
+    role: "Développeur 3D · Data Engineer",
+    outils: ["Babylon.js", "Node.js", "D3.js", "Python"],
+    types: ["temps-reel"],
+    defi: "Transformer des data chimiques complexes en visualisations 3D interactives et compréhensibles, performantes à grande échelle.",
     solution:
-      "Pipeline photogrammétrique optimisé, compression 3D sans perte, indexation spatiale, viewer web performant avec outils de mesure et métadonnées CIDOC-CRM complètes.",
-    resultats:
-      "500+ artefacts numérisés, 200 000+ utilisateurs/an, certification OAIS pour archivage pérenne.",
-    galerie: [
-      { url: "/images/projets/patrimoine-detail-1.jpg", alt: "Précision haute-définition" },
-      { url: "/images/projets/patrimoine-detail-2.jpg", alt: "Système d'archivage" },
-    ],
+      "Moteur 3D custom avec shader graph pour molécules, synchronisation temps réel avec backend, interface de contrôle intuitive.",
+  },
+  {
+    slug: "steamone",
+    titre: "Steamone – Visite Virtuelle Immobilier Luxe",
+    client: "Steamone",
+    resume:
+      "Plateforme de visite immersive pour portefeuille immobilier haut de gamme, avec navigation intuitive et mise en scène photographique.",
+    categorie: "Visite Virtuelle",
+    annee: 2022,
+    role: "Direction technique · Architecture 3D",
+    outils: ["Babylon.js", "Photogrammetry", "HDRi", "Node.js"],
+    types: ["visite-virtuelle", "temps-reel"],
+    defi: "Créer des visites immersives photorealistic de propriétés de luxe, avec navigation fluide et interface haut de gamme.",
+    solution:
+      "Photogrammetrie precision + HDRi mapping, optimisation LOD agressive pour mobile, interface minimaliste de prestige.",
+  },
+  {
+    slug: "creation-originales",
+    titre: "Création Originales – Design Produit 3D",
+    client: "Création Originales",
+    resume:
+      "Modélisation 3D et rendu de produits design artisanaux pour catalogues, portfolio digital et campagnes e-commerce.",
+    categorie: "Design Produit",
+    annee: 2022,
+    role: "Modélisateur 3D · Product Visualizer",
+    outils: ["Cinema 4D", "Octane Render", "Substance 3D", "Lightroom"],
+    types: ["modelisation", "design"],
+    defi: "Valoriser des créations artisanales via 3D photo-réaliste, capturer matières et finitions avec fidélité.",
+    solution:
+      "Modélisation haute-poly avec textures custom, éclairage studio-like, post-production minutieuse pour rendu naturel.",
+  },
+  {
+    slug: "horlogerie-suisse",
+    titre: "Horlogerie Suisse – Campagne Visuelle 360°",
+    client: "Horlogerie Suisse",
+    resume:
+      "Production visuelle complète : modélisation montres de prestige, vidéos 360°, animations mécanisme et matériaux de luxe.",
+    categorie: "Modélisation Horlogerie",
+    annee: 2022,
+    role: "Graphiste 3D senior · Director créatif",
+    outils: ["Cinema 4D", "Octane Render", "Houdini", "After Effects"],
+    types: ["modelisation", "video"],
+    defi: "Créer des rendus horlogers avec précision mécanique extrême et beauté cinématographique, valoriser héritage et savoir-faire.",
+    solution:
+      "Modélisation mécanique précise (engrenages, spiraux), matériau or/acier avec couches de brillance, animation du mécanisme en mouvement.",
   },
 ];
