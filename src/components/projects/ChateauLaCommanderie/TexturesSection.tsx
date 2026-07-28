@@ -51,15 +51,15 @@ export default function TexturesSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-24 px-6 md:px-12 lg:px-20 bg-black"
+      className="w-full py-16 px-6 md:px-12 lg:px-20 bg-black"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
-        <div className="mb-20 max-w-2xl">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-4">
+        <div className="mb-14 max-w-2xl">
+          <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
             Maîtrise des Textures & du Photoralisme
           </h2>
-          <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed">
+          <p className="text-sm md:text-base text-slate-300 font-light leading-relaxed">
             Travail minutieux sur les shaders (rugosité du verre, imperfections,
             relief des capsules) pour gommer l'effet "trop propre" de la 3D.
           </p>
@@ -72,7 +72,7 @@ export default function TexturesSection() {
             ref={leftImageRef}
             className="md:col-span-2 overflow-hidden rounded-xl bg-slate-800"
           >
-            <div className="relative aspect-video md:aspect-[4/3] overflow-hidden group bg-slate-700">
+            <div className="relative aspect-video md:aspect-[2/1] overflow-hidden group bg-slate-700">
               <div className="w-full h-full bg-slate-700" />
               {/* Overlay gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

@@ -71,15 +71,15 @@ export default function PackshotsSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-24 px-6 md:px-12 lg:px-20 bg-black"
+      className="w-full py-16 px-6 md:px-12 lg:px-20 bg-black"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
-        <div className="mb-20 text-center">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-4">
+        <div className="mb-14 text-center">
+          <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
             Packshots Commerciaux
           </h2>
-          <p className="text-base md:text-lg text-slate-300 font-light max-w-2xl mx-auto">
+          <p className="text-sm md:text-base text-slate-300 font-light max-w-2xl mx-auto">
             Déclinaisons standardisées de la gamme prêtes pour l'e-commerce et
             les catalogues print.
           </p>

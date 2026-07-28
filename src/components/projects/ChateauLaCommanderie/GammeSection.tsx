@@ -56,15 +56,15 @@ export default function GammeSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-24 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-slate-900 to-black"
+      className="w-full py-16 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-slate-900 to-black"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
-        <div className="mb-20 text-center">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-4">
+        <div className="mb-14 text-center">
+          <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
             Une Évolution Cohérente de la Gamme
           </h2>
-          <p className="text-base md:text-lg text-slate-300 font-light max-w-2xl mx-auto">
+          <p className="text-sm md:text-base text-slate-300 font-light max-w-2xl mx-auto">
             Modélisation rigoureuse des étiquettes et des textures sur plusieurs
             millésimes pour assurer une identité visuelle pérenne.
           </p>
@@ -79,11 +79,11 @@ export default function GammeSection() {
               className="flex flex-col items-center gap-6 group"
             >
               {/* Bottle Image */}
-              <div className="relative w-full h-[46vh] max-h-[460px] overflow-hidden rounded-lg bg-slate-800">
+              <div className="relative w-full aspect-[9/16] overflow-hidden rounded-lg bg-slate-800">
                 <img
                   src={item.bottleImage}
                   alt={`Château La Commanderie ${item.year}`}
-                  className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                 />
                 {/* Soft Shadow */}
                 <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.1)] pointer-events-none" />

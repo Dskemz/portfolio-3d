@@ -77,14 +77,14 @@ export default function HeroSection() {
         </div>
 
         {/* Titre Principal */}
-        <h1 className="mb-6 text-5xl md:text-7xl font-thin text-white leading-tight max-w-4xl">
+        <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl">
           La Commanderie
           <br />
           <span className="text-neutral-400">de 2013 à 2021</span>
         </h1>
 
         {/* Paragraphe Descriptif */}
-        <p className="max-w-2xl text-base md:text-lg text-neutral-300 font-light leading-relaxed">
+        <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
           Étude de cas d'un accompagnement complet pour le développement d'une
           marque de vin : modélisation 3D de toute la gamme et mise en scène
           publicitaire haut de gamme.

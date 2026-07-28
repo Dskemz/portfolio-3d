@@ -7,7 +7,7 @@ export default function ProjectFooter() {
   return (
     <footer className="w-full bg-slate-900 text-white">
       {/* Main Footer */}
-      <div className="px-6 md:px-12 lg:px-20 py-24 border-b border-slate-800">
+      <div className="px-6 md:px-12 lg:px-20 py-16 border-b border-slate-800">
         <div className="max-w-7xl mx-auto">
           {/* Project Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-12 mb-20">

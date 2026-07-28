@@ -81,22 +81,22 @@ export default function TechBreakdownSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-24 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-black to-slate-900"
+      className="w-full py-16 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-black to-slate-900"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
-        <div className="mb-20">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-4">
+        <div className="mb-14">
+          <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
             Analyse Technique & Passes de Rendu
           </h2>
-          <p className="text-base md:text-lg text-slate-300 font-light max-w-3xl">
+          <p className="text-sm md:text-base text-slate-300 font-light max-w-3xl">
             Décomposition du processus de rendu et de la topologie 3D. Chaque
             passe représente une couche du pipeline de production.
           </p>
         </div>
 
         {/* Grid 2x2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-2xl mx-auto">
           {RENDER_PASSES.map((pass, idx) => (
             <div
               key={pass.id}
@@ -114,8 +114,8 @@ export default function TechBreakdownSection() {
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-lg md:text-xl font-light text-white mb-2">
+                <div className="p-4">
+                  <h3 className="text-sm md:text-base font-light text-white mb-2">
                     {pass.title}
                   </h3>
                   <p className="text-sm md:text-base text-slate-300 font-light mb-4">
