@@ -69,7 +69,7 @@ export default function APropos() {
                   <img
                     src="/images/denis-about.jpg"
                     alt="Denis Masquet"
-                    className="h-full w-full object-cover object-[center_25%] lg:object-contain lg:object-center"
+                    className="h-full w-full object-cover object-[center_35%] scale-110 lg:object-[center_30%] lg:scale-125"
                   />
                 </div>
               </div>
