@@ -1,28 +1,25 @@
 "use client";
 
-import { VisuelWithings } from "./VisuelWithings";
+import { VisuelProjet } from "./VisuelProjet";
 import { Reveal } from "../ui/Reveal";
 import type { SectionGrid } from "@/content/withings-layout-config";
 
 interface SectionGridWithingsProps {
   section: SectionGrid;
-  title?: string;
-  subtitle?: string;
+  slug: string; // Slug du projet — détermine le dossier des images
 }
 
 /**
- * Composant réutilisable pour afficher une section d'images Withings.
+ * Composant réutilisable pour afficher une section d'images de projet.
  * La grille s'adapte automatiquement selon la config (colonnes, gaps, ratios).
  * 
  * Utilisation :
- * <SectionGridWithings section={SECTION_CHAPITRE_1} />
+ * <SectionGridWithings section={SECTION_CHAPITRE_1} slug="withings-scanwatch" />
  */
 export function SectionGridWithings({
   section,
-  title,
-  subtitle,
+  slug,
 }: SectionGridWithingsProps) {
-  // Génère les classes Tailwind pour la grille en fonction du nombre de colonnes
   const gridColsClass = {
     1: "grid-cols-1",
     2: "grid-cols-2",
@@ -46,7 +43,8 @@ export function SectionGridWithings({
     <Reveal className={`grid ${gridColsClass} ${section.gap}`} cascade>
       {section.images.map((image) => (
         <div key={image.name} className={colSpanClass(image.colSpan || 1)}>
-          <VisuelWithings
+          <VisuelProjet
+            slug={slug}
             name={image.name}
             label={image.label}
             ratio={image.ratio}

@@ -1,5 +1,5 @@
 /**
- * Configuration layout — creation-originales
+ * Configuration layout — summum-3d
  * 
  * Modifie colonnes/gap/ratio pour ajuster la mise en page.
  */
@@ -12,7 +12,7 @@ export const SECTION_HERO: SectionGrid = {
   images: [
     {
       name: "01-hero",
-      label: "Design produit",
+      label: "Showroom 3D",
       ratio: "21/9",
       teinte: "#14161a",
       colSpan: 1,
@@ -26,7 +26,7 @@ export const SECTION_BANNER: SectionGrid = {
   images: [
     {
       name: "02-produit",
-      label: "Produit",
+      label: "Produit 360",
       ratio: "16/9",
       teinte: "#20242a",
       colSpan: 1,
@@ -55,4 +55,4 @@ export const SECTION_DETAILS: SectionGrid = {
   ],
 };
 
-export const SECTIONS_CREATION_ORIGINALES = [SECTION_HERO, SECTION_BANNER, SECTION_DETAILS];
+export const SECTIONS_SUMMUM_3D = [SECTION_HERO, SECTION_BANNER, SECTION_DETAILS];

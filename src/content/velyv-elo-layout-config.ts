@@ -1,5 +1,5 @@
 /**
- * Configuration layout — creation-originales
+ * Configuration layout — velyv-elo
  * 
  * Modifie colonnes/gap/ratio pour ajuster la mise en page.
  */
@@ -12,7 +12,7 @@ export const SECTION_HERO: SectionGrid = {
   images: [
     {
       name: "01-hero",
-      label: "Design produit",
+      label: "Vélo électrique",
       ratio: "21/9",
       teinte: "#14161a",
       colSpan: 1,
@@ -25,8 +25,8 @@ export const SECTION_BANNER: SectionGrid = {
   gap: "gap-4",
   images: [
     {
-      name: "02-produit",
-      label: "Produit",
+      name: "02-velo-full",
+      label: "Vue complète",
       ratio: "16/9",
       teinte: "#20242a",
       colSpan: 1,
@@ -35,7 +35,7 @@ export const SECTION_BANNER: SectionGrid = {
 };
 
 export const SECTION_DETAILS: SectionGrid = {
-  colonnes: 2,
+  colonnes: 3,
   gap: "gap-4",
   images: [
     {
@@ -52,7 +52,14 @@ export const SECTION_DETAILS: SectionGrid = {
       teinte: "#20242a",
       colSpan: 1,
     },
+    {
+      name: "05-detail-3",
+      label: "Détail 3",
+      ratio: "1/1",
+      teinte: "#1b1e23",
+      colSpan: 1,
+    },
   ],
 };
 
-export const SECTIONS_CREATION_ORIGINALES = [SECTION_HERO, SECTION_BANNER, SECTION_DETAILS];
+export const SECTIONS_VELYV_ELO = [SECTION_HERO, SECTION_BANNER, SECTION_DETAILS];

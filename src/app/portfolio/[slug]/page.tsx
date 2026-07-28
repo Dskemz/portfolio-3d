@@ -1,14 +1,33 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PROJETS } from "@/content/projets";
-import { ProjectHeader } from "@/components/portfolio/ProjectHeader";
-import { ProjectViewer } from "@/components/portfolio/ProjectViewer";
-import { ProjectBrief } from "@/components/portfolio/ProjectBrief";
-import { ProjectComparison } from "@/components/portfolio/ProjectComparison";
-import { ProjectGallery } from "@/components/portfolio/ProjectGallery";
-import { ProjectNavigation } from "@/components/portfolio/ProjectNavigation";
-import { CtaSignature } from "@/components/portfolio/CtaSignature";
+import { GenericProjetPage } from "@/components/portfolio/GenericProjetPage";
 import { EtudeCasWithings } from "@/components/portfolio/EtudeCasWithings";
+import type { SectionGrid } from "@/content/withings-layout-config";
+
+// Configs layout par projet
+import { SECTIONS_DECOTEC } from "@/content/decotec-layout-config";
+import { SECTIONS_NFT_FLOOFIES } from "@/content/nft-floofies-layout-config";
+import { SECTIONS_SUMMUM_3D } from "@/content/summum-3d-layout-config";
+import { SECTIONS_VELYV_ELO } from "@/content/velyv-elo-layout-config";
+import { SECTIONS_AGENCES_GEORGES } from "@/content/agences-georges-layout-config";
+import { SECTIONS_ALQUYME } from "@/content/alquyme-layout-config";
+import { SECTIONS_STEAMONE } from "@/content/steamone-layout-config";
+import { SECTIONS_CREATION_ORIGINALES } from "@/content/creation-originales-layout-config";
+import { SECTIONS_HORLOGERIE_SUISSE } from "@/content/horlogerie-suisse-layout-config";
+
+// Mapping slug → sections
+const SECTIONS_PAR_PROJET: Record<string, SectionGrid[]> = {
+  "decotec": SECTIONS_DECOTEC,
+  "nft-floofies": SECTIONS_NFT_FLOOFIES,
+  "summum-3d": SECTIONS_SUMMUM_3D,
+  "velyv-elo": SECTIONS_VELYV_ELO,
+  "agences-georges": SECTIONS_AGENCES_GEORGES,
+  "alquyme": SECTIONS_ALQUYME,
+  "steamone": SECTIONS_STEAMONE,
+  "creation-originales": SECTIONS_CREATION_ORIGINALES,
+  "horlogerie-suisse": SECTIONS_HORLOGERIE_SUISSE,
+};
 
 export function generateStaticParams() {
   return PROJETS.map((projet) => ({ slug: projet.slug }));
@@ -52,7 +71,7 @@ export default async function ProjetPage({
   const precedent = PROJETS[(index - 1 + PROJETS.length) % PROJETS.length];
   const suivant = PROJETS[(index + 1) % PROJETS.length];
 
-  // Étude de cas éditoriale sur-mesure (ex. Withings ScanWatch).
+  // Étude de cas éditoriale sur-mesure (ex. Withings)
   if (projet.etudeCas) {
     return (
       <EtudeCasWithings
@@ -63,54 +82,15 @@ export default async function ProjetPage({
     );
   }
 
+  // Sections personnalisées du projet (si définies)
+  const sections = SECTIONS_PAR_PROJET[projet.slug] ?? [];
+
   return (
-    <div className="flex flex-1 flex-col overflow-x-clip bg-black text-white">
-      <ProjectHeader
-        client={projet.client}
-        titre={projet.titre}
-        role={projet.role}
-        outils={projet.outils}
-        annee={projet.annee}
-      />
-
-      <div className="mx-auto w-full max-w-6xl space-y-20 px-6 pb-24 lg:space-y-28 lg:px-16 xl:px-24">
-        {/* Viewer 3D / visuel grand format */}
-        <ProjectViewer
-          src={projet.viewer ?? projet.couverture}
-          alt={projet.titre}
-          ratio={projet.ratioViewer ?? "16/9"}
-          isIframe={projet.hasIframe ?? false}
-          slug={projet.slug}
-        />
-
-        {/* Défi & solution */}
-        <ProjectBrief
-          defi={projet.defi}
-          solution={projet.solution}
-          resultats={projet.resultats}
-        />
-
-        {/* Wireframe → rendu final */}
-        {projet.wireframe && projet.final && (
-          <ProjectComparison
-            wireframeUrl={projet.wireframe}
-            wireframeLabel={projet.wireframeLabel ?? "Wireframe"}
-            finalUrl={projet.final}
-            finalLabel={projet.finalLabel ?? "Rendu final"}
-          />
-        )}
-
-        {/* Galerie de détails */}
-        {projet.galerie && projet.galerie.length > 0 && (
-          <ProjectGallery images={projet.galerie} />
-        )}
-
-        {/* Navigation précédent / suivant */}
-        <ProjectNavigation previous={precedent} next={suivant} />
-      </div>
-
-      {/* CTA signature partagé */}
-      <CtaSignature />
-    </div>
+    <GenericProjetPage
+      projet={projet}
+      precedent={precedent}
+      suivant={suivant}
+      sections={sections}
+    />
   );
 }

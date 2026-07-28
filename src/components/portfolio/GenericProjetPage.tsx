@@ -60,7 +60,7 @@ export function GenericProjetPage({
         {sections.length > 0 ? (
           <div className="space-y-24 lg:space-y-32">
             {sections.map((section, idx) => (
-              <SectionGridWithings key={idx} section={section} />
+              <SectionGridWithings key={idx} section={section} slug={projet.slug} />
             ))}
           </div>
         ) : (

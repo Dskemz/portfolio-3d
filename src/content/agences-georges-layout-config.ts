@@ -1,5 +1,5 @@
 /**
- * Configuration layout — creation-originales
+ * Configuration layout — agences-georges
  * 
  * Modifie colonnes/gap/ratio pour ajuster la mise en page.
  */
@@ -12,7 +12,7 @@ export const SECTION_HERO: SectionGrid = {
   images: [
     {
       name: "01-hero",
-      label: "Design produit",
+      label: "Collection fashion",
       ratio: "21/9",
       teinte: "#14161a",
       colSpan: 1,
@@ -25,8 +25,8 @@ export const SECTION_BANNER: SectionGrid = {
   gap: "gap-4",
   images: [
     {
-      name: "02-produit",
-      label: "Produit",
+      name: "02-collection",
+      label: "Collection",
       ratio: "16/9",
       teinte: "#20242a",
       colSpan: 1,
@@ -55,4 +55,4 @@ export const SECTION_DETAILS: SectionGrid = {
   ],
 };
 
-export const SECTIONS_CREATION_ORIGINALES = [SECTION_HERO, SECTION_BANNER, SECTION_DETAILS];
+export const SECTIONS_AGENCES_GEORGES = [SECTION_HERO, SECTION_BANNER, SECTION_DETAILS];

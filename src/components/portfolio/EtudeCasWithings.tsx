@@ -1,6 +1,6 @@
 import { Reveal } from "../ui/Reveal";
 import { IMAGES_WITHINGS } from "@/content/withings-config";
-import { VisuelWithings } from "./VisuelWithings";
+import { VisuelProjet } from "./VisuelProjet";
 import { ProjectNavigation } from "./ProjectNavigation";
 import { CtaSignature } from "./CtaSignature";
 import type { ProjetData } from "../../content/projets";
@@ -91,7 +91,7 @@ export function EtudeCasWithings({
       {/* Placeholder 1 — grand visuel maître horizontal */}
       <div className="mx-auto w-full max-w-6xl px-6 lg:px-16 xl:px-24">
         <Reveal>
-          <VisuelWithings
+          <VisuelProjet slug="withings-scanwatch"
             name="01-hero"
             label="Visuel maître — gamme ScanWatch 2"
             ratio="21/9"
@@ -124,7 +124,7 @@ export function EtudeCasWithings({
 
           {/* Grande image maître */}
           <Reveal className="mt-12 lg:mt-16">
-            <VisuelWithings
+            <VisuelProjet slug="withings-scanwatch"
               name="02-face"
               label="Gamme complète ScanWatch 2"
               ratio="21/9"
@@ -134,9 +134,9 @@ export function EtudeCasWithings({
 
           {/* 3 images en dessous */}
           <Reveal className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3 lg:gap-6 lg:mt-8" cascade>
-            <VisuelWithings name="02b-face-38" label="38mm" ratio="4/3" teinte="#20242a" />
-            <VisuelWithings name="02c-face-42" label="42mm" ratio="4/3" teinte="#1b1e23" />
-            <VisuelWithings name="02d-face-43" label="43mm" ratio="4/3" teinte="#20242a" />
+            <VisuelProjet slug="withings-scanwatch" name="02b-face-38" label="38mm" ratio="4/3" teinte="#20242a" />
+            <VisuelProjet slug="withings-scanwatch" name="02c-face-42" label="42mm" ratio="4/3" teinte="#1b1e23" />
+            <VisuelProjet slug="withings-scanwatch" name="02d-face-43" label="43mm" ratio="4/3" teinte="#20242a" />
           </Reveal>
         </section>
 
@@ -159,17 +159,17 @@ export function EtudeCasWithings({
 
           {/* Placeholder 3 — grille asymétrique de gros plans */}
           <Reveal className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:grid-rows-2" cascade>
-            <VisuelWithings
+            <VisuelProjet slug="withings-scanwatch"
               name="05-boucle"
               label="Boucle déployante"
               ratio="1/1"
               teinte="#1b1e23"
               className="lg:col-span-2 lg:row-span-2 lg:aspect-auto"
             />
-            <VisuelWithings name="06-couture" label="Couture cuir" ratio="1/1" teinte="#252930" />
-            <VisuelWithings name="07-tissage" label="Tissage" ratio="1/1" teinte="#20242a" />
-            <VisuelWithings name="08-sablage" label="Sablage métal" ratio="1/1" teinte="#252930" />
-            <VisuelWithings name="09-silicone" label="Silicone" ratio="1/1" teinte="#1b1e23" />
+            <VisuelProjet slug="withings-scanwatch" name="06-couture" label="Couture cuir" ratio="1/1" teinte="#252930" />
+            <VisuelProjet slug="withings-scanwatch" name="07-tissage" label="Tissage" ratio="1/1" teinte="#20242a" />
+            <VisuelProjet slug="withings-scanwatch" name="08-sablage" label="Sablage métal" ratio="1/1" teinte="#252930" />
+            <VisuelProjet slug="withings-scanwatch" name="09-silicone" label="Silicone" ratio="1/1" teinte="#1b1e23" />
           </Reveal>
         </section>
 
@@ -179,7 +179,7 @@ export function EtudeCasWithings({
         <section className="border-t border-mine pt-16">
           {/* Placeholder 4 — profil + reflets spéculaires, texte en dessous */}
           <Reveal>
-            <VisuelWithings
+            <VisuelProjet slug="withings-scanwatch"
               name="10-studio"
               label="Mise en scène studio — reflets spéculaires sur verre et biseaux"
               ratio="16/9"
@@ -223,7 +223,7 @@ export function EtudeCasWithings({
 
           {/* Grande vue éclatée */}
           <Reveal className="mt-12 lg:mt-16">
-            <VisuelWithings
+            <VisuelProjet slug="withings-scanwatch"
               name="11-eclate"
               label="Vue éclatée — exploded view"
               ratio="21/9"
@@ -233,25 +233,25 @@ export function EtudeCasWithings({
 
           {/* 4 variations compactes */}
           <Reveal className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:gap-4 lg:mt-8" cascade>
-            <VisuelWithings name="12-cadran-vert" label="Cadran vert" ratio="1/1" teinte="#1b1e23" />
-            <VisuelWithings name="13-cadran-noir" label="Cadran noir" ratio="1/1" teinte="#14161a" />
-            <VisuelWithings name="14-bracelet-noir" label="Bracelet noir" ratio="1/1" teinte="#20242a" />
-            <VisuelWithings name="15-bracelet-metal" label="Bracelet metal" ratio="1/1" teinte="#1b1e23" />
+            <VisuelProjet slug="withings-scanwatch" name="12-cadran-vert" label="Cadran vert" ratio="1/1" teinte="#1b1e23" />
+            <VisuelProjet slug="withings-scanwatch" name="13-cadran-noir" label="Cadran noir" ratio="1/1" teinte="#14161a" />
+            <VisuelProjet slug="withings-scanwatch" name="14-bracelet-noir" label="Bracelet noir" ratio="1/1" teinte="#20242a" />
+            <VisuelProjet slug="withings-scanwatch" name="15-bracelet-metal" label="Bracelet metal" ratio="1/1" teinte="#1b1e23" />
           </Reveal>
 
           {/* Grille asymétrique de détails */}
           <Reveal className="mt-6 grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:grid-rows-2 lg:gap-4 lg:mt-8" cascade>
-            <VisuelWithings
+            <VisuelProjet slug="withings-scanwatch"
               name="16-detail-cadran-1"
               label="Cadran détail 1"
               ratio="1/1"
               teinte="#1b1e23"
               className="md:col-span-2 md:row-span-2 lg:col-span-2 lg:row-span-2 md:aspect-auto"
             />
-            <VisuelWithings name="17-detail-bracelet-1" label="Bracelet 1" ratio="1/1" teinte="#20242a" />
-            <VisuelWithings name="18-detail-boitier-1" label="Boîtier 1" ratio="1/1" teinte="#252930" />
-            <VisuelWithings name="19-detail-cadran-2" label="Cadran détail 2" ratio="1/1" teinte="#1b1e23" />
-            <VisuelWithings name="20-detail-bracelet-2" label="Bracelet 2" ratio="1/1" teinte="#20242a" />
+            <VisuelProjet slug="withings-scanwatch" name="17-detail-bracelet-1" label="Bracelet 1" ratio="1/1" teinte="#20242a" />
+            <VisuelProjet slug="withings-scanwatch" name="18-detail-boitier-1" label="Boîtier 1" ratio="1/1" teinte="#252930" />
+            <VisuelProjet slug="withings-scanwatch" name="19-detail-cadran-2" label="Cadran détail 2" ratio="1/1" teinte="#1b1e23" />
+            <VisuelProjet slug="withings-scanwatch" name="20-detail-bracelet-2" label="Bracelet 2" ratio="1/1" teinte="#20242a" />
           </Reveal>
         </section>
 
