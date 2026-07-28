@@ -2,7 +2,7 @@ interface PlaceholderVisuelProps {
   /** Libellé discret décrivant le visuel à venir. */
   label: string;
   /** Ratio d'affichage. */
-  ratio?: "16/9" | "4/3" | "1/1" | "3/4" | "21/9";
+  ratio?: "16/9" | "4/3" | "1/1" | "3/4" | "21/9" | "9/16";
   /** Teinte de fond (rampe graphite). */
   teinte?: string;
   className?: string;
@@ -14,6 +14,7 @@ const RATIOS: Record<string, string> = {
   "1/1": "aspect-square",
   "3/4": "aspect-[3/4]",
   "21/9": "aspect-[21/9]",
+  "9/16": "aspect-[9/16]",
 };
 
 /**
