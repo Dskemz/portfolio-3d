@@ -100,7 +100,7 @@ export default function TechBreakdownSection() {
           {RENDER_PASSES.map((pass, idx) => (
             <div
               key={pass.id}
-              ref={(el) => (gridItemsRef.current[idx] = el)}
+              ref={(el) => { gridItemsRef.current[idx] = el; }}
               className="group cursor-pointer"
               onClick={() => setSelectedPass(pass)}
             >

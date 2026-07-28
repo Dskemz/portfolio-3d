@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Metadata } from 'next';
 import HeroSection from '@/components/projects/ChateauLaCommanderie/HeroSection';
 import GammeSection from '@/components/projects/ChateauLaCommanderie/GammeSection';
 import TexturesSection from '@/components/projects/ChateauLaCommanderie/TexturesSection';

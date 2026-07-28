@@ -117,7 +117,7 @@ export default function GammeSection() {
           {BOTTLES_DATA.map((item, idx) => (
             <div
               key={item.year}
-              ref={(el) => (itemsRef.current[idx] = el)}
+              ref={(el) => { itemsRef.current[idx] = el; }}
               className="flex flex-col items-center gap-6 group"
             >
               {/* Bottle Image */}

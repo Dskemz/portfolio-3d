@@ -90,7 +90,7 @@ export default function PackshotsSection() {
           {PACKSHOTS_DATA.map((packshot, idx) => (
             <div
               key={packshot.id}
-              ref={(el) => (itemsRef.current[idx] = el)}
+              ref={(el) => { itemsRef.current[idx] = el; }}
               className="group flex flex-col items-center text-center"
             >
               {/* Studio Background - Soft Shadow */}
