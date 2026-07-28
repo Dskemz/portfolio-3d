@@ -71,7 +71,7 @@ export default function GammeSection() {
         </div>
 
         {/* Bottles Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12 max-w-3xl mx-auto">
+        <div className="grid grid-cols-2 gap-4 md:gap-12 max-w-3xl mx-auto">
           {BOTTLES_DATA.map((item, idx) => (
             <div
               key={item.year}

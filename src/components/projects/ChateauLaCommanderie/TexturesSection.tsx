@@ -72,7 +72,7 @@ export default function TexturesSection() {
             ref={leftImageRef}
             className="md:col-span-2 overflow-hidden rounded-xl bg-slate-800"
           >
-            <div className="relative aspect-video md:aspect-[2/1] overflow-hidden group bg-slate-700">
+            <div className="relative aspect-video md:aspect-auto md:h-80 overflow-hidden group bg-slate-700">
               <div className="w-full h-full bg-slate-700" />
               {/* Overlay gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -91,7 +91,7 @@ export default function TexturesSection() {
             ref={rightImageRef}
             className="md:col-span-1 overflow-hidden rounded-xl bg-slate-800"
           >
-            <div className="relative aspect-square overflow-hidden group bg-slate-700">
+            <div className="relative aspect-square md:aspect-auto md:h-80 overflow-hidden group bg-slate-700">
               <div className="w-full h-full bg-slate-700" />
               {/* Overlay gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
