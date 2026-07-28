@@ -121,17 +121,28 @@ export default function IndexProjets() {
                     backgroundColor: TEINTE[index % TEINTE.length],
                     transform:
                       index === actif ? "translateY(-0.35rem)" : "none",
+                    ...(
+                      !projet.couverture && {
+                        background: `linear-gradient(135deg, hsl(${
+                          projet.slug.charCodeAt(0) * 3
+                        }, 45%, 35%) 0%, hsl(${
+                          projet.slug.charCodeAt(1) * 3
+                        }, 55%, 25%) 100%)`,
+                      }
+                    ),
                   }}
                   className="relative w-full overflow-hidden transition-transform duration-500 ease-sobre lg:!translate-y-0"
                 >
-                  <Image
-                    src={projet.couverture}
-                    alt=""
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 66vw"
-                    priority={index === 0}
-                    className="object-cover opacity-85 transition-[transform,opacity] duration-700 ease-sobre group-hover:scale-[1.015] group-hover:opacity-100"
-                  />
+                  {projet.couverture && (
+                    <Image
+                      src={projet.couverture}
+                      alt=""
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 66vw"
+                      priority={index === 0}
+                      className="object-cover opacity-85 transition-[transform,opacity] duration-700 ease-sobre group-hover:scale-[1.015] group-hover:opacity-100"
+                    />
+                  )}
                 </div>
 
                 {/* Sous 1024 px, le texte ne s'affiche que pour la vignette

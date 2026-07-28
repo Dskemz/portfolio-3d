@@ -32,7 +32,8 @@ export interface ProjetData {
   resume: string;
   categorie: string;
   annee: number;
-  couverture: string;
+  /** URL de l'image hero. Optionnelle : fallback à un gradient si absente. */
+  couverture?: string;
 
   // — Champs étendus (page projet) —
   role: string;
@@ -53,6 +54,15 @@ export interface ProjetData {
   galerie?: Array<{ url: string; alt?: string; caption?: string }>;
 }
 
+/** Génère un gradient de fallback pseudo-aléatoire pour un projet sans image. */
+export function getCouvertureOuFallback(
+  projet: ProjetData,
+): string | "gradient-auto" {
+  if (projet.couverture) return projet.couverture;
+  // Fallback : gradient dégradé basé sur le slug (reproductible, esthétique)
+  return "gradient-auto";
+}
+
 export const PROJETS: ProjetData[] = [
   {
     slug: "withings-scanwatch",
@@ -62,7 +72,7 @@ export const PROJETS: ProjetData[] = [
       "Création de toute la gamme de montres ScanWatch 2, ScanWatch Light et ScanWatch Nova : vidéos 360° pour le shop interactif et packshots pour la grande distribution.",
     categorie: "Modélisation",
     annee: 2025,
-    couverture: "/images/projets/withings-cover.jpg",
+    couverture: "/images/projets/withings/01-hero.jpg",
     role: "Graphiste 3D indépendant",
     outils: ["Visuels", "Packshots", "Vidéos 360°"],
     types: ["modelisation"],
@@ -79,7 +89,6 @@ export const PROJETS: ProjetData[] = [
       "Plateforme de visite virtuelle 360° temps réel pour portefeuille immobilier premium.",
     categorie: "Visite Virtuelle",
     annee: 2024,
-    couverture: "/images/projets/nexity-cover.jpg",
     role: "Direction technique 3D · Babylon.js · Architecture WebGL",
     outils: ["Babylon.js", "WebGL", "Three.js", "Node.js"],
     types: ["visite-virtuelle", "temps-reel"],
@@ -104,7 +113,6 @@ export const PROJETS: ProjetData[] = [
       "Modélisation 3D photogrammétrique d'un complexe résidentiel de 15 000 m².",
     categorie: "Modélisation",
     annee: 2023,
-    couverture: "/images/projets/bouygues-cover.jpg",
     role: "Modélisateur 3D lead · Post-production visuelle",
     outils: ["Cinema 4D", "Octane Render", "Substance Designer", "Photogrammétrie"],
     types: ["modelisation", "architecture"],
@@ -130,7 +138,6 @@ export const PROJETS: ProjetData[] = [
       "Plateforme centralisée de gestion et déploiement de visites virtuelles immobilières.",
     categorie: "Visite Virtuelle",
     annee: 2024,
-    couverture: "/images/projets/laforet-cover.jpg",
     role: "Architecte système · Lead développement front",
     outils: ["Next.js", "Babylon.js", "PostgreSQL", "AWS"],
     types: ["visite-virtuelle", "temps-reel"],
@@ -155,7 +162,6 @@ export const PROJETS: ProjetData[] = [
       "Moteur de simulation 3D pour analyse d'impact structurel et optimisation de chantier.",
     categorie: "Temps Réel",
     annee: 2023,
-    couverture: "/images/projets/btp-cover.jpg",
     role: "Développeur 3D temps réel · Moteur physique",
     outils: ["Babylon.js", "Cannon.js", "Web Workers", "Three.js"],
     types: ["temps-reel", "architecture"],
@@ -173,7 +179,6 @@ export const PROJETS: ProjetData[] = [
       "Viewer 3D avec mode AR WebXR pour essayage virtuel de produits premium.",
     categorie: "Temps Réel",
     annee: 2024,
-    couverture: "/images/projets/ar-luxury-cover.jpg",
     role: "Direction créative · Implémentation AR WebXR",
     outils: ["Three.js", "WebXR", "React Three Fiber", "TensorFlow"],
     types: ["temps-reel", "modelisation"],
@@ -196,7 +201,6 @@ export const PROJETS: ProjetData[] = [
       "Dashboard analytique 3D temps réel pour visualisation de métriques complexes.",
     categorie: "Temps Réel",
     annee: 2023,
-    couverture: "/images/projets/dataviz-cover.jpg",
     role: "Développeur WebGL · Data visualization",
     outils: ["Three.js", "D3.js", "WebGL", "Node.js"],
     types: ["temps-reel"],
@@ -215,7 +219,6 @@ export const PROJETS: ProjetData[] = [
       "Plateforme de numérisation 3D et d'archivage pour le patrimoine culturel.",
     categorie: "Modélisation",
     annee: 2023,
-    couverture: "/images/projets/patrimoine-cover.jpg",
     role: "Lead développement · Archéologie numérique",
     outils: ["Photogrammétrie", "Cinema 4D", "PostgreSQL", "WebGL"],
     types: ["modelisation", "architecture"],

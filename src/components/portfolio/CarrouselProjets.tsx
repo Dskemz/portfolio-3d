@@ -124,19 +124,30 @@ function ImageCardWrapper({
         }}
       />
 
-      {/* Image */}
-      <motion.img
-        src={project.couverture}
-        alt={project.titre}
-        loading="lazy"
-        draggable={false}
-        className="h-full w-full object-cover"
-        initial={false}
-        animate={{
-          opacity: isCurrent ? 1 : 0.6,
-        }}
-        transition={{ duration: 0.3 }}
-      />
+      {/* Image ou fallback gradient */}
+      {project.couverture ? (
+        <motion.img
+          src={project.couverture}
+          alt={project.titre}
+          loading="lazy"
+          draggable={false}
+          className="h-full w-full object-cover"
+          initial={false}
+          animate={{
+            opacity: isCurrent ? 1 : 0.6,
+          }}
+          transition={{ duration: 0.3 }}
+        />
+      ) : (
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(135deg, hsl(${
+              project.slug.charCodeAt(0) * 3
+            }, 45%, 35%) 0%, hsl(${project.slug.charCodeAt(1) * 3}, 55%, 25%) 100%)`,
+          }}
+        />
+      )}
 
       {/* Ombre portée dynamique */}
       <motion.div

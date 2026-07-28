@@ -5,7 +5,7 @@ interface ProjetLien {
   slug: string;
   titre: string;
   client: string;
-  couverture: string;
+  couverture?: string;
 }
 
 interface ProjectNavigationProps {
@@ -37,14 +37,29 @@ function Carte({
 
   return (
     <Link href={`/portfolio/${projet.slug}`} className="group block">
-      <div className="relative aspect-[4/3] overflow-hidden bg-graphite-800 sm:aspect-video">
-        <Image
-          src={projet.couverture}
-          alt={projet.titre}
-          fill
-          sizes="(max-width: 768px) 50vw, 50vw"
-          className="object-cover transition-transform duration-500 ease-sobre group-hover:scale-[1.04]"
-        />
+      <div
+        className="relative aspect-[4/3] overflow-hidden bg-graphite-800 sm:aspect-video"
+        style={
+          !projet.couverture
+            ? {
+                background: `linear-gradient(135deg, hsl(${
+                  projet.slug.charCodeAt(0) * 3
+                }, 45%, 35%) 0%, hsl(${
+                  projet.slug.charCodeAt(1) * 3
+                }, 55%, 25%) 100%)`,
+              }
+            : undefined
+        }
+      >
+        {projet.couverture && (
+          <Image
+            src={projet.couverture}
+            alt={projet.titre}
+            fill
+            sizes="(max-width: 768px) 50vw, 50vw"
+            className="object-cover transition-transform duration-500 ease-sobre group-hover:scale-[1.04]"
+          />
+        )}
         <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/30" />
       </div>
 

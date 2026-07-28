@@ -4,10 +4,11 @@ import { useState } from "react";
 import Image from "next/image";
 
 interface ProjectViewerProps {
-  src: string;
+  src?: string;
   alt: string;
   ratio?: "16/9" | "4/3" | "1/1" | "9/16";
   isIframe?: boolean;
+  slug?: string; // Pour générer un gradient pseudo-aléatoire en fallback
 }
 
 const RATIOS: Record<string, string> = {
@@ -28,32 +29,46 @@ export function ProjectViewer({
   alt,
   ratio = "16/9",
   isIframe = false,
+  slug = "project",
 }: ProjectViewerProps) {
   const [charge, setCharge] = useState(false);
 
   return (
     <div
       className={`relative overflow-hidden bg-graphite-800 ${RATIOS[ratio] ?? RATIOS["16/9"]}`}
+      style={
+        !src
+          ? {
+              background: `linear-gradient(135deg, hsl(${
+                slug.charCodeAt(0) * 3
+              }, 45%, 35%) 0%, hsl(${slug.charCodeAt(1) * 3}, 55%, 25%) 100%)`,
+            }
+          : undefined
+      }
     >
-      {isIframe ? (
-        <iframe
-          src={src}
-          title={alt}
-          loading="lazy"
-          className="h-full w-full border-none bg-graphite-950"
-          sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-presentation"
-          allowFullScreen
-          onLoad={() => setCharge(true)}
-        />
-      ) : (
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          sizes="(max-width: 1024px) 100vw, 80vw"
-          className="object-cover"
-          onLoad={() => setCharge(true)}
-        />
+      {src && (
+        <>
+          {isIframe ? (
+            <iframe
+              src={src}
+              title={alt}
+              loading="lazy"
+              className="h-full w-full border-none bg-graphite-950"
+              sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-presentation"
+              allowFullScreen
+              onLoad={() => setCharge(true)}
+            />
+          ) : (
+            <Image
+              src={src}
+              alt={alt}
+              fill
+              sizes="(max-width: 1024px) 100vw, 80vw"
+              className="object-cover"
+              onLoad={() => setCharge(true)}
+            />
+          )}
+        </>
       )}
 
       {/* Liseré émissif — net + halo flouté, une fois le média chargé */}

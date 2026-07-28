@@ -10,13 +10,13 @@ interface EtudeCasWithingsProps {
     slug: string;
     titre: string;
     client: string;
-    couverture: string;
+    couverture?: string;
   };
   suivant: {
     slug: string;
     titre: string;
     client: string;
-    couverture: string;
+    couverture?: string;
   };
 }
 

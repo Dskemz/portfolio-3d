@@ -32,7 +32,9 @@ export async function generateMetadata({
       description: projet.resume,
       url: `/portfolio/${projet.slug}`,
       type: "article",
-      images: [{ url: projet.couverture, width: 1200, height: 630 }],
+      ...(projet.couverture && {
+        images: [{ url: projet.couverture, width: 1200, height: 630 }],
+      }),
     },
   };
 }
@@ -78,6 +80,7 @@ export default async function ProjetPage({
           alt={projet.titre}
           ratio={projet.ratioViewer ?? "16/9"}
           isIframe={projet.hasIframe ?? false}
+          slug={projet.slug}
         />
 
         {/* Défi & solution */}

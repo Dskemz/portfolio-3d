@@ -76,7 +76,7 @@ export default function GrilleProjets() {
 
           <p className="mt-5 max-w-xs text-base font-light leading-relaxed text-papier/60">
             Visites virtuelles, modélisation, direction artistique. La taille
-            dit l'importance.
+            dit l&apos;importance.
           </p>
         </aside>
 
