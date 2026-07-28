@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { PROJETS } from "@/content/projets";
 import { GenericProjetPage } from "@/components/portfolio/GenericProjetPage";
 import { EtudeCasWithings } from "@/components/portfolio/EtudeCasWithings";
+import { EtudeCasChateauLaCommanderie } from "@/components/portfolio/EtudeCasChateauLaCommanderie";
 import type { SectionGrid } from "@/content/withings-layout-config";
 
 // Configs layout par projet
@@ -70,6 +71,17 @@ export default async function ProjetPage({
   const projet = PROJETS[index];
   const precedent = PROJETS[(index - 1 + PROJETS.length) % PROJETS.length];
   const suivant = PROJETS[(index + 1) % PROJETS.length];
+
+  // Étude de cas sur-mesure — Château La Commanderie (slug agences-georges)
+  if (slug === "agences-georges") {
+    return (
+      <EtudeCasChateauLaCommanderie
+        projet={projet}
+        precedent={precedent}
+        suivant={suivant}
+      />
+    );
+  }
 
   // Étude de cas éditoriale sur-mesure (ex. Withings)
   if (projet.etudeCas) {

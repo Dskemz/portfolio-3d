@@ -139,19 +139,19 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "agences-georges",
-    titre: "Application Showroom 3D – Fashion Luxury",
+    titre: "Château La Commanderie — Modélisation 3D & Packaging",
     client: "Agences Georges",
     resume:
-      "Application interactive 3D pour présentation de collections haute couture, essayage virtuel et personnalisation en temps réel.",
-    categorie: "Application 3D",
-    annee: 2023,
+      "Accompagnement complet du développement d'une marque de vin : modélisation 3D de toute la gamme et mise en scène publicitaire haut de gamme, de 2013 à 2021.",
+    categorie: "Direction Artistique & Packaging",
+    annee: 2021,
     couverture: "/images/projets/agences-georges/01-hero.jpg",
-    role: "Lead 3D · Architecture WebGL",
-    outils: ["Three.js", "Babylon.js", "React", "Tailwind"],
-    types: ["temps-reel"],
-    defi: "Créer une expérience d'essayage virtuel fluide et intuitive pour collections de luxe, performante sur mobile et desktop.",
+    role: "Direction Artistique · Modélisation & Rendu 3D",
+    outils: ["Blender", "Substance", "Photoshop", "After Effects"],
+    types: ["modelisation", "design"],
+    defi: "Assurer une identité visuelle pérenne sur plusieurs millésimes et gommer l'effet « trop propre » de la 3D pour un rendu photoréaliste.",
     solution:
-      "Pipeline optimisé pour assets mode, shaders custom pour matières (soie, cuir, verre), interface épurée et responsive.",
+      "Modélisation rigoureuse des étiquettes et textures, shaders custom (verre, liège, dorure, capsule étain), packshots standardisés pour l'e-commerce et le print.",
   },
   {
     slug: "alquyme",
