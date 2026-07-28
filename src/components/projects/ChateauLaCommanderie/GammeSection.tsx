@@ -15,13 +15,17 @@ interface BottleItem {
 const BOTTLES_DATA: BottleItem[] = [
   {
     year: 2013,
-    bottleImage: '',
-    labelImage: '',
+    bottleImage:
+      'https://images.unsplash.com/photo-1608270861620-7a0be7e3c4d0?w=300&h=600&fit=crop',
+    labelImage:
+      'https://images.unsplash.com/photo-1608270861620-7a0be7e3c4d0?w=400&h=300&fit=crop',
   },
   {
     year: 2021,
-    bottleImage: '',
-    labelImage: '',
+    bottleImage:
+      'https://images.unsplash.com/photo-1608270861620-7a0be7e3c4d0?w=300&h=600&fit=crop',
+    labelImage:
+      'https://images.unsplash.com/photo-1608270861620-7a0be7e3c4d0?w=400&h=300&fit=crop',
   },
 ];
 
@@ -52,21 +56,22 @@ export default function GammeSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-16 md:py-20 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-amber-50 to-stone-100"
+      className="w-full py-24 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-slate-900 to-black"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
-        <div className="mb-16 md:mb-20 text-center">
-          <h2 className="text-3xl md:text-4xl font-light text-slate-900 mb-4">
-            Une Identité Visuelle Déclinée
+        <div className="mb-20 text-center">
+          <h2 className="text-4xl md:text-5xl font-light text-white mb-4">
+            Une Évolution Cohérente de la Gamme
           </h2>
-          <p className="text-sm md:text-base text-slate-700 font-light max-w-3xl mx-auto">
-            Accompagnement global sur plusieurs années (2013-2021) : modélisation rigoureuse des étiquettes et des textures (variations or et argent) pour assurer une identité visuelle pérenne.
+          <p className="text-base md:text-lg text-slate-300 font-light max-w-2xl mx-auto">
+            Modélisation rigoureuse des étiquettes et des textures sur plusieurs
+            millésimes pour assurer une identité visuelle pérenne.
           </p>
         </div>
 
-        {/* Bottles Grid - 2 items max */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 max-w-3xl mx-auto">
+        {/* Bottles Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12 max-w-3xl mx-auto">
           {BOTTLES_DATA.map((item, idx) => (
             <div
               key={item.year}
@@ -74,39 +79,27 @@ export default function GammeSection() {
               className="flex flex-col items-center gap-6 group"
             >
               {/* Bottle Image */}
-              <div className="relative w-full aspect-[2/5] overflow-hidden rounded-lg bg-white border border-stone-200">
-                <div className="w-full h-full bg-white flex items-center justify-center">
-                  {item.bottleImage ? (
-                    <img
-                      src={item.bottleImage}
-                      alt={`Château La Commanderie ${item.year}`}
-                      className="w-auto h-full object-contain transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="text-stone-300 text-sm">Bouteille {item.year}</div>
-                  )}
-                </div>
+              <div className="relative w-full h-[46vh] max-h-[460px] overflow-hidden rounded-lg bg-slate-800">
+                <img
+                  src={item.bottleImage}
+                  alt={`Château La Commanderie ${item.year}`}
+                  className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-105"
+                />
                 {/* Soft Shadow */}
-                <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.05)] pointer-events-none" />
+                <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.1)] pointer-events-none" />
               </div>
 
               {/* Label Image */}
-              <div className="w-full aspect-[4/3] rounded-md overflow-hidden bg-white border border-stone-200">
-                <div className="w-full h-full bg-stone-50 flex items-center justify-center">
-                  {item.labelImage ? (
-                    <img
-                      src={item.labelImage}
-                      alt={`Étiquette ${item.year}`}
-                      className="w-full h-full object-contain p-4"
-                    />
-                  ) : (
-                    <div className="text-stone-300 text-sm">Étiquette {item.year}</div>
-                  )}
-                </div>
+              <div className="w-full aspect-[4/3] rounded-md overflow-hidden bg-slate-800 border border-slate-700">
+                <img
+                  src={item.labelImage}
+                  alt={`Étiquette ${item.year}`}
+                  className="w-full h-full object-cover object-center"
+                />
               </div>
 
               {/* Year Label */}
-              <p className="text-center text-sm md:text-base font-light text-slate-700 tracking-wide">
+              <p className="text-center text-sm md:text-base font-light text-slate-400 tracking-wide">
                 Millésime {item.year}
               </p>
             </div>
