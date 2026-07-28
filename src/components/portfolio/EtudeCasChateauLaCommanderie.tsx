@@ -31,7 +31,7 @@ export function EtudeCasChateauLaCommanderie({
   suivant,
 }: EtudeCasChateauLaCommanderieProps) {
   return (
-    <div className="flex flex-1 flex-col overflow-x-clip bg-white">
+    <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
       <GammeSection />
       <TexturesSection />

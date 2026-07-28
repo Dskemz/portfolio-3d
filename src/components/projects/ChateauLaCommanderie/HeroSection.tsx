@@ -56,17 +56,12 @@ export default function HeroSection() {
       ref={containerRef}
       className="relative w-full h-screen bg-slate-900 overflow-hidden"
     >
-      {/* Hero Background Image */}
+      {/* Hero Background */}
       <div
         ref={heroImageRef}
-        className="absolute inset-0 w-full h-full bg-cover bg-center"
-        style={{
-          backgroundImage:
-            'url("https://images.unsplash.com/photo-1608270861620-7a0be7e3c4d0?w=1920&h=1080&fit=crop")',
-          backgroundPosition: 'center',
-        }}
+        className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-800 to-black"
       >
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/20" />
       </div>
 
       {/* Text Content */}

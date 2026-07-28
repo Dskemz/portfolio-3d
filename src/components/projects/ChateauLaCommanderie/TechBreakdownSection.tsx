@@ -81,15 +81,15 @@ export default function TechBreakdownSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-24 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-neutral-50 to-white"
+      className="w-full py-24 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-black to-slate-900"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <div className="mb-20">
-          <h2 className="text-4xl md:text-5xl font-light text-slate-900 mb-4">
+          <h2 className="text-4xl md:text-5xl font-light text-white mb-4">
             Analyse Technique & Passes de Rendu
           </h2>
-          <p className="text-base md:text-lg text-slate-600 font-light max-w-3xl">
+          <p className="text-base md:text-lg text-slate-300 font-light max-w-3xl">
             Décomposition du processus de rendu et de la topologie 3D. Chaque
             passe représente une couche du pipeline de production.
           </p>
@@ -105,29 +105,25 @@ export default function TechBreakdownSection() {
               onClick={() => setSelectedPass(pass)}
             >
               {/* Card */}
-              <div className="h-full rounded-lg overflow-hidden bg-white border border-neutral-200 transition-all duration-300 group-hover:border-slate-400 group-hover:shadow-xl">
+              <div className="h-full rounded-lg overflow-hidden bg-slate-800 border border-slate-700 transition-all duration-300 group-hover:border-slate-500 group-hover:shadow-xl">
                 {/* Image */}
                 <div className="relative w-full aspect-square overflow-hidden bg-neutral-100">
-                  <img
-                    src={pass.image}
-                    alt={pass.title}
-                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
-                  />
+                  <div className="w-full h-full bg-slate-700" />
                   {/* Overlay on hover */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-lg md:text-xl font-light text-slate-900 mb-2">
+                  <h3 className="text-lg md:text-xl font-light text-white mb-2">
                     {pass.title}
                   </h3>
-                  <p className="text-sm md:text-base text-slate-600 font-light mb-4">
+                  <p className="text-sm md:text-base text-slate-300 font-light mb-4">
                     {pass.description}
                   </p>
 
                   {/* Read More Indicator */}
-                  <div className="flex items-center gap-2 text-sm text-slate-500 group-hover:text-slate-900 transition-colors duration-300">
+                  <div className="flex items-center gap-2 text-sm text-slate-400 group-hover:text-white transition-colors duration-300">
                     <span>Détails</span>
                     <svg
                       className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
@@ -150,31 +146,31 @@ export default function TechBreakdownSection() {
         </div>
 
         {/* Technical Details Section */}
-        <div className="mt-20 bg-slate-50 rounded-lg p-8 md:p-12">
-          <h3 className="text-2xl md:text-3xl font-light text-slate-900 mb-8">
+        <div className="mt-20 bg-slate-800 rounded-lg p-8 md:p-12">
+          <h3 className="text-2xl md:text-3xl font-light text-white mb-8">
             Pipeline de Production
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="space-y-3">
-              <h4 className="text-lg font-light text-slate-900">Modélisation</h4>
-              <p className="text-sm md:text-base text-slate-600 font-light leading-relaxed">
+              <h4 className="text-lg font-light text-white">Modélisation</h4>
+              <p className="text-sm md:text-base text-slate-300 font-light leading-relaxed">
                 Topologie quad-based pour sculpture et déformation fluides.
                 Subdivision surfaces pour géométrie organique du bouchon.
               </p>
             </div>
             <div className="space-y-3">
-              <h4 className="text-lg font-light text-slate-900">Texturing</h4>
-              <p className="text-sm md:text-base text-slate-600 font-light leading-relaxed">
+              <h4 className="text-lg font-light text-white">Texturing</h4>
+              <p className="text-sm md:text-base text-slate-300 font-light leading-relaxed">
                 PBR workflow : Diffuse, Roughness, Metallic, Normal, AO maps.
                 Procédural texturing pour imperfections naturelles.
               </p>
             </div>
             <div className="space-y-3">
-              <h4 className="text-lg font-light text-slate-900">
+              <h4 className="text-lg font-light text-white">
                 Rendu & Composition
               </h4>
-              <p className="text-sm md:text-base text-slate-600 font-light leading-relaxed">
+              <p className="text-sm md:text-base text-slate-300 font-light leading-relaxed">
                 Éclairage 3 points studio. Passes AOV pour flexibilité en
                 post-production. Color grading pour cohérence visuelle.
               </p>
@@ -190,21 +186,17 @@ export default function TechBreakdownSection() {
           onClick={() => setSelectedPass(null)}
         >
           <div
-            className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-slate-900 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative">
-              <img
-                src={selectedPass.image}
-                alt={selectedPass.title}
-                className="w-full aspect-square object-cover"
-              />
+            <div className="relative bg-slate-800">
+              <div className="w-full aspect-square bg-slate-700" />
               <button
                 onClick={() => setSelectedPass(null)}
-                className="absolute top-4 right-4 bg-white/90 hover:bg-white p-2 rounded-full transition-all"
+                className="absolute top-4 right-4 bg-slate-800/90 hover:bg-slate-700 p-2 rounded-full transition-all"
               >
                 <svg
-                  className="w-6 h-6 text-slate-900"
+                  className="w-6 h-6 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -219,10 +211,10 @@ export default function TechBreakdownSection() {
               </button>
             </div>
             <div className="p-8">
-              <h3 className="text-2xl font-light text-slate-900 mb-4">
+              <h3 className="text-2xl font-light text-white mb-4">
                 {selectedPass.title}
               </h3>
-              <p className="text-base text-slate-600 font-light leading-relaxed">
+              <p className="text-base text-slate-300 font-light leading-relaxed">
                 {selectedPass.fullDescription}
               </p>
             </div>

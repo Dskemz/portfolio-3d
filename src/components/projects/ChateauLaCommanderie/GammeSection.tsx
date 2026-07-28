@@ -98,15 +98,15 @@ export default function GammeSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-24 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-white to-neutral-50"
+      className="w-full py-24 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-slate-900 to-black"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <div className="mb-20 text-center">
-          <h2 className="text-4xl md:text-5xl font-light text-slate-900 mb-4">
+          <h2 className="text-4xl md:text-5xl font-light text-white mb-4">
             Une Évolution Cohérente de la Gamme
           </h2>
-          <p className="text-base md:text-lg text-slate-600 font-light max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-slate-300 font-light max-w-2xl mx-auto">
             Modélisation rigoureuse des étiquettes et des textures sur plusieurs
             millésimes pour assurer une identité visuelle pérenne.
           </p>
@@ -121,7 +121,7 @@ export default function GammeSection() {
               className="flex flex-col items-center gap-6 group"
             >
               {/* Bottle Image */}
-              <div className="relative w-full aspect-[2/5] overflow-hidden rounded-lg bg-neutral-100">
+              <div className="relative w-full aspect-[2/5] overflow-hidden rounded-lg bg-slate-800">
                 <img
                   src={item.bottleImage}
                   alt={`Château La Commanderie ${item.year}`}
@@ -132,7 +132,7 @@ export default function GammeSection() {
               </div>
 
               {/* Label Image */}
-              <div className="w-full aspect-[4/3] rounded-md overflow-hidden bg-neutral-50 border border-neutral-200">
+              <div className="w-full aspect-[4/3] rounded-md overflow-hidden bg-slate-800 border border-slate-700">
                 <img
                   src={item.labelImage}
                   alt={`Étiquette ${item.year}`}
@@ -141,7 +141,7 @@ export default function GammeSection() {
               </div>
 
               {/* Year Label */}
-              <p className="text-center text-sm md:text-base font-light text-slate-600 tracking-wide">
+              <p className="text-center text-sm md:text-base font-light text-slate-400 tracking-wide">
                 Millésime {item.year}
               </p>
             </div>
