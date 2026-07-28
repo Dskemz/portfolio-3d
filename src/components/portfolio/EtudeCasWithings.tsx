@@ -1,4 +1,5 @@
 import { Reveal } from "../ui/Reveal";
+import { IMAGES_WITHINGS } from "@/content/withings-config";
 import { VisuelWithings } from "./VisuelWithings";
 import { ProjectNavigation } from "./ProjectNavigation";
 import { CtaSignature } from "./CtaSignature";
