@@ -31,12 +31,12 @@ export default function TheVault() {
           onClick={() => setFiltre("tous")}
           label="Tous"
         />
-        {TYPES_PROJETS.map((type) => (
+        {Object.entries(TYPES_PROJETS).map(([id, { label }]) => (
           <FiltreBouton
-            key={type.id}
-            actif={filtre === type.id}
-            onClick={() => setFiltre(type.id)}
-            label={type.label}
+            key={id}
+            actif={filtre === id}
+            onClick={() => setFiltre(id as any)}
+            label={label}
           />
         ))}
       </div>
@@ -107,13 +107,14 @@ export default function TheVault() {
 
                   <div className="flex flex-wrap gap-2 pt-1">
                     {projet.types.map((typeId) => {
-                      const type = TYPES_PROJETS.find((t) => t.id === typeId);
+                      const typeData = TYPES_PROJETS[typeId];
+                      if (!typeData) return null;
                       return (
                         <span
                           key={typeId}
                           className="inline-block border border-mine px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.2em] text-trait transition-colors duration-300 group-hover:border-orange-500/40"
                         >
-                          {type?.label}
+                          {typeData.label}
                         </span>
                       );
                     })}
