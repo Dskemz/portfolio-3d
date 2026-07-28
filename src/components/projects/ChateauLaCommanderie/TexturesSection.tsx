@@ -51,22 +51,22 @@ export default function TexturesSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-24 px-6 md:px-12 lg:px-20 bg-black"
+      className="w-full py-16 md:py-20 px-6 md:px-12 lg:px-20 bg-black"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
-        <div className="mb-20 max-w-2xl">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-4">
+        <div className="mb-12 md:mb-16 max-w-2xl">
+          <h2 className="text-3xl md:text-4xl font-light text-white mb-3">
             Maîtrise des Textures & du Photoralisme
           </h2>
-          <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed">
+          <p className="text-sm md:text-base text-slate-300 font-light leading-relaxed">
             Travail minutieux sur les shaders (rugosité du verre, imperfections,
             relief des capsules) pour gommer l'effet "trop propre" de la 3D.
           </p>
         </div>
 
         {/* Asymmetric Masonry Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {/* Left Image - Larger */}
           <div
             ref={leftImageRef}
@@ -106,7 +106,7 @@ export default function TexturesSection() {
         </div>
 
         {/* Technical Details */}
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           <div className="space-y-3">
             <h3 className="text-lg md:text-xl font-light text-white">
               Subsurface Scattering & Matériaux Organiques

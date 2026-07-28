@@ -71,22 +71,22 @@ export default function PackshotsSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-24 px-6 md:px-12 lg:px-20 bg-black"
+      className="w-full py-16 md:py-20 px-6 md:px-12 lg:px-20 bg-stone-100"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
-        <div className="mb-20 text-center">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-4">
+        <div className="mb-16 md:mb-20 text-center">
+          <h2 className="text-3xl md:text-4xl font-light text-slate-900 mb-4">
             Packshots Commerciaux
           </h2>
-          <p className="text-base md:text-lg text-slate-300 font-light max-w-2xl mx-auto">
+          <p className="text-sm md:text-base text-slate-700 font-light max-w-3xl mx-auto">
             Déclinaisons standardisées de la gamme prêtes pour l'e-commerce et
             les catalogues print.
           </p>
         </div>
 
         {/* Packshots Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-4">
           {PACKSHOTS_DATA.map((packshot, idx) => (
             <div
               key={packshot.id}
@@ -94,7 +94,7 @@ export default function PackshotsSection() {
               className="group flex flex-col items-center text-center"
             >
               {/* Studio Background - Soft Shadow */}
-              <div className="w-full mb-6 bg-gradient-to-b from-slate-800 via-slate-900 to-black rounded-xl p-8 min-h-[400px] flex items-center justify-center overflow-hidden relative">
+              <div className="w-full mb-4 bg-gradient-to-b from-white via-stone-50 to-stone-100 rounded-lg p-4 md:p-6 aspect-[3/4] flex items-center justify-center overflow-hidden relative">
                 {/* Subtle grid background */}
                 <div
                   className="absolute inset-0 opacity-5"
@@ -112,11 +112,11 @@ export default function PackshotsSection() {
               </div>
 
               {/* Info */}
-              <div className="space-y-2">
-                <h3 className="text-lg md:text-xl font-light text-white">
+              <div className="space-y-1 text-center">
+                <h3 className="text-base md:text-lg font-light text-slate-900">
                   {packshot.variant}
                 </h3>
-                <p className="text-sm text-slate-400 font-light uppercase tracking-wide">
+                <p className="text-xs md:text-sm text-slate-600 font-light uppercase tracking-wide">
                   {packshot.description}
                 </p>
               </div>
@@ -125,45 +125,45 @@ export default function PackshotsSection() {
         </div>
 
         {/* Specifications */}
-        <div className="mt-24 pt-20 border-t border-slate-700">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="mt-12 pt-12 border-t border-stone-300">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             <div>
-              <h4 className="text-sm font-light text-slate-400 uppercase tracking-wider mb-2">
+              <h4 className="text-xs md:text-sm font-light text-slate-700 uppercase tracking-wider mb-2">
                 Résolution
               </h4>
-              <p className="text-lg md:text-xl font-light text-white">
+              <p className="text-base md:text-lg font-light text-slate-900">
                 4K - 4096x6144px
               </p>
             </div>
             <div>
-              <h4 className="text-sm font-light text-slate-400 uppercase tracking-wider mb-2">
+              <h4 className="text-xs md:text-sm font-light text-slate-700 uppercase tracking-wider mb-2">
                 Format
               </h4>
-              <p className="text-lg md:text-xl font-light text-white">
+              <p className="text-base md:text-lg font-light text-slate-900">
                 PNG 32-bit + Alpha
               </p>
             </div>
             <div>
-              <h4 className="text-sm font-light text-slate-400 uppercase tracking-wider mb-2">
+              <h4 className="text-xs md:text-sm font-light text-slate-700 uppercase tracking-wider mb-2">
                 Profondeur Couleur
               </h4>
-              <p className="text-lg md:text-xl font-light text-white">
+              <p className="text-base md:text-lg font-light text-slate-900">
                 sRGB / Adobe RGB
               </p>
             </div>
             <div>
-              <h4 className="text-sm font-light text-slate-400 uppercase tracking-wider mb-2">
+              <h4 className="text-xs md:text-sm font-light text-slate-700 uppercase tracking-wider mb-2">
                 Utilisation
               </h4>
-              <p className="text-lg md:text-xl font-light text-white">
+              <p className="text-base md:text-lg font-light text-slate-900">
                 Web & Print
               </p>
             </div>
           </div>
 
           {/* Formats Section */}
-          <div className="mt-16 space-y-4">
-            <h4 className="text-xl md:text-2xl font-light text-white">
+          <div className="mt-12 space-y-4">
+            <h4 className="text-lg md:text-xl font-light text-slate-900">
               Déclinaisons Disponibles
             </h4>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -176,8 +176,8 @@ export default function PackshotsSection() {
                 'Avec étiquette détachée',
               ].map((format, idx) => (
                 <div key={idx} className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-slate-500" />
-                  <span className="text-sm md:text-base text-slate-300 font-light">
+                  <div className="w-2 h-2 rounded-full bg-slate-400" />
+                  <span className="text-xs md:text-sm text-slate-700 font-light">
                     {format}
                   </span>
                 </div>

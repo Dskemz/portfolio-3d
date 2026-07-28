@@ -54,7 +54,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-screen bg-slate-900 overflow-hidden"
+      className="relative w-full min-h-screen md:h-screen bg-slate-900 overflow-hidden"
     >
       {/* Hero Background */}
       <div
@@ -70,21 +70,21 @@ export default function HeroSection() {
         className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center"
       >
         {/* Surtitre */}
-        <div className="mb-6 tracking-widest">
-          <p className="text-sm md:text-base font-light text-neutral-300 uppercase letter-spacing">
+        <div className="mb-4 md:mb-6 tracking-widest">
+          <p className="text-xs md:text-sm font-light text-neutral-400 uppercase letter-spacing">
             Projet 3D — Direction Artistique & Packaging
           </p>
         </div>
 
         {/* Titre Principal */}
-        <h1 className="mb-6 text-5xl md:text-7xl font-thin text-white leading-tight max-w-4xl">
+        <h1 className="mb-4 md:mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl">
           La Commanderie
           <br />
-          <span className="text-neutral-400">de 2013 à 2021</span>
+          <span className="text-neutral-400 text-3xl md:text-5xl">de 2013 à 2021</span>
         </h1>
 
         {/* Paragraphe Descriptif */}
-        <p className="max-w-2xl text-base md:text-lg text-neutral-300 font-light leading-relaxed">
+        <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
           Étude de cas d'un accompagnement complet pour le développement d'une
           marque de vin : modélisation 3D de toute la gamme et mise en scène
           publicitaire haut de gamme.
