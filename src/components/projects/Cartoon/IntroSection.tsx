@@ -82,7 +82,7 @@ export default function IntroSection() {
             className="lg:col-span-7 group relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-200 to-teal-200 aspect-[4/5] lg:aspect-auto lg:min-h-[560px]"
           >
             <img
-              src="/images/projets/creation-originales/scientifique.png"
+              src="/images/projets/creation-originales/scientifique.jpg"
               alt="Personnage cartoon — visuel phare"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
@@ -105,7 +105,7 @@ export default function IntroSection() {
               className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-200 to-indigo-200 aspect-[4/3] flex-1"
             >
               <img
-                src="/images/projets/creation-originales/astronaute.png"
+                src="/images/projets/creation-originales/astronaute.jpg"
                 alt="Petit astronaute aux ballons en forme de cœur"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
