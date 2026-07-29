@@ -56,7 +56,7 @@ export default function HeroSection() {
       */}
       <div
         ref={heroImageRef}
-        className="absolute inset-0 w-full h-full bg-gradient-to-br from-orange-300 to-rose-400 md:bg-right"
+        className="absolute inset-0 w-full h-full bg-[#121212] md:bg-right"
         style={{
           backgroundImage: 'url("/images/projets/creation-originales/01-hero.jpg")',
           backgroundPosition: '70% center',
