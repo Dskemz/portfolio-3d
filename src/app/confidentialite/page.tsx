@@ -32,16 +32,15 @@ export default function PolitiqueConfidentialite() {
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Introduction</h2>
           <div className="space-y-4 text-gray-700">
             <p>
-              Visite3D ("nous", "notre" ou "nos") s'engage à protéger votre vie privée. Cette
+              Denis Masquet s'engage à protéger votre vie privée. Cette
               Politique de Confidentialité explique comment nous collectons, utilisons, divulguons
               et stockons vos données personnelles.
             </p>
             <p>
-              Cette politique s'applique à tous les services fournis par Visite3D, y compris:
+              Cette politique s'applique à tous les services fournis par Denis Masquet, y compris:
             </p>
             <ul className="list-disc ml-6 space-y-1">
               <li>Hub_Visite3D (plateforme de création de visites virtuelles)</li>
-              <li>MotionLogo (générateur d'icônes IA)</li>
               <li>Site web et formulaires de contact</li>
               <li>Tous les services futurs</li>
             </ul>
@@ -76,20 +75,9 @@ export default function PolitiqueConfidentialite() {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">1.3 Données de compte</h3>
-              <p className="mb-2">
-                <strong>Collecte:</strong> Lors de l'inscription à Hub_Visite3D ou MotionLogo
-              </p>
-              <p>
-                <strong>Données:</strong> Identifiants, mot de passe haché, profil, préférences,
-                historique de création
-              </p>
-            </div>
-
-            <div>
               <h3 className="text-lg font-semibold text-gray-800 mb-2">1.4 Données de paiement</h3>
               <p className="mb-2">
-                <strong>Collecte:</strong> Via Stripe/PayPal (jamais stocké par Visite3D)
+                <strong>Collecte:</strong> Via Stripe/PayPal (jamais stocké par Denis Masquet)
               </p>
               <p>
                 <strong>Données:</strong> Fournisseur de paiement traite les données bancaires
@@ -117,10 +105,6 @@ export default function PolitiqueConfidentialite() {
             <div className="border-l-4 border-bleu-encre pl-4">
               <h3 className="font-semibold mb-2">📋 Consentement (Art. 6.1.a)</h3>
               <p>Formulaire de contact, newsletter, marketing</p>
-            </div>
-            <div className="border-l-4 border-bleu-encre pl-4">
-              <h3 className="font-semibold mb-2">📜 Contrat (Art. 6.1.b)</h3>
-              <p>Données d'utilisation des services Hub_Visite3D, MotionLogo</p>
             </div>
             <div className="border-l-4 border-purple-500 pl-4">
               <h3 className="font-semibold mb-2">⚖️ Obligation légale (Art. 6.1.c)</h3>
@@ -245,7 +229,7 @@ export default function PolitiqueConfidentialite() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">7. Sécurité des données</h2>
           <div className="space-y-4 text-gray-700">
-            <p>Visite3D implémente des mesures de sécurité techniques et organisationnelles:</p>
+            <p>Denis Masquet implémente des mesures de sécurité techniques et organisationnelles:</p>
             <ul className="list-disc ml-6 space-y-2">
               <li>Chiffrement SSL/TLS pour toutes les transmissions</li>
               <li>Authentification JWT pour l'accès aux services</li>
@@ -336,12 +320,12 @@ export default function PolitiqueConfidentialite() {
           <div className="space-y-4 text-gray-700">
             <div>
               <p className="font-semibold mb-2">📧 Responsable de traitement</p>
-              <p className="text-sm">D, Visite3D</p>
-              <p className="text-sm">contact@example.com</p>
+              <p className="text-sm">Denis Masquet</p>
+              <p className="text-sm">denis.masquet@gmail.com</p>
             </div>
             <div>
               <p className="font-semibold mb-2">🔐 Délégué à la protection des données</p>
-              <p className="text-sm">contact@example.com</p>
+              <p className="text-sm">denis.masquet@gmail.com</p>
             </div>
             <div>
               <p className="font-semibold mb-2">📋 CNIL</p>
