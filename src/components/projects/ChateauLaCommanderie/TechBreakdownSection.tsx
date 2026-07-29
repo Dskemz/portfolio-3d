@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
-import { getImageUrl } from '@/lib/imageResolver';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -20,7 +19,7 @@ const RENDER_PASSES: RenderPass[] = [
     id: 'diffuse',
     title: 'Passe Diffuse Color',
     description: 'Couleurs de base et albédo',
-    image: '/images/projets/agences-georges/08-tech-pass-08.svg',
+    image: '/images/projets/agences-georges/08-tech-pass-08.jpg',
     fullDescription:
       'La passe Diffuse Color représente les couleurs de base sans éclairage. Elle capture l\'albédo de chaque matériau : verre teinté, étiquette, bouchon.',
   },
@@ -28,7 +27,7 @@ const RENDER_PASSES: RenderPass[] = [
     id: 'roughness',
     title: 'Passe Roughness / Reflections',
     description: 'Réflectivité et rugosité des surfaces',
-    image: '/images/projets/agences-georges/09-tech-pass-09.svg',
+    image: '/images/projets/agences-georges/09-tech-pass-09.jpg',
     fullDescription:
       'La carte de rugosité définit comment chaque surface diffuse ou réfléchit la lumière. Le verre est hautement réfléchissant, l\'étiquette très diffuse.',
   },
@@ -36,15 +35,15 @@ const RENDER_PASSES: RenderPass[] = [
     id: 'wireframe',
     title: 'Topologie & Wireframe',
     description: 'Géométrie et maillage 3D',
-    image: '/images/projets/agences-georges/10-tech-pass-10.svg',
+    image: '/images/projets/agences-georges/10-tech-pass-10.jpg',
     fullDescription:
-      'Topologie propre et optimisée du maillage. Densité de polygones adaptée au niveau de détail requis : subdivisions au goulot et bouchon.',
+      'Topologie propre et optimisée du maillage. Densité de polygones adaptée au niveau de détail requis.',
   },
   {
     id: 'final',
     title: 'Image Finale Compositée',
     description: 'Rendu complet avec éclairage et effets',
-    image: '/images/projets/agences-georges/11-tech-pass-11.svg',
+    image: '/images/projets/agences-georges/11-tech-pass-11.jpg',
     fullDescription:
       'Composition finale intégrant tous les éléments : éclairage 3 points studio, reflets, ombres et post-traitement.',
   },
@@ -57,7 +56,6 @@ export default function TechBreakdownSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Stagger animation on grid items
       gsap.from(gridItemsRef.current, {
         opacity: 0,
         scale: 0.95,
@@ -71,7 +69,6 @@ export default function TechBreakdownSection() {
         },
       });
     }, containerRef);
-
     return () => ctx.revert();
   }, []);
 
@@ -81,7 +78,6 @@ export default function TechBreakdownSection() {
       className="w-full py-16 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-black to-slate-900"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Section Title */}
         <div className="mb-14">
           <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
             Analyse Technique & Passes de Rendu
@@ -92,7 +88,6 @@ export default function TechBreakdownSection() {
           </p>
         </div>
 
-        {/* Grid 2x2 */}
         <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-2xl mx-auto">
           {RENDER_PASSES.map((pass, idx) => (
             <div
@@ -101,53 +96,30 @@ export default function TechBreakdownSection() {
               className="group cursor-pointer"
               onClick={() => setSelectedPass(pass)}
             >
-              {/* Card */}
-              <div className="h-full rounded-lg overflow-hidden bg-slate-800 border border-slate-700 transition-all duration-300 group-hover:border-slate-500 group-hover:shadow-xl">
-                {/* Image */}
-                <div className="relative w-full aspect-square overflow-hidden bg-neutral-100">
-                  <div className="w-full h-full bg-slate-700" />
-                  {/* Overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-
-                {/* Content */}
-                <div className="p-4">
-                  <h3 className="text-sm md:text-base font-light text-white mb-2">
+              <div className="relative aspect-square overflow-hidden rounded-lg bg-slate-800">
+                <img
+                  src={pass.image}
+                  alt={pass.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <h3 className="text-sm md:text-base font-light text-white">
                     {pass.title}
                   </h3>
-                  <p className="text-sm md:text-base text-slate-300 font-light mb-4">
+                  <p className="text-xs text-slate-400 font-light mt-1 hidden md:block">
                     {pass.description}
                   </p>
-
-                  {/* Read More Indicator */}
-                  <div className="flex items-center gap-2 text-sm text-slate-400 group-hover:text-white transition-colors duration-300">
-                    <span>Détails</span>
-                    <svg
-                      className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Technical Details Section */}
         <div className="mt-20 bg-slate-800 rounded-lg p-8 md:p-12">
           <h3 className="text-2xl md:text-3xl font-light text-white mb-8">
             Pipeline de Production
           </h3>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="space-y-3">
               <h4 className="text-lg font-light text-white">Modélisation</h4>
@@ -164,9 +136,7 @@ export default function TechBreakdownSection() {
               </p>
             </div>
             <div className="space-y-3">
-              <h4 className="text-lg font-light text-white">
-                Rendu & Composition
-              </h4>
+              <h4 className="text-lg font-light text-white">Rendu & Composition</h4>
               <p className="text-sm md:text-base text-slate-300 font-light leading-relaxed">
                 Éclairage 3 points studio. Passes AOV pour flexibilité en
                 post-production. Color grading pour cohérence visuelle.
@@ -176,45 +146,38 @@ export default function TechBreakdownSection() {
         </div>
       </div>
 
-      {/* Modal detail view */}
       {selectedPass && (
         <div
-          className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-6"
           onClick={() => setSelectedPass(null)}
         >
           <div
-            className="bg-slate-900 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className="relative max-w-3xl w-full bg-slate-900 rounded-lg overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative bg-slate-800">
-              <div className="w-full aspect-square bg-slate-700" />
-              <button
-                onClick={() => setSelectedPass(null)}
-                className="absolute top-4 right-4 bg-slate-800/90 hover:bg-slate-700 p-2 rounded-full transition-all"
-              >
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
+            <div className="aspect-video relative">
+              <img
+                src={selectedPass.image}
+                alt={selectedPass.title}
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="p-8">
               <h3 className="text-2xl font-light text-white mb-4">
                 {selectedPass.title}
               </h3>
-              <p className="text-base text-slate-300 font-light leading-relaxed">
+              <p className="text-sm md:text-base text-slate-300 font-light leading-relaxed">
                 {selectedPass.fullDescription}
               </p>
             </div>
+            <button
+              className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+              onClick={() => setSelectedPass(null)}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
       )}

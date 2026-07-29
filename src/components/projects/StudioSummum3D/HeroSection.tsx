@@ -2,67 +2,103 @@
 
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
-import { getImageUrl } from '@/lib/imageResolver';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const heroImageRef = useRef<HTMLDivElement>(null);
+  const textContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(imageRef.current, {
-        scale: 1.15,
-        opacity: 0,
-        duration: 1.8,
-        ease: 'power3.out',
+      gsap.to(heroImageRef.current, {
+        scrollTrigger: {
+          id: 'heroScroll',
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom center',
+          scrub: 1,
+          onUpdate: (self) => {
+            gsap.to(heroImageRef.current, {
+              y: -self.progress * 100,
+              duration: 0,
+            });
+          },
+        },
       });
-      gsap.from(textRef.current, {
-        y: 60,
+      gsap.to(textContentRef.current, {
         opacity: 0,
-        duration: 1.2,
-        delay: 0.4,
-        ease: 'power3.out',
+        y: -50,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'center center',
+          scrub: 0.5,
+        },
       });
-    }, sectionRef);
+    }, containerRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative w-full min-h-screen bg-black overflow-hidden">
-      {/* Full-bleed image */}
+    <section
+      ref={containerRef}
+      className="relative w-full h-screen bg-slate-900 overflow-hidden"
+    >
       <div
-        ref={imageRef}
-        className="absolute inset-0 w-full h-full"
+        ref={heroImageRef}
+        className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-800 to-black"
         style={{
-          backgroundImage: `url("${getImageUrl('/images/projets/summum-3d/01-hero')}")`,
+          backgroundImage: 'url("/images/projets/summum-3d/01-hero.jpg")',
           backgroundPosition: 'center',
           backgroundSize: 'cover',
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
+        <div className="absolute inset-0 bg-black/20" />
       </div>
 
-      {/* Text — bottom-left aligned, editorial */}
       <div
-        ref={textRef}
-        className="relative z-10 h-full min-h-screen flex flex-col justify-end px-6 md:px-16 lg:px-24 pb-20 md:pb-28"
+        ref={textContentRef}
+        className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center"
       >
-        <p className="text-[10px] md:text-xs font-mono uppercase tracking-[0.3em] text-neutral-500 mb-4">
-          Photogrammétrie · Retopologie · GLB
-        </p>
+        <div className="mb-6 tracking-widest">
+          <p className="text-sm md:text-base font-light text-neutral-300 uppercase letter-spacing">
+            Projet 3D — Photogrammétrie & Patrimoine
+          </p>
+        </div>
 
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extralight text-white leading-[1.05] max-w-3xl mb-6">
+        <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl">
           Studio Summum
+          <br />
+          <span className="text-neutral-400">La Sauvegarde Numérique d&apos;Œuvres d&apos;Art</span>
         </h1>
 
-        <p className="max-w-lg text-sm md:text-base text-neutral-400 font-light leading-relaxed">
+        <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
           Numérisation haute fidélité d&apos;œuvres d&apos;art par photogrammétrie,
-          retopologie et optimisation pour le temps réel.
+          retopologie et optimisation pour une exploitation fluide en temps
+          réel (GLTF/GLB).
         </p>
 
-        {/* Scroll line */}
-        <div className="mt-12 w-px h-16 bg-gradient-to-b from-neutral-600 to-transparent" />
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+          <p className="text-xs text-neutral-400 uppercase tracking-wider">
+            Scroll
+          </p>
+          <svg
+            className="w-4 h-6 text-neutral-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M19 14l-7 7m0 0l-7-7m7 7V3"
+            />
+          </svg>
+        </div>
       </div>
     </section>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { getImageUrl } from "@/lib/imageResolver";
 
 /**
  * Écrin de la visite. L'iframe (annonce Laforêt → viewer 3D, tout se passe à
@@ -109,7 +108,7 @@ export default function VisiteEmbed() {
           {/* Châssis par-dessus, transparent aux clics */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={getImageUrl("/images/laptop")}
+            src="/images/laptop.png"
             alt=""
             aria-hidden="true"
             draggable={false}
