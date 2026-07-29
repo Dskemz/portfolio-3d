@@ -5,6 +5,7 @@ import { GenericProjetPage } from "@/components/portfolio/GenericProjetPage";
 import { EtudeCasWithings } from "@/components/portfolio/EtudeCasWithings";
 import { EtudeCasChateauLaCommanderie } from "@/components/portfolio/EtudeCasChateauLaCommanderie";
 import { EtudeCasStudioSummum } from "@/components/portfolio/EtudeCasStudioSummum";
+import { EtudeCasCartoon } from "@/components/portfolio/EtudeCasCartoon";
 import type { SectionGrid } from "@/content/withings-layout-config";
 
 // Configs layout par projet
@@ -88,6 +89,17 @@ export default async function ProjetPage({
   if (slug === "summum-3d") {
     return (
       <EtudeCasStudioSummum
+        projet={projet}
+        precedent={precedent}
+        suivant={suivant}
+      />
+    );
+  }
+
+  // Étude de cas sur-mesure — Le Cartoon mis en scène (slug creation-originales)
+  if (slug === "creation-originales") {
+    return (
+      <EtudeCasCartoon
         projet={projet}
         precedent={precedent}
         suivant={suivant}
