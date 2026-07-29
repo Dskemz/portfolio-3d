@@ -40,7 +40,7 @@ export const SECTION_BANNER: SectionGrid = {
 };
 
 export const SECTION_DETAILS: SectionGrid = {
-  colonnes: 2,
+  colonnes: 3,
   gap: "gap-4",
   images: [
     {
@@ -66,5 +66,24 @@ export const SECTION_DETAILS: SectionGrid = {
     },
   ],
 };
-
+export const SECTION_S: SectionGrid = {
+  colonnes: 3,
+  gap: "gap-4",
+  images: [
+    {
+      name: "03-detail-1",
+      label: "Détail 1",
+      ratio: "1/1",
+      teinte: "#14161a",
+      colSpan: 1,
+    },
+    {
+      name: "04-detail-1",
+      label: "Détail 1",
+      ratio: "1/1",
+      teinte: "#14161a",
+      colSpan: 1,
+    },
+  ],
+};
 export const SECTIONS_AGENCES_GEORGES = [SECTION_BANNER, SECTION_DETAILS];
