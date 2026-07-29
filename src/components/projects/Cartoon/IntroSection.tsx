@@ -55,7 +55,7 @@ export default function IntroSection() {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-20 px-6 md:px-12 lg:px-20 bg-[#faf7f2]"
+      className="w-full py-20 px-6 md:px-12 lg:px-20 bg-gradient-to-br from-[#0a0f1d] to-[#121212]"
     >
       <div className="max-w-7xl mx-auto">
         {/* Bloc texte épuré */}
@@ -63,7 +63,7 @@ export default function IntroSection() {
           <p className="text-xs font-medium text-rose-400 uppercase tracking-[0.3em] mb-5">
             01 — Le cartoon
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-neutral-900 leading-[1.15]">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white leading-[1.15]">
             Allier deux idées,
             <br />
             obtenir une création.
