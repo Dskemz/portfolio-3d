@@ -1,0 +1,9 @@
+<svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1920" height="1080" fill="#1e293b"/>
+  <text x="960" y="540" font-size="120" font-weight="bold" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle" font-family="Arial">
+    IMAGE 01 - HERO
+  </text>
+  <text x="960" y="650" font-size="40" fill="#64748b" text-anchor="middle" dominant-baseline="middle" font-family="Arial">
+    Format paysage 16:9 (1920x1080px)
+  </text>
+</svg>

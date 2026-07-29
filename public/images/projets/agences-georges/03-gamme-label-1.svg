@@ -1,0 +1,5 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1e293b"/>
+  <text x="200" y="150" font-size="40" font-weight="bold" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle" font-family="Arial">IMG 03</text>
+  <text x="200" y="210" font-size="18" fill="#64748b" text-anchor="middle" font-family="Arial">Gamme Étiquette 1</text>
+</svg>
