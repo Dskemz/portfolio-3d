@@ -128,10 +128,10 @@ export default function ScenesSection() {
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
-              <h3 className="text-base md:text-lg font-light text-neutral-900">
+              <h3 className="text-base md:text-lg font-light text-white">
                 {c.titre}
               </h3>
-              <p className="text-sm text-neutral-400 font-light mt-0.5">
+              <p className="text-sm text-white font-light mt-0.5">
                 {c.legende}
               </p>
             </div>

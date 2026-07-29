@@ -15,7 +15,7 @@ export default function ProjectFooter() {
               <h4 className="text-xs font-medium text-neutral-400 uppercase tracking-widest mb-4">
                 Projet
               </h4>
-              <h3 className="text-2xl md:text-3xl font-light text-neutral-900">
+              <h3 className="text-2xl md:text-3xl font-light text-white">
                 Le Cartoon mis en scène
               </h3>
               <p className="text-sm text-neutral-500 font-light mt-2">
@@ -27,7 +27,7 @@ export default function ProjectFooter() {
               <h4 className="text-xs font-medium text-neutral-400 uppercase tracking-widest mb-4">
                 Univers
               </h4>
-              <p className="text-lg md:text-xl font-light text-neutral-900">
+              <p className="text-lg md:text-xl font-light text-white">
                 Cartoon &amp; Design ludique
               </p>
             </div>
@@ -64,7 +64,7 @@ export default function ProjectFooter() {
             <div className="flex flex-col gap-4">
               <Link
                 href="/portfolio"
-                className="group inline-flex items-center gap-3 text-sm md:text-base font-light text-neutral-900 hover:text-neutral-500 transition-colors duration-300 w-fit"
+                className="group inline-flex items-center gap-3 text-sm md:text-base font-light text-white hover:text-neutral-500 transition-colors duration-300 w-fit"
               >
                 <span>Voir tous les projets</span>
                 <svg
