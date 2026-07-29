@@ -72,7 +72,7 @@ export default function HeroSection() {
         <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl">
           Studio Summum
           <br />
-          <span className="text-neutral-400">La Sauvegarde Numérique d&apos;Œuvres d&apos;Art</span>
+          <span className="text-neutral-800">La Sauvegarde Numérique d&apos;Œuvres d&apos;Art</span>
         </h1>
 
         <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
