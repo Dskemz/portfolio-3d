@@ -64,7 +64,7 @@ export default function HeroSection() {
         className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center"
       >
         <div className="mb-6 tracking-widest">
-          <p className="text-sm md:text-base font-light text-orange-600 uppercase letter-spacing">
+          <p className="text-sm md:text-base font-light text-white uppercase letter-spacing">
             Projet 3D — Photogrammétrie & Patrimoine
           </p>
         </div>
@@ -75,7 +75,7 @@ export default function HeroSection() {
           <span className="text-white">La Sauvegarde Numérique d&apos;Œuvres d&apos;Art</span>
         </h1>
 
-        <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
+        <p className="max-w-2xl text-sm md:text-base text-white font-light leading-relaxed">
           Numérisation haute fidélité d&apos;œuvres d&apos;art par photogrammétrie,
           retopologie et optimisation pour une exploitation fluide en temps
           réel (GLTF/GLB).
