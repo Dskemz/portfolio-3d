@@ -94,7 +94,7 @@ export default function HeroSection() {
           pour la grande distribution.
         </p>
 
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 md:left-16 lg:left-24 md:translate-x-0 flex flex-col items-center gap-2 animate-bounce">
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
           <p className="text-xs text-neutral-400 uppercase tracking-wider">
             Scroll
           </p>

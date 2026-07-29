@@ -49,22 +49,22 @@ export default function HeroSection() {
     >
       <div
         ref={heroImageRef}
-        className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-800 to-black"
+        className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-800 to-black md:bg-right"
         style={{
           backgroundImage: 'url("/images/projets/summum-3d/01-hero.jpg")',
-          backgroundPosition: 'center',
+          backgroundPosition: '70% center',
           backgroundSize: 'cover',
         }}
       >
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-black/40 md:bg-black/20" />
       </div>
 
       <div
         ref={textContentRef}
-        className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center"
+        className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center md:items-start md:text-left md:px-16 lg:px-24"
       >
         <div className="mb-6 tracking-widest">
-          <p className="text-sm md:text-base font-light text-white uppercase letter-spacing">
+          <p className="text-sm md:text-base font-light text-neutral-300 uppercase letter-spacing">
             Projet 3D — Photogrammétrie & Patrimoine
           </p>
         </div>
@@ -72,21 +72,21 @@ export default function HeroSection() {
         <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl">
           Studio Summum
           <br />
-          <span className="text-white">La Sauvegarde Numérique d&apos;Œuvres d&apos;Art</span>
+          <span className="text-neutral-400">La Sauvegarde Numérique d&apos;Œuvres d&apos;Art</span>
         </h1>
 
-        <p className="max-w-2xl text-sm md:text-base text-white font-light leading-relaxed">
+        <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
           Numérisation haute fidélité d&apos;œuvres d&apos;art par photogrammétrie,
           retopologie et optimisation pour une exploitation fluide en temps
           réel (GLTF/GLB).
         </p>
 
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-          <p className="text-xs text-white uppercase tracking-wider">
+          <p className="text-xs text-neutral-400 uppercase tracking-wider">
             Scroll
           </p>
           <svg
-            className="w-4 h-6 text-white"
+            className="w-4 h-6 text-neutral-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
