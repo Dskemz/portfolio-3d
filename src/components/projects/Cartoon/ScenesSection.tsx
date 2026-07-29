@@ -93,14 +93,14 @@ export default function ScenesSection() {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-20 px-6 md:px-12 lg:px-20 bg-white"
+      className="w-full py-20 px-6 md:px-12 lg:px-20 bg-gradient-to-br from-[#0a0f1d] to-[#121212]"
     >
       <div className="max-w-7xl mx-auto">
         <div ref={headRef} className="max-w-2xl mb-14 lg:mb-16">
           <p className="text-xs font-medium text-rose-400 uppercase tracking-[0.3em] mb-5">
             02 — Mises en scène et personnages
           </p>
-          <h2 className="text-3xl md:text-4xl font-light text-neutral-900 leading-tight">
+          <h2 className="text-3xl md:text-4xl font-light text-white leading-tight">
             Des créations originales,
             <br />
             un rendu net et pop.

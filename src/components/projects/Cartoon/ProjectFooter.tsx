@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function ProjectFooter() {
   return (
-    <footer className="w-full bg-[#faf7f2] text-neutral-900">
+    <footer className="w-full bg-gradient-to-br from-[#0a0f1d] to-[#121212] text-white">
       {/* Main Footer */}
       <div className="px-6 md:px-12 lg:px-20 py-16 border-b border-neutral-200">
         <div className="max-w-7xl mx-auto">
