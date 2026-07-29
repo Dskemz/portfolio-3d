@@ -113,7 +113,7 @@ export const PROJETS: ProjetData[] = [
       "Numérisation haute fidélité d'œuvres d'art par photogrammétrie, retopologie et optimisation GLTF/GLB pour une exploitation temps réel (musées virtuels, WebGL, archives).",
     categorie: "Photogrammétrie & 3D Temps Réel",
     annee: 2023,
-    couverture: "/images/projets/summum-3d/01-hero.svg",
+    couverture: "/images/projets/summum-3d/01-hero.jpg",
     role: "Photogrammétrie · Retopologie · Optimisation GLB",
     outils: ["RealityCapture", "Blender", "Substance", "glTF"],
     types: ["modelisation", "temps-reel"],

@@ -1,10 +1,10 @@
 import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/StudioSummum3D/HeroSection";
-import GammeSection from "@/components/projects/StudioSummum3D/GammeSection";
-import TexturesSection from "@/components/projects/StudioSummum3D/TexturesSection";
-import TechBreakdownSection from "@/components/projects/StudioSummum3D/TechBreakdownSection";
-import PackshotsSection from "@/components/projects/StudioSummum3D/PackshotsSection";
+import DefiSection from "@/components/projects/StudioSummum3D/DefiSection";
+import ComparatifSection from "@/components/projects/StudioSummum3D/ComparatifSection";
+import FocusMatiereSection from "@/components/projects/StudioSummum3D/FocusMatiereSection";
+import ShowroomSection from "@/components/projects/StudioSummum3D/ShowroomSection";
 
 interface ProjetLien {
   slug: string;
@@ -19,13 +19,6 @@ interface EtudeCasStudioSummumProps {
   suivant: ProjetLien;
 }
 
-/**
- * Étude de cas éditoriale sur-mesure — STUDIO SUMMUM 3D.
- *
- * Rendue via la route dynamique /portfolio/[slug] pour le slug "summum-3d".
- * Compose les 5 sections dédiées (hero, collection, textures, breakdown
- * technique, showroom) puis la navigation inter-projets standard du site.
- */
 export function EtudeCasStudioSummum({
   precedent,
   suivant,
@@ -33,10 +26,10 @@ export function EtudeCasStudioSummum({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
-      <GammeSection />
-      <TexturesSection />
-      <TechBreakdownSection />
-      <PackshotsSection />
+      <DefiSection />
+      <ComparatifSection />
+      <FocusMatiereSection />
+      <ShowroomSection />
 
       <div className="mx-auto w-full max-w-6xl px-6 pb-24 lg:px-16 xl:px-24">
         <ProjectNavigation previous={precedent} next={suivant} />

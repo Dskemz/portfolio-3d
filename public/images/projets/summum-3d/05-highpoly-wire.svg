@@ -1,0 +1,6 @@
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="500" height="500" fill="#1e293b"/>
+  <text x="250" y="200" font-size="71" font-weight="bold" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle" font-family="Arial">IMG 05</text>
+  <text x="250" y="312" font-size="25" fill="#64748b" text-anchor="middle" font-family="Arial">High-poly wireframe</text>
+  <text x="250" y="350" font-size="20" fill="#475569" text-anchor="middle" font-family="Arial">Carré 1:1</text>
+</svg>
