@@ -47,21 +47,31 @@ export default function HeroSection() {
       ref={containerRef}
       className="relative w-full h-screen bg-slate-900 overflow-hidden"
     >
+      {/* 
+        Image de fond : 
+        - bg-[position:70%_center] décale l'image sur mobile pour qu'on voie bien la bouteille.
+        - md:bg-right la replace proprement à droite sur les grands écrans.
+      */}
       <div
         ref={heroImageRef}
         className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-800 to-black"
         style={{
           backgroundImage: 'url("/images/projets/agences-georges/01-hero.jpg")',
-          backgroundPosition: 'center',
+          backgroundPosition: '70% center',
           backgroundSize: 'cover',
         }}
       >
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-black/30 md:bg-black/10" />
       </div>
 
+      {/* 
+        Conteneur du texte : 
+        - items-center text-center sur mobile (centré)
+        - md:items-start md:text-left md:w-1/2 sur ordinateur (aligné à gauche pour laisser la place à la bouteille)
+      */}
       <div
         ref={textContentRef}
-        className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center"
+        className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center md:items-start md:text-left md:px-16 lg:px-24"
       >
         <div className="mb-6 tracking-widest">
           <p className="text-sm md:text-base font-light text-neutral-300 uppercase letter-spacing">
@@ -75,13 +85,13 @@ export default function HeroSection() {
           <span className="text-neutral-400">de 2013 à 2021</span>
         </h1>
 
-        <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
+        <p className="max-w-xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
           Étude de cas d&apos;un accompagnement complet pour le développement d&apos;une
           marque de vin : modélisation 3D de toute la gamme et mise en scène
           publicitaire haut de gamme.
         </p>
 
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 md:left-24 md:translate-x-0 flex flex-col items-center gap-2 animate-bounce">
           <p className="text-xs text-neutral-400 uppercase tracking-wider">
             Scroll
           </p>
