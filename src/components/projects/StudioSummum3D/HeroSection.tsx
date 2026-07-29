@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { getImageUrl } from '@/lib/imageResolver';
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -34,7 +35,7 @@ export default function HeroSection() {
         ref={imageRef}
         className="absolute inset-0 w-full h-full"
         style={{
-          backgroundImage: 'url("/images/projets/summum-3d/01-hero.svg")',
+          backgroundImage: `url("${getImageUrl('/images/projets/summum-3d/01-hero')}")`,
           backgroundPosition: 'center',
           backgroundSize: 'cover',
         }}

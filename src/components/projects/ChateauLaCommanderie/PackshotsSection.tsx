@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { getImageUrl } from '@/lib/imageResolver';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -18,29 +19,25 @@ const PACKSHOTS_DATA: Packshot[] = [
     id: 1,
     variant: 'Rouge Classique',
     description: 'Appellation Contrôlée',
-    image:
-      'https://images.unsplash.com/photo-1510812431401-41d2bd2e3bb6?w=400&h=600&fit=crop',
+    image: '/images/projets/agences-georges/12-packshot-1.svg',
   },
   {
     id: 2,
     variant: 'Blanc Prestige',
     description: 'Cuvée Limitée',
-    image:
-      'https://images.unsplash.com/photo-1516594798972-b7e95dd33c58?w=400&h=600&fit=crop',
+    image: '/images/projets/agences-georges/13-packshot-2.svg',
   },
   {
     id: 3,
     variant: 'Rosé Délicat',
     description: 'Été 2021',
-    image:
-      'https://images.unsplash.com/photo-1608270861620-7a0be7e3c4d0?w=400&h=600&fit=crop',
+    image: '/images/projets/agences-georges/14-packshot-3.svg',
   },
   {
     id: 4,
     variant: 'Mousseux Festif',
     description: 'Édition Spéciale',
-    image:
-      'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=600&fit=crop',
+    image: '/images/projets/agences-georges/15-packshot-4.svg',
   },
 ];
 
@@ -105,7 +102,13 @@ export default function PackshotsSection() {
                 />
 
                 {/* Bottle Image Placeholder */}
-                <div className="relative z-10 w-full h-full flex items-center justify-center bg-slate-700" />
+                <div className="relative z-10 w-full h-full flex items-center justify-center">
+                  <img
+                    src={packshot.image}
+                    alt={packshot.variant}
+                    className="h-full w-auto max-h-96 object-contain drop-shadow-lg transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
 
                 {/* Studio Light Effect */}
                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-16 bg-gradient-radial from-black/10 to-transparent blur-3xl pointer-events-none" />

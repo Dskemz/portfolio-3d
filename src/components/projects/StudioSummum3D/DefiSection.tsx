@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { getImageUrl } from '@/lib/imageResolver';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -52,7 +53,7 @@ export default function DefiSection() {
           className="lg:col-span-3 relative aspect-[4/5] md:aspect-[3/4] lg:aspect-auto lg:h-[75vh] overflow-hidden rounded-sm bg-slate-800"
         >
           <img
-            src="/images/projets/summum-3d/02-defi-piece.svg"
+            src={getImageUrl('/images/projets/summum-3d/02-defi-piece')}
             alt="Pièce principale numérisée"
             className="w-full h-full object-cover object-center"
           />

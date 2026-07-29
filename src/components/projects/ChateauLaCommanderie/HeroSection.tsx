@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { getImageUrl } from '@/lib/imageResolver';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -60,6 +61,11 @@ export default function HeroSection() {
       <div
         ref={heroImageRef}
         className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-800 to-black"
+        style={{
+          backgroundImage: 'url("/images/projets/agences-georges/01-hero.svg")',
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+        }}
       >
         <div className="absolute inset-0 bg-black/20" />
       </div>

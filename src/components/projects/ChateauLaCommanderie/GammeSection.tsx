@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { getImageUrl } from '@/lib/imageResolver';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -15,17 +16,13 @@ interface BottleItem {
 const BOTTLES_DATA: BottleItem[] = [
   {
     year: 2013,
-    bottleImage:
-      'https://images.unsplash.com/photo-1608270861620-7a0be7e3c4d0?w=300&h=600&fit=crop',
-    labelImage:
-      'https://images.unsplash.com/photo-1608270861620-7a0be7e3c4d0?w=400&h=300&fit=crop',
+    bottleImage: '/images/projets/agences-georges/02-gamme-bottle-1.svg',
+    labelImage: '/images/projets/agences-georges/03-gamme-label-1.svg',
   },
   {
     year: 2021,
-    bottleImage:
-      'https://images.unsplash.com/photo-1608270861620-7a0be7e3c4d0?w=300&h=600&fit=crop',
-    labelImage:
-      'https://images.unsplash.com/photo-1608270861620-7a0be7e3c4d0?w=400&h=300&fit=crop',
+    bottleImage: '/images/projets/agences-georges/04-gamme-bottle-2.svg',
+    labelImage: '/images/projets/agences-georges/05-gamme-label-2.svg',
   },
 ];
 

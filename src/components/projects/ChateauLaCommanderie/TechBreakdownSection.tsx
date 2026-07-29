@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
+import { getImageUrl } from '@/lib/imageResolver';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -19,8 +20,7 @@ const RENDER_PASSES: RenderPass[] = [
     id: 'diffuse',
     title: 'Passe Diffuse Color',
     description: 'Couleurs de base et albédo',
-    image:
-      'https://images.unsplash.com/photo-1579546059666-e1b6944ed25e?w=600&h=600&fit=crop',
+    image: '/images/projets/agences-georges/08-tech-pass-08.svg',
     fullDescription:
       'La passe Diffuse Color représente les couleurs de base sans éclairage. Elle capture l\'albédo de chaque matériau : verre teinté, étiquette, bouchon.',
   },
@@ -28,8 +28,7 @@ const RENDER_PASSES: RenderPass[] = [
     id: 'roughness',
     title: 'Passe Roughness / Reflections',
     description: 'Réflectivité et rugosité des surfaces',
-    image:
-      'https://images.unsplash.com/photo-1503694712202-371f2b4bcc11?w=600&h=600&fit=crop',
+    image: '/images/projets/agences-georges/09-tech-pass-09.svg',
     fullDescription:
       'La carte de rugosité définit comment chaque surface diffuse ou réfléchit la lumière. Le verre est hautement réfléchissant, l\'étiquette très diffuse.',
   },
@@ -37,8 +36,7 @@ const RENDER_PASSES: RenderPass[] = [
     id: 'wireframe',
     title: 'Topologie & Wireframe',
     description: 'Géométrie et maillage 3D',
-    image:
-      'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=600&h=600&fit=crop',
+    image: '/images/projets/agences-georges/10-tech-pass-10.svg',
     fullDescription:
       'Topologie propre et optimisée du maillage. Densité de polygones adaptée au niveau de détail requis : subdivisions au goulot et bouchon.',
   },
@@ -46,8 +44,7 @@ const RENDER_PASSES: RenderPass[] = [
     id: 'final',
     title: 'Image Finale Compositée',
     description: 'Rendu complet avec éclairage et effets',
-    image:
-      'https://images.unsplash.com/photo-1616516305581-5eef39dce6b9?w=600&h=600&fit=crop',
+    image: '/images/projets/agences-georges/11-tech-pass-11.svg',
     fullDescription:
       'Composition finale intégrant tous les éléments : éclairage 3 points studio, reflets, ombres et post-traitement.',
   },

@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { getImageUrl } from '@/lib/imageResolver';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -73,7 +74,11 @@ export default function TexturesSection() {
             className="md:col-span-2 overflow-hidden rounded-xl bg-slate-800"
           >
             <div className="relative aspect-video md:aspect-auto md:h-80 overflow-hidden group bg-slate-700">
-              <div className="w-full h-full bg-slate-700" />
+              <img
+                src={getImageUrl("/images/projets/agences-georges/06-textures-macro-1")}
+                alt="Zoom sur bouchon liège et capsule étain"
+                className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              />
               {/* Overlay gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               {/* Caption */}
@@ -92,7 +97,11 @@ export default function TexturesSection() {
             className="md:col-span-1 overflow-hidden rounded-xl bg-slate-800"
           >
             <div className="relative aspect-square md:aspect-auto md:h-80 overflow-hidden group bg-slate-700">
-              <div className="w-full h-full bg-slate-700" />
+              <img
+                src={getImageUrl("/images/projets/agences-georges/07-textures-macro-2")}
+                alt="Étiquette papier texturé et dorure"
+                className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              />
               {/* Overlay gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               {/* Caption */}
