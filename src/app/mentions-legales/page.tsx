@@ -78,7 +78,7 @@ export default function MentionsLegales() {
           <div className="space-y-4 text-gray-700">
             <p>
               Tous les contenus du site (textes, images, vidéos, codes, structures) sont la
-              propriété exclusive de Visite3D ou de ses partenaires, sauf mention contraire.
+              propriété exclusive de Denis Masquet ou de ses partenaires, sauf mention contraire.
             </p>
 
             <h3 className="text-lg font-semibold text-gray-800 mt-4">Licences et attributions:</h3>
@@ -110,8 +110,8 @@ export default function MentionsLegales() {
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">4. Limitation de responsabilité</h2>
           <div className="space-y-4 text-gray-700">
             <p>
-              Visite3D s'efforce de maintenir l'exactitude des informations, mais ne garantit pas
-              l'absence d'erreurs. Visite3D ne peut être tenu responsable des:
+              Denis Masquet s'efforce de maintenir l'exactitude des informations, mais ne garantit pas
+              l'absence d'erreurs. Denis Masquet ne peut être tenu responsable des:
             </p>
             <ul className="list-disc ml-6 space-y-2">
               <li>Interruptions ou indisponibilités du service</li>
@@ -127,7 +127,7 @@ export default function MentionsLegales() {
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">5. Liens externes</h2>
           <div className="space-y-2 text-gray-700">
             <p>
-              Le site contient des liens vers des sites externes. Visite3D n'est pas responsable du
+              Le site contient des liens vers des sites externes. Denis Masquet n'est pas responsable du
               contenu de ces sites. L'existence d'un lien ne constitue pas une approbation de la
               part de Denis Masquet.
             </p>
