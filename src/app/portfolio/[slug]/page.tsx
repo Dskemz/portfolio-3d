@@ -4,6 +4,7 @@ import { PROJETS } from "@/content/projets";
 import { GenericProjetPage } from "@/components/portfolio/GenericProjetPage";
 import { EtudeCasWithings } from "@/components/portfolio/EtudeCasWithings";
 import { EtudeCasChateauLaCommanderie } from "@/components/portfolio/EtudeCasChateauLaCommanderie";
+import { EtudeCasStudioSummum } from "@/components/portfolio/EtudeCasStudioSummum";
 import type { SectionGrid } from "@/content/withings-layout-config";
 
 // Configs layout par projet
@@ -76,6 +77,17 @@ export default async function ProjetPage({
   if (slug === "agences-georges") {
     return (
       <EtudeCasChateauLaCommanderie
+        projet={projet}
+        precedent={precedent}
+        suivant={suivant}
+      />
+    );
+  }
+
+  // Étude de cas sur-mesure — Studio Summum 3D (slug summum-3d)
+  if (slug === "summum-3d") {
+    return (
+      <EtudeCasStudioSummum
         projet={projet}
         precedent={precedent}
         suivant={suivant}

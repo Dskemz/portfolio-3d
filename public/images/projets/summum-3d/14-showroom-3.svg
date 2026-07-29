@@ -1,0 +1,6 @@
+<svg viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="600" fill="#1e293b"/>
+  <text x="200" y="300" font-size="50" font-weight="bold" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle" font-family="Arial">IMG 14</text>
+  <text x="200" y="400" font-size="18" fill="#64748b" text-anchor="middle" font-family="Arial">Fiche œuvre</text>
+  <text x="200" y="450" font-size="15" fill="#475569" text-anchor="middle" font-family="Arial">Portrait 2:3</text>
+</svg>

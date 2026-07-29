@@ -1,0 +1,6 @@
+<svg viewBox="0 0 300 480" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="480" fill="#1e293b"/>
+  <text x="150" y="240" font-size="37" font-weight="bold" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle" font-family="Arial">IMG 04</text>
+  <text x="150" y="320" font-size="13" fill="#64748b" text-anchor="middle" font-family="Arial">Pièce 2 - Vue principale</text>
+  <text x="150" y="360" font-size="11" fill="#475569" text-anchor="middle" font-family="Arial">Portrait 9:16</text>
+</svg>

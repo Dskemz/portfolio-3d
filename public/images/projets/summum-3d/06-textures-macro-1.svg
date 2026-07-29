@@ -1,0 +1,6 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="400" fill="#1e293b"/>
+  <text x="400" y="200" font-size="100" font-weight="bold" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle" font-family="Arial">IMG 06</text>
+  <text x="400" y="266" font-size="36" fill="#64748b" text-anchor="middle" font-family="Arial">Macro - Scan brut</text>
+  <text x="400" y="300" font-size="30" fill="#475569" text-anchor="middle" font-family="Arial">Paysage 2:1</text>
+</svg>
