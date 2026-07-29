@@ -28,7 +28,7 @@ const CREATIONS: Creation[] = [
     legende: 'Huit bras, huit couleurs',
     image: '/images/projets/creation-originales/Poulpe.jpg',
     fond: 'from-teal-200 to-emerald-200',
-    ratio: 'aspect-[4/5]',
+    ratio: 'aspect-[16/9]',
   },
   {
     id: 2,
@@ -44,7 +44,7 @@ const CREATIONS: Creation[] = [
     legende: 'Le petit astronaute s\'envole',
     image: '/images/projets/creation-originales/astronaute.jpg',
     fond: 'from-rose-200 to-fuchsia-200',
-    ratio: 'aspect-[4/3]',
+    ratio: 'aspect-[4/5]',
   },
   {
     id: 4,
