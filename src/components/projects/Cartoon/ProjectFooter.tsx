@@ -84,7 +84,7 @@ export default function ProjectFooter() {
 
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-3 px-8 py-3 bg-neutral-900 text-white font-light text-sm md:text-base rounded-lg hover:bg-neutral-700 transition-colors duration-300 w-fit"
+                className="inline-flex items-center justify-center gap-3 px-8 py-3 bg-gradient-to-r from-orange-300 via-rose-300 to-fuchsia-300 font-light text-sm md:text-base rounded-lg hover:bg-neutral-700 transition-colors duration-300 w-fit"
               >
                 Discutons de votre projet
               </Link>
