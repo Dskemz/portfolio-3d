@@ -28,25 +28,25 @@ export default function MentionsLegales() {
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">1. Éditeur du site</h2>
           <div className="space-y-2 text-gray-700">
             <p>
-              <strong>Nom:</strong> Visite3D (À remplacer par votre nom)
+              <strong>Nom:</strong> Denis Masquet
             </p>
             <p>
-              <strong>Statut:</strong> Micro-entreprise (À adapter: SARL, EIRL, etc.)
+              <strong>Statut:</strong> Micro-entreprise (EI)
             </p>
             <p>
-              <strong>SIRET:</strong> [Votre numéro SIRET]
+              <strong>SIRET:</strong> 880727649
             </p>
             <p>
-              <strong>Adresse:</strong> [Votre adresse complète]
+              <strong>Adresse:</strong> Rambouillet, 78120 France
             </p>
             <p>
-              <strong>Email:</strong> contact@example.com
+              <strong>Email:</strong> denis.masquet@gmail.com
             </p>
             <p>
-              <strong>Téléphone:</strong> +33 1 23 45 67 89
+              <strong>Téléphone:</strong> +33 6 86 68 46 90
             </p>
             <p>
-              <strong>Directeur de publication:</strong> D (Prénom Nom)
+              <strong>Directeur de publication:</strong> Denis Masquet
             </p>
           </div>
         </section>
@@ -129,7 +129,7 @@ export default function MentionsLegales() {
             <p>
               Le site contient des liens vers des sites externes. Visite3D n'est pas responsable du
               contenu de ces sites. L'existence d'un lien ne constitue pas une approbation de la
-              part de Visite3D.
+              part de Denis Masquet.
             </p>
           </div>
         </section>
@@ -139,8 +139,8 @@ export default function MentionsLegales() {
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">6. Services fournis</h2>
           <div className="space-y-4 text-gray-700">
             <p>
-              Visite3D fournit une plateforme de création de visites virtuelles 3D (Hub_Visite3D)
-              et un viewer de consultation (MotionLogo). Les services sont fournis "en l'état",
+              Denis Masquet fournit une plateforme de création de visites virtuelles 3D (Hub_Visite3D)
+              et un viewer de consultation. Les services sont fournis "en l'état",
               sans garantie spécifique.
             </p>
             <h3 className="text-lg font-semibold text-gray-800 mt-4">Conditions d'utilisation:</h3>
@@ -167,10 +167,10 @@ export default function MentionsLegales() {
               .
             </p>
             <p>
-              <strong>Responsable du traitement:</strong> D, Visite3D
+              <strong>Responsable du traitement:</strong> Denis Masquet
             </p>
             <p>
-              <strong>Délégué à la protection des données (DPO):</strong> contact@example.com
+              <strong>Délégué à la protection des données (DPO):</strong> denis.masquet@gmail.com
             </p>
           </div>
         </section>
@@ -230,7 +230,7 @@ export default function MentionsLegales() {
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">10. Modifications</h2>
           <div className="space-y-2 text-gray-700">
             <p>
-              Visite3D se réserve le droit de modifier ces mentions légales à tout moment. Les
+              Denis Masquet se réserve le droit de modifier ces mentions légales à tout moment. Les
               modifications entrent en vigueur dès leur publication.
             </p>
             <p className="text-sm text-gray-500 mt-4">
@@ -242,10 +242,10 @@ export default function MentionsLegales() {
         {/* Footer */}
         <div className="border-t pt-8 mt-12">
           <p className="text-sm text-gray-600">
-            © {new Date().getFullYear()} Visite3D. Tous droits réservés.
+            © {new Date().getFullYear()} Denis Masquet. Tous droits réservés.
           </p>
           <p className="text-sm text-gray-600 mt-2">
-            Visite3D est une marque déposée. All third-party trademarks are property of their
+            Denis Masquet est une marque déposée. All third-party trademarks are property of their
             respective owners.
           </p>
         </div>
