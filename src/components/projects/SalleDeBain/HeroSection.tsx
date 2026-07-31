@@ -64,7 +64,7 @@ export default function HeroSection() {
         className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center md:items-start md:text-left md:px-16 lg:px-24"
       >
         <div className="mb-6 tracking-widest">
-          <p className="text-sm md:text-base font-light text-neutral-300 uppercase letter-spacing">
+          <p className="text-sm md:text-base font-light text-white uppercase letter-spacing">
             Architecture d&apos;Intérieur
           </p>
         </div>
@@ -72,10 +72,10 @@ export default function HeroSection() {
         <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl">
           Perspectives 3D Photoréalistes
           <br />
-          <span className="text-neutral-400">Scénographies de Mobilier &amp; Finitions</span>
+          <span className="text-white">Scénographies de Mobilier &amp; Finitions</span>
         </h1>
 
-        <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
+        <p className="max-w-2xl text-sm md:text-base text-white font-light leading-relaxed">
           Création de perspectives 3D haute fidélité pour la présentation de collections de
           mobilier de salle de bain — modélisation précise, étude d&apos;éclairage naturel et rendu photoréaliste.
         </p>
