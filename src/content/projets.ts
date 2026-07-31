@@ -90,19 +90,19 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "nft-floofies",
-    titre: "NFT Floofies – Univers Digital Collectible",
+    titre: "Floofies – Le shiba du futur",
     client: "NFT Floofies",
     resume:
-      "Création visuelle complète d'un univers NFT : characters, environments, animations et visuels marketing pour plateforme blockchain.",
+      "Collection de NFT 3D mettant en scène un univers cartoon et pop-futuriste — shibas modulaires, accessoires spatiaux et compositions génératives structurées en quatre niveaux de rareté.",
     categorie: "Design Digital",
     annee: 2024,
     couverture: "/images/projets/nft-floofies/01-hero.jpg",
-    role: "Art Director 3D · Character Design · Animation",
-    outils: ["Cinema 4D", "Substance 3D", "Unreal Engine", "Blender"],
+    role: "Art Director 3D · Character Design · NFT Generative",
+    outils: ["Cinema 4D", "Substance 3D", "Blender", "Photoshop"],
     types: ["modelisation", "design"],
-    defi: "Créer un univers visuel cohérent et distinctif pour des assets NFT, avec qualité cinématographique et adaptabilité multi-formats.",
+    defi: "Créer un univers visuel cohérent et distinctif pour une collection NFT modulaire, avec quatre niveaux de rareté progressive (base, compositions, rares, légendaires) et une qualité cinématographique.",
     solution:
-      "Modélisation stylisée des characters avec rigging et animation, création d'environments dreamlike, rendu en haute résolution pour blockchain.",
+      "Base morphologique commune déclinable en trois pelages, système modulaire à cinq couches (chapeau, œil, bouche, corps, objet dos), pièces rares cyberpunk et légendaires uniques développées comme œuvres 3D à part entière.",
   },
   {
     slug: "summum-3d",
