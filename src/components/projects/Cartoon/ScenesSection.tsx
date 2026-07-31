@@ -11,54 +11,46 @@ interface Creation {
   titre: string;
   legende: string;
   image: string;
-  fond: string;
-  ratio: string;
 }
 
 /**
- * Chaque carte porte son propre fond pastel/pop pour faire ressortir l'aspect
- * 3D léché. Les images sont branchées sur les visuels réellement présents dans
- * /public/images/projets/creation-originales/ ; il suffit de déposer les
- * fichiers manquants (05-…, 06-…) pour compléter la grille sans toucher au code.
+ * Le visuel large (la pieuvre) est isolé en tête pour mettre en valeur son
+ * format panoramique, suivi des créations au format portrait dans une grille
+ * de 3. Chaque image est en object-contain pour rester visible dans son
+ * intégralité, sur un fond sombre homogène avec les autres études de cas.
  */
+const FEATURE: Creation = {
+  id: 0,
+  titre: 'La pieuvre jongleuse',
+  legende: 'Huit bras, huit couleurs',
+  image: '/images/projets/creation-originales/Poulpe.jpg',
+};
+
 const CREATIONS: Creation[] = [
   {
     id: 1,
-    titre: 'La pieuvre jongleuse',
-    legende: 'Huit bras, huit couleurs',
-    image: '/images/projets/creation-originales/Poulpe.jpg',
-    fond: 'from-teal-200 to-emerald-200',
-    ratio: 'aspect-[16/9]',
-  },
-  {
-    id: 2,
     titre: 'Bain moussant',
     legende: 'Un personnage au chaud dans sa tasse',
     image: '/images/projets/creation-originales/teatime.jpg',
-    fond: 'from-sky-200 to-cyan-200',
-    ratio: 'aspect-[4/3]',
   },
   {
-    id: 3,
+    id: 2,
     titre: 'Ballons cœur',
     legende: 'Le petit astronaute s\'envole',
     image: '/images/projets/creation-originales/astronaute.jpg',
-    fond: 'from-rose-200 to-fuchsia-200',
-    ratio: 'aspect-[4/5]',
   },
   {
-    id: 4,
+    id: 3,
     titre: 'Licorne donut',
     legende: 'Flottaison sucrée',
     image: '/images/projets/creation-originales/licorne.jpg',
-    fond: 'from-violet-200 to-purple-200',
-    ratio: 'aspect-[4/5]',
   },
 ];
 
 export default function ScenesSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const headRef = useRef<HTMLDivElement>(null);
+  const featureRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -74,6 +66,17 @@ export default function ScenesSection() {
           toggleActions: 'play none none reverse',
         },
       });
+      gsap.from(featureRef.current, {
+        y: 40,
+        opacity: 0,
+        duration: 0.9,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: featureRef.current,
+          start: 'top 82%',
+          toggleActions: 'play none none reverse',
+        },
+      });
       gsap.from(cardsRef.current, {
         opacity: 0,
         y: 50,
@@ -82,7 +85,7 @@ export default function ScenesSection() {
         ease: 'power3.out',
         scrollTrigger: {
           trigger: cardsRef.current[0],
-          start: 'top 82%',
+          start: 'top 85%',
           toggleActions: 'play none none reverse',
         },
       });
@@ -93,7 +96,7 @@ export default function ScenesSection() {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-20 px-6 md:px-12 lg:px-20 bg-gradient-to-br from-[#0a0f1d] to-[#121212]"
+      className="w-full py-16 px-6 md:px-12 lg:px-20 bg-black"
     >
       <div className="max-w-7xl mx-auto">
         <div ref={headRef} className="max-w-2xl mb-14 lg:mb-16">
@@ -105,33 +108,48 @@ export default function ScenesSection() {
             <br />
             un rendu net et pop.
           </h2>
-          <p className="mt-5 text-base text-neutral-500 font-light leading-relaxed">
+          <p className="mt-5 text-base text-neutral-400 font-light leading-relaxed">
             Chaque scène joue sur un fond uni pastel pour laisser la 3D léchée
             occuper toute la lumière.
           </p>
         </div>
 
-        {/* Grille dynamique alternée — décalage vertical 1 carte sur 2 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        {/* Visuel large panoramique */}
+        <div ref={featureRef} className="mb-10 lg:mb-14">
+          <div className="group relative w-full aspect-[16/9] overflow-hidden rounded-3xl bg-slate-800">
+            <img
+              src={FEATURE.image}
+              alt={FEATURE.titre}
+              className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+          <h3 className="mt-4 text-base md:text-lg font-light text-white">
+            {FEATURE.titre}
+          </h3>
+          <p className="text-sm text-neutral-400 font-light mt-0.5">
+            {FEATURE.legende}
+          </p>
+        </div>
+
+        {/* Créations au format portrait */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {CREATIONS.map((c, idx) => (
             <div
               key={c.id}
               ref={(el) => { cardsRef.current[idx] = el; }}
-              className={`group ${idx % 2 === 1 ? 'sm:mt-10 lg:mt-16' : ''}`}
+              className="group"
             >
-              <div
-                className={`relative w-full ${c.ratio} overflow-hidden rounded-3xl bg-gradient-to-br ${c.fond} mb-4`}
-              >
+              <div className="relative w-full aspect-[7/8] overflow-hidden rounded-3xl bg-slate-800 mb-4">
                 <img
                   src={c.image}
                   alt={c.titre}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
               <h3 className="text-base md:text-lg font-light text-white">
                 {c.titre}
               </h3>
-              <p className="text-sm text-white font-light mt-0.5">
+              <p className="text-sm text-neutral-400 font-light mt-0.5">
                 {c.legende}
               </p>
             </div>

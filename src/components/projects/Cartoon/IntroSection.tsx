@@ -55,7 +55,7 @@ export default function IntroSection() {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-20 px-6 md:px-12 lg:px-20 bg-gradient-to-br from-[#0a0f1d] to-[#121212]"
+      className="w-full py-16 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-slate-900 to-black"
     >
       <div className="max-w-7xl mx-auto">
         {/* Bloc texte épuré */}
@@ -68,46 +68,50 @@ export default function IntroSection() {
             <br />
             obtenir une création.
           </h2>
-          <p className="mt-6 text-base md:text-lg text-neutral-500 font-light leading-relaxed">
+          <p className="mt-6 text-base md:text-lg text-neutral-400 font-light leading-relaxed">
             Couleur, dynamisme, une mise en scène simple pour une création unique.
             Chaque visuel naît de la rencontre inattendue de deux univers.
           </p>
         </div>
 
-        {/* Mise en valeur asymétrique — 1 visuel phare + 2 satellites */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-          {/* Visuel phare (ex. l'ours / personnage cartoon) */}
-          <div
-            ref={bigRef}
-            className="lg:col-span-7 group relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-200 to-teal-200 aspect-[4/5] lg:aspect-auto lg:min-h-[560px]"
-          >
-            <img
-              src="/images/projets/creation-originales/scientifique.jpg"
-              alt="Personnage cartoon — visuel phare"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
+        {/*
+          Mise en valeur asymétrique — 1 visuel phare + 2 satellites.
+          Les cartes sont calées sur le ratio réel des visuels (~7/8, portrait)
+          et l'image est en object-contain pour rester visible dans son
+          intégralité, sans recadrage.
+        */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+          {/* Visuel phare */}
+          <div ref={bigRef} className="lg:col-span-6">
+            <div className="group relative w-full aspect-[7/8] overflow-hidden rounded-3xl bg-slate-800">
+              <img
+                src="/images/projets/creation-originales/scientifique.jpg"
+                alt="Personnage cartoon — visuel phare"
+                className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
+              />
+            </div>
           </div>
 
-          {/* Colonne de 2 satellites (licorne sur bouée donut, astronaute aux ballons cœur) */}
-          <div className="lg:col-span-5 flex flex-col gap-6 lg:gap-8">
+          {/* 2 satellites côte à côte, mêmes proportions que le phare */}
+          <div className="lg:col-span-6 grid grid-cols-2 gap-6 lg:gap-8">
             <div
               ref={(el) => { sideRef.current[0] = el; }}
-              className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-rose-200 to-pink-200 aspect-[4/3] flex-1"
+              className="group relative w-full aspect-[7/8] overflow-hidden rounded-3xl bg-slate-800"
             >
               <img
                 src="/images/projets/creation-originales/licorne.jpg"
                 alt="Licorne sur sa bouée donut"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
               />
             </div>
             <div
               ref={(el) => { sideRef.current[1] = el; }}
-              className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-200 to-indigo-200 aspect-[4/3] flex-1"
+              className="group relative w-full aspect-[7/8] overflow-hidden rounded-3xl bg-slate-800"
             >
               <img
                 src="/images/projets/creation-originales/astronaute.jpg"
                 alt="Petit astronaute aux ballons en forme de cœur"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
               />
             </div>
           </div>

@@ -33,7 +33,7 @@ export function EtudeCasCartoon({
   suivant,
 }: EtudeCasCartoonProps) {
   return (
-    <div className="flex flex-1 flex-col overflow-x-clip bg-[#faf7f2]">
+    <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
       <IntroSection />
       <ScenesSection />

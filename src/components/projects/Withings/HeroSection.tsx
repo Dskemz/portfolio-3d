@@ -63,7 +63,7 @@ export default function HeroSection() {
           backgroundSize: 'cover',
         }}
       >
-        <div className="absolute inset-0 bg-black/40 md:bg-black/20" />
+        <div className="absolute inset-0 bg-black/55 md:bg-black/35" />
       </div>
 
       {/*
@@ -77,29 +77,29 @@ export default function HeroSection() {
         className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center md:items-start md:text-left md:px-16 lg:px-24"
       >
         <div className="mb-6 tracking-widest">
-          <p className="text-sm md:text-base font-light text-neutral-300 uppercase">
+          <p className="text-sm md:text-base font-light text-white/90 uppercase drop-shadow-sm">
             Withings — Modélisation 3D &amp; Horlogerie connectée
           </p>
         </div>
 
-        <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl">
+        <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl drop-shadow-md">
           ScanWatch 2, Light
           <br />
-          <span className="text-neutral-400">et Nova</span>
+          <span className="text-white/80">et Nova</span>
         </h1>
 
-        <p className="max-w-xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
+        <p className="max-w-xl text-sm md:text-base text-white/90 font-light leading-relaxed drop-shadow-sm">
           Création 3D de toute la gamme de montres connectées : boîtiers,
           cadrans et bracelets. Vidéos 360° pour le shop interactif et packshots
           pour la grande distribution.
         </p>
 
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-          <p className="text-xs text-neutral-400 uppercase tracking-wider">
+          <p className="text-xs text-white/80 uppercase tracking-wider drop-shadow-sm">
             Scroll
           </p>
           <svg
-            className="w-4 h-6 text-neutral-400"
+            className="w-4 h-6 text-white/80"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

@@ -1,10 +1,12 @@
 import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/ChateauLaCommanderie/HeroSection";
+import BandeauProjet from "@/components/projects/shared/BandeauProjet";
 import GammeSection from "@/components/projects/ChateauLaCommanderie/GammeSection";
 import TexturesSection from "@/components/projects/ChateauLaCommanderie/TexturesSection";
 import TechBreakdownSection from "@/components/projects/ChateauLaCommanderie/TechBreakdownSection";
 import PackshotsSection from "@/components/projects/ChateauLaCommanderie/PackshotsSection";
+import ProjectFooter from "@/components/projects/ChateauLaCommanderie/ProjectFooter";
 
 interface ProjetLien {
   slug: string;
@@ -34,6 +36,9 @@ export function EtudeCasChateauLaCommanderie({
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
       <GammeSection />
+      <BandeauProjet degrade="from-amber-300 via-rose-300 to-red-300">
+        De la bouteille à la matière : une identité qui se déguste des yeux.
+      </BandeauProjet>
       <TexturesSection />
       <TechBreakdownSection />
       <PackshotsSection />
@@ -41,6 +46,8 @@ export function EtudeCasChateauLaCommanderie({
       <div className="mx-auto w-full max-w-6xl px-6 pb-24 lg:px-16 xl:px-24">
         <ProjectNavigation previous={precedent} next={suivant} />
       </div>
+
+      <ProjectFooter />
     </div>
   );
 }

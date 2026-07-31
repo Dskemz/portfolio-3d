@@ -5,9 +5,9 @@ import Link from 'next/link';
 
 export default function ProjectFooter() {
   return (
-    <footer className="w-full bg-gradient-to-br from-[#0a0f1d] to-[#121212] text-white">
+    <footer className="w-full bg-slate-900 text-white">
       {/* Main Footer */}
-      <div className="px-6 md:px-12 lg:px-20 py-16 border-b border-neutral-200">
+      <div className="px-6 md:px-12 lg:px-20 py-16 border-b border-slate-800">
         <div className="max-w-7xl mx-auto">
           {/* Project Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-12 mb-20">
@@ -41,7 +41,7 @@ export default function ProjectFooter() {
                   (skill) => (
                     <span
                       key={skill}
-                      className="text-xs font-light text-neutral-600 border border-neutral-300 px-3 py-1.5 rounded-full"
+                      className="text-xs font-light text-slate-300 border border-slate-600 px-3 py-1.5 rounded-full"
                     >
                       {skill}
                     </span>
@@ -54,7 +54,7 @@ export default function ProjectFooter() {
           {/* Description & CTA */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
             <div>
-              <p className="text-base md:text-lg text-neutral-600 font-light leading-relaxed max-w-2xl">
+              <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed max-w-2xl">
                 Une série de créations 3D originales et ludiques : personnages,
                 mises en scène colorées et compositions décalées, pensées comme
                 de petites histoires visuelles au rendu net et « clean ».
@@ -64,7 +64,7 @@ export default function ProjectFooter() {
             <div className="flex flex-col gap-4">
               <Link
                 href="/portfolio"
-                className="group inline-flex items-center gap-3 text-sm md:text-base font-light text-white hover:text-neutral-500 transition-colors duration-300 w-fit"
+                className="group inline-flex items-center gap-3 text-sm md:text-base font-light text-white hover:text-slate-300 transition-colors duration-300 w-fit"
               >
                 <span>Voir tous les projets</span>
                 <svg
@@ -103,25 +103,25 @@ export default function ProjectFooter() {
           <div className="flex items-center gap-6">
             <Link
               href="/"
-              className="text-xs text-neutral-400 hover:text-neutral-900 font-light transition-colors"
+              className="text-xs text-neutral-400 hover:text-white font-light transition-colors"
             >
               Accueil
             </Link>
             <Link
               href="/portfolio"
-              className="text-xs text-neutral-400 hover:text-neutral-900 font-light transition-colors"
+              className="text-xs text-neutral-400 hover:text-white font-light transition-colors"
             >
               Portfolio
             </Link>
             <Link
               href="/services"
-              className="text-xs text-neutral-400 hover:text-neutral-900 font-light transition-colors"
+              className="text-xs text-neutral-400 hover:text-white font-light transition-colors"
             >
               Services
             </Link>
             <Link
               href="/contact"
-              className="text-xs text-neutral-400 hover:text-neutral-900 font-light transition-colors"
+              className="text-xs text-neutral-400 hover:text-white font-light transition-colors"
             >
               Contact
             </Link>
