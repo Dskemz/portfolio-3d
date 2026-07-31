@@ -74,20 +74,19 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "decotec",
-    titre: "Architecture d'Intérieur – Galerie Virtuelle",
+    titre: "Architecture d'Intérieur – Salle de Bain",
     client: "Décotec",
     resume:
-      "Plateforme immersive de visite virtuelle 360° pour showroom d'architecture d'intérieur et design mobilier.",
-    categorie: "Visite Virtuelle",
+      "Perspectives 3D photoréalistes pour la présentation de collections de mobilier de salle de bain — scénographies de gammes, étude d'éclairage et workflow technique.",
+    categorie: "Architecture",
     annee: 2024,
     couverture: "/images/projets/decotec/01-hero.jpg",
-    role: "Direction technique 3D · Babylon.js · Architecture WebGL",
-    outils: ["Babylon.js", "WebGL", "Three.js", "Node.js"],
-    types: ["visite-virtuelle", "temps-reel"],
-    defi: "Créer une expérience immersive permettant d'explorer des espaces de design premium en temps réel, avec chargements optimisés et compatibilité multi-appareils.",
+    role: "Modélisation 3D · Rendu Photoréaliste · Optimisation GLTF",
+    outils: ["Cinema 4D", "Corona Renderer", "Substance 3D", "Blender"],
+    types: ["modelisation", "architecture"],
+    defi: "Créer des perspectives 3D photoréalistes mettant en valeur les collections de mobilier de salle de bain dans des environnements variés, avec une fidélité maximale des matériaux et un pipeline optimisé pour la déclinaison temps réel.",
     solution:
-      "Architecture Babylon.js optimisée avec streaming progressif des actifs 3D, gestion des LOD et shaders personnalisés pour qualité cinématographique.",
-    resultats: "Engagement visiteur en hausse de 38%, demandes de consultation en hausse de 28%.",
+      "Modélisation haute densité, étude d'éclairage en trois variantes (jour, neutre, nuit), scénographies de six ambiances matérielles distinctes et optimisation du maillage pour export GLTF/GLB léger.",
   },
   {
     slug: "nft-floofies",
