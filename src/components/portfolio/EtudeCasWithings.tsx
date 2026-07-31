@@ -2,7 +2,7 @@ import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/Withings/HeroSection";
 import BandeauScroll from "@/components/projects/shared/BandeauScroll";
-import BandeauProjet from "@/components/projects/shared/BandeauProjet";
+import PhraseSection from "@/components/projects/shared/PhraseSection";
 import Elements3DSection from "@/components/projects/Withings/Elements3DSection";
 import MatieresSection from "@/components/projects/Withings/MatieresSection";
 import LumiereSection from "@/components/projects/Withings/LumiereSection";
@@ -43,10 +43,10 @@ export function EtudeCasWithings({
       <HeroSection />
       <BandeauScroll degrade="from-sky-500 via-cyan-500 to-blue-500" couleurTexte="text-white/85" />
       <Elements3DSection />
-      <BandeauProjet degrade="from-sky-500 via-cyan-500 to-blue-500">
+      <PhraseSection>
         De la structure à la matière : chaque surface révèle la précision
         horlogère.
-      </BandeauProjet>
+      </PhraseSection>
       <MatieresSection />
       <LumiereSection />
 

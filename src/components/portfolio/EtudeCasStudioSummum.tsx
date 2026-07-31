@@ -2,7 +2,7 @@ import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/StudioSummum3D/HeroSection";
 import BandeauScroll from "@/components/projects/shared/BandeauScroll";
-import BandeauProjet from "@/components/projects/shared/BandeauProjet";
+import PhraseSection from "@/components/projects/shared/PhraseSection";
 import DefiSection from "@/components/projects/StudioSummum3D/DefiSection";
 import ComparatifSection from "@/components/projects/StudioSummum3D/ComparatifSection";
 import FocusMatiereSection from "@/components/projects/StudioSummum3D/FocusMatiereSection";
@@ -29,14 +29,11 @@ export function EtudeCasStudioSummum({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
-      <BandeauScroll degrade="from-[#cbb894] via-[#ddcbaa] to-[#e8dcc4]" couleurTexte="text-stone-700" />
+      <BandeauScroll degrade="from-[#928674] via-[#a89a83] to-[#c2b59d]" couleurTexte="text-stone-800" />
       <DefiSection />
-      <BandeauProjet
-        degrade="from-[#cbb894] via-[#ddcbaa] to-[#e8dcc4]"
-        couleurTexte="text-stone-800"
-      >
+      <PhraseSection>
         Du défi au rendu final : le produit révélé sous son meilleur jour.
-      </BandeauProjet>
+      </PhraseSection>
       <ComparatifSection />
       <FocusMatiereSection />
       <ShowroomSection />

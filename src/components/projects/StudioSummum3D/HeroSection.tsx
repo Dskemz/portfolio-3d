@@ -49,7 +49,7 @@ export default function HeroSection() {
     >
       <div
         ref={heroImageRef}
-        className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-800 to-black md:bg-right"
+        className="absolute inset-x-0 top-0 w-full h-[calc(100%+160px)] bg-gradient-to-br from-slate-800 to-black md:bg-right"
         style={{
           backgroundImage: 'url("/images/projets/summum-3d/01-hero.jpg")',
           backgroundPosition: '70% center',
