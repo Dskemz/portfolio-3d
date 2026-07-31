@@ -154,19 +154,19 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "alquyme",
-    titre: "Alquyme – Data Visualization 3D Interactive",
+    titre: "Alquyme – Flacon d'exception",
     client: "Alquyme",
     resume:
-      "Plateforme de visualisation de données chimiques et moléculaires en 3D temps réel, avec interaction et animation scientifique.",
-    categorie: "Data Visualization",
+      "Création 3D et mise en scène d'un flacon de parfum ALQUYME — sablier vertical à double récipient, gravures dorées et déclinaisons chromatiques pour une collection modulaire.",
+    categorie: "Design Packaging & Parfum",
     annee: 2023,
     couverture: "/images/projets/alquyme/01-hero.jpg",
-    role: "Développeur 3D · Data Engineer",
-    outils: ["Babylon.js", "Node.js", "D3.js", "Python"],
-    types: ["temps-reel"],
-    defi: "Transformer des data chimiques complexes en visualisations 3D interactives et compréhensibles, performantes à grande échelle.",
+    role: "Modélisateur 3D · Designer packaging",
+    outils: ["Cinema 4D", "Octane Render", "Substance Designer", "Photoshop"],
+    types: ["modelisation", "design"],
+    defi: "Créer un flacon de parfum haut de gamme au dessin signature, avec un système modulaire de teintes et d'écrins précieux pour décliner une collection d'éditions olfactives.",
     solution:
-      "Moteur 3D custom avec shader graph pour molécules, synchronisation temps réel avec backend, interface de contrôle intuitive.",
+      "Modélisation d'un flacon sablier vertical à double récipient, textures de gravures dorées, mise en scène sur drapé rouge et déclinaisons chromatiques (transparent, bleu, rose, argent, or, ambre).",
   },
   {
     slug: "steamone",

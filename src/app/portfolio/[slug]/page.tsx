@@ -10,12 +10,12 @@ import { EtudeCasSalleDeBain } from "@/components/portfolio/EtudeCasSalleDeBain"
 import { EtudeCasNft } from "@/components/portfolio/EtudeCasNft";
 import { EtudeCasVelo } from "@/components/portfolio/EtudeCasVelo";
 import { EtudeCasSteamOne } from "@/components/portfolio/EtudeCasSteamOne";
+import { EtudeCasAlquyme } from "@/components/portfolio/EtudeCasAlquyme";
 import type { SectionGrid } from "@/content/withings-layout-config";
 
 // Configs layout par projet
 import { SECTIONS_SUMMUM_3D } from "@/content/summum-3d-layout-config";
 import { SECTIONS_AGENCES_GEORGES } from "@/content/agences-georges-layout-config";
-import { SECTIONS_ALQUYME } from "@/content/alquyme-layout-config";
 import { SECTIONS_CREATION_ORIGINALES } from "@/content/creation-originales-layout-config";
 import { SECTIONS_HORLOGERIE_SUISSE } from "@/content/horlogerie-suisse-layout-config";
 
@@ -23,7 +23,6 @@ import { SECTIONS_HORLOGERIE_SUISSE } from "@/content/horlogerie-suisse-layout-c
 const SECTIONS_PAR_PROJET: Record<string, SectionGrid[]> = {
   "summum-3d": SECTIONS_SUMMUM_3D,
   "agences-georges": SECTIONS_AGENCES_GEORGES,
-  "alquyme": SECTIONS_ALQUYME,
   "creation-originales": SECTIONS_CREATION_ORIGINALES,
   "horlogerie-suisse": SECTIONS_HORLOGERIE_SUISSE,
 };
@@ -129,6 +128,17 @@ export default async function ProjetPage({
   if (slug === "steamone") {
     return (
       <EtudeCasSteamOne
+        projet={projet}
+        precedent={precedent}
+        suivant={suivant}
+      />
+    );
+  }
+
+  // Étude de cas sur-mesure — Alquyme · Flacon d'exception (slug alquyme)
+  if (slug === "alquyme") {
+    return (
+      <EtudeCasAlquyme
         projet={projet}
         precedent={precedent}
         suivant={suivant}
