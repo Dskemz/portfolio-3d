@@ -45,7 +45,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-screen bg-slate-900 overflow-hidden"
+      className="relative w-full h-screen bg-gradient-to-br from-[#8c1d2f] to-[#6e1423] overflow-hidden"
     >
       {/* 
         Image de fond : 
@@ -54,7 +54,7 @@ export default function HeroSection() {
       */}
       <div
         ref={heroImageRef}
-        className="absolute inset-x-0 top-0 w-full h-[calc(100%+160px)] bg-gradient-to-br from-slate-800 to-black"
+        className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-800 to-black"
         style={{
           backgroundImage: 'url("/images/projets/agences-georges/01-hero.jpg")',
           backgroundPosition: '70% center',
@@ -91,6 +91,24 @@ export default function HeroSection() {
           publicitaire haut de gamme.
         </p>
 
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+          <p className="text-xs text-white/80 uppercase tracking-wider drop-shadow-sm">
+            Scroll
+          </p>
+          <svg
+            className="w-4 h-6 text-white/80"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M19 14l-7 7m0 0l-7-7m7 7V3"
+            />
+          </svg>
+        </div>
       </div>
     </section>
   );

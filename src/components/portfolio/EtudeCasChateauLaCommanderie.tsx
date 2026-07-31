@@ -1,7 +1,6 @@
 import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/ChateauLaCommanderie/HeroSection";
-import BandeauScroll from "@/components/projects/shared/BandeauScroll";
 import PhraseSection from "@/components/projects/shared/PhraseSection";
 import GammeSection from "@/components/projects/ChateauLaCommanderie/GammeSection";
 import TexturesSection from "@/components/projects/ChateauLaCommanderie/TexturesSection";
@@ -36,7 +35,6 @@ export function EtudeCasChateauLaCommanderie({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
-      <BandeauScroll degrade="from-[#6e1423] via-[#8c1d2f] to-[#a83246]" couleurTexte="text-white/85" />
       <GammeSection />
       <PhraseSection>
         De la bouteille à la matière : une identité qui se déguste des yeux.

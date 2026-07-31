@@ -1,7 +1,6 @@
 import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/Withings/HeroSection";
-import BandeauScroll from "@/components/projects/shared/BandeauScroll";
 import PhraseSection from "@/components/projects/shared/PhraseSection";
 import Elements3DSection from "@/components/projects/Withings/Elements3DSection";
 import MatieresSection from "@/components/projects/Withings/MatieresSection";
@@ -41,7 +40,6 @@ export function EtudeCasWithings({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
-      <BandeauScroll degrade="from-sky-500 via-cyan-500 to-blue-500" couleurTexte="text-white/85" />
       <Elements3DSection />
       <PhraseSection>
         De la structure à la matière : chaque surface révèle la précision
