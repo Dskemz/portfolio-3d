@@ -170,19 +170,19 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "steamone",
-    titre: "Steamone – Visite Virtuelle Immobilier Luxe",
+    titre: "Steamone - Défroisseur vapeur",
     client: "Steamone",
     resume:
-      "Plateforme de visite immersive pour portefeuille immobilier haut de gamme, avec navigation intuitive et mise en scène photographique.",
-    categorie: "Visite Virtuelle",
+      "Modélisation 3D et vue éclatée d'un défroisseur vapeur — révéler l'architecture interne, expliquer l'ergonomie et sublimer le design industriel.",
+    categorie: "Design Produit & Éclaté 3D",
     annee: 2022,
     couverture: "/images/projets/steamone/01-hero.jpg",
-    role: "Direction technique · Architecture 3D",
-    outils: ["Babylon.js", "Photogrammetry", "HDRi", "Node.js"],
-    types: ["visite-virtuelle", "temps-reel"],
-    defi: "Créer des visites immersives photorealistic de propriétés de luxe, avec navigation fluide et interface haut de gamme.",
+    role: "Modélisateur 3D · Designer produit",
+    outils: ["Cinema 4D", "Octane Render", "Substance Designer", "Photoshop"],
+    types: ["modelisation", "design"],
+    defi: "Créer une communication visuelle pédagogique et esthétique révélant la technologie interne d'un défroisseur vapeur nouvelle génération, sous plusieurs axes d'éclatement.",
     solution:
-      "Photogrammetrie precision + HDRi mapping, optimisation LOD agressive pour mobile, interface minimaliste de prestige.",
+      "Modélisation précise des 42 pièces internes, éclatés multi-axes (vertical, horizontal, radial), gros plans sur composants électroniques et vues isométriques d'assemblage.",
   },
   {
     slug: "creation-originales",
