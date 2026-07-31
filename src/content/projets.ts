@@ -202,18 +202,18 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "horlogerie-suisse",
-    titre: "Horlogerie Suisse – Campagne Visuelle 360°",
-    client: "Horlogerie Suisse",
+    titre: "Horlogerie – Mise en scène de montres",
+    client: "Projet personnel",
     resume:
-      "Production visuelle complète : modélisation montres de prestige, vidéos 360°, animations mécanisme et matériaux de luxe.",
+      "Projets personnels de modélisation 3D horlogère — Villeret Chinese Calendar, Polaris Memovox 50e anniversaire et collection évolutive de pièces d'exception.",
     categorie: "Modélisation Horlogerie",
     annee: 2022,
     couverture: "/images/projets/horlogerie-suisse/01-hero.jpg",
-    role: "Graphiste 3D senior · Director créatif",
-    outils: ["Cinema 4D", "Octane Render", "Houdini", "After Effects"],
-    types: ["modelisation", "video"],
-    defi: "Créer des rendus horlogers avec précision mécanique extrême et beauté cinématographique, valoriser héritage et savoir-faire.",
+    role: "Modélisateur 3D · Direction artistique",
+    outils: ["Cinema 4D", "Octane Render", "Substance Designer", "Photoshop"],
+    types: ["modelisation"],
+    defi: "Restituer avec exactitude les complications, matériaux et finitions de pièces horlogères de prestige — verre saphir, cadrans soleillés, boîtiers polis/brossés — tout en construisant une collection évolutive et harmonieuse.",
     solution:
-      "Modélisation mécanique précise (engrenages, spiraux), matériau or/acier avec couches de brillance, animation du mécanisme en mouvement.",
+      "Modélisation haute précision (Villeret Chinese Calendar, Polaris Memovox), rendus clay et matériaux, compositions duo, galerie évolutive prête à accueillir les futures pièces.",
   },
 ];
