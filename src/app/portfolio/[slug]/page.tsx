@@ -6,10 +6,10 @@ import { EtudeCasWithings } from "@/components/portfolio/EtudeCasWithings";
 import { EtudeCasChateauLaCommanderie } from "@/components/portfolio/EtudeCasChateauLaCommanderie";
 import { EtudeCasStudioSummum } from "@/components/portfolio/EtudeCasStudioSummum";
 import { EtudeCasCartoon } from "@/components/portfolio/EtudeCasCartoon";
+import { EtudeCasSalleDeBain } from "@/components/portfolio/EtudeCasSalleDeBain";
 import type { SectionGrid } from "@/content/withings-layout-config";
 
 // Configs layout par projet
-import { SECTIONS_DECOTEC } from "@/content/decotec-layout-config";
 import { SECTIONS_NFT_FLOOFIES } from "@/content/nft-floofies-layout-config";
 import { SECTIONS_SUMMUM_3D } from "@/content/summum-3d-layout-config";
 import { SECTIONS_VELYV_ELO } from "@/content/velyv-elo-layout-config";
@@ -21,7 +21,6 @@ import { SECTIONS_HORLOGERIE_SUISSE } from "@/content/horlogerie-suisse-layout-c
 
 // Mapping slug → sections
 const SECTIONS_PAR_PROJET: Record<string, SectionGrid[]> = {
-  "decotec": SECTIONS_DECOTEC,
   "nft-floofies": SECTIONS_NFT_FLOOFIES,
   "summum-3d": SECTIONS_SUMMUM_3D,
   "velyv-elo": SECTIONS_VELYV_ELO,
@@ -89,6 +88,17 @@ export default async function ProjetPage({
   if (slug === "summum-3d") {
     return (
       <EtudeCasStudioSummum
+        projet={projet}
+        precedent={precedent}
+        suivant={suivant}
+      />
+    );
+  }
+
+  // Étude de cas sur-mesure — Architecture d'Intérieur · Salle de Bain (slug decotec)
+  if (slug === "decotec") {
+    return (
+      <EtudeCasSalleDeBain
         projet={projet}
         precedent={precedent}
         suivant={suivant}
