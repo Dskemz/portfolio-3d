@@ -125,16 +125,16 @@ export const PROJETS: ProjetData[] = [
     titre: "VélyVélo – Conception de Vélo Électrique",
     client: "VélyVélo",
     resume:
-      "Conception et modélisation 3D complète d'une gamme de vélos électriques, packshots et animations de présentation produit.",
-    categorie: "Modélisation Produit",
+      "Conception 3D d'un vélo électrique de livraison urbaine — structure caisson-selle, personnalisation par enseigne et déclinaisons de flottes professionnelles.",
+    categorie: "Design Produit & Mobilité",
     annee: 2023,
     couverture: "/images/projets/velyv-elo/01-hero.jpg",
     role: "Modélisateur 3D lead · Designer produit",
     outils: ["Cinema 4D", "Substance Designer", "Octane Render", "Photoshop"],
-    types: ["modelisation"],
-    defi: "Modéliser une gamme de vélos avec précision technique et rendu réaliste, générer assets pour site e-commerce et matériel marketing.",
+    types: ["modelisation", "design"],
+    defi: "Concevoir un vélo électrique modulaire pour la livraison urbaine, adaptable à toutes les enseignes de mobilité rapide, avec un système de personnalisation cohérent et industriellement viable.",
     solution:
-      "Modélisation paramétrique pour déclinaisons multiples (tailles, couleurs), matériaux techniques fidèles, packshots optimisés.",
+      "Structure arrière innovante caisson-selle, système de flocage par enseigne (éléments fixes noirs, jantes/pédales/porte-bagage colorés, rappel secondaire cadre) et déclinaisons de palettes pour flottes professionnelles.",
   },
   {
     slug: "agences-georges",
