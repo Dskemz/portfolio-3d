@@ -1,6 +1,7 @@
 import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/StudioSummum3D/HeroSection";
+import BandeauScroll from "@/components/projects/shared/BandeauScroll";
 import BandeauProjet from "@/components/projects/shared/BandeauProjet";
 import DefiSection from "@/components/projects/StudioSummum3D/DefiSection";
 import ComparatifSection from "@/components/projects/StudioSummum3D/ComparatifSection";
@@ -29,7 +30,8 @@ export function EtudeCasStudioSummum({
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
       <DefiSection />
-      <BandeauProjet degrade="from-violet-300 via-purple-300 to-fuchsia-300">
+      <BandeauScroll degrade="from-amber-200 to-yellow-100" />
+      <BandeauProjet degrade="from-amber-200 via-yellow-100 to-amber-100">
         Du défi au rendu final : le produit révélé sous son meilleur jour.
       </BandeauProjet>
       <ComparatifSection />

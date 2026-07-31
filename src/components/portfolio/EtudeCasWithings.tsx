@@ -1,6 +1,7 @@
 import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/Withings/HeroSection";
+import BandeauScroll from "@/components/projects/shared/BandeauScroll";
 import BandeauProjet from "@/components/projects/shared/BandeauProjet";
 import Elements3DSection from "@/components/projects/Withings/Elements3DSection";
 import MatieresSection from "@/components/projects/Withings/MatieresSection";
@@ -41,7 +42,8 @@ export function EtudeCasWithings({
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
       <Elements3DSection />
-      <BandeauProjet degrade="from-teal-300 via-cyan-300 to-sky-300">
+      <BandeauScroll degrade="from-sky-300 to-blue-300" />
+      <BandeauProjet degrade="from-sky-300 via-cyan-200 to-blue-200">
         De la structure à la matière : chaque surface révèle la précision
         horlogère.
       </BandeauProjet>
