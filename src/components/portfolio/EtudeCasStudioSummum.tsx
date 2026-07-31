@@ -29,9 +29,12 @@ export function EtudeCasStudioSummum({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
+      <BandeauScroll degrade="from-[#cbb894] via-[#ddcbaa] to-[#e8dcc4]" couleurTexte="text-stone-700" />
       <DefiSection />
-      <BandeauScroll degrade="from-amber-200 to-yellow-100" />
-      <BandeauProjet degrade="from-amber-200 via-yellow-100 to-amber-100">
+      <BandeauProjet
+        degrade="from-[#cbb894] via-[#ddcbaa] to-[#e8dcc4]"
+        couleurTexte="text-stone-800"
+      >
         Du défi au rendu final : le produit révélé sous son meilleur jour.
       </BandeauProjet>
       <ComparatifSection />

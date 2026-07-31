@@ -41,9 +41,9 @@ export function EtudeCasWithings({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
+      <BandeauScroll degrade="from-sky-500 via-cyan-500 to-blue-500" couleurTexte="text-white/85" />
       <Elements3DSection />
-      <BandeauScroll degrade="from-sky-300 to-blue-300" />
-      <BandeauProjet degrade="from-sky-300 via-cyan-200 to-blue-200">
+      <BandeauProjet degrade="from-sky-500 via-cyan-500 to-blue-500">
         De la structure à la matière : chaque surface révèle la précision
         horlogère.
       </BandeauProjet>

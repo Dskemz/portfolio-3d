@@ -36,9 +36,9 @@ export function EtudeCasChateauLaCommanderie({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
+      <BandeauScroll degrade="from-[#6e1423] via-[#8c1d2f] to-[#a83246]" couleurTexte="text-white/85" />
       <GammeSection />
-      <BandeauScroll degrade="from-amber-400 to-amber-500" />
-      <BandeauProjet degrade="from-amber-400 via-amber-300 to-amber-200">
+      <BandeauProjet degrade="from-[#6e1423] via-[#8c1d2f] to-[#a83246]">
         De la bouteille à la matière : une identité qui se déguste des yeux.
       </BandeauProjet>
       <TexturesSection />
