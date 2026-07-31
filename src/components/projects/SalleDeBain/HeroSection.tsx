@@ -80,7 +80,7 @@ export default function HeroSection() {
           mobilier de salle de bain — modélisation précise, étude d&apos;éclairage naturel et rendu photoréaliste.
         </p>
 
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce bg-[#F7F5F0] px-4 py-2 rounded-full shadow-lg">
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
           <p className="text-xs text-stone-100 uppercase tracking-wider">
             Scroll
           </p>
