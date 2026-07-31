@@ -70,7 +70,6 @@ export default function HeroSection() {
         </div>
 
         <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl">
-          Perspectives 3D Photoréalistes
           <br />
           <span className="text-white">Scénographies de Mobilier &amp; Finitions</span>
         </h1>
