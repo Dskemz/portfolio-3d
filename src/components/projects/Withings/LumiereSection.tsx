@@ -76,9 +76,6 @@ export default function LumiereSection() {
           ref={textRef}
           className="grid grid-cols-1 lg:grid-cols-[8rem_1fr] gap-6 lg:gap-10 mb-16 lg:mb-20"
         >
-          <p className="text-xs font-light text-slate-500 uppercase tracking-[0.3em] lg:pt-2">
-            03, Lumière et reflets
-          </p>
           <div className="max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-light text-white mb-5">
               L&apos;horlogerie pure, sculptée par la lumière

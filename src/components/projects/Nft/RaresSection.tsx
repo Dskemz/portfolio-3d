@@ -99,11 +99,6 @@ export default function RaresSection() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div ref={textRef} className="mb-16 md:mb-20 max-w-3xl">
-          <div className="mb-4 flex items-center gap-3">
-            <span className="text-xs font-light text-purple-400 uppercase tracking-widest">03</span>
-            <span className="h-px w-12 bg-purple-400/50" />
-            <span className="text-xs font-light text-purple-300 uppercase tracking-widest">Rareté élevée</span>
-          </div>
           <h2 className="text-4xl md:text-5xl font-light text-white mb-6 leading-tight">
             Quelques rares
             <br />

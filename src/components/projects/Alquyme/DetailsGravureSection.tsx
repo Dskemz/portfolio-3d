@@ -120,10 +120,6 @@ export default function DetailsGravureSection() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div ref={textRef} className="mb-16 md:mb-20 max-w-3xl">
-          <div className="mb-4 flex items-center gap-3">
-            <span className="text-xs font-light text-amber-400 uppercase tracking-widest">02</span>
-            <span className="h-px w-12 bg-amber-400/50" />
-          </div>
           <h2 className="text-4xl md:text-5xl font-light text-white mb-6 leading-tight">
             Détails &amp; gravure
             <br />

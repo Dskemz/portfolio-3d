@@ -60,9 +60,6 @@ export default function IntroSection() {
       <div className="max-w-7xl mx-auto">
         {/* Bloc texte épuré */}
         <div ref={textRef} className="max-w-3xl mb-14 lg:mb-20">
-          <p className="text-xs font-medium text-rose-400 uppercase tracking-[0.3em] mb-5">
-            01, Le cartoon
-          </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white leading-[1.15]">
             Allier deux idées,
             <br />

@@ -95,9 +95,6 @@ export default function MatieresSection() {
       <div className="max-w-7xl mx-auto">
         {/* Bloc texte, création des éléments industriels et textures */}
         <div ref={textRef} className="mb-14 max-w-2xl">
-          <p className="text-xs font-light text-slate-500 uppercase tracking-[0.3em] mb-5">
-            02, Matières et teintes
-          </p>
           <h2 className="text-3xl md:text-4xl font-light text-white mb-5">
             Du gris industriel aux textures organiques
           </h2>

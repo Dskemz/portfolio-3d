@@ -90,9 +90,6 @@ export default function Elements3DSection() {
           className="grid grid-cols-1 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-8 lg:gap-16 mb-16 lg:mb-20"
         >
           <div className="lg:pt-4">
-            <p className="text-xs font-light text-slate-500 uppercase tracking-[0.3em] mb-5">
-              01, Éléments 3D
-            </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white leading-tight">
               Une gamme entière,
               <br />
