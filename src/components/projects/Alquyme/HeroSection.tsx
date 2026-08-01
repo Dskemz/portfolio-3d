@@ -80,6 +80,25 @@ export default function HeroSection() {
           un sablier vertical à double récipient, où la lumière glisse sur les surfaces transparentes
           et se prend dans les gravures dorées, racontant une histoire à la manière d&apos;un rituel olfactif.
         </p>
+
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+          <p className="text-xs text-white/80 uppercase tracking-wider drop-shadow-sm">
+            Scroll
+          </p>
+          <svg
+            className="w-4 h-6 text-white/80"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M19 14l-7 7m0 0l-7-7m7 7V3"
+            />
+          </svg>
+        </div>
       </div>
     </section>
   );
