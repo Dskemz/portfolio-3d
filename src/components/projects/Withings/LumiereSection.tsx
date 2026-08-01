@@ -74,9 +74,8 @@ export default function LumiereSection() {
         {/* Bloc texte, l'accent sur l'horlogerie pure */}
         <div
           ref={textRef}
-          className="grid grid-cols-1 lg:grid-cols-[8rem_1fr] gap-6 lg:gap-10 mb-16 lg:mb-20"
+          className="max-w-2xl mb-16 lg:mb-20"
         >
-          <div className="max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-light text-white mb-5">
               L&apos;horlogerie pure, sculptée par la lumière
             </h2>
@@ -86,7 +85,6 @@ export default function LumiereSection() {
               les tranches de boîtiers. La lumière forme un ensemble cohérent qui
               met chaque élément en valeur.
             </p>
-          </div>
         </div>
 
         {/* Paire de profils, reflets soleillés côte à côte */}
