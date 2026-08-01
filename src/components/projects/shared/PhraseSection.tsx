@@ -11,8 +11,8 @@ interface PhraseSectionProps {
  */
 export default function PhraseSection({ children }: PhraseSectionProps) {
   return (
-    <section className="w-full px-6 md:px-12 lg:px-20 py-20 md:py-28">
-      <p className="max-w-4xl mx-auto text-center text-2xl md:text-3xl lg:text-4xl font-light italic text-white leading-tight">
+    <section className="w-full px-6 md:px-12 lg:px-20 py-12 md:py-16">
+      <p className="max-w-4xl mx-auto text-center text-2xl md:text-3xl lg:text-4xl font-light italic text-white/90 leading-tight">
         {children}
       </p>
     </section>

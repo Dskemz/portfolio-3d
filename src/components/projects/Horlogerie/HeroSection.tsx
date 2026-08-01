@@ -80,25 +80,6 @@ export default function HeroSection() {
           sur des décors texturés et lunaires. Précision mécanique, matériaux nobles et éclairage
           sophistiqué au service de l&apos;horlogerie de prestige.
         </p>
-
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-          <p className="text-xs text-stone-100 uppercase tracking-wider">
-            Scroll
-          </p>
-          <svg
-            className="w-4 h-6 text-stone-100"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
-        </div>
       </div>
     </section>
   );

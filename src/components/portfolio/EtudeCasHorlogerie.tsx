@@ -35,7 +35,7 @@ export function EtudeCasHorlogerie({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
-      <BandeauScroll degrade="from-rose-500 to-rose-700" />
+      <BandeauScroll degrade="from-amber-600 to-yellow-800" />
       <VilleretSection />
       <PhraseSection>
         Précision du geste, patience de la matière, l&apos;horlogerie comme discipline du regard.
