@@ -82,11 +82,11 @@ export default function HeroSection() {
         </p>
 
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-          <p className="text-xs text-stone-800 uppercase tracking-wider">
+          <p className="text-xs text-white uppercase tracking-wider">
             Scroll
           </p>
           <svg
-            className="w-4 h-6 text-stone-800"
+            className="w-4 h-6 text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
