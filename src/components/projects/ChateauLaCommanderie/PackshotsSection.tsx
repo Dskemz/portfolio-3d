@@ -45,7 +45,7 @@ export default function PackshotsSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-16 px-6 md:px-12 lg:px-20 bg-black"
+      className="w-full py-16 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-black to-slate-900"
     >
       <div className="max-w-7xl mx-auto">
         <div className="mb-14 text-center">

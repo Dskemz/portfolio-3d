@@ -114,7 +114,7 @@ export default function GalerieSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-20 md:py-32 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-black via-rose-950/5 to-black"
+      className="w-full py-20 md:py-32 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-black via-rose-950/5 to-slate-900"
     >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
