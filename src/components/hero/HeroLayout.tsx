@@ -11,16 +11,16 @@ const ModelViewer = dynamic(() => import("./ModelViewer"), {
 });
 
 /**
- * HeroLayout — Composant client pour la section hero.
+ * HeroLayout, Composant client pour la section hero.
  */
 export default function HeroLayout({
   modelUrl,
-  modelAlt = "Visite virtuelle 3D interactive — démonstration Graphite 3D",
+  modelAlt = "Visite virtuelle 3D interactive, démonstration Graphite 3D",
   className = "",
 }: HeroLayoutProps) {
   return (
     <>
-      {/* — Charger le CDN model-viewer — */}
+      {/*, Charger le CDN model-viewer, */}
       <Script
         src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"
         type="module"
@@ -32,7 +32,7 @@ export default function HeroLayout({
         }}
       />
 
-      {/* — Section hero — */}
+      {/*, Section hero, */}
       <section
         className={`mx-auto w-full max-w-7xl px-6 py-16 md:px-10 md:py-24 ${className}`}
         aria-labelledby="hero-title"

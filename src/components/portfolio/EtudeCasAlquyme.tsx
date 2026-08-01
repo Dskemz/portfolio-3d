@@ -21,7 +21,7 @@ interface EtudeCasAlquymeProps {
 }
 
 /**
- * Étude de cas éditoriale sur-mesure — ALQUYME · Flacon d'exception.
+ * Étude de cas éditoriale sur-mesure, ALQUYME · Flacon d'exception.
  *
  * Rendue via la route dynamique /portfolio/[slug] pour le slug "alquyme".
  * Compose les sections dédiées (hero, packaging & écrin, détails & gravure,
@@ -36,7 +36,7 @@ export function EtudeCasAlquyme({
       <HeroSection />
       <PackagingSection />
       <PhraseSection>
-        Aussi puissante qu&apos;une odeur — la lumière qui glisse sur l&apos;or raconte une histoire.
+        Aussi puissante qu&apos;une odeur, la lumière qui glisse sur l&apos;or raconte une histoire.
       </PhraseSection>
       <DetailsGravureSection />
       <VariantesTeintesSection />

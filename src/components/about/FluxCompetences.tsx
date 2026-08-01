@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * FluxCompetences — les quatre domaines traversés par le fil orange.
+ * FluxCompetences, les quatre domaines traversés par le fil orange.
  *
  * Le fil est INVISIBLE au repos et SE DESSINE une seule fois quand la section
  * entre dans le viewport (`whileInView` + `pathLength`). Les cadres apparaissent
@@ -15,7 +15,7 @@
  * DESKTOP : repère fixe 1440×520, cadres positionnés en %. MOBILE : les cadres
  * sont empilés à hauteur variable, donc le fil est MESURÉ (offsetTop/Height,
  * insensibles aux transforms d'entrée) et serpente verticalement d'un cadre à
- * l'autre — même esprit que sur ordinateur, plus aucun trait parasite sur le
+ * l'autre, même esprit que sur ordinateur, plus aucun trait parasite sur le
  * bord gauche.
  */
 
@@ -51,7 +51,7 @@ const DOMAINES: readonly Domaine[] = [
 /**
  * Repère commun au tracé et aux cadres : 1440 × 520.
  * Axes médians des cadres : 240, 560, 880, 1200.
- * Couloirs horizontaux : 25 en haut, 490 en bas — hors de tous les cadres.
+ * Couloirs horizontaux : 25 en haut, 490 en bas, hors de tous les cadres.
  */
 const TRACE =
   "M 0 490 H 232 Q 240 490 240 482 V 33 Q 240 25 248 25 " +
@@ -162,7 +162,7 @@ export default function FluxCompetences() {
   return (
     <>
       {/* ---------------------------------------------------------------- */}
-      {/*  Ordinateur — pleine largeur, le fil traverse l'écran             */}
+      {/*  Ordinateur, pleine largeur, le fil traverse l'écran             */}
       {/* ---------------------------------------------------------------- */}
       <div
         className="relative left-1/2 hidden w-screen -translate-x-1/2 lg:block"
@@ -256,7 +256,7 @@ export default function FluxCompetences() {
         </svg>
       </div>
 
-      {/* Mobile et tablette — fil mesuré partagé (serpente + sort au bord) */}
+      {/* Mobile et tablette, fil mesuré partagé (serpente + sort au bord) */}
       <RailMobile items={DOMAINES} accent={ACCENT} heading="h2" />
     </>
   );

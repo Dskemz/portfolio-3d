@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FiletAnime } from "@/components/portfolio/FiletAnime";
 
 /**
- * Bloc d'appel à l'action signature — « Un projet en tête, discutons-en ».
+ * Bloc d'appel à l'action signature, « Un projet en tête, discutons-en ».
  * Filet lumineux (net orange + halo flouté) partant de la fin du titre, sur le
  * modèle de /contact. Partagé par la page hub et les pages projet.
  */

@@ -24,19 +24,19 @@ const PALETTES_SECONDAIRES: Palette[] = [
   {
     id: 'menthe',
     nom: 'Palette Menthe & Nuit',
-    usage: 'Flottes urbaines premium — logistique écoresponsable',
+    usage: 'Flottes urbaines premium, logistique écoresponsable',
     image: '/images/projets/velyv-elo/15-palette-menthe.jpg',
   },
   {
     id: 'corail',
     nom: 'Palette Corail & Sable',
-    usage: 'Livraison boutique — commerces spécialisés',
+    usage: 'Livraison boutique, commerces spécialisés',
     image: '/images/projets/velyv-elo/16-palette-corail.jpg',
   },
   {
     id: 'graphite',
     nom: 'Palette Graphite & Chrome',
-    usage: 'Flotte corporate — services entreprises B2B',
+    usage: 'Flotte corporate, services entreprises B2B',
     image: '/images/projets/velyv-elo/17-palette-graphite.jpg',
   },
 ];

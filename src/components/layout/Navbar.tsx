@@ -151,7 +151,7 @@ export default function Navbar() {
       {/*
         `relative z-10` : SANS ça, le masque ci-dessus recouvrait l'îlot.
         Il est `absolute` (donc peint avec les descendants positionnés) tandis
-        que ce conteneur est `static` (peint plus tôt) — l'ordre de peinture CSS
+        que ce conteneur est `static` (peint plus tôt), l'ordre de peinture CSS
         le faisait donc passer AU-DESSUS de la navbar.
       */}
       <div className="relative z-10 pt-4 px-4 sm:px-6 lg:px-8">
@@ -167,7 +167,7 @@ export default function Navbar() {
             href="/"
             onClick={surClicLogo}
             className="flex shrink-0 items-center text-white transition-colors duration-200 hover:text-[#ed8936]"
-            aria-label="Accueil — revenir en haut"
+            aria-label="Accueil, revenir en haut"
           >
             <svg
               className="h-6 w-auto"
@@ -194,7 +194,7 @@ export default function Navbar() {
             </svg>
           </Link>
 
-          {/* Onglets — parfaitement centrés au milieu de la barre */}
+          {/* Onglets, parfaitement centrés au milieu de la barre */}
           <ul className="absolute inset-y-0 left-1/2 hidden -translate-x-1/2 items-center gap-7 md:flex">
             {LIENS.map(({ libelle, href }) => (
               <li key={href}>
@@ -228,7 +228,7 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Réseaux — tout à droite de la barre */}
+          {/* Réseaux, tout à droite de la barre */}
           <div className="hidden items-center gap-4 md:flex">
             {RESEAUX.map(({ nom, href }) => (
               <a
@@ -244,7 +244,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Navigation mobile — HTML natif, sans JavaScript. */}
+          {/* Navigation mobile, HTML natif, sans JavaScript. */}
           <MenuMobile liens={LIENS} actif={pathname} />
         </nav>
       </div>

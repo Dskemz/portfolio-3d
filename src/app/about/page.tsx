@@ -3,12 +3,12 @@ import Link from "next/link";
 import FluxCompetences from "@/components/about/FluxCompetences";
 
 export const metadata: Metadata = {
-  title: "À propos — graphiste 3D généraliste",
+  title: "À propos, graphiste 3D généraliste",
   description:
     "Denis Masquet, graphiste 3D généraliste : visites virtuelles parcourues dans le navigateur, modélisation 3D et temps réel web.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "À propos — graphiste 3D généraliste",
+    title: "À propos, graphiste 3D généraliste",
     description:
       "Visites virtuelles dans le navigateur, modélisation 3D et temps réel web.",
     url: "/about",
@@ -20,7 +20,7 @@ export default function APropos() {
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black text-white">
       {/* ------------------------------------------------------------------ */}
-      {/*  Déclaration d'intention — inchangée                                */}
+      {/*  Déclaration d'intention, inchangée                                */}
       {/* ------------------------------------------------------------------ */}
       <section className="mx-auto w-full max-w-6xl px-6 pb-16 pt-36 md:pt-40 lg:px-16 xl:px-24">
         <div className="lg:grid lg:grid-cols-[8rem_1fr] lg:gap-8">
@@ -52,7 +52,7 @@ export default function APropos() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/*  Parcours — avec photo cerclée responsive                           */}
+      {/*  Parcours, avec photo cerclée responsive                           */}
       {/* ------------------------------------------------------------------ */}
       <section className="mx-auto w-full max-w-6xl border-t border-mine px-6 py-14 lg:px-16 lg:py-20 xl:px-24">
         <div className="lg:grid lg:grid-cols-[8rem_1fr] lg:gap-8">
@@ -103,7 +103,7 @@ export default function APropos() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/*  Appel — conservé, habillage aligné sur l'orange                    */}
+      {/*  Appel, conservé, habillage aligné sur l'orange                    */}
       {/* ------------------------------------------------------------------ */}
       <section className="mx-auto w-full max-w-6xl border-t border-mine px-6 py-14 lg:px-16 lg:py-20 xl:px-24">
         <div className="flex flex-wrap items-center gap-4">

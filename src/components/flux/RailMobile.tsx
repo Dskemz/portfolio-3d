@@ -7,7 +7,7 @@ import { motion, useReducedMotion } from "framer-motion";
  * Fil mobile partagé (/about et /visite). Mesuré sur la pile RÉELLE de cartes :
  * il ENTRE depuis le bord de l'écran par un coude, serpente orthogonalement en
  * traversant chaque carte empilée, puis fait un virage à 90° pour RESSORTIR
- * proprement sur le bord de l'écran — plus aucun trait qui s'arrête dans le
+ * proprement sur le bord de l'écran, plus aucun trait qui s'arrête dans le
  * vide. Animé comme le desktop : `pathLength` sur 3 traits concentriques +
  * illumination transitoire par carte au passage du front. Positions lues en
  * offsetTop/offsetHeight (insensibles aux transforms d'apparition des cartes) ;

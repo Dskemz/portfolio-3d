@@ -1,5 +1,5 @@
 /**
- * Configuration layout — horlogerie-suisse
+ * Configuration layout, horlogerie-suisse
  * 
  * Modifie colonnes/gap/ratio pour ajuster la mise en page.
  */

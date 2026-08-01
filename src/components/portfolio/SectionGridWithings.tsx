@@ -6,7 +6,7 @@ import type { SectionGrid } from "@/content/withings-layout-config";
 
 interface SectionGridWithingsProps {
   section: SectionGrid;
-  slug: string; // Slug du projet — détermine le dossier des images
+  slug: string; // Slug du projet, détermine le dossier des images
 }
 
 /**

@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { PROJETS, TYPES_PROJETS } from "@/content/projets";
 
 /**
- * The Vault — grille globale filtrable par typologie.
+ * The Vault, grille globale filtrable par typologie.
  *
  * Filtres : « Tous » + les quatre typologies de TYPES_PROJETS. Un projet
  * apparaît dès qu'il porte le type sélectionné (un projet peut en cumuler

@@ -30,13 +30,13 @@ const RARES_RENDUS: RareRendu[] = [
   {
     id: 'cyber-armor',
     nom: 'Shiba Cyber Armor',
-    description: 'Armure cybernétique complète — équipement de combat',
+    description: 'Armure cybernétique complète, équipement de combat',
     image: '/images/projets/nft-floofies/17-rare-cyber.jpg',
   },
   {
     id: 'neon-warrior',
     nom: 'Shiba Neon Warrior',
-    description: 'Guerrier néon — katana laser + casque HUD',
+    description: 'Guerrier néon, katana laser + casque HUD',
     image: '/images/projets/nft-floofies/18-rare-warrior.jpg',
   },
 ];
@@ -111,7 +111,7 @@ export default function RaresSection() {
           </h2>
           <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4">
             Une seconde catégorie de NFT bâtis sur la même base morphologique, mais avec 
-            <span className="text-white"> moins de déclinaisons disponibles</span> — chaque pièce 
+            <span className="text-white"> moins de déclinaisons disponibles</span>, chaque pièce 
             possède un caractère plus affirmé et une valeur collectionneur significativement supérieure.
           </p>
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">
@@ -161,7 +161,7 @@ export default function RaresSection() {
           <div>
             <div className="mb-6">
               <h3 className="text-xs font-light text-slate-400 uppercase tracking-widest">
-                Rendus finaux — Shibas armés
+                Rendus finaux, Shibas armés
               </h3>
             </div>
 

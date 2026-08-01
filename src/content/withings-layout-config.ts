@@ -1,5 +1,5 @@
 /**
- * Configuration COMPLÈTE du projet Withings — mise en page + images.
+ * Configuration COMPLÈTE du projet Withings, mise en page + images.
  * 
  * Tu peux modifier :
  * - colonnes : nombre de colonnes de la grille (1, 2, 3, 4...)
@@ -24,7 +24,7 @@ export interface SectionGrid {
 }
 
 /**
- * HEADER — Hero
+ * HEADER, Hero
  */
 export const SECTION_HERO: SectionGrid = {
   colonnes: 1,
@@ -32,7 +32,7 @@ export const SECTION_HERO: SectionGrid = {
   images: [
     {
       name: "01-hero",
-      label: "Visuel maître — gamme ScanWatch 2",
+      label: "Visuel maître, gamme ScanWatch 2",
       ratio: "21/9",
       teinte: "#14161a",
       colSpan: 1,
@@ -41,7 +41,7 @@ export const SECTION_HERO: SectionGrid = {
 };
 
 /**
- * CHAPITRE 1 — Éléments 3D
+ * CHAPITRE 1, Éléments 3D
  */
 export const SECTION_CHAPITRE_1: SectionGrid = {
   colonnes: 3, // ← CHANGE ICI pour passer à 2 ou 4 colonnes
@@ -79,7 +79,7 @@ export const SECTION_CHAPITRE_1: SectionGrid = {
 };
 
 /**
- * CHAPITRE 2 — Matières et teintes (grille asymétrique)
+ * CHAPITRE 2, Matières et teintes (grille asymétrique)
  */
 export const SECTION_CHAPITRE_2: SectionGrid = {
   colonnes: 4, // ← 4 colonnes pour asymétrie 2x2
@@ -124,7 +124,7 @@ export const SECTION_CHAPITRE_2: SectionGrid = {
 };
 
 /**
- * CHAPITRE 3 — Lumière et reflets
+ * CHAPITRE 3, Lumière et reflets
  */
 export const SECTION_CHAPITRE_3: SectionGrid = {
   colonnes: 1,
@@ -132,7 +132,7 @@ export const SECTION_CHAPITRE_3: SectionGrid = {
   images: [
     {
       name: "10-studio",
-      label: "Mise en scène studio — reflets spéculaires sur verre et biseaux",
+      label: "Mise en scène studio, reflets spéculaires sur verre et biseaux",
       ratio: "16/9",
       teinte: "#0e1013",
       colSpan: 1,
@@ -141,7 +141,7 @@ export const SECTION_CHAPITRE_3: SectionGrid = {
 };
 
 /**
- * CHAPITRE 4 — Teintes et finitions
+ * CHAPITRE 4, Teintes et finitions
  */
 export const SECTION_CHAPITRE_4: SectionGrid = {
   colonnes: 1,
@@ -149,7 +149,7 @@ export const SECTION_CHAPITRE_4: SectionGrid = {
   images: [
     {
       name: "11-eclate",
-      label: "Vue éclatée — tous les éléments",
+      label: "Vue éclatée, tous les éléments",
       ratio: "21/9",
       teinte: "#14161a",
       colSpan: 1,
@@ -158,7 +158,7 @@ export const SECTION_CHAPITRE_4: SectionGrid = {
 };
 
 /**
- * CHAPITRE 5 — Couleurs (petite grille carrée)
+ * CHAPITRE 5, Couleurs (petite grille carrée)
  */
 export const SECTION_CHAPITRE_5: SectionGrid = {
   colonnes: 4, // ← Change à 2 ou 3 si besoin
@@ -196,7 +196,7 @@ export const SECTION_CHAPITRE_5: SectionGrid = {
 };
 
 /**
- * CHAPITRE 6 — Détails macro
+ * CHAPITRE 6, Détails macro
  */
 export const SECTION_CHAPITRE_6: SectionGrid = {
   colonnes: 5, // ← Change à 3 ou 2 si besoin

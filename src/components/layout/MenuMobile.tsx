@@ -19,17 +19,17 @@ interface MenuMobileProps {
 }
 
 /**
- * Navigation mobile — PAGE plein écran, pas un panneau flottant.
+ * Navigation mobile, PAGE plein écran, pas un panneau flottant.
  *
  * ⚠️ Repose sur `<details>` / `<summary>` natifs : zéro état React, zéro
  * dépendance à l'hydratation. C'est la seule implémentation qui ait fini par
- * fonctionner après quatre tentatives en JavaScript — ne pas y revenir.
+ * fonctionner après quatre tentatives en JavaScript, ne pas y revenir.
  * L'`id="menu-mobile"` est le point d'accroche de `menu-mobile.css`
  * (verrou de défilement) : NE PAS le renommer.
  *
  * Le bouton est un pictogramme : trois traits fermé, un seul trait ouvert.
  * Les deux traits extérieurs disparaissent en `group-open:opacity-0`, celui du
- * milieu reste — donc aucune bascule d'icône, juste une transition d'opacité.
+ * milieu reste, donc aucune bascule d'icône, juste une transition d'opacité.
  */
 export default function MenuMobile({ liens, actif }: MenuMobileProps) {
   const detailsRef = useRef<HTMLDetailsElement>(null);
@@ -101,7 +101,7 @@ export default function MenuMobile({ liens, actif }: MenuMobileProps) {
           ))}
         </nav>
 
-        {/* Bloc de pied — poussé en bas de l'écran par `mt-auto` */}
+        {/* Bloc de pied, poussé en bas de l'écran par `mt-auto` */}
         <div className="mt-auto pt-16">
           <address className="not-italic">
             <p className="font-mono text-[11px] uppercase leading-relaxed tracking-[0.2em] text-zinc-500">

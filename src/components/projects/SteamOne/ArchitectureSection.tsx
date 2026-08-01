@@ -30,13 +30,13 @@ const VUES_ISO: VueIsometrique[] = [
   {
     id: 'assemblage-1',
     titre: 'Assemblage vue de dessus',
-    description: 'Empilement modulaire des sous-ensembles — chaîne d\'assemblage lisible',
+    description: 'Empilement modulaire des sous-ensembles, chaîne d\'assemblage lisible',
     image: '/images/projets/steamone/10-iso-assemblage-1.jpg',
   },
   {
     id: 'assemblage-2',
     titre: 'Assemblage vue de côté',
-    description: 'Flux thermique et hydraulique — parcours de l\'eau et de la vapeur',
+    description: 'Flux thermique et hydraulique, parcours de l\'eau et de la vapeur',
     image: '/images/projets/steamone/11-iso-assemblage-2.jpg',
   },
 ];
@@ -116,7 +116,7 @@ export default function ArchitectureSection() {
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">
             Les gros plans révèlent la précision de chaque pièce ; les vues isométriques
             d&apos;assemblage racontent la logique industrielle du montage. Deux échelles
-            de lecture qui se répondent — le détail et le tout.
+            de lecture qui se répondent, le détail et le tout.
           </p>
         </div>
 

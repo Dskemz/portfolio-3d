@@ -6,13 +6,13 @@ import { motion, useReducedMotion } from "framer-motion";
 import { PROJETS } from "@/content/projets";
 
 /**
- * CarrouselProjets — défilement vertical des projets.
+ * CarrouselProjets, défilement vertical des projets.
  *
  * Le visuel de premier plan part vers le BAS et disparaît ; le suivant arrive
  * par le HAUT. Celui de derrière est deux fois plus petit, décalé sur la
  * gauche et flouté : on l'aperçoit, on ne le lit pas.
  *
- * Aucune écriture sur le visuel — le texte vit entièrement dans la colonne de
+ * Aucune écriture sur le visuel, le texte vit entièrement dans la colonne de
  * gauche, alignée sur le HAUT de l'image. L'image bénéficie du même traitement
  * que les fiches de la home : halo orange, gradient radial, périmètre animé SVG.
  *
@@ -40,7 +40,7 @@ const SEUIL_GLISSEMENT = 45;
 const SEUIL_DECISION = 4;
 
 /**
- * ImageCardWrapper — enveloppe l'image du carrousel avec le traitement glow
+ * ImageCardWrapper, enveloppe l'image du carrousel avec le traitement glow
  * identique aux fiches de la home page : halo, gradient radial, périmètre SVG,
  * ombre portée. S'assure la cohérence visuelle globale du site.
  */
@@ -161,7 +161,7 @@ function ImageCardWrapper({
         transition={{ duration: 0.3 }}
       />
 
-      {/* Périmètre SVG animé — se redessine à chaque passage courant */}
+      {/* Périmètre SVG animé, se redessine à chaque passage courant */}
       {perimeter && isCurrent && (
         <svg
           aria-hidden
@@ -335,7 +335,7 @@ export default function CarrouselProjets() {
   return (
     <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,34%)_minmax(0,1fr)] lg:gap-16">
       {/* ---------------------------------------------------------------- */}
-      {/*  Colonne de texte — titre en HAUT, détails alignés sur le BAS     */}
+      {/*  Colonne de texte, titre en HAUT, détails alignés sur le BAS     */}
       {/*  du carrousel (la colonne s'étire à la hauteur de la scène).      */}
       {/* ---------------------------------------------------------------- */}
       <motion.div className="flex flex-col" {...entreeTexte}>
@@ -349,7 +349,7 @@ export default function CarrouselProjets() {
             /{String(courant + 1).padStart(2, "0")}
             <span className="text-trait">
               {" "}
-              — {String(PROJETS.length).padStart(2, "0")}
+             , {String(PROJETS.length).padStart(2, "0")}
             </span>
           </p>
 
@@ -375,7 +375,7 @@ export default function CarrouselProjets() {
       </motion.div>
 
       {/* ---------------------------------------------------------------- */}
-      {/*  Carrousel — le visuel avec traitement glow + lien grille dessous */}
+      {/*  Carrousel, le visuel avec traitement glow + lien grille dessous */}
       {/* ---------------------------------------------------------------- */}
       <motion.div className="flex flex-col" {...entreeCarrousel}>
         <div

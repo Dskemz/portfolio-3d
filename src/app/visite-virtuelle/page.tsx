@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default function VisiteVirtuelle() {
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black text-white">
-      {/* Hero — titre + sous-titre en continuité, aucun trait de coupure */}
+      {/* Hero, titre + sous-titre en continuité, aucun trait de coupure */}
       <section className="pt-32 pb-16 md:pt-40 md:pb-20">
         <div className="mx-auto w-full max-w-3xl px-6 text-center md:px-10">
           <Reveal>
@@ -52,12 +52,12 @@ export default function VisiteVirtuelle() {
         </div>
       </section>
 
-      {/* Visite embarquée — pleine largeur en annonce, se ramène aux dimensions
+      {/* Visite embarquée, pleine largeur en annonce, se ramène aux dimensions
           du viewer quand on ouvre la visite 3D. Aucun fichier distant touché :
           le dimensionnement est géré ici (voir VisiteEmbed). */}
       <VisiteEmbed />
 
-      {/* Points clés — flux électrique traversant les 3 atouts (cf. /about) */}
+      {/* Points clés, flux électrique traversant les 3 atouts (cf. /about) */}
       <section className="px-6 pt-20 pb-24 md:pb-32">
         <FluxServices />
       </section>

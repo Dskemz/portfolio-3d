@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 /**
- * Bento Grid — grille modulaire pour le futur portfolio.
+ * Bento Grid, grille modulaire pour le futur portfolio.
  *
  * Non intégré à la navigation : ce fichier n'est encore appelé nulle part.
  * Il attend d'être branché sur `src/content/projets.ts`.

@@ -8,7 +8,7 @@ interface VignetteCompetenceProps {
 }
 
 /**
- * Vignette de compétence — socle fonctionnel.
+ * Vignette de compétence, socle fonctionnel.
  *
  * La zone média est pour l'instant un placeholder : cadre fin, fond
  * sourd, halo orange discret. Elle est déjà câblée sur deux états (2D /
@@ -62,7 +62,7 @@ export default function VignetteCompetence({ etape }: VignetteCompetenceProps) {
         {etape.description}
       </p>
 
-      {/* Zone média — placeholder pour l'instant */}
+      {/* Zone média, placeholder pour l'instant */}
       <div className="mt-6">
         {bascule && (
           <div className="mb-3 flex gap-px border border-mine/60 p-px">

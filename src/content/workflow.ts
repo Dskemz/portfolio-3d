@@ -3,7 +3,7 @@
  *
  * Tout se configure ici : l'ordre des étapes, le côté d'apparition sur
  * desktop, la nature de la branche, et le média associé. `SkillFlow` ne
- * fait que lire ce tableau — ajouter une étape ne demande aucune
+ * fait que lire ce tableau, ajouter une étape ne demande aucune
  * modification de composant.
  */
 
@@ -29,7 +29,7 @@ export interface SourceMedia {
    * - mode 3d : modèle dans `public/models/`
    */
   src?: string;
-  /** Texte alternatif — obligatoire dès qu'un `src` est renseigné. */
+  /** Texte alternatif, obligatoire dès qu'un `src` est renseigné. */
   alt: string;
 }
 
@@ -38,7 +38,7 @@ export interface MediaEtape {
   statique: SourceMedia;
   /**
    * Optionnel. Sa seule présence fait apparaître le sélecteur 2D/3D sur
-   * la vignette — pas besoin d'un drapeau supplémentaire.
+   * la vignette, pas besoin d'un drapeau supplémentaire.
    */
   interactif?: SourceMedia;
 }

@@ -1,12 +1,12 @@
 import { Archivo, Instrument_Sans, IBM_Plex_Mono } from "next/font/google";
 
 /**
- * Trois rôles, trois fontes — aucune n'est décorative.
+ * Trois rôles, trois fontes, aucune n'est décorative.
  * - Archivo (variable, largeurs étendues) : le display. Grotesque technique,
  *   large, qui tient une identité sans passer par un serif « agence ».
  * - Instrument Sans : le texte courant. Neutre mais pas anonyme.
  * - IBM Plex Mono : la fonte utilitaire. Elle porte les données chiffrées
- *   (cotes, ratios, coordonnées) — le vocabulaire du plan coté.
+ *   (cotes, ratios, coordonnées), le vocabulaire du plan coté.
  */
 
 export const archivo = Archivo({

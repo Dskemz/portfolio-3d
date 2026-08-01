@@ -267,7 +267,7 @@ export default function SkillFlow() {
   /**
    * Fiche sur laquelle un cran nous a délibérément posés. Distinct de stepRef,
    * qui est recalculé depuis le scroll : le cap doux se basait sur stepRef, lui-même
-   * dérivé de la valeur plafonnée par ce cap — la boucle de rétroaction faisait
+   * dérivé de la valeur plafonnée par ce cap, la boucle de rétroaction faisait
    * osciller l'allumage à chaque frame (clignotement + re-render permanent).
    */
   const parkedStepRef = useRef(-1);
@@ -525,7 +525,7 @@ export default function SkillFlow() {
      * n'a pas encore été dépassée (son ancre est toujours sous le haut du
      * viewport). Depuis l'accueil la fiche est à ~1 écran de distance ; l'ancien
      * seuil 0.68·vh la ratait au premier scroll, laissant le défilement natif la
-     * dépasser — d'où le déclenchement au second geste. Le seuil `top > 0`
+     * dépasser, d'où le déclenchement au second geste. Le seuil `top > 0`
      * supprime ce "premier scroll libre".
      */
     const firstFicheApproaches = () => {
@@ -819,12 +819,12 @@ export default function SkillFlow() {
   const isMobile = mode === "mobile";
   const litSet = useMemo(() => new Set(litIds), [litIds]);
 
-  /* ═══════ MOBILE — composant dédié ═══════ */
+  /* ═══════ MOBILE, composant dédié ═══════ */
   if (isMobile) {
     return <SkillFlowMobile />;
   }
 
-  /* ═══════ Accueil — hors workflow, centré ═══════ */
+  /* ═══════ Accueil, hors workflow, centré ═══════ */
   const intro = (
     <header className="px-10 pb-12 pt-44">
       <div className="mx-auto flex w-full max-w-[84rem] flex-col items-center text-center">
@@ -832,7 +832,7 @@ export default function SkillFlow() {
           La ligne de rôle est DANS le <h1>, pas dans un <p> voisin.
           Rendu strictement identique (le span réinitialise taille, graisse,
           interlettrage et interlignage hérités), mais les mots-clés passent du
-          corps de texte au seul <h1> de la page — c'est le signal le plus fort
+          corps de texte au seul <h1> de la page, c'est le signal le plus fort
           que Google lit sur un document.
         */}
         <h1 className="font-display text-[clamp(2.6rem,6.4vw,5rem)] font-light leading-[1.02] tracking-[-0.02em] text-white">
@@ -902,7 +902,7 @@ export default function SkillFlow() {
           {/*
             Halo par traits empilés, PLUS AUCUN filtre SVG.
             L'ancien `sf-emission` empilait deux feGaussianBlur (dont un à 7) sur une
-            région de 240 % de la bbox — soit toute la hauteur de page — et le
+            région de 240 % de la bbox, soit toute la hauteur de page, et le
             navigateur la rastérisait à CHAQUE frame, puisque strokeDashoffset change
             en continu pendant un cran. C'était le poste de coût principal du lag.
             Trois traits concentriques donnent le même rendu pour un trait de 1,3 px,

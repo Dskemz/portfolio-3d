@@ -21,7 +21,7 @@ const RATIOS: Record<string, string> = {
 /**
  * Espace central immersif de la page projet : viewer 3D embarqué (iframe
  * `loading="lazy"`) ou visuel grand format. Même traitement glow que le reste
- * du site — liseré orange net doublé d'un halo flouté, apparaissant une fois le
+ * du site, liseré orange net doublé d'un halo flouté, apparaissant une fois le
  * média chargé.
  */
 export function ProjectViewer({
@@ -71,7 +71,7 @@ export function ProjectViewer({
         </>
       )}
 
-      {/* Liseré émissif — net + halo flouté, une fois le média chargé */}
+      {/* Liseré émissif, net + halo flouté, une fois le média chargé */}
       <span
         aria-hidden="true"
         className={`pointer-events-none absolute inset-0 border transition-opacity duration-500 ${

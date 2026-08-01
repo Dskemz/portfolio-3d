@@ -13,7 +13,7 @@ interface BandeauScrollProps {
 }
 
 /**
- * Bandeau scroll réutilisable — reprend le design du Cartoon : bande colorée
+ * Bandeau scroll réutilisable, reprend le design du Cartoon : bande colorée
  * placée entre le hero et la première section, avec "SCROLL" centré et flèche
  * animée. Chaque projet le décline dans une couleur qui lui est propre.
  */

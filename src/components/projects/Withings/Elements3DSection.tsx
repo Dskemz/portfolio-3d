@@ -84,14 +84,14 @@ export default function Elements3DSection() {
       className="w-full py-16 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-slate-900 to-black"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Bloc texte asymétrique — aligné à gauche, sur 2 colonnes décalées */}
+        {/* Bloc texte asymétrique, aligné à gauche, sur 2 colonnes décalées */}
         <div
           ref={textRef}
           className="grid grid-cols-1 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-8 lg:gap-16 mb-16 lg:mb-20"
         >
           <div className="lg:pt-4">
             <p className="text-xs font-light text-slate-500 uppercase tracking-[0.3em] mb-5">
-              01 — Éléments 3D
+              01, Éléments 3D
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white leading-tight">
               Une gamme entière,
@@ -119,7 +119,7 @@ export default function Elements3DSection() {
         >
           <img
             src="/images/projets/withings/11-eclate.jpg"
-            alt="Vue éclatée de la ScanWatch — boîtier, capteurs et bracelet"
+            alt="Vue éclatée de la ScanWatch, boîtier, capteurs et bracelet"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         </div>

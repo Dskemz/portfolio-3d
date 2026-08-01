@@ -76,7 +76,7 @@ export async function envoyerMessage(
       to: process.env.CONTACT_EMAIL_TO ?? "",
       // Permet de répondre au visiteur d'un simple « Répondre ».
       replyTo: email,
-      subject: `Demande via graphite3d.fr — ${nom}${societe ? ` (${societe})` : ""}`,
+      subject: `Demande via graphite3d.fr, ${nom}${societe ? ` (${societe})` : ""}`,
       text: [
         `Nom      : ${nom}`,
         `E-mail   : ${email}`,

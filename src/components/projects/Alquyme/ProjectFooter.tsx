@@ -19,7 +19,7 @@ export default function ProjectFooter() {
                 Alquyme
               </h3>
               <p className="text-sm text-slate-400 font-light mt-2">
-                Flacon d&apos;exception — Design packaging parfum
+                Flacon d&apos;exception, Design packaging parfum
               </p>
             </div>
 
@@ -59,7 +59,7 @@ export default function ProjectFooter() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
             <div>
               <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed max-w-2xl">
-                Création 3D et mise en scène d&apos;un flacon de parfum ALQUYME — sablier vertical
+                Création 3D et mise en scène d&apos;un flacon de parfum ALQUYME, sablier vertical
                 à double récipient, jeux de lumière sur les gravures dorées et déclinaisons
                 chromatiques pour une collection modulaire d&apos;éditions olfactives.
               </p>
@@ -96,7 +96,7 @@ export default function ProjectFooter() {
       <div className="px-6 md:px-12 lg:px-20 py-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-xs text-slate-400 font-light">
-            <p>© 2024 D. — Freelance Designer &amp; Developer</p>
+            <p>© 2024 D. Freelance Designer &amp; Developer</p>
           </div>
 
           <div className="flex items-center gap-6">

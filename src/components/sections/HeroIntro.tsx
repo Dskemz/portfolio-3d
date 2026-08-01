@@ -8,11 +8,11 @@ interface Repere {
 const REPERES: readonly Repere[] = [
   { cle: "Discipline", valeur: "Artiste 3D généraliste & retail." },
   { cle: "Spécialité", valeur: "Optimisation .glb & Web 3D" },
-  { cle: "Moteur", valeur: "Babylon.js — temps réel" },
+  { cle: "Moteur", valeur: "Babylon.js, temps réel" },
 ] as const;
 
 /**
- * Hero d'introduction — texte centré, sans 3D.
+ * Hero d'introduction, texte centré, sans 3D.
  *
  * Composant serveur : le H1 est présent dans le HTML initial, donc il porte
  * le LCP et le référencement sans dépendre du chargement de la 3D placée
@@ -34,7 +34,7 @@ export default function HeroIntro() {
       </h1>
 
       <p className="mt-8 max-w-2xl text-lg leading-relaxed text-papier/80 md:text-xl">
-        Artiste 3D généraliste — modélisation haute fidélité, expériences
+        Artiste 3D généraliste, modélisation haute fidélité, expériences
         interactives et visites virtuelles immersives. Spécialisé en optimisation
         web et Babylon.js pour des solutions performantes et captivantes.
       </p>

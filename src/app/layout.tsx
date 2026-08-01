@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
 /**
- * Sora — police de tout le site (SIL Open Font License, gratuite).
+ * Sora, police de tout le site (SIL Open Font License, gratuite).
  *
  * Les variables exposées ici s'appellent `--font-sora` et `--font-plex-mono`,
  * PAS `--font-display` / `--font-mono` : ces deux derniers noms sont ceux des
@@ -34,7 +34,7 @@ const mono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://graphite3d.fr"),
   title: {
-    default: "Denis Masquet — Graphiste 3D généraliste | Graphite 3D",
+    default: "Denis Masquet, Graphiste 3D généraliste | Graphite 3D",
     template: "%s | Graphite 3D",
   },
   description:

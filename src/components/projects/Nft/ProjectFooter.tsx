@@ -19,7 +19,7 @@ export default function ProjectFooter() {
                 Floofies
               </h3>
               <p className="text-sm text-slate-400 font-light mt-2">
-                Le shiba du futur — Collection NFT 3D
+                Le shiba du futur, Collection NFT 3D
               </p>
             </div>
 
@@ -59,7 +59,7 @@ export default function ProjectFooter() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
             <div>
               <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed max-w-2xl">
-                Collection de NFT 3D mettant en scène un univers cartoon et pop-futuriste — 
+                Collection de NFT 3D mettant en scène un univers cartoon et pop-futuriste, 
                 personnages modulaires, accessoires spatiaux et compositions génératives 
                 organisées selon quatre niveaux de rareté progressive.
               </p>
@@ -96,7 +96,7 @@ export default function ProjectFooter() {
       <div className="px-6 md:px-12 lg:px-20 py-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-xs text-slate-400 font-light">
-            <p>© 2024 D. — Freelance Designer &amp; Developer</p>
+            <p>© 2024 D. Freelance Designer &amp; Developer</p>
           </div>
 
           <div className="flex items-center gap-6">

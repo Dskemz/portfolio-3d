@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
  * l'intérieur) est habillée pour donner une stature de logiciel SaaS. Aucun
  * fichier distant n'est touché : tout est géré dans cette page hôte.
  *
- * DESKTOP / TABLETTE — mockup d'ordinateur portable FIXE (PNG, écran = trou
+ * DESKTOP / TABLETTE, mockup d'ordinateur portable FIXE (PNG, écran = trou
  * transparent). L'écran ne fait que ~770 px de large : si on y mettait l'iframe
  * à 100 %, la page distante afficherait sa mise en page MOBILE (effet loupe).
  * On rend donc l'iframe à une LARGEUR LOGIQUE DESKTOP (1440 px) puis on la
@@ -15,12 +15,12 @@ import { useEffect, useRef, useState } from "react";
  * clics restent précis au pixel) pour remplir exactement la dalle. Résultat :
  * la vraie mise en page desktop 16/9, à l'échelle, nette et centrée.
  *
- * MOBILE — châssis effacé → carte fluide au format téléphone. L'iframe est en
+ * MOBILE, châssis effacé → carte fluide au format téléphone. L'iframe est en
  * largeur native (pas de mise à l'échelle : la page rend sa version mobile, ce
  * qui est le rendu voulu). Un BOUCLIER tactile garde le défilement de la page
  * prioritaire : iframe `pointer-events:none` par défaut (le doigt défile la
  * PAGE), un tap sur « Toucher pour explorer » active la visite en FULLSCREEN,
- * « Terminer » la relâche — jamais piégé par le tactile du viewer 3D.
+ * « Terminer » la relâche, jamais piégé par le tactile du viewer 3D.
  * En fullscreen, la navbar se rétracte et l'iframe occupe tout l'écran.
  */
 
@@ -78,7 +78,7 @@ export default function VisiteEmbed() {
 
   return (
     <div className="w-full">
-      {/* ================= DESKTOP / TABLETTE — écrin laptop ================= */}
+      {/* ================= DESKTOP / TABLETTE, écrin laptop ================= */}
       <div className="mx-auto hidden w-full max-w-[1080px] px-6 lg:block">
         <div className="relative mx-auto aspect-[2332/1500] w-full">
           {/* Dalle : cadre rectangulaire aux coins subtilement arrondis, calé
@@ -117,7 +117,7 @@ export default function VisiteEmbed() {
         </div>
       </div>
 
-      {/* ===================== MOBILE — carte fluide ======================== */}
+      {/* ===================== MOBILE, carte fluide ======================== */}
       {/* Quand actif = true : fullscreen immersif, navbar masquée */}
       <div
         ref={containerRef}

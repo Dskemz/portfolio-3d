@@ -52,7 +52,7 @@ export function PlaceholderVisuel({
         </span>
       </div>
 
-      {/* Liseré émissif au survol — net + halo flouté */}
+      {/* Liseré émissif au survol, net + halo flouté */}
       <span
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 border border-orange-500/10 transition-colors duration-300 group-hover:border-orange-500/40"

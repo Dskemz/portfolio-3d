@@ -1,7 +1,7 @@
 /**
  * Composant générique pour les pages de projet.
  * 
- * Utilisable par n'importe quel projet — tu peux composer ta mise en page
+ * Utilisable par n'importe quel projet, tu peux composer ta mise en page
  * en assemblant des sections génériques (hero, texte, grille d'images, etc.)
  */
 

@@ -21,7 +21,7 @@ interface EtudeCasWithingsProps {
 }
 
 /**
- * Étude de cas sur-mesure — WITHINGS ScanWatch 2, Light et Nova.
+ * Étude de cas sur-mesure, WITHINGS ScanWatch 2, Light et Nova.
  *
  * Rendue via la route dynamique /portfolio/[slug] pour le slug
  * "withings-scanwatch". Compose les sections dédiées (hero immersif, éléments

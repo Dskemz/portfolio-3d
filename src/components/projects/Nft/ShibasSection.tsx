@@ -17,19 +17,19 @@ const SHIBAS_BASE: ShibaBase[] = [
   {
     id: 'jaune',
     nom: 'Shiba Jaune',
-    variante: 'Base commune — pelage doré',
+    variante: 'Base commune, pelage doré',
     image: '/images/projets/nft-floofies/02-shiba-jaune.jpg',
   },
   {
     id: 'blanc',
     nom: 'Shiba Blanc',
-    variante: 'Base commune — pelage neige',
+    variante: 'Base commune, pelage neige',
     image: '/images/projets/nft-floofies/03-shiba-blanc.jpg',
   },
   {
     id: 'poils',
     nom: 'Shiba Poilu',
-    variante: 'Base commune — fourrure longue',
+    variante: 'Base commune, fourrure longue',
     image: '/images/projets/nft-floofies/04-shiba-poils.jpg',
   },
 ];
@@ -88,14 +88,14 @@ export default function ShibasSection() {
             <span className="text-slate-400">Fondations &amp; base commune</span>
           </h2>
           <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4">
-            La collection repose sur une <span className="text-white">base morphologique commune</span> — 
+            La collection repose sur une <span className="text-white">base morphologique commune</span>, 
             un shiba stylisé aux proportions cartoon, décliné en trois grandes familles de pelage. 
             Ces fondations garantissent la cohérence de l&apos;ensemble tout en offrant des variations 
             graphiques immédiatement reconnaissables.
           </p>
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">
             Chaque base sert de socle aux couches suivantes : accessoires, vêtements, casques, 
-            armes — permettant la génération de milliers de combinaisons uniques.
+            armes, permettant la génération de milliers de combinaisons uniques.
           </p>
         </div>
 

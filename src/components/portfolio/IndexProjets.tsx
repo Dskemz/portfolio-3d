@@ -9,7 +9,7 @@ import { PROJETS } from "@/content/projets";
 const SELECTION = PROJETS.slice(0, 3);
 
 /**
- * Aplats d'attente — À SUPPRIMER une fois les visuels en place.
+ * Aplats d'attente, À SUPPRIMER une fois les visuels en place.
  * Tant que `public/images/portfolio/` est vide, ces gris donnent à voir les
  * gabarits et l'enchaînement des blocs.
  */
@@ -25,12 +25,12 @@ const TEINTE = ["#1b1e23", "#2a2f36", "#14161a"] as const;
 const FORMAT = "16 / 9";
 
 /**
- * Index des projets — colonne de texte à gauche, visuels à droite.
+ * Index des projets, colonne de texte à gauche, visuels à droite.
  *
  * Répartition : un tiers pour l'écrit, deux tiers pour l'image. La colonne
  * de gauche est collante et occupe toute la hauteur : le nom du projet se
  * cale en haut, sa description en bas. Elle se met à jour au fil du
- * défilement, sans que rien ne bouge à l'écran — seul le texte change.
+ * défilement, sans que rien ne bouge à l'écran, seul le texte change.
  *
  * Sous 1024 px la colonne collante n'a plus de sens : le texte redescend
  * sous chaque visuel, dans l'ordre naturel de lecture.
@@ -67,7 +67,7 @@ export default function IndexProjets() {
     <div className="w-full">
       <div className="lg:grid lg:grid-cols-3">
         {/* ---------------------------------------------------------------- */}
-        {/*  Colonne de gauche — 1/3, collante, desktop uniquement           */}
+        {/*  Colonne de gauche, 1/3, collante, desktop uniquement           */}
         {/*  Dupliquée du contenu de droite, donc masquée aux lecteurs       */}
         {/*  d'écran : ils lisent la version en flux, sous chaque visuel.    */}
         {/* ---------------------------------------------------------------- */}
@@ -93,7 +93,7 @@ export default function IndexProjets() {
             </h2>
 
             <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.24em] text-trait">
-              {projetActif.client} — {projetActif.annee}
+              {projetActif.client}, {projetActif.annee}
             </p>
 
             <p className="mt-4 max-w-xs text-base font-light leading-relaxed text-papier/60">
@@ -103,7 +103,7 @@ export default function IndexProjets() {
         </aside>
 
         {/* ---------------------------------------------------------------- */}
-        {/*  Colonne de droite — 2/3, les visuels empilés                    */}
+        {/*  Colonne de droite, 2/3, les visuels empilés                    */}
         {/* ---------------------------------------------------------------- */}
         <div className="flex flex-col gap-[2px] lg:col-span-2 lg:py-40">
           {SELECTION.map((projet, index) => (
@@ -158,7 +158,7 @@ export default function IndexProjets() {
                   <div className="overflow-hidden">
                     <div className="px-6 pb-7 pt-4">
                       <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-trait">
-                        {projet.client} — {projet.annee}
+                        {projet.client}, {projet.annee}
                       </p>
                       <h2 className="mt-3 font-display text-2xl font-light leading-tight text-papier">
                         {projet.titre}
@@ -173,7 +173,7 @@ export default function IndexProjets() {
                 {/* Sémantique : le texte visible est décoratif à ce stade,
                     puisqu'il apparaît et disparaît au défilement. */}
                 <span className="sr-only">
-                  {projet.titre} — {projet.resume} ({projet.client},{" "}
+                  {projet.titre}, {projet.resume} ({projet.client},{" "}
                   {projet.annee})
                 </span>
               </Link>

@@ -21,7 +21,7 @@ interface EtudeCasHorlogerieProps {
 }
 
 /**
- * Étude de cas éditoriale sur-mesure — HORLOGERIE · Mise en scène de montres.
+ * Étude de cas éditoriale sur-mesure, HORLOGERIE · Mise en scène de montres.
  *
  * Rendue via la route dynamique /portfolio/[slug] pour le slug "horlogerie-suisse".
  * Compose les sections dédiées (hero, Villeret Chinese Calendar, Polaris Memovox,
@@ -36,7 +36,7 @@ export function EtudeCasHorlogerie({
       <HeroSection />
       <VilleretSection />
       <PhraseSection>
-        Précision du geste, patience de la matière — l&apos;horlogerie comme discipline du regard.
+        Précision du geste, patience de la matière, l&apos;horlogerie comme discipline du regard.
       </PhraseSection>
       <PolarisSection />
       <GalerieSection />

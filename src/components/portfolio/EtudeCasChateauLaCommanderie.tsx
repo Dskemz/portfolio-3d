@@ -22,7 +22,7 @@ interface EtudeCasChateauLaCommanderieProps {
 }
 
 /**
- * Étude de cas éditoriale sur-mesure — CHÂTEAU LA COMMANDERIE (Agences Georges).
+ * Étude de cas éditoriale sur-mesure, CHÂTEAU LA COMMANDERIE (Agences Georges).
  *
  * Rendue via la route dynamique /portfolio/[slug] pour le slug "agences-georges".
  * Compose les 5 sections dédiées (hero, gamme, textures, breakdown technique,

@@ -17,25 +17,25 @@ const VUES_ECLATE: VueEclate[] = [
   {
     id: 'reservoir',
     titre: 'Réservoir',
-    legende: 'Contenance eau — module amovible',
+    legende: 'Contenance eau, module amovible',
     image: '/images/projets/steamone/02-eclate-reservoir.jpg',
   },
   {
     id: 'boitier',
     titre: 'Boîtier principal',
-    legende: 'Coque ergonomique — poignée &amp; commandes',
+    legende: 'Coque ergonomique, poignée &amp; commandes',
     image: '/images/projets/steamone/03-eclate-boitier.jpg',
   },
   {
     id: 'resistances',
     titre: 'Résistances',
-    legende: 'Bloc de chauffe — génération de vapeur',
+    legende: 'Bloc de chauffe, génération de vapeur',
     image: '/images/projets/steamone/04-eclate-resistances.jpg',
   },
   {
     id: 'grille',
     titre: 'Grille de diffusion',
-    legende: 'Sortie vapeur — répartition homogène',
+    legende: 'Sortie vapeur, répartition homogène',
     image: '/images/projets/steamone/05-eclate-grille.jpg',
   },
 ];
@@ -100,7 +100,7 @@ export default function EclateSection() {
             d&apos;ingénierie qui font sa singularité.
           </p>
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">
-            Les grandes pièces — réservoir, boîtier, résistances, grille de diffusion — sont
+            Les grandes pièces, réservoir, boîtier, résistances, grille de diffusion, sont
             séparées et flottent dans l&apos;espace, comme si le produit se démontait par lui-même
             face au regard. Une mise en scène pédagogique, précise et esthétique.
           </p>

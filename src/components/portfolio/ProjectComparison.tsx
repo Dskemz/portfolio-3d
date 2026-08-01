@@ -72,7 +72,7 @@ export function ProjectComparison({
         onWheel={onWheel}
         style={{ touchAction: "none" }}
       >
-        {/* Rendu final — plan de fond avec légère surbrillance */}
+        {/* Rendu final, plan de fond avec légère surbrillance */}
         <div className="absolute inset-0">
           <Image
             src={finalUrl}
@@ -85,7 +85,7 @@ export function ProjectComparison({
           <div className="absolute inset-0 bg-black/5" />
         </div>
 
-        {/* Wireframe — révélé par clip-path, plus visible */}
+        {/* Wireframe, révélé par clip-path, plus visible */}
         <div
           className="absolute inset-0"
           style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
@@ -99,7 +99,7 @@ export function ProjectComparison({
           />
         </div>
 
-        {/* Trait de séparation — filet lumineux avec double flèche */}
+        {/* Trait de séparation, filet lumineux avec double flèche */}
         <div
           className="absolute inset-y-0 w-px bg-orange-500"
           style={{ left: `${position}%`, transform: "translateX(-50%)" }}
@@ -108,7 +108,7 @@ export function ProjectComparison({
             aria-hidden="true"
             className="absolute inset-y-0 -left-[1px] w-[3px] bg-orange-500/40 blur-[3px]"
           />
-          {/* Poignée + double flèches — plus visible */}
+          {/* Poignée + double flèches, plus visible */}
           <span className="absolute left-1/2 top-1/2 flex flex-col items-center justify-center gap-0.5 h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-orange-500/80 bg-black/75 backdrop-blur-sm transition-transform duration-300 group-hover:scale-125 group-hover:border-orange-500">
             {/* Double flèche gauche */}
             <span className="text-orange-500 text-sm font-bold leading-none">«</span>

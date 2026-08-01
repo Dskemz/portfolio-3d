@@ -1,5 +1,5 @@
 /**
- * Configuration layout — creation-originales
+ * Configuration layout, creation-originales
  * 
  * Modifie colonnes/gap/ratio pour ajuster la mise en page.
  */

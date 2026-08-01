@@ -19,7 +19,7 @@ interface IframeScrollIsolatorProps {
  * l'iframe est en cross-origin, donc les événements molette qui se produisent
  * À L'INTÉRIEUR ne remontent JAMAIS au document parent. Impossible de les
  * annuler. La seule prise que la page parent conserve, c'est son propre
- * défilement — on le verrouille donc à l'entrée du pointeur.
+ * défilement, on le verrouille donc à l'entrée du pointeur.
  *
  * Verrou : `overflow: hidden` sur <html> et <body>, avec compensation de la
  * largeur de la barre de défilement pour éviter un saut de mise en page.
@@ -39,7 +39,7 @@ export default function IframeScrollIsolator({
   const verrouilleRef = useRef(false);
   const [pointeurFin, setPointeurFin] = useState(false);
 
-  // Souris véritable uniquement — jamais sur tactile.
+  // Souris véritable uniquement, jamais sur tactile.
   useEffect(() => {
     const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
     const maj = () => setPointeurFin(mq.matches);

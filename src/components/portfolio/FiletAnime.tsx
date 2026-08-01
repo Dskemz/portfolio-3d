@@ -18,7 +18,7 @@ interface FiletAnimeProps {
 }
 
 /**
- * Filet lumineux animé au scroll — deux traits superposés (net orange + halo
+ * Filet lumineux animé au scroll, deux traits superposés (net orange + halo
  * flouté) partant de la fin du mot et s'étirant jusqu'au bord de l'écran.
  *
  * L'animation joue sur `scaleX` (origine à gauche) : aucun reflow, mouvement

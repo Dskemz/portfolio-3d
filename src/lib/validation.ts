@@ -5,7 +5,7 @@ import { z } from "zod";
  *
  * Il sert des deux côtés : le client pour le retour immédiat, le serveur
  * comme rempart. La validation navigateur est un confort d'usage, jamais
- * une sécurité — un envoi forgé ne passe pas par elle.
+ * une sécurité, un envoi forgé ne passe pas par elle.
  */
 export const schemaContact = z.object({
   nom: z

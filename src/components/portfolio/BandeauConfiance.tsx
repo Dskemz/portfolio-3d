@@ -1,17 +1,17 @@
 /**
- * BandeauConfiance — « Ils m'ont fait confiance ».
+ * BandeauConfiance, « Ils m'ont fait confiance ».
  *
  * Plus de nappe floue derrière les logos (retirée à la demande de D) : il ne
  * reste que le libellé et la piste qui défile, resserrés l'un contre l'autre.
  * Le fil orange qui passe juste au-dessus (tracé dans page.tsx) tient lieu de
- * séparation — inutile d'ajouter un fond.
+ * séparation, inutile d'ajouter un fond.
  *
  * Défilement : piste dupliquée deux fois, translatée de -50 % en boucle ; la
  * couture est invisible car la seconde moitié copie la première.
  *
  * Wordmarks (noms typographiés) plutôt qu'images : aucun asset requis. Pour de
  * vrais logos, remplacer le contenu de la boucle par une balise <img> vers
- * /public/images/logos/ — piste et animation inchangées.
+ * /public/images/logos/, piste et animation inchangées.
  *
  * Animation neutralisée sous `prefers-reduced-motion`.
  */

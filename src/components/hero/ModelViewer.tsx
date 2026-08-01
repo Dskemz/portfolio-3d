@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { ModelViewerProps, ViewerState } from "@/types/hero";
 
 /**
- * ModelViewer — Composant client pour le viewer 3D avec model-viewer de Google.
+ * ModelViewer, Composant client pour le viewer 3D avec model-viewer de Google.
  *
  * Responsabilités:
  * - Charger le CDN model-viewer (via next/script dans le layout parent)
@@ -86,7 +86,7 @@ export default function ModelViewer({
       className="relative"
       aria-label="Visite virtuelle 3D interactive"
     >
-      {/* — Cote horizontale — */}
+      {/*, Cote horizontale, */}
       {showDimensions && (
         <div
           aria-hidden="true"
@@ -105,7 +105,7 @@ export default function ModelViewer({
         </div>
       )}
 
-      {/* — Cote verticale — */}
+      {/*, Cote verticale, */}
       {showDimensions && (
         <div
           aria-hidden="true"
@@ -124,7 +124,7 @@ export default function ModelViewer({
         </div>
       )}
 
-      {/* — Conteneur viewer — */}
+      {/*, Conteneur viewer, */}
       <div
         style={{ aspectRatio: ratio }}
         className="relative w-full overflow-hidden border border-mine bg-mine/40"
@@ -153,7 +153,7 @@ export default function ModelViewer({
           </div>
         )}
 
-        {/* model-viewer — ne s'affiche que si le CDN est chargé */}
+        {/* model-viewer, ne s'affiche que si le CDN est chargé */}
         {typeof window !== "undefined" &&
           (window as any)["ModelViewerElement"] && (
             <model-viewer
@@ -185,7 +185,7 @@ export default function ModelViewer({
 
       {/* Caption */}
       <figcaption className="mt-3 flex items-baseline justify-between gap-4 font-mono text-xs tracking-wider text-trait">
-        <span>Visite interactive — cliquez et déplacez-vous</span>
+        <span>Visite interactive, cliquez et déplacez-vous</span>
         {showDimensions && dimensions && (
           <span aria-hidden>{dimensions.w}×{dimensions.h}</span>
         )}

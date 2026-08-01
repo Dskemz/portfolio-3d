@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { ORIGIN_ID } from "@/content/workflowData";
 
 /**
- * HomeIntro — séquence d'introduction (loader) de la page d'accueil.
+ * HomeIntro, séquence d'introduction (loader) de la page d'accueil.
  *
  * Récit : de NOMBREUX flux (les workflows éprouvés au fil de la carrière)
  * entrent par le haut comme les pistes d'un circuit imprimé, à angles droits,
- * et CONVERGENT en un seul point. De ce point, un unique flux — le workflow
- * affiné, optimisé — descend, sort par la gauche, rentre par la droite (effet
+ * et CONVERGENT en un seul point. De ce point, un unique flux, le workflow
+ * affiné, optimisé, descend, sort par la gauche, rentre par la droite (effet
  * de liaison) et vient se poser en « goutte d'eau » EXACTEMENT sur l'amorce de
  * la home (`#wf-origin`), le point qui lance le storytelling. Le contenu
  * apparaît alors en fondu, puis le défilement est débloqué.
@@ -20,21 +20,21 @@ import { ORIGIN_ID } from "@/content/workflowData";
  * était calculée en JavaScript puis réécrite dans le DOM, pour 8 animations en
  * parallèle : sur un processeur ancien ce temps JS mangeait le budget de frame
  * en plus du rendu, d'où les saccades. Désormais aucun JS ne s'exécute par
- * image — le navigateur anime les tracés en code natif ; le JS ne fait que
+ * image, le navigateur anime les tracés en code natif ; le JS ne fait que
  * poser la géométrie et enchaîner les étapes via l'événement `animationend`.
  * Rendu strictement identique : mêmes tracés, mêmes durées, mêmes courbes.
  *
  * Points de conception importants :
- * – Le point d'arrivée est la position RÉELLE de l'amorce, mesurée dans le DOM
+ *, Le point d'arrivée est la position RÉELLE de l'amorce, mesurée dans le DOM
  *   (le contenu est monté dès le départ, masqué en opacité), re-mesurée juste
  *   avant la goutte pour un raccord parfait.
- * – Aucun `await document.fonts.ready` en tête : sur une machine lente il
+ *, Aucun `await document.fonts.ready` en tête : sur une machine lente il
  *   retardait tout le lancement (l'utilisateur « ratait » l'animation). On
  *   démarre immédiatement.
- * – Aucun filtre CSS `drop-shadow` (rastérisé à CHAQUE image) : coûteux sur
+ *, Aucun filtre CSS `drop-shadow` (rastérisé à CHAQUE image) : coûteux sur
  *   vieux matériel. Les pistes sont des traits nets ; la lueur est portée par
  *   la goutte finale.
- * – Chaque piste est MASQUÉE (opacity 0) dès que sa comète a fini : sinon un
+ *, Chaque piste est MASQUÉE (opacity 0) dès que sa comète a fini : sinon un
  *   `stroke-linecap: round` laisse un point orange résiduel à l'extrémité —
  *   c'était le point fantôme qui restait au bord gauche sur téléphone.
  *
@@ -120,7 +120,7 @@ export default function HomeIntro({ children }: { children: React.ReactNode }) {
      * Lance une comète le long d'un <path> via une ANIMATION CSS native
      * (`stroke-dashoffset` de SEG → -1) et résout quand elle est terminée.
      * Aucun JavaScript n'est exécuté par image : c'est le moteur du navigateur
-     * qui anime — d'où le gain sur matériel ancien. `both` fige l'état de
+     * qui anime, d'où le gain sur matériel ancien. `both` fige l'état de
      * départ pendant le `delay` et l'état final après.
      */
     const filerVers = (

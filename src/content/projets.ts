@@ -1,5 +1,5 @@
 /**
- * PROJETS — Catalogue complet avec configurations flexibles
+ * PROJETS, Catalogue complet avec configurations flexibles
  */
 
 export type TypeProjetId = "modelisation" | "visite-virtuelle" | "temps-reel" | "architecture" | "design" | "video";
@@ -16,7 +16,7 @@ export const TYPES_PROJETS: Record<ProjetTypeId, { label: string; icon: string }
 };
 
 export interface ProjetData {
-  // — Champs historiques —
+  //, Champs historiques —
   slug: string;
   titre: string;
   client: string;
@@ -26,7 +26,7 @@ export interface ProjetData {
   /** URL de l'image hero. Optionnelle : fallback à un gradient si absente. */
   couverture?: string;
 
-  // — Champs étendus (page projet) —
+  //, Champs étendus (page projet) —
   role: string;
   outils: string[];
   types: TypeProjetId[];
@@ -74,10 +74,10 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "decotec",
-    titre: "Architecture d'Intérieur – Salle de Bain",
+    titre: "Architecture d'Intérieur, Salle de Bain",
     client: "Décotec",
     resume:
-      "Perspectives 3D photoréalistes pour la présentation de collections de mobilier de salle de bain — scénographies de gammes, étude d'éclairage et workflow technique.",
+      "Perspectives 3D photoréalistes pour la présentation de collections de mobilier de salle de bain, scénographies de gammes, étude d'éclairage et workflow technique.",
     categorie: "Architecture",
     annee: 2024,
     couverture: "/images/projets/decotec/01-hero.jpg",
@@ -90,10 +90,10 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "nft-floofies",
-    titre: "Floofies – Le shiba du futur",
+    titre: "Floofies, Le shiba du futur",
     client: "NFT Floofies",
     resume:
-      "Collection de NFT 3D mettant en scène un univers cartoon et pop-futuriste — shibas modulaires, accessoires spatiaux et compositions génératives structurées en quatre niveaux de rareté.",
+      "Collection de NFT 3D mettant en scène un univers cartoon et pop-futuriste, shibas modulaires, accessoires spatiaux et compositions génératives structurées en quatre niveaux de rareté.",
     categorie: "Design Digital",
     annee: 2024,
     couverture: "/images/projets/nft-floofies/01-hero.jpg",
@@ -106,7 +106,7 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "summum-3d",
-    titre: "Studio Summum — Sauvegarde Numérique d'Œuvres d'Art",
+    titre: "Studio Summum, Sauvegarde Numérique d'Œuvres d'Art",
     client: "Studio Summum",
     resume:
       "Numérisation haute fidélité d'œuvres d'art par photogrammétrie, retopologie et optimisation GLTF/GLB pour une exploitation temps réel (musées virtuels, WebGL, archives).",
@@ -122,10 +122,10 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "velyv-elo",
-    titre: "VélyVélo – Conception de Vélo Électrique",
+    titre: "VélyVélo, Conception de Vélo Électrique",
     client: "VélyVélo",
     resume:
-      "Conception 3D d'un vélo électrique de livraison urbaine — structure caisson-selle, personnalisation par enseigne et déclinaisons de flottes professionnelles.",
+      "Conception 3D d'un vélo électrique de livraison urbaine, structure caisson-selle, personnalisation par enseigne et déclinaisons de flottes professionnelles.",
     categorie: "Design Produit & Mobilité",
     annee: 2023,
     couverture: "/images/projets/velyv-elo/01-hero.jpg",
@@ -138,7 +138,7 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "agences-georges",
-    titre: "Application Showroom 3D – Fashion Luxury",
+    titre: "Application Showroom 3D, Fashion Luxury",
     client: "Agences Georges",
     resume:
       "Application interactive 3D pour présentation de collections haute couture, essayage virtuel et personnalisation en temps réel.",
@@ -154,10 +154,10 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "alquyme",
-    titre: "Alquyme – Flacon d'exception",
+    titre: "Alquyme, Flacon d'exception",
     client: "Alquyme",
     resume:
-      "Création 3D et mise en scène d'un flacon de parfum ALQUYME — sablier vertical à double récipient, gravures dorées et déclinaisons chromatiques pour une collection modulaire.",
+      "Création 3D et mise en scène d'un flacon de parfum ALQUYME, sablier vertical à double récipient, gravures dorées et déclinaisons chromatiques pour une collection modulaire.",
     categorie: "Design Packaging & Parfum",
     annee: 2023,
     couverture: "/images/projets/alquyme/01-hero.jpg",
@@ -173,7 +173,7 @@ export const PROJETS: ProjetData[] = [
     titre: "Steamone - Défroisseur vapeur",
     client: "Steamone",
     resume:
-      "Modélisation 3D et vue éclatée d'un défroisseur vapeur — révéler l'architecture interne, expliquer l'ergonomie et sublimer le design industriel.",
+      "Modélisation 3D et vue éclatée d'un défroisseur vapeur, révéler l'architecture interne, expliquer l'ergonomie et sublimer le design industriel.",
     categorie: "Design Produit & Éclaté 3D",
     annee: 2022,
     couverture: "/images/projets/steamone/01-hero.jpg",
@@ -186,7 +186,7 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "creation-originales",
-    titre: "Création Originales – Design Produit 3D",
+    titre: "Création Originales, Design Produit 3D",
     client: "Création Originales",
     resume:
       "Modélisation 3D et rendu de produits design artisanaux pour catalogues, portfolio digital et campagnes e-commerce.",
@@ -202,17 +202,17 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "horlogerie-suisse",
-    titre: "Horlogerie – Mise en scène de montres",
+    titre: "Horlogerie, Mise en scène de montres",
     client: "Projet personnel",
     resume:
-      "Projets personnels de modélisation 3D horlogère — Villeret Chinese Calendar, Polaris Memovox 50e anniversaire et collection évolutive de pièces d'exception.",
+      "Projets personnels de modélisation 3D horlogère, Villeret Chinese Calendar, Polaris Memovox 50e anniversaire et collection évolutive de pièces d'exception.",
     categorie: "Modélisation Horlogerie",
     annee: 2022,
     couverture: "/images/projets/horlogerie-suisse/01-hero.jpg",
     role: "Modélisateur 3D · Direction artistique",
     outils: ["Cinema 4D", "Octane Render", "Substance Designer", "Photoshop"],
     types: ["modelisation"],
-    defi: "Restituer avec exactitude les complications, matériaux et finitions de pièces horlogères de prestige — verre saphir, cadrans soleillés, boîtiers polis/brossés — tout en construisant une collection évolutive et harmonieuse.",
+    defi: "Restituer avec exactitude les complications, matériaux et finitions de pièces horlogères de prestige, verre saphir, cadrans soleillés, boîtiers polis/brossés, tout en construisant une collection évolutive et harmonieuse.",
     solution:
       "Modélisation haute précision (Villeret Chinese Calendar, Polaris Memovox), rendus clay et matériaux, compositions duo, galerie évolutive prête à accueillir les futures pièces.",
   },

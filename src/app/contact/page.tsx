@@ -27,7 +27,7 @@ export default function ContactPage() {
               c'est le `inline-block relative` sur « projet » qui donne le point
               d'ancrage, et `left-full` colle le départ au « t ».
 
-              `top: 0.93em` place le trait sur la BARRE BASSE du « t » — la
+              `top: 0.93em` place le trait sur la BARRE BASSE du « t », la
               valeur est en `em`, elle suit donc la taille du titre entre
               mobile et grand écran sans second réglage.
             */}

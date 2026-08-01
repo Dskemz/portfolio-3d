@@ -48,6 +48,6 @@ export interface ModelViewerProps {
 }
 
 /**
- * État du viewer 3D — utilisé par ModelViewer.tsx
+ * État du viewer 3D, utilisé par ModelViewer.tsx
  */
 export type ViewerState = "idle" | "loading" | "ready" | "error";

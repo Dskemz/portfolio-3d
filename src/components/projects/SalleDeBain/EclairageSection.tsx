@@ -20,7 +20,7 @@ const ECLAIRAGE_VARIANTES: EclairageVariante[] = [
     id: 'jour',
     titre: 'Lumière Naturelle (Jour)',
     description: 'Lumière douce et chaleureuse',
-    details: 'Rendu en lumière du jour dominante — baie vitrée large — reflets sur les surfaces lisses — ambiance sereine et lumineuse.',
+    details: 'Rendu en lumière du jour dominante, baie vitrée large, reflets sur les surfaces lisses, ambiance sereine et lumineuse.',
     image: '/images/projets/decotec/09-eclairage-jour.jpg',
     temperature: '6500K',
   },
@@ -28,7 +28,7 @@ const ECLAIRAGE_VARIANTES: EclairageVariante[] = [
     id: 'blanc',
     titre: 'Éclairage Blanc Neutre',
     description: 'Clarté & Netteté optimales',
-    details: 'Éclairage LED blanc froid (4500K) — rendu détaillé et lisible — idéal pour la visualisation des matériaux et finitions.',
+    details: 'Éclairage LED blanc froid (4500K), rendu détaillé et lisible, idéal pour la visualisation des matériaux et finitions.',
     image: '/images/projets/decotec/10-eclairage-blanc.jpg',
     temperature: '4500K',
   },
@@ -36,7 +36,7 @@ const ECLAIRAGE_VARIANTES: EclairageVariante[] = [
     id: 'nuit',
     titre: 'Ambiance de Nuit (Spa)',
     description: 'Détente & Intimité',
-    details: 'Éclairage tamisé (2700K) — jeux de lumière indirecte — reflets dramatiques sur le marbre et l\'eau — atmosphère relaxante.',
+    details: 'Éclairage tamisé (2700K), jeux de lumière indirecte, reflets dramatiques sur le marbre et l\'eau, atmosphère relaxante.',
     image: '/images/projets/decotec/11-eclairage-nuit.jpg',
     temperature: '2700K',
   },
@@ -79,7 +79,7 @@ export default function EclairageSection() {
           </h2>
           <p className="text-base md:text-lg text-slate-400 font-light max-w-3xl mx-auto">
             Analyse comparative montrant l&apos;influence décisive de l&apos;éclairage sur la perception
-            des matériaux — contrastes, reflets, et ambiance générale de l&apos;espace.
+            des matériaux, contrastes, reflets, et ambiance générale de l&apos;espace.
           </p>
         </div>
 
@@ -164,7 +164,7 @@ export default function EclairageSection() {
               <h4 className="text-lg font-light text-white mb-3">Température de Couleur</h4>
               <p className="text-sm text-slate-300 font-light leading-relaxed">
                 De 2700K (ambiante chaude) à 6500K (lumière naturelle), la température chromatique
-                influence l&apos;interprétation émotionnelle de la pièce — intimité vs clarté analytique.
+                influence l&apos;interprétation émotionnelle de la pièce, intimité vs clarté analytique.
               </p>
             </div>
 

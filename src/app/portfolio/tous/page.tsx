@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "L'ensemble des réalisations 3D, filtrables par typologie : visites virtuelles interactives, temps réel web, modélisation produit et architecture.",
   alternates: { canonical: "/portfolio/tous" },
   openGraph: {
-    title: "Tous les projets — graphiste 3D généraliste",
+    title: "Tous les projets, graphiste 3D généraliste",
     description:
       "Visites virtuelles interactives, temps réel web, modélisation et architecture.",
     url: "/portfolio/tous",

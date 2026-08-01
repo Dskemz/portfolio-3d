@@ -14,7 +14,7 @@ interface ProjectNavigationProps {
 }
 
 /**
- * Navigation de bas de page — projet précédent / suivant. Deux vignettes avec
+ * Navigation de bas de page, projet précédent / suivant. Deux vignettes avec
  * survol : léger zoom du visuel, titre qui vire à l'orange.
  */
 export function ProjectNavigation({ previous, next }: ProjectNavigationProps) {

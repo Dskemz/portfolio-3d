@@ -17,7 +17,7 @@ export const IMAGES_WITHINGS = {
   // Header
   hero: {
     name: "01-hero",
-    label: "Visuel maître — gamme ScanWatch 2",
+    label: "Visuel maître, gamme ScanWatch 2",
     ratio: "21/9" as const,
     teinte: "#14161a",
   } as ImageWithings,
@@ -48,7 +48,7 @@ export const IMAGES_WITHINGS = {
     teinte: "#20242a",
   } as ImageWithings,
 
-  // Chapitre 2 — Matières
+  // Chapitre 2, Matières
   boucle: {
     name: "05-boucle",
     label: "Boucle déployante",
@@ -81,23 +81,23 @@ export const IMAGES_WITHINGS = {
     teinte: "#1b1e23",
   } as ImageWithings,
 
-  // Chapitre 3 — Lumière
+  // Chapitre 3, Lumière
   studio: {
     name: "10-studio",
-    label: "Mise en scène studio — reflets spéculaires sur verre et biseaux",
+    label: "Mise en scène studio, reflets spéculaires sur verre et biseaux",
     ratio: "16/9" as const,
     teinte: "#0e1013",
   } as ImageWithings,
 
-  // Chapitre 4 — Teintes
+  // Chapitre 4, Teintes
   eclate: {
     name: "11-eclate",
-    label: "Vue éclatée — tous les éléments",
+    label: "Vue éclatée, tous les éléments",
     ratio: "21/9" as const,
     teinte: "#14161a",
   } as ImageWithings,
 
-  // Chapitre 5 — Couleurs
+  // Chapitre 5, Couleurs
   cadranVert: {
     name: "12-cadran-vert",
     label: "Cadran vert",
@@ -123,7 +123,7 @@ export const IMAGES_WITHINGS = {
     teinte: "#1b1e23",
   } as ImageWithings,
 
-  // Chapitre 6 — Détails
+  // Chapitre 6, Détails
   detailCadran1: {
     name: "16-detail-cadran-1",
     label: "Cadran détail 1",

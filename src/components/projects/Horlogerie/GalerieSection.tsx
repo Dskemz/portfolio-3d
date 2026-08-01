@@ -33,7 +33,7 @@ const PIECES_HORLOGERES: PieceHorlogere[] = [
     nom: 'Reverso Tribute',
     reference: 'Boîtier rectangulaire réversible',
     annee: '2024',
-    description: 'Étude du mécanisme de retournement — double cadran',
+    description: 'Étude du mécanisme de retournement, double cadran',
     image: '/images/projets/horlogerie-suisse/15-galerie-reverso.jpg',
     status: 'published',
   },
@@ -42,7 +42,7 @@ const PIECES_HORLOGERES: PieceHorlogere[] = [
     nom: 'Master Control',
     reference: 'Complications classiques',
     annee: '2024',
-    description: 'Cadran opalin — index appliques or rose',
+    description: 'Cadran opalin, index appliques or rose',
     image: '/images/projets/horlogerie-suisse/16-galerie-master.jpg',
     status: 'published',
   },
@@ -60,7 +60,7 @@ const PIECES_HORLOGERES: PieceHorlogere[] = [
     nom: 'Prochaine pièce',
     reference: '',
     annee: '',
-    description: 'Modélisation en cours — à venir prochainement',
+    description: 'Modélisation en cours, à venir prochainement',
     image: '',
     status: 'coming-soon',
   },
@@ -69,7 +69,7 @@ const PIECES_HORLOGERES: PieceHorlogere[] = [
     nom: 'Prochaine pièce',
     reference: '',
     annee: '',
-    description: 'Modélisation en cours — à venir prochainement',
+    description: 'Modélisation en cours, à venir prochainement',
     image: '',
     status: 'coming-soon',
   },
@@ -137,7 +137,7 @@ export default function GalerieSection() {
           </p>
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">
             Modélisation, texturing, éclairage et compositions : chaque étude est menée avec la
-            même exigence — celle du geste horloger, précis et patient.
+            même exigence, celle du geste horloger, précis et patient.
           </p>
         </div>
 
@@ -237,7 +237,7 @@ export default function GalerieSection() {
             Un atelier ouvert
           </h3>
           <p className="text-base text-slate-300 font-light leading-relaxed max-w-3xl">
-            L&apos;horlogerie est un terrain d&apos;exploration privilégié pour la 3D — précision
+            L&apos;horlogerie est un terrain d&apos;exploration privilégié pour la 3D, précision
             mécanique extrême, matériaux nobles, jeux de reflets sophistiqués. Cette collection
             s&apos;enrichira régulièrement de nouvelles études, chacune apportant son lot
             d&apos;apprentissages sur le rendu de la matière, la lumière et le mouvement.

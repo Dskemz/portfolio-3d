@@ -5,11 +5,11 @@ import { useState } from "react";
 import { PROJETS } from "@/content/projets";
 
 /**
- * Grille déstructurée — liseré de 2 px, aucune annotation au repos.
+ * Grille déstructurée, liseré de 2 px, aucune annotation au repos.
  *
  * Deux colonnes indépendantes : les projets y sont répartis en alternance et
  * chaque colonne empile ses vignettes. Comme les hauteurs diffèrent, les deux
- * colonnes se désalignent d'elles-mêmes — c'est ce décalage qui déstructure.
+ * colonnes se désalignent d'elles-mêmes, c'est ce décalage qui déstructure.
  *
  * Volontairement autonome : les hauteurs viennent d'un rythme défini ici, et
  * non d'un champ des données. Une entrée incomplète ne peut donc plus faire
@@ -28,7 +28,7 @@ import { PROJETS } from "@/content/projets";
 const GABARIT = [560, 340, 400, 620, 360, 500, 300, 460] as const;
 
 /**
- * Aplats d'attente — À SUPPRIMER une fois les visuels en place.
+ * Aplats d'attente, À SUPPRIMER une fois les visuels en place.
  * Assez clairs pour se détacher du fond noir et donner à voir les gabarits,
  * le liseré et le mouvement de rétraction.
  */
@@ -60,7 +60,7 @@ export default function GrilleProjets() {
     <div className="w-full">
       <div className="lg:grid lg:grid-cols-3">
         {/* ---------------------------------------------------------------- */}
-        {/*  Colonne de gauche — 1/3, collante                               */}
+        {/*  Colonne de gauche, 1/3, collante                               */}
         {/* ---------------------------------------------------------------- */}
         <aside className="px-6 lg:sticky lg:top-0 lg:col-span-1 lg:flex lg:h-screen lg:flex-col lg:justify-start lg:px-0 lg:py-40 lg:pl-16 lg:pr-14 xl:pl-24">
           <Link
@@ -81,7 +81,7 @@ export default function GrilleProjets() {
         </aside>
 
         {/* ---------------------------------------------------------------- */}
-        {/*  Mosaïque — 2/3, deux colonnes désalignées                       */}
+        {/*  Mosaïque, 2/3, deux colonnes désalignées                       */}
         {/* ---------------------------------------------------------------- */}
         <div className="pb-16 pt-16 lg:col-span-2 lg:py-40">
           <div className="grid grid-cols-1 gap-[2px] sm:grid-cols-2">
@@ -126,7 +126,7 @@ export default function GrilleProjets() {
                         </div>
 
                         {/* Image : se rétracte de la hauteur du bandeau.
-                            Balise native volontairement — un fichier absent
+                            Balise native volontairement, un fichier absent
                             ne doit jamais compromettre la mise en page. */}
                         <div
                           style={{
@@ -149,7 +149,7 @@ export default function GrilleProjets() {
 
                         {/* Le bandeau tronque : le contexte complet vit ici. */}
                         <span className="sr-only">
-                          {projet.titre} — {projet.client}
+                          {projet.titre}, {projet.client}
                         </span>
                       </Link>
                     </article>

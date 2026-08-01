@@ -19,7 +19,7 @@ export default function ProjectFooter() {
                 Steamone
               </h3>
               <p className="text-sm text-slate-400 font-light mt-2">
-                Défroisseur vapeur — Éclaté produit 3D
+                Défroisseur vapeur, Éclaté produit 3D
               </p>
             </div>
 
@@ -59,7 +59,7 @@ export default function ProjectFooter() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
             <div>
               <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed max-w-2xl">
-                Modélisation 3D et vue éclatée d&apos;un défroisseur vapeur SteamOne — révéler
+                Modélisation 3D et vue éclatée d&apos;un défroisseur vapeur SteamOne, révéler
                 l&apos;architecture interne du produit, expliquer son ergonomie et sublimer le
                 design industriel par une communication visuelle précise et pédagogique.
               </p>
@@ -96,7 +96,7 @@ export default function ProjectFooter() {
       <div className="px-6 md:px-12 lg:px-20 py-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-xs text-slate-400 font-light">
-            <p>© 2024 D. — Freelance Designer &amp; Developer</p>
+            <p>© 2024 D. Freelance Designer &amp; Developer</p>
           </div>
 
           <div className="flex items-center gap-6">

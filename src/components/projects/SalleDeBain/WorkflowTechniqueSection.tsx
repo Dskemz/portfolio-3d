@@ -21,25 +21,25 @@ const MESH_PASSES: MeshPass[] = [
     id: 'highpoly',
     titre: 'Modélisation Haute Densité',
     description: 'Géométrie brute détaillée',
-    details: 'Capture initiale avec densité polygonale élevée — microreliefs, biseautages, arêtes.',
+    details: 'Capture initiale avec densité polygonale élevée, microreliefs, biseautages, arêtes.',
     image: '/images/projets/decotec/12-mesh-highpoly.jpg',
-    fullDescription: 'Modélisation CAO haute fidélité représentant la géométrie complète de la salle de bain — chaque surface courbe, chaque angle, chaque détail — pour un total de plusieurs millions de polygones.',
+    fullDescription: 'Modélisation CAO haute fidélité représentant la géométrie complète de la salle de bain, chaque surface courbe, chaque angle, chaque détail, pour un total de plusieurs millions de polygones.',
     color: 'from-cyan-500/20 to-cyan-600/10',
   },
   {
     id: 'wireframe',
     titre: 'Wireframe Colorisé',
     description: 'Topologie optimisée',
-    details: 'Structure topologique épurée — lignes de construction visibles — maillage propre et fluide.',
+    details: 'Structure topologique épurée, lignes de construction visibles, maillage propre et fluide.',
     image: '/images/projets/decotec/13-mesh-wireframe.jpg',
-    fullDescription: 'Affichage du wireframe colorisé montrant la topologie finale du maillage optimisé — chaque arête, chaque polygone est disposé de manière logique pour supporter le rendu temps réel sans compromettre la fidélité visuelle.',
+    fullDescription: 'Affichage du wireframe colorisé montrant la topologie finale du maillage optimisé, chaque arête, chaque polygone est disposé de manière logique pour supporter le rendu temps réel sans compromettre la fidélité visuelle.',
     color: 'from-lime-500/20 to-lime-600/10',
   },
   {
     id: 'optimized',
     titre: 'Rendu Optimisé',
     description: 'Modèle léger & fluide',
-    details: 'Géométrie retopologisée — réduction polygonale intelligente — prêt pour GLTF/GLB.',
+    details: 'Géométrie retopologisée, réduction polygonale intelligente, prêt pour GLTF/GLB.',
     image: '/images/projets/decotec/14-mesh-optimized.jpg',
     fullDescription: 'Maillage final optimisé avec une réduction polygonale ciblée. Les détails visuels sont préservés via baking de textures (normal maps, roughness, AO), permettant un rendu léger et fluide idéal pour exportation GLTF et intégration WebGL.',
     color: 'from-orange-500/20 to-orange-600/10',
@@ -82,7 +82,7 @@ export default function WorkflowTechniqueSection() {
             Workflow Technique &amp; Maillage
           </h2>
           <p className="text-base md:text-lg text-slate-400 font-light max-w-3xl">
-            Mise en avant du pipeline de modélisation — de la géométrie brute haute densité jusqu&apos;à
+            Mise en avant du pipeline de modélisation, de la géométrie brute haute densité jusqu&apos;à
             l&apos;optimisation finale pour rendu temps réel (GLTF/GLB). Chaque étape garantit propreté
             topologique et fluidité de performance.
           </p>
@@ -150,7 +150,7 @@ export default function WorkflowTechniqueSection() {
                 <h4 className="text-lg font-light text-white">Modélisation CAO</h4>
               </div>
               <p className="text-sm text-slate-400 font-light leading-relaxed">
-                Création de la géométrie haute fidélité en logiciel de modélisation — tous les détails
+                Création de la géométrie haute fidélité en logiciel de modélisation, tous les détails
                 et microreliefs capturés.
               </p>
             </div>
@@ -163,7 +163,7 @@ export default function WorkflowTechniqueSection() {
                 <h4 className="text-lg font-light text-white">Retopologie</h4>
               </div>
               <p className="text-sm text-slate-400 font-light leading-relaxed">
-                Création d&apos;une nouvelle topologie épurée et optimisée — structure logique, lignes
+                Création d&apos;une nouvelle topologie épurée et optimisée, structure logique, lignes
                 de flux maîtrisées.
               </p>
             </div>

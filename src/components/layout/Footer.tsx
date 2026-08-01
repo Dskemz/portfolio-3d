@@ -12,7 +12,7 @@ const LIENS_SITE = [
 ] as const;
 
 /**
- * Composant serveur — aucun état, aucun JS envoyé au client.
+ * Composant serveur, aucun état, aucun JS envoyé au client.
  */
 export default function Footer() {
   const annee = new Date().getFullYear();
@@ -26,7 +26,7 @@ export default function Footer() {
               Denis Masquet
             </p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-trait">
-              Artiste 3D généraliste — visites virtuelles 3D immersives performantes et retail.
+              Artiste 3D généraliste, visites virtuelles 3D immersives performantes et retail.
             </p>
           </div>
 
@@ -69,7 +69,7 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col gap-2 border-t border-mine pt-6 font-mono text-[11px] uppercase tracking-[0.16em] text-trait sm:flex-row sm:items-center sm:justify-between">
           <span>© {annee} Graphiste 3D</span>
-          <span>Micro-entrepreneur — SIRET 880727649</span>
+          <span>Micro-entrepreneur, SIRET 880727649</span>
         </div>
       </div>
     </footer>

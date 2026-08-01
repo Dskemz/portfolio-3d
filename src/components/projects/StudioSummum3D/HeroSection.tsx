@@ -65,7 +65,7 @@ export default function HeroSection() {
       >
         <div className="mb-6 tracking-widest">
           <p className="text-sm md:text-base font-light text-neutral-300 uppercase letter-spacing">
-            Projet 3D — Photogrammétrie & Patrimoine
+            Projet 3D, Photogrammétrie & Patrimoine
           </p>
         </div>
 

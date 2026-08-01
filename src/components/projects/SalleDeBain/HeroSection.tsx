@@ -76,7 +76,7 @@ export default function HeroSection() {
 
         <p className="max-w-2xl text-sm md:text-base text-white font-light leading-relaxed">
           Création de perspectives 3D haute fidélité pour la présentation de collections de
-          mobilier de salle de bain — modélisation précise, étude d&apos;éclairage naturel et rendu photoréaliste.
+          mobilier de salle de bain, modélisation précise, étude d&apos;éclairage naturel et rendu photoréaliste.
         </p>
 
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">

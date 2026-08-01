@@ -21,7 +21,7 @@ interface EtudeCasVeloProps {
 }
 
 /**
- * Étude de cas éditoriale sur-mesure — VÉLYVÉLO · Conception de Vélo Électrique.
+ * Étude de cas éditoriale sur-mesure, VÉLYVÉLO · Conception de Vélo Électrique.
  *
  * Rendue via la route dynamique /portfolio/[slug] pour le slug "velyv-elo".
  * Compose les sections dédiées (hero, innovation & confort, flocage par enseigne,
@@ -36,7 +36,7 @@ export function EtudeCasVelo({
       <HeroSection />
       <InnovationSection />
       <PhraseSection>
-        Une architecture technique, mille identités visuelles — la mobilité comme plateforme.
+        Une architecture technique, mille identités visuelles, la mobilité comme plateforme.
       </PhraseSection>
       <FlocageSection />
       <VariantesFlotteSection />

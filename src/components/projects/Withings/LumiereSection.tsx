@@ -59,25 +59,25 @@ export default function LumiereSection() {
       className="w-full py-16 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-black to-slate-900"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Mise en scène studio — reflets spéculaires */}
+        {/* Mise en scène studio, reflets spéculaires */}
         <div
           ref={studioRef}
           className="w-full aspect-[16/9] overflow-hidden rounded-lg bg-slate-800 mb-10 lg:mb-14 group"
         >
           <img
             src="/images/projets/withings/10-studio.jpg"
-            alt="Mise en scène studio — reflets spéculaires sur verre et biseaux"
+            alt="Mise en scène studio, reflets spéculaires sur verre et biseaux"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         </div>
 
-        {/* Bloc texte — l'accent sur l'horlogerie pure */}
+        {/* Bloc texte, l'accent sur l'horlogerie pure */}
         <div
           ref={textRef}
           className="grid grid-cols-1 lg:grid-cols-[8rem_1fr] gap-6 lg:gap-10 mb-16 lg:mb-20"
         >
           <p className="text-xs font-light text-slate-500 uppercase tracking-[0.3em] lg:pt-2">
-            03 — Lumière et reflets
+            03, Lumière et reflets
           </p>
           <div className="max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-light text-white mb-5">
@@ -85,14 +85,14 @@ export default function LumiereSection() {
             </h2>
             <p className="text-sm md:text-base text-slate-300 font-light leading-relaxed">
               Faire ressortir les lignes des profils ultra-fins, souligner les
-              reflets soleillés des cadrans — comme le bleu profond — et révéler
+              reflets soleillés des cadrans, comme le bleu profond, et révéler
               les tranches de boîtiers. La lumière forme un ensemble cohérent qui
               met chaque élément en valeur.
             </p>
           </div>
         </div>
 
-        {/* Paire de profils — reflets soleillés côte à côte */}
+        {/* Paire de profils, reflets soleillés côte à côte */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-6 md:mb-8">
           <div
             ref={(el) => { pairRef.current[0] = el; }}
@@ -120,7 +120,7 @@ export default function LumiereSection() {
             />
             <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/70 to-transparent">
               <p className="text-sm font-light text-white">
-                Reflet soleillé — bleu profond
+                Reflet soleillé, bleu profond
               </p>
             </div>
           </div>

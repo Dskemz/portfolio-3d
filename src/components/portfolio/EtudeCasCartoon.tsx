@@ -19,7 +19,7 @@ interface EtudeCasCartoonProps {
 }
 
 /**
- * Étude de cas sur-mesure — LE CARTOON MIS EN SCÈNE (slug creation-originales).
+ * Étude de cas sur-mesure, LE CARTOON MIS EN SCÈNE (slug creation-originales).
  *
  * Rendue via la route dynamique /portfolio/[slug]. Rupture assumée avec le thème
  * sombre des autres études de cas : fond clair et fonds pastel/pop pour coller à

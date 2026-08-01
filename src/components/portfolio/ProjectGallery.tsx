@@ -117,7 +117,7 @@ export function ProjectGallery({ images }: ProjectGalleryProps) {
               ← Préc.
             </button>
             <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-trait">
-              {String(actif + 1).padStart(2, "0")} — {String(images.length).padStart(2, "0")}
+              {String(actif + 1).padStart(2, "0")}, {String(images.length).padStart(2, "0")}
             </span>
             <button
               onClick={suivant}

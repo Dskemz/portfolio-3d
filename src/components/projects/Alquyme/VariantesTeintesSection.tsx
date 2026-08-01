@@ -25,13 +25,13 @@ const ECRINS: Ecrin[] = [
   {
     id: 'etui-cuir',
     nom: 'Étui cuir texturé',
-    usage: 'Édition Prestige — présentation individuelle',
+    usage: 'Édition Prestige, présentation individuelle',
     image: '/images/projets/alquyme/11-etui-cuir.jpg',
   },
   {
     id: 'boite-cadeau',
     nom: 'Boîte-cadeau bicolore',
-    usage: 'Édition Coffret — écrin de collection',
+    usage: 'Édition Coffret, écrin de collection',
     image: '/images/projets/alquyme/12-boite-cadeau.jpg',
   },
 ];
@@ -40,42 +40,42 @@ const VARIANTES: Variante[] = [
   {
     id: 'transparent',
     teinte: 'Verre transparent',
-    ambiance: 'Signature — matière originale',
+    ambiance: 'Signature, matière originale',
     hex: '#E8E4D4',
     image: '/images/projets/alquyme/13-var-transparent.jpg',
   },
   {
     id: 'bleu-pastel',
     teinte: 'Bleu pastel',
-    ambiance: 'Marine — fraîcheur aquatique',
+    ambiance: 'Marine, fraîcheur aquatique',
     hex: '#A8C5D6',
     image: '/images/projets/alquyme/14-var-bleu.jpg',
   },
   {
     id: 'rose-poudre',
     teinte: 'Rose poudré',
-    ambiance: 'Florale — douceur romantique',
+    ambiance: 'Florale, douceur romantique',
     hex: '#E8B8B8',
     image: '/images/projets/alquyme/15-var-rose.jpg',
   },
   {
     id: 'argent',
     teinte: 'Argent monochrome',
-    ambiance: 'Boisée — minéralité argentée',
+    ambiance: 'Boisée, minéralité argentée',
     hex: '#C0C0C8',
     image: '/images/projets/alquyme/16-var-argent.jpg',
   },
   {
     id: 'or',
     teinte: 'Or monochrome',
-    ambiance: 'Orientale — chaleur ambrée',
+    ambiance: 'Orientale, chaleur ambrée',
     hex: '#D4AF37',
     image: '/images/projets/alquyme/17-var-or.jpg',
   },
   {
     id: 'ambre',
     teinte: 'Ambre profond',
-    ambiance: 'Précieuse — mystère résineux',
+    ambiance: 'Précieuse, mystère résineux',
     hex: '#8B4513',
     image: '/images/projets/alquyme/18-var-ambre.jpg',
   },
@@ -157,7 +157,7 @@ export default function VariantesTeintesSection() {
           </p>
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">
             À côté des variantes de teinte, les <span className="text-white">écrins précieux</span>
-            {" "}— étui cuir et boîte-cadeau bicolore — prolongent le rituel jusqu&apos;au
+            {" "}— étui cuir et boîte-cadeau bicolore, prolongent le rituel jusqu&apos;au
             déballage, transformant chaque acquisition en cérémonie.
           </p>
         </div>
@@ -169,7 +169,7 @@ export default function VariantesTeintesSection() {
               Écrins &amp; boîte-cadeau
             </h3>
             <p className="text-sm text-slate-500 font-light">
-              Prolongements du rituel — geste de dévoilement
+              Prolongements du rituel, geste de dévoilement
             </p>
           </div>
 

@@ -1,6 +1,6 @@
 /**
  * workflowData.ts
- * Flux narratif « SkillFlow » — circuit unique, 7 étapes.
+ * Flux narratif « SkillFlow », circuit unique, 7 étapes.
  *
  * Les étapes principales et secondaires s'inscrivent À LA SUITE sur le
  * MÊME circuit : le flux descend l'axe, traverse une étape principale,

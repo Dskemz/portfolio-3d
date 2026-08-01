@@ -18,7 +18,7 @@ interface Viewer3DProps {
 }
 
 /**
- * Viewer 3D isolé — il ne rend QUE le modèle.
+ * Viewer 3D isolé, il ne rend QUE le modèle.
  *
  * Volontairement dépourvu de titre, de texte et de boutons : la section qui
  * l'accueille porte déjà son propre discours, et le haut de page porte

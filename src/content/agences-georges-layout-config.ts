@@ -1,5 +1,5 @@
 /**
- * Configuration layout — agences-georges
+ * Configuration layout, agences-georges
  * 
  * Modifie colonnes/gap/ratio pour ajuster la mise en page.
  */

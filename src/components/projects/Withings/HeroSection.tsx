@@ -78,7 +78,7 @@ export default function HeroSection() {
       >
         <div className="mb-6 tracking-widest">
           <p className="text-sm md:text-base font-light text-white/90 uppercase drop-shadow-sm">
-            Withings — Modélisation 3D &amp; Horlogerie connectée
+            Withings, Modélisation 3D &amp; Horlogerie connectée
           </p>
         </div>
 

@@ -17,7 +17,7 @@ const VUES: Vue[] = [
   {
     id: 'sablier',
     titre: 'Flacon sablier vertical',
-    legende: 'Silhouette signature — deux récipients en dualité',
+    legende: 'Silhouette signature, deux récipients en dualité',
     image: '/images/projets/alquyme/02-sablier.jpg',
   },
   {
@@ -29,7 +29,7 @@ const VUES: Vue[] = [
   {
     id: 'support',
     titre: 'Mise en scène sur drapé',
-    legende: 'Support texturé rouge profond — écho des rituels précieux',
+    legende: 'Support texturé rouge profond, écho des rituels précieux',
     image: '/images/projets/alquyme/04-drape.jpg',
   },
 ];
@@ -91,13 +91,13 @@ export default function PackagingSection() {
             Création d&apos;un <span className="text-white">packaging et de rituels</span> mettant
             en scène le parfum ALQUYME. Le flacon se compose de <span className="text-white">deux
             récipients</span> en dualité, dessinant une silhouette de sablier vertical
-            reconnaissable — chaque volume porte sa propre ambiance olfactive.
+            reconnaissable, chaque volume porte sa propre ambiance olfactive.
           </p>
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">
             Aussi puissante qu&apos;une odeur, la <span className="text-white">lumière qui se
             reflète</span> dans les surfaces transparentes et les bagues métalliques
             raconte une histoire. Le rendu 3D capture ces jeux de matière : verre, or,
-            texture du support — chaque plan est composé comme une nature morte contemporaine.
+            texture du support, chaque plan est composé comme une nature morte contemporaine.
           </p>
         </div>
 

@@ -72,11 +72,11 @@ export default function HeroSection() {
         <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl">
           Horlogerie
           <br />
-          <span className="text-neutral-300">Mise en scène de montres — Collection évolutive</span>
+          <span className="text-neutral-300">Mise en scène de montres, Collection évolutive</span>
         </h1>
 
         <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
-          Projets personnels de modélisation 3D horlogère — pièces d&apos;exception mises en scène
+          Projets personnels de modélisation 3D horlogère, pièces d&apos;exception mises en scène
           sur des décors texturés et lunaires. Précision mécanique, matériaux nobles et éclairage
           sophistiqué au service de l&apos;horlogerie de prestige.
         </p>

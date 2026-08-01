@@ -24,19 +24,19 @@ const VUES_AXES: VueAxe[] = [
   {
     id: 'axe-vertical',
     axe: 'Axe vertical',
-    description: 'Décomposition en couches horizontales — lecture par étages',
+    description: 'Décomposition en couches horizontales, lecture par étages',
     image: '/images/projets/steamone/12-axe-vertical.jpg',
   },
   {
     id: 'axe-horizontal',
     axe: 'Axe horizontal',
-    description: 'Décomposition latérale — pièces alignées en séquence',
+    description: 'Décomposition latérale, pièces alignées en séquence',
     image: '/images/projets/steamone/13-axe-horizontal.jpg',
   },
   {
     id: 'axe-radial',
     axe: 'Axe radial',
-    description: 'Expansion depuis le centre — organisation spatiale du volume',
+    description: 'Expansion depuis le centre, organisation spatiale du volume',
     image: '/images/projets/steamone/14-axe-radial.jpg',
   },
 ];
@@ -45,19 +45,19 @@ const FINITIONS: Finition[] = [
   {
     id: 'plastique-mat',
     titre: 'Plastique mat texturé',
-    description: 'Coque principale — toucher agréable, résistant aux traces de doigts',
+    description: 'Coque principale, toucher agréable, résistant aux traces de doigts',
     image: '/images/projets/steamone/15-finition-mat.jpg',
   },
   {
     id: 'aluminium-brosse',
     titre: 'Aluminium brossé',
-    description: 'Bandeau frontal — signature premium, réflexion contrôlée',
+    description: 'Bandeau frontal, signature premium, réflexion contrôlée',
     image: '/images/projets/steamone/16-finition-alu.jpg',
   },
   {
     id: 'grille-inox',
     titre: 'Grille inox perforée',
-    description: 'Sortie vapeur — dessin technique visible et lisible',
+    description: 'Sortie vapeur, dessin technique visible et lisible',
     image: '/images/projets/steamone/17-finition-inox.jpg',
   },
 ];
@@ -137,8 +137,8 @@ export default function ExplorationSection() {
             différents, chacun mettant en lumière un aspect distinct du produit.
           </p>
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">
-            À côté des vues techniques, les finitions de surface — plastique mat, aluminium brossé,
-            inox perforé — rappellent que le design industriel se joue aussi dans le toucher,
+            À côté des vues techniques, les finitions de surface, plastique mat, aluminium brossé,
+            inox perforé, rappellent que le design industriel se joue aussi dans le toucher,
             la réflexion de la lumière et la qualité perçue.
           </p>
         </div>
@@ -238,7 +238,7 @@ export default function ExplorationSection() {
             Décomposer un objet, c&apos;est raconter son histoire. Chaque vue éclatée du SteamOne
             expose une intention de conception : le confort d&apos;usage, la maintenance possible,
             le soin apporté à chaque composant. Le rendu 3D devient un outil pédagogique et
-            commercial à la fois — comprendre pour désirer.
+            commercial à la fois, comprendre pour désirer.
           </p>
         </div>
       </div>

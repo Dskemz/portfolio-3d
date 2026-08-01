@@ -21,7 +21,7 @@ const RENDER_PASSES: RenderPass[] = [
     description: 'Sortie brute de la photogrammétrie',
     image: '/images/projets/summum-3d/08-tech-highpoly.svg',
     fullDescription:
-      'Maillage haute densité directement issu de la reconstruction photogrammétrique — plusieurs millions de polygones capturant chaque détail de surface.',
+      'Maillage haute densité directement issu de la reconstruction photogrammétrique, plusieurs millions de polygones capturant chaque détail de surface.',
   },
   {
     id: 'lowpoly',

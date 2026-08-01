@@ -78,7 +78,7 @@ export default function HeroSection() {
       >
         <div className="mb-6 tracking-widest">
           <p className="text-sm md:text-base font-medium text-white/90 uppercase drop-shadow-sm">
-            Créations Originales — Cartoon 3D
+            Créations Originales, Cartoon 3D
           </p>
         </div>
 

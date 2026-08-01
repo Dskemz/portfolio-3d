@@ -24,7 +24,7 @@ const MACROS: Macro[] = [
   {
     id: 'bague-cannelee',
     nom: 'Bague cannelée',
-    detail: 'Rythme régulier des rainures — jeu tactile et lumineux',
+    detail: 'Rythme régulier des rainures, jeu tactile et lumineux',
     image: '/images/projets/alquyme/05-macro-bague.jpg',
   },
   {
@@ -36,13 +36,13 @@ const MACROS: Macro[] = [
   {
     id: 'jonction',
     nom: 'Jonction des deux volumes',
-    detail: 'Anneau central articulé — finition brossée',
+    detail: 'Anneau central articulé, finition brossée',
     image: '/images/projets/alquyme/07-macro-jonction.jpg',
   },
   {
     id: 'goulot',
     nom: 'Goulot &amp; capsule',
-    detail: 'Vissage précis — étanchéité et geste rituel',
+    detail: 'Vissage précis, étanchéité et geste rituel',
     image: '/images/projets/alquyme/08-macro-goulot.jpg',
   },
 ];
@@ -51,13 +51,13 @@ const COMPOSITIONS: Composition[] = [
   {
     id: 'ouvert',
     titre: 'Flacon ouvert',
-    description: 'Séparation des deux volumes — révélation du geste modulaire',
+    description: 'Séparation des deux volumes, révélation du geste modulaire',
     image: '/images/projets/alquyme/09-compo-ouvert.jpg',
   },
   {
     id: 'assemble',
     titre: 'Assemblage complet',
-    description: 'Silhouette pleine — équilibre des masses et des matières',
+    description: 'Silhouette pleine, équilibre des masses et des matières',
     image: '/images/projets/alquyme/10-compo-assemble.jpg',
   },
 ];
@@ -133,7 +133,7 @@ export default function DetailsGravureSection() {
             Un travail méticuleux de <span className="text-white">textures</span> vient sublimer
             chaque bague métallique cannelée. Les rainures régulières captent la lumière et
             créent un jeu de contraste subtil, tandis que le <span className="text-white">logo
-            ALQUYME</span> est frappé en relief dans la matière dorée — signature tactile et visuelle.
+            ALQUYME</span> est frappé en relief dans la matière dorée, signature tactile et visuelle.
           </p>
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">
             Ces gros plans macro révèlent le soin apporté à chaque finition. Les vues de

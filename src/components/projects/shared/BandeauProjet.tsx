@@ -12,7 +12,7 @@ interface BandeauProjetProps {
 }
 
 /**
- * Encart de couleur commun aux études de cas — même structure que le Cartoon
+ * Encart de couleur commun aux études de cas, même structure que le Cartoon
  * (rounded-3xl, dégradé horizontal, texte centré). La teinte reprend celle du
  * bandeau scroll du projet pour une cohérence visuelle sur toute la page.
  */

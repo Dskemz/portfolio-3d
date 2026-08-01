@@ -23,26 +23,26 @@ interface Duo {
 const MATERIAUX_POLARIS: Materiau[] = [
   {
     id: 'clay-boitier',
-    titre: 'Clay render — Boîtier',
-    description: 'Coque neutre — étude des volumes et proportions',
+    titre: 'Clay render, Boîtier',
+    description: 'Coque neutre, étude des volumes et proportions',
     image: '/images/projets/horlogerie-suisse/09-polaris-clay.jpg',
   },
   {
     id: 'acier-poli',
     titre: 'Acier poli miroir',
-    description: 'Facettes rehaussées — reflets contrastés',
+    description: 'Facettes rehaussées, reflets contrastés',
     image: '/images/projets/horlogerie-suisse/10-polaris-acier-poli.jpg',
   },
   {
     id: 'acier-brosse',
     titre: 'Acier brossé satiné',
-    description: 'Rayures directionnelles — capture douce de la lumière',
+    description: 'Rayures directionnelles, capture douce de la lumière',
     image: '/images/projets/horlogerie-suisse/11-polaris-acier-brosse.jpg',
   },
   {
     id: 'cadran-soleille',
     titre: 'Cadran soleillé',
-    description: 'Rayons partant du centre — jeu chromatique subtil',
+    description: 'Rayons partant du centre, jeu chromatique subtil',
     image: '/images/projets/horlogerie-suisse/12-polaris-cadran.jpg',
   },
 ];
@@ -50,13 +50,13 @@ const MATERIAUX_POLARIS: Materiau[] = [
 const DUOS_POLARIS: Duo[] = [
   {
     id: 'duo-01',
-    titre: 'Composition duo — Édition classique',
-    legende: 'Bracelet cuir vs bracelet acier — pièces jumelles',
+    titre: 'Composition duo, Édition classique',
+    legende: 'Bracelet cuir vs bracelet acier, pièces jumelles',
     image: '/images/projets/horlogerie-suisse/13-polaris-duo-1.jpg',
   },
   {
     id: 'duo-02',
-    titre: 'Composition duo — Édition anniversaire',
+    titre: 'Composition duo, Édition anniversaire',
     legende: 'Cadran bleu profond vs cadran gris ardoise',
     image: '/images/projets/horlogerie-suisse/14-polaris-duo-2.jpg',
   },
@@ -133,8 +133,8 @@ export default function PolarisSection() {
           <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4">
             Modélisation 3D dédiée à la <span className="text-white">Polaris Memovox</span>, pièce
             iconique dont l&apos;héritage horloger célèbre son 50e anniversaire. L&apos;étude
-            approfondie des matériaux — <span className="text-white">boîtier acier</span>, cadrans
-            soleillés et bracelets spécifiques — permet une restitution fidèle du savoir-faire.
+            approfondie des matériaux, <span className="text-white">boîtier acier</span>, cadrans
+            soleillés et bracelets spécifiques, permet une restitution fidèle du savoir-faire.
           </p>
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">
             Le travail est présenté à travers des <span className="text-white">rendus en clay
@@ -151,7 +151,7 @@ export default function PolarisSection() {
               Matériaux &amp; finitions
             </h3>
             <p className="text-sm text-slate-500 font-light">
-              Clay render — Acier poli — Acier brossé — Cadran soleillé
+              Clay render, Acier poli, Acier brossé, Cadran soleillé
             </p>
           </div>
 
@@ -197,7 +197,7 @@ export default function PolarisSection() {
               Compositions en duo
             </h3>
             <p className="text-sm text-slate-500 font-light">
-              Pièces jumelles — dialogue des variantes
+              Pièces jumelles, dialogue des variantes
             </p>
           </div>
 

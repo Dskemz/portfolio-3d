@@ -31,21 +31,21 @@ const LEGENDAIRES_RENDUS: LegendaireRendu[] = [
   {
     id: 'cryo',
     nom: 'Caisson Cryogénique',
-    description: 'Shiba en stase cryogénique — gaz vert, capsule futuriste',
+    description: 'Shiba en stase cryogénique, gaz vert, capsule futuriste',
     edition: '1 / 1',
     image: '/images/projets/nft-floofies/23-legend-cryo.jpg',
   },
   {
     id: 'momie',
     nom: 'Shiba Momie',
-    description: 'Bandelettes ancestrales, aura mystique — pièce unique',
+    description: 'Bandelettes ancestrales, aura mystique, pièce unique',
     edition: '1 / 1',
     image: '/images/projets/nft-floofies/24-legend-momie.jpg',
   },
   {
     id: 'armure-maille',
     nom: 'Armure de Mailles',
-    description: 'Cotte de mailles médiévale — chevalier du futur',
+    description: 'Cotte de mailles médiévale, chevalier du futur',
     edition: '1 / 1',
     image: '/images/projets/nft-floofies/25-legend-armure.jpg',
   },
@@ -120,7 +120,7 @@ export default function LegendairesSection() {
             <span className="text-slate-400">Pièces uniques &amp; rarissimes</span>
           </h2>
           <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4">
-            Au sommet de la collection se trouvent les <span className="text-white">pièces légendaires</span> — 
+            Au sommet de la collection se trouvent les <span className="text-white">pièces légendaires</span>, 
             uniques, spectaculaires, développées comme de véritables œuvres 3D à part entière. 
             Elles constituent le cœur de la valeur collectionneur de l&apos;univers Floofies.
           </p>
@@ -169,7 +169,7 @@ export default function LegendairesSection() {
         <div>
           <div className="mb-6">
             <h3 className="text-xs font-light text-slate-400 uppercase tracking-widest">
-              Pièces légendaires — Éditions uniques
+              Pièces légendaires, Éditions uniques
             </h3>
           </div>
 
@@ -221,7 +221,7 @@ export default function LegendairesSection() {
             Des shibas de base généreusement déclinés aux pièces légendaires uniques, Floofies 
             organise sa collection selon un principe clair de rareté progressive. Chaque niveau 
             offre son propre récit visuel, sa propre valeur collectionneur, tout en s&apos;inscrivant 
-            dans un univers cohérent — cartoon, pop et résolument tourné vers le futur.
+            dans un univers cohérent, cartoon, pop et résolument tourné vers le futur.
           </p>
         </div>
       </div>

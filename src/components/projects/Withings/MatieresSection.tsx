@@ -93,23 +93,23 @@ export default function MatieresSection() {
       className="w-full py-16 px-6 md:px-12 lg:px-20 bg-black"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Bloc texte — création des éléments industriels et textures */}
+        {/* Bloc texte, création des éléments industriels et textures */}
         <div ref={textRef} className="mb-14 max-w-2xl">
           <p className="text-xs font-light text-slate-500 uppercase tracking-[0.3em] mb-5">
-            02 — Matières et teintes
+            02, Matières et teintes
           </p>
           <h2 className="text-3xl md:text-4xl font-light text-white mb-5">
             Du gris industriel aux textures organiques
           </h2>
           <p className="text-sm md:text-base text-slate-300 font-light leading-relaxed">
             La plupart des éléments industriels sont créés à partir de valeurs de
-            gris. Les autres — cuirs piqués, coutures, boucles ardillons ou fond
-            de boîtier gravé avec ses capteurs — nécessitent des textures
+            gris. Les autres, cuirs piqués, coutures, boucles ardillons ou fond
+            de boîtier gravé avec ses capteurs, nécessitent des textures
             spécifiques travaillées en macro.
           </p>
         </div>
 
-        {/* Composition en macro-détails — mise en valeur du grain */}
+        {/* Composition en macro-détails, mise en valeur du grain */}
         <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[140px] md:auto-rows-[200px] gap-4 md:gap-6">
           {MACROS.map((macro, idx) => (
             <div

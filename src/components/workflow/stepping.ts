@@ -28,7 +28,7 @@ export const INTRO_GRAB_VH = 0.68;
 export const LINE_VH = 0.62;
 
 /**
- * Courbe du cran, en coordonnées cubic-bézier [x1, y1, x2, y2] — même convention
+ * Courbe du cran, en coordonnées cubic-bézier [x1, y1, x2, y2], même convention
  * que le CSS. Départ franc, freinage long : monte y1 et rapproche x1 de 0 pour
  * partir plus vite, tire x2 vers 0 pour freiner plus longtemps.
  */
@@ -121,7 +121,7 @@ export const HOME_JUMP_EVENT = "skillflow:home-jump";
  *
  * `behavior: "auto"` est indispensable : `globals.css` déclare
  * `html { scroll-behavior: smooth }`, dont hérite tout scroll programmatique
- * qui ne le contredit pas — c'est ce qui rendait le retour lent et animé.
+ * qui ne le contredit pas, c'est ce qui rendait le retour lent et animé.
  *
  * Le second passage au frame suivant couvre les cas où un layout tardif
  * (polices, images, mesure des fiches) décale la page juste après le saut.

@@ -20,7 +20,7 @@ const SCENOGRAPHIES: Scenographie[] = [
     id: 'travertin-beige',
     titre: 'Travertin Beige',
     sous_titre: 'Chaleur & Sérénité',
-    ambiance: 'Collection travertin brossé — vasque intégrée — robinetterie chromée',
+    ambiance: 'Collection travertin brossé, vasque intégrée, robinetterie chromée',
     finitions: ['Travertin massif', 'Vasque simple', 'Miroir biseauté'],
     image: '/images/projets/decotec/03-scenographie-travertin.jpg',
   },
@@ -28,7 +28,7 @@ const SCENOGRAPHIES: Scenographie[] = [
     id: 'pierre-grise',
     titre: 'Pierre Grise',
     sous_titre: 'Minimalisme Contemporain',
-    ambiance: 'Revêtements pierre grise mate — double vasque — éclairage épuré',
+    ambiance: 'Revêtements pierre grise mate, double vasque, éclairage épuré',
     finitions: ['Pierre lisse', 'Double vasque', 'Façade mate'],
     image: '/images/projets/decotec/04-scenographie-pierre.jpg',
   },
@@ -36,7 +36,7 @@ const SCENOGRAPHIES: Scenographie[] = [
     id: 'carreaux-verts',
     titre: 'Carreaux Verts',
     sous_titre: 'Rétro Inspiré & Élégance',
-    ambiance: 'Carrelage vert profond — vasque en céramique — quincaillerie laiton',
+    ambiance: 'Carrelage vert profond, vasque en céramique, quincaillerie laiton',
     finitions: ['Carrelage géométrique', 'Vasque ronde', 'Finitions laiton'],
     image: '/images/projets/decotec/05-scenographie-vert.jpg',
   },
@@ -44,7 +44,7 @@ const SCENOGRAPHIES: Scenographie[] = [
     id: 'bois-strie',
     titre: 'Bois Strié',
     sous_titre: 'Chaleur Naturelle & Texture',
-    ambiance: 'Mobilier en bois strié naturel — vasque suspendue — ambiance spa',
+    ambiance: 'Mobilier en bois strié naturel, vasque suspendue, ambiance spa',
     finitions: ['Bois naturel', 'Vasque suspendue', 'Miroir intégré'],
     image: '/images/projets/decotec/06-scenographie-bois.jpg',
   },
@@ -52,7 +52,7 @@ const SCENOGRAPHIES: Scenographie[] = [
     id: 'marbre-blanc',
     titre: 'Marbre Blanc',
     sous_titre: 'Luxe & Pureté',
-    ambiance: 'Revêtements marbre blanc — vasque double — éclairage doré',
+    ambiance: 'Revêtements marbre blanc, vasque double, éclairage doré',
     finitions: ['Marbre massif', 'Double vasque', 'Quincaillerie dorée'],
     image: '/images/projets/decotec/07-scenographie-marbre.jpg',
   },
@@ -60,7 +60,7 @@ const SCENOGRAPHIES: Scenographie[] = [
     id: 'beton-brut',
     titre: 'Béton Brut',
     sous_titre: 'Industriel & Moderne',
-    ambiance: 'Béton poli — vasque intégrée épurée — éclairage architectural',
+    ambiance: 'Béton poli, vasque intégrée épurée, éclairage architectural',
     finitions: ['Béton poli', 'Vasque minimale', 'Acier inox'],
     image: '/images/projets/decotec/08-scenographie-beton.jpg',
   },
@@ -102,7 +102,7 @@ export default function ScenographieSection() {
           </h2>
           <p className="text-base md:text-lg text-slate-400 font-light max-w-3xl">
             Exploration de six univers distincts mettant en lumière les variantes de finitions,
-            les décors texturés et les gammes de mobilier disponibles — chaque ambiance raconte
+            les décors texturés et les gammes de mobilier disponibles, chaque ambiance raconte
             une histoire de design intérieur.
           </p>
         </div>

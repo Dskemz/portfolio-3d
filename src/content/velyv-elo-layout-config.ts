@@ -1,5 +1,5 @@
 /**
- * Configuration layout — velyv-elo
+ * Configuration layout, velyv-elo
  * 
  * Modifie colonnes/gap/ratio pour ajuster la mise en page.
  */

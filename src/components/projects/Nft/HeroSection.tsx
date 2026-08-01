@@ -76,7 +76,7 @@ export default function HeroSection() {
         </h1>
 
         <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
-          Collection de NFT 3D mettant en scène un univers cartoon et pop-futuriste — personnages
+          Collection de NFT 3D mettant en scène un univers cartoon et pop-futuriste, personnages
           modulaires, accessoires spatiaux et compositions génératives dans une esthétique
           science-fiction assumée.
         </p>

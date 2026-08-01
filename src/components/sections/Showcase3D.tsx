@@ -11,7 +11,7 @@ interface Showcase3DProps {
  *
  * Ne contient que trois choses : un titre de section, un paragraphe court et
  * le viewer. Nom, métier, description, boutons et repères techniques vivent
- * exclusivement dans HeroIntro, en haut de page — rien n'est répété ici.
+ * exclusivement dans HeroIntro, en haut de page, rien n'est répété ici.
  */
 export default function Showcase3D({
   modelUrl,

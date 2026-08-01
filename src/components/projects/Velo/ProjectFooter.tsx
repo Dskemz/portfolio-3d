@@ -19,7 +19,7 @@ export default function ProjectFooter() {
                 VélyVélo
               </h3>
               <p className="text-sm text-slate-400 font-light mt-2">
-                Conception de Vélo Électrique — Mobilité urbaine
+                Conception de Vélo Électrique, Mobilité urbaine
               </p>
             </div>
 
@@ -59,7 +59,7 @@ export default function ProjectFooter() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
             <div>
               <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed max-w-2xl">
-                Conception 3D d&apos;un vélo électrique de livraison urbaine — structure
+                Conception 3D d&apos;un vélo électrique de livraison urbaine, structure
                 caisson-selle innovante, système de personnalisation par enseigne et déclinaisons
                 de flottes professionnelles pour les grandes plateformes de mobilité rapide.
               </p>
@@ -96,7 +96,7 @@ export default function ProjectFooter() {
       <div className="px-6 md:px-12 lg:px-20 py-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-xs text-slate-400 font-light">
-            <p>© 2024 D. — Freelance Designer &amp; Developer</p>
+            <p>© 2024 D. Freelance Designer &amp; Developer</p>
           </div>
 
           <div className="flex items-center gap-6">

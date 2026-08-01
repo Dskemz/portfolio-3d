@@ -17,13 +17,13 @@ const VUES_TECHNIQUES: VueTechnique[] = [
   {
     id: 'trois-quarts',
     titre: 'Vue trois-quarts',
-    legende: 'Silhouette générale — équilibre des masses',
+    legende: 'Silhouette générale, équilibre des masses',
     image: '/images/projets/velyv-elo/02-vue-3-4.jpg',
   },
   {
     id: 'selle',
     titre: 'Selle & Assise',
-    legende: 'Ergonomie du poste de conduite — confort longue durée',
+    legende: 'Ergonomie du poste de conduite, confort longue durée',
     image: '/images/projets/velyv-elo/03-vue-selle.jpg',
   },
   {
@@ -95,7 +95,7 @@ export default function InnovationSection() {
           </p>
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">
             L&apos;autonomie de la batterie, l&apos;équilibre des masses et la finesse des lignes
-            ont guidé chaque choix de modélisation — un vélo pensé pour de longues journées
+            ont guidé chaque choix de modélisation, un vélo pensé pour de longues journées
             en milieu urbain, avec une identité visuelle forte et un vocabulaire industriel maîtrisé.
           </p>
         </div>

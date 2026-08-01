@@ -40,11 +40,11 @@ export async function generateMetadata({
   if (!projet) return {};
 
   return {
-    title: `${projet.titre} — ${projet.client}`,
+    title: `${projet.titre}, ${projet.client}`,
     description: projet.resume,
     alternates: { canonical: `/portfolio/${projet.slug}` },
     openGraph: {
-      title: `${projet.titre} — ${projet.client}`,
+      title: `${projet.titre}, ${projet.client}`,
       description: projet.resume,
       url: `/portfolio/${projet.slug}`,
       type: "article",
@@ -68,7 +68,7 @@ export default async function ProjetPage({
   const precedent = PROJETS[(index - 1 + PROJETS.length) % PROJETS.length];
   const suivant = PROJETS[(index + 1) % PROJETS.length];
 
-  // Étude de cas sur-mesure — Château La Commanderie (slug agences-georges)
+  // Étude de cas sur-mesure, Château La Commanderie (slug agences-georges)
   if (slug === "agences-georges") {
     return (
       <EtudeCasChateauLaCommanderie
@@ -79,7 +79,7 @@ export default async function ProjetPage({
     );
   }
 
-  // Étude de cas sur-mesure — Studio Summum 3D (slug summum-3d)
+  // Étude de cas sur-mesure, Studio Summum 3D (slug summum-3d)
   if (slug === "summum-3d") {
     return (
       <EtudeCasStudioSummum
@@ -90,7 +90,7 @@ export default async function ProjetPage({
     );
   }
 
-  // Étude de cas sur-mesure — Architecture d'Intérieur · Salle de Bain (slug decotec)
+  // Étude de cas sur-mesure, Architecture d'Intérieur · Salle de Bain (slug decotec)
   if (slug === "decotec") {
     return (
       <EtudeCasSalleDeBain
@@ -101,7 +101,7 @@ export default async function ProjetPage({
     );
   }
 
-  // Étude de cas sur-mesure — Floofies · Le shiba du futur (slug nft-floofies)
+  // Étude de cas sur-mesure, Floofies · Le shiba du futur (slug nft-floofies)
   if (slug === "nft-floofies") {
     return (
       <EtudeCasNft
@@ -112,7 +112,7 @@ export default async function ProjetPage({
     );
   }
 
-  // Étude de cas sur-mesure — VélyVélo · Conception de Vélo Électrique (slug velyv-elo)
+  // Étude de cas sur-mesure, VélyVélo · Conception de Vélo Électrique (slug velyv-elo)
   if (slug === "velyv-elo") {
     return (
       <EtudeCasVelo
@@ -123,7 +123,7 @@ export default async function ProjetPage({
     );
   }
 
-  // Étude de cas sur-mesure — SteamOne · Défroisseur vapeur (slug steamone)
+  // Étude de cas sur-mesure, SteamOne · Défroisseur vapeur (slug steamone)
   if (slug === "steamone") {
     return (
       <EtudeCasSteamOne
@@ -134,7 +134,7 @@ export default async function ProjetPage({
     );
   }
 
-  // Étude de cas sur-mesure — Alquyme · Flacon d'exception (slug alquyme)
+  // Étude de cas sur-mesure, Alquyme · Flacon d'exception (slug alquyme)
   if (slug === "alquyme") {
     return (
       <EtudeCasAlquyme
@@ -145,7 +145,7 @@ export default async function ProjetPage({
     );
   }
 
-  // Étude de cas sur-mesure — Horlogerie · Mise en scène de montres (slug horlogerie-suisse)
+  // Étude de cas sur-mesure, Horlogerie · Mise en scène de montres (slug horlogerie-suisse)
   if (slug === "horlogerie-suisse") {
     return (
       <EtudeCasHorlogerie
@@ -156,7 +156,7 @@ export default async function ProjetPage({
     );
   }
 
-  // Étude de cas sur-mesure — Le Cartoon mis en scène (slug creation-originales)
+  // Étude de cas sur-mesure, Le Cartoon mis en scène (slug creation-originales)
   if (slug === "creation-originales") {
     return (
       <EtudeCasCartoon

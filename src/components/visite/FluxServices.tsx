@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * FluxServices — les trois atouts de l'offre, traversés par le fil électrique.
+ * FluxServices, les trois atouts de l'offre, traversés par le fil électrique.
  * Même structure d'animation que /about (FluxCompetences) : au repos tout est
  * invisible ; à l'entrée dans le viewport les cadres apparaissent EN SÉQUENCE
  * (fondu + glissée, alternance haut/bas), PUIS le flux se dessine de gauche à
@@ -152,7 +152,7 @@ export default function FluxServices() {
 
   return (
     <>
-      {/* ================= DESKTOP — pleine largeur, fil traversant ========= */}
+      {/* ================= DESKTOP, pleine largeur, fil traversant ========= */}
       <div
         className="relative left-1/2 hidden w-screen -translate-x-1/2 lg:block"
         style={{ aspectRatio: "1440 / 520" }}
@@ -245,7 +245,7 @@ export default function FluxServices() {
         </svg>
       </div>
 
-      {/* Mobile et tablette — fil mesuré partagé (serpente + sort au bord) */}
+      {/* Mobile et tablette, fil mesuré partagé (serpente + sort au bord) */}
       <RailMobile items={SERVICES} accent={ACCENT} heading="h3" />
     </>
   );

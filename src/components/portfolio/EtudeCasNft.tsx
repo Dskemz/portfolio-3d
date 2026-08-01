@@ -22,7 +22,7 @@ interface EtudeCasNftProps {
 }
 
 /**
- * Étude de cas éditoriale sur-mesure — FLOOFIES · Collection NFT 3D.
+ * Étude de cas éditoriale sur-mesure, FLOOFIES · Collection NFT 3D.
  *
  * Rendue via la route dynamique /portfolio/[slug] pour le slug "nft-floofies".
  * Compose les sections dédiées (hero, shibas de base, compositions modulaires,
@@ -37,7 +37,7 @@ export function EtudeCasNft({
       <HeroSection />
       <ShibasSection />
       <PhraseSection>
-        Une base commune, mille personnages — la modularité au service de l&apos;imaginaire.
+        Une base commune, mille personnages, la modularité au service de l&apos;imaginaire.
       </PhraseSection>
       <CompositionsSection />
       <RaresSection />

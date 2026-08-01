@@ -33,13 +33,13 @@ const COMPOSITIONS: Composition[] = [
   {
     id: 'vr',
     nom: 'Casque VR',
-    description: 'Composition futuriste — visière VR + tenue tech',
+    description: 'Composition futuriste, visière VR + tenue tech',
     image: '/images/projets/nft-floofies/11-compo-vr.jpg',
   },
   {
     id: 'lunettes-3d',
     nom: 'Lunettes 3D',
-    description: 'Composition pop — lunettes 3D + bomber lumineux',
+    description: 'Composition pop, lunettes 3D + bomber lumineux',
     image: '/images/projets/nft-floofies/12-compo-lunettes.jpg',
   },
 ];

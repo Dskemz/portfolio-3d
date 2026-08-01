@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 /**
- * Logotype générique provisoire — carré orange vectoriel.
+ * Logotype générique provisoire, carré orange vectoriel.
  * Remplace le nom en toutes lettres dans le coin haut-gauche de la Navbar.
  *
  * Dans Navbar.tsx :

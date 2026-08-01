@@ -1,5 +1,5 @@
 /**
- * TEMPLATE — Configuration layout pour un nouveau projet
+ * TEMPLATE, Configuration layout pour un nouveau projet
  * 
  * À utiliser :
  * 1. Copie ce fichier en `mon-projet-layout-config.ts`
@@ -12,7 +12,7 @@
 import type { SectionGrid } from "@/content/withings-layout-config";
 
 /**
- * Section 1 — Hero ou intro
+ * Section 1, Hero ou intro
  */
 export const SECTION_1: SectionGrid = {
   colonnes: 1,
@@ -29,7 +29,7 @@ export const SECTION_1: SectionGrid = {
 };
 
 /**
- * Section 2 — Exemple de grille 3 colonnes
+ * Section 2, Exemple de grille 3 colonnes
  */
 export const SECTION_2: SectionGrid = {
   colonnes: 3, // ← Change à 2, 4, 5 si besoin
@@ -67,7 +67,7 @@ export const SECTION_2: SectionGrid = {
 };
 
 /**
- * Section 3 — Exemple de grille asymétrique
+ * Section 3, Exemple de grille asymétrique
  */
 export const SECTION_3: SectionGrid = {
   colonnes: 4,

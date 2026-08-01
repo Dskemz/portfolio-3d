@@ -72,7 +72,7 @@ export default function HeroSection() {
         <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl">
           Alquyme
           <br />
-          <span className="text-neutral-300">Flacon d&apos;exception — Écrin de parfum</span>
+          <span className="text-neutral-300">Flacon d&apos;exception, Écrin de parfum</span>
         </h1>
 
         <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">

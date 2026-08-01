@@ -1,5 +1,5 @@
 /**
- * Configuration layout — decotec
+ * Configuration layout, decotec
  * 
  * Modifie colonnes/gap/ratio pour ajuster la mise en page.
  */

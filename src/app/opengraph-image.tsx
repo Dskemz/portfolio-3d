@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 export const alt =
-  "Graphite 3D — Denis Masquet, graphiste 3D généraliste";
+  "Graphite 3D, Denis Masquet, graphiste 3D généraliste";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

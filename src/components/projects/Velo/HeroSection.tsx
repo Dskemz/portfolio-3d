@@ -76,7 +76,7 @@ export default function HeroSection() {
         </h1>
 
         <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
-          Conception 3D d&apos;un vélo électrique de livraison urbaine — mobilité professionnelle,
+          Conception 3D d&apos;un vélo électrique de livraison urbaine, mobilité professionnelle,
           structure modulaire caisson-selle, personnalisation par enseigne et intégration de flotte.
         </p>
 

@@ -26,7 +26,7 @@ const ENSEIGNES_RENDUS: EnseigneRendu[] = [
   {
     id: 'flink',
     enseigne: 'Flink',
-    description: 'Rose signature — jantes, pédales et porte-bagage',
+    description: 'Rose signature, jantes, pédales et porte-bagage',
     couleurPrincipale: 'Rose vif',
     couleurRappel: 'Noir mat',
     image: '/images/projets/velyv-elo/05-flink.jpg',
@@ -34,7 +34,7 @@ const ENSEIGNES_RENDUS: EnseigneRendu[] = [
   {
     id: 'stuart',
     enseigne: 'Stuart',
-    description: 'Orange dynamique — équipements colorés',
+    description: 'Orange dynamique, équipements colorés',
     couleurPrincipale: 'Orange',
     couleurRappel: 'Blanc',
     image: '/images/projets/velyv-elo/06-stuart.jpg',
@@ -42,7 +42,7 @@ const ENSEIGNES_RENDUS: EnseigneRendu[] = [
   {
     id: 'just-eat',
     enseigne: 'Just Eat',
-    description: 'Rouge/orange gourmand — rappel jaune sur cadre',
+    description: 'Rouge/orange gourmand, rappel jaune sur cadre',
     couleurPrincipale: 'Rouge',
     couleurRappel: 'Jaune',
     image: '/images/projets/velyv-elo/07-just-eat.jpg',
@@ -50,7 +50,7 @@ const ENSEIGNES_RENDUS: EnseigneRendu[] = [
   {
     id: 'gopuff',
     enseigne: 'Gopuff',
-    description: 'Violet/rose — identité visuelle affirmée',
+    description: 'Violet/rose, identité visuelle affirmée',
     couleurPrincipale: 'Violet',
     couleurRappel: 'Rose',
     image: '/images/projets/velyv-elo/08-gopuff.jpg',
@@ -135,7 +135,7 @@ export default function FlocageSection() {
           </h2>
           <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4">
             Le vélo se décline selon la charte graphique de chaque partenaire. Les
-            <span className="text-white"> éléments fixes</span> — fourche, gardes-boue, batterie —
+            <span className="text-white"> éléments fixes</span>, fourche, gardes-boue, batterie —
             restent en <span className="text-white">noir mat</span>, socle universel.
           </p>
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">

@@ -24,25 +24,25 @@ const MACROS_VILLERET: Macro[] = [
   {
     id: 'cadran',
     nom: 'Cadran émaillé',
-    detail: 'Complications chinoises — index gravés à la main',
+    detail: 'Complications chinoises, index gravés à la main',
     image: '/images/projets/horlogerie-suisse/02-villeret-cadran.jpg',
   },
   {
     id: 'saphir',
     nom: 'Verre saphir',
-    detail: 'Reflets contrôlés — antireflets bombé',
+    detail: 'Reflets contrôlés, antireflets bombé',
     image: '/images/projets/horlogerie-suisse/03-villeret-saphir.jpg',
   },
   {
     id: 'aiguilles',
     nom: 'Aiguilles bleuies',
-    detail: 'Feuille finement travaillée — traitement thermique',
+    detail: 'Feuille finement travaillée, traitement thermique',
     image: '/images/projets/horlogerie-suisse/04-villeret-aiguilles.jpg',
   },
   {
     id: 'bracelet',
     nom: 'Bracelet cuir alligator',
-    detail: 'Grain texturé — coutures ton sur ton',
+    detail: 'Grain texturé, coutures ton sur ton',
     image: '/images/projets/horlogerie-suisse/05-villeret-bracelet.jpg',
   },
 ];
@@ -51,19 +51,19 @@ const VUES_VILLERET: VueAngle[] = [
   {
     id: 'face',
     angle: 'Face avant',
-    description: 'Cadran complet — lecture des complications',
+    description: 'Cadran complet, lecture des complications',
     image: '/images/projets/horlogerie-suisse/06-villeret-face.jpg',
   },
   {
     id: 'profil',
     angle: 'Vue de profil',
-    description: 'Épaisseur du boîtier — courbes de la carrure',
+    description: 'Épaisseur du boîtier, courbes de la carrure',
     image: '/images/projets/horlogerie-suisse/07-villeret-profil.jpg',
   },
   {
     id: 'dos',
     angle: 'Fond ouvert',
-    description: 'Mouvement mécanique visible — masse oscillante gravée',
+    description: 'Mouvement mécanique visible, masse oscillante gravée',
     image: '/images/projets/horlogerie-suisse/08-villeret-dos.jpg',
   },
 ];
@@ -138,14 +138,14 @@ export default function VilleretSection() {
           </h2>
           <p className="text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4">
             Modélisation et mise en scène 3D de la <span className="text-white">Villeret Chinese
-            Calendar</span> — une pièce d&apos;exception dont les complications font écho au
+            Calendar</span>, une pièce d&apos;exception dont les complications font écho au
             calendrier lunaire traditionnel. Chaque détail a été reproduit fidèlement : indexation
             gravée, aiguilles feuilles bleuies, guillochage du cadran.
           </p>
           <p className="text-sm md:text-base text-slate-400 font-light leading-relaxed">
             Un travail particulier a été porté sur les <span className="text-white">reflets du verre
             saphir</span>, sur les cadrans multicouches et sur la texture du
-            <span className="text-white"> bracelet cuir alligator</span> — jusqu&apos;au grain
+            <span className="text-white"> bracelet cuir alligator</span>, jusqu&apos;au grain
             reproduit à l&apos;identique.
           </p>
         </div>
@@ -159,7 +159,7 @@ export default function VilleretSection() {
                 Détails du cadran
               </h3>
               <p className="text-sm text-slate-500 font-light">
-                Gros plans macro — savoir-faire horloger
+                Gros plans macro, savoir-faire horloger
               </p>
             </div>
 

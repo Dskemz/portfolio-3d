@@ -5,12 +5,12 @@ import LienSobre from "@/components/portfolio/LienSobre";
 import { CtaSignature } from "@/components/portfolio/CtaSignature";
 
 export const metadata: Metadata = {
-  title: "Mes Projets — visites virtuelles, temps réel et modélisation 3D",
+  title: "Mes Projets, visites virtuelles, temps réel et modélisation 3D",
   description:
     "Sélection de réalisations 3D : visites virtuelles interactives dans le navigateur, expériences temps réel web et modélisation produit haute définition.",
   alternates: { canonical: "/portfolio" },
   openGraph: {
-    title: "Mes Projets — graphiste 3D généraliste",
+    title: "Mes Projets, graphiste 3D généraliste",
     description:
       "Visites virtuelles interactives, temps réel web et modélisation 3D.",
     url: "/portfolio",
@@ -40,14 +40,14 @@ export default function PortfolioPage() {
           </h1>
         </div>
 
-        {/* Carrousel principal — 8 projets phares (lazy-load interne) */}
+        {/* Carrousel principal, 8 projets phares (lazy-load interne) */}
         <div className="mt-16 lg:mt-20">
           <CarrouselProjets />
         </div>
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/*  Bandeau défilant — logos clients (marquee infini)                 */}
+      {/*  Bandeau défilant, logos clients (marquee infini)                 */}
       {/*  Le composant rend son propre libellé + section.                   */}
       {/* ------------------------------------------------------------------ */}
       <div className="border-t border-mine">
@@ -55,7 +55,7 @@ export default function PortfolioPage() {
       </div>
 
       {/* ------------------------------------------------------------------ */}
-      {/*  Accès à la grille complète — page dédiée /portfolio/tous          */}
+      {/*  Accès à la grille complète, page dédiée /portfolio/tous          */}
       {/* ------------------------------------------------------------------ */}
       <section className="mx-auto w-full max-w-6xl border-t border-mine px-6 py-16 lg:px-16 lg:py-24 xl:px-24">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
@@ -76,7 +76,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/*  CTA signature — filet lumineux + lien contact (partagé)           */}
+      {/*  CTA signature, filet lumineux + lien contact (partagé)           */}
       {/* ------------------------------------------------------------------ */}
       <CtaSignature />
     </div>

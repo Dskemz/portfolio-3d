@@ -45,7 +45,7 @@ export default function IntroductionSection() {
       className="w-full py-20 md:py-32 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-black to-slate-900"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Visuel grand format — baignoire avec lumière naturelle */}
+        {/* Visuel grand format, baignoire avec lumière naturelle */}
         <div ref={imageRef} className="mb-16 md:mb-24 w-full">
           <div className="relative w-full aspect-[16/10] md:aspect-[21/9] rounded-xl overflow-hidden bg-slate-800 border border-slate-700">
             <img
@@ -85,7 +85,7 @@ export default function IntroductionSection() {
               Modélisation 3D Précise
             </h3>
             <p className="text-sm md:text-base text-slate-400 font-light">
-              Géométrie haute densité pour capturer chaque détail des surfaces et des profils — vasques,
+              Géométrie haute densité pour capturer chaque détail des surfaces et des profils, vasques,
               robinetterie, mobilier encastré.
             </p>
           </div>
@@ -105,7 +105,7 @@ export default function IntroductionSection() {
               Textures &amp; Matériaux
             </h3>
             <p className="text-sm md:text-base text-slate-400 font-light">
-              Recréation fidèle des finitions — céramique, travertin, pierre, bois strié — avec
+              Recréation fidèle des finitions, céramique, travertin, pierre, bois strié, avec
               microsurfaces et patines réalistes.
             </p>
           </div>

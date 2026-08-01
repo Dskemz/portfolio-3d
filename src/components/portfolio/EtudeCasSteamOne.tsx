@@ -21,7 +21,7 @@ interface EtudeCasSteamOneProps {
 }
 
 /**
- * Étude de cas éditoriale sur-mesure — STEAMONE · Défroisseur vapeur.
+ * Étude de cas éditoriale sur-mesure, STEAMONE · Défroisseur vapeur.
  *
  * Rendue via la route dynamique /portfolio/[slug] pour le slug "steamone".
  * Compose les sections dédiées (hero, éclaté produit, architecture interne,
@@ -36,7 +36,7 @@ export function EtudeCasSteamOne({
       <HeroSection />
       <EclateSection />
       <PhraseSection>
-        Comprendre un objet, c&apos;est le laisser se raconter — pièce par pièce, geste par geste.
+        Comprendre un objet, c&apos;est le laisser se raconter, pièce par pièce, geste par geste.
       </PhraseSection>
       <ArchitectureSection />
       <ExplorationSection />

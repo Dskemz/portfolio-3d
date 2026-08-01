@@ -15,7 +15,7 @@ interface RevealProps {
 }
 
 /**
- * Apparition au scroll — fondu et légère montée.
+ * Apparition au scroll, fondu et légère montée.
  *
  * API identique à la version précédente : les composants appelants n'ont
  * pas à changer.

@@ -22,7 +22,7 @@ interface EtudeCasSalleDeBainProps {
 }
 
 /**
- * Étude de cas éditoriale sur-mesure — ARCHITECTURE D'INTÉRIEUR · SALLE DE BAIN.
+ * Étude de cas éditoriale sur-mesure, ARCHITECTURE D'INTÉRIEUR · SALLE DE BAIN.
  *
  * Rendue via la route dynamique /portfolio/[slug] pour le slug "decotec".
  * Compose les sections dédiées (hero, introduction, scénographies, éclairage,

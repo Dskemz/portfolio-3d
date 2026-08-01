@@ -13,7 +13,7 @@ import {
 } from "./stepping";
 
 /**
- * ⚙️ INTERRUPTEUR — scroll cranté au doigt sur smartphone.
+ * ⚙️ INTERRUPTEUR, scroll cranté au doigt sur smartphone.
  *
  *   true  : un flick = une fiche, comme sur desktop (essai en cours).
  *   false : scroll natif avec inertie, comportement d'origine.
@@ -229,7 +229,7 @@ export default function SkillFlowMobile() {
      * n'a pas encore été dépassée (son bord haut est toujours sous le haut du
      * viewport). Sur mobile l'accueil fait 100svh : la fiche est un plein écran
      * plus bas (top ≈ vh), donc l'ancien seuil 0.68·vh la ratait au premier
-     * geste — le scroll natif la dépassait et la visite ne s'enclenchait qu'au
+     * geste, le scroll natif la dépassait et la visite ne s'enclenchait qu'au
      * second swipe. Le seuil `top > 0` supprime ce "premier scroll libre".
      */
     const firstFicheApproaches = () => {
@@ -342,12 +342,12 @@ export default function SkillFlowMobile() {
 
     /**
      * Cœur du correctif mobile. Dans la zone guidée, on appelle `preventDefault`
-     * DÈS LE PREMIER PIXEL du geste — pas seulement après le seuil de swipe.
+     * DÈS LE PREMIER PIXEL du geste, pas seulement après le seuil de swipe.
      *
      * Pourquoi c'est indispensable : sur iOS/Android, dès qu'on laisse passer les
      * quelques premiers pixels d'un `touchmove` au défilement natif, le navigateur
      * s'engage dans SON scroll et rend les `touchmove` suivants NON annulables
-     * (`e.cancelable === false`) — nos `preventDefault` deviennent alors inertes.
+     * (`e.cancelable === false`), nos `preventDefault` deviennent alors inertes.
      * Résultat : le doigt lançait le scroll natif, dépassait la 1re fiche, et le
      * `animateScrollTo` du cran était écrasé. En tuant le natif dès le pixel 1,
      * le scroll automatique du cran n'est plus jamais concurrencé.
@@ -514,7 +514,7 @@ export default function SkillFlowMobile() {
         </div>
       </header>
 
-      {/* ═══ LE TRAIT — simple div centrée, aucune SVG ═══ */}
+      {/* ═══ LE TRAIT, simple div centrée, aucune SVG ═══ */}
       <div
         aria-hidden
         className="pointer-events-none absolute left-1/2 z-0"
@@ -529,7 +529,7 @@ export default function SkillFlowMobile() {
         }}
       />
 
-      {/* ═══ Les fiches — centrées, le trait passe au milieu ═══ */}
+      {/* ═══ Les fiches, centrées, le trait passe au milieu ═══ */}
       <section
         aria-label="Processus de production 3D"
         className="relative z-10 flex w-full flex-col gap-16 px-6 pb-24 pt-10"

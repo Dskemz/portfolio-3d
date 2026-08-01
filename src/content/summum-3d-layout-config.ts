@@ -1,5 +1,5 @@
 /**
- * Configuration layout — summum-3d
+ * Configuration layout, summum-3d
  * 
  * Modifie colonnes/gap/ratio pour ajuster la mise en page.
  */
