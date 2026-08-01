@@ -94,7 +94,7 @@ export default function ArchitectureSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-20 md:py-32 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-slate-900 to-black"
+      className="w-full py-8 md:py-12 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-slate-900 to-black"
     >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
