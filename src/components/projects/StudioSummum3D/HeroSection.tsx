@@ -64,7 +64,7 @@ export default function HeroSection() {
         className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center md:items-start md:text-left md:px-16 lg:px-24"
       >
         <div className="mb-6 tracking-widest">
-          <p className="text-sm md:text-base font-light text-neutral-300 uppercase letter-spacing">
+          <p className="text-sm md:text-base font-light text-stone-800 uppercase letter-spacing">
             Projet 3D, Photogrammétrie & Patrimoine
           </p>
         </div>
