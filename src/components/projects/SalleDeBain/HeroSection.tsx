@@ -45,7 +45,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-screen bg-gradient-to-br from-[#f5efe0] to-[#d9cdb2] overflow-hidden"
+      className="relative w-full h-screen bg-gradient-to-br from-[#d4a339] to-[#b88d30] overflow-hidden"
     >
       <div
         ref={heroImageRef}
@@ -64,7 +64,7 @@ export default function HeroSection() {
         className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center md:items-start md:text-left md:px-16 lg:px-24"
       >
         <div className="mb-6 tracking-widest">
-          <p className="text-sm md:text-base font-light text-slate-900/80 uppercase letter-spacing">
+          <p className="text-sm md:text-base font-light text-[#b88d30] uppercase letter-spacing">
             Architecture d&apos;Intérieur
           </p>
         </div>
