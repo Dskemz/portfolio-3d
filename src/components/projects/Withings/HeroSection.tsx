@@ -45,7 +45,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-screen bg-gradient-to-br from-[#c8ccd1] to-[#7a8087] overflow-hidden"
+      className="relative w-full h-screen bg-gradient-to-br from-[#1a98db] to-[#1374a8] overflow-hidden"
     >
       {/*
         Image de fond immersive (montre sur le sable) :
@@ -77,7 +77,7 @@ export default function HeroSection() {
         className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center md:items-start md:text-left md:px-16 lg:px-24"
       >
         <div className="mb-6 tracking-widest">
-          <p className="text-sm md:text-base font-light text-[#7a8087] uppercase drop-shadow-sm">
+          <p className="text-sm md:text-base font-light text-[#1a98db] uppercase drop-shadow-sm">
             Withings, Modélisation 3D &amp; Horlogerie connectée
           </p>
         </div>
