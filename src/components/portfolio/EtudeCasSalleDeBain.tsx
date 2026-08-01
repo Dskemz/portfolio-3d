@@ -1,6 +1,7 @@
 import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/SalleDeBain/HeroSection";
+import BandeauScroll from "@/components/projects/shared/BandeauScroll";
 import PhraseSection from "@/components/projects/shared/PhraseSection";
 import IntroductionSection from "@/components/projects/SalleDeBain/IntroductionSection";
 import ScenographieSection from "@/components/projects/SalleDeBain/ScenographieSection";
@@ -35,6 +36,7 @@ export function EtudeCasSalleDeBain({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
+      <BandeauScroll degrade="from-slate-600 to-slate-800" />
       <IntroductionSection />
       <PhraseSection>
         Du matériau au pixel : chaque surface raconte une intention de design.

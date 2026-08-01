@@ -1,6 +1,7 @@
 import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/Alquyme/HeroSection";
+import BandeauScroll from "@/components/projects/shared/BandeauScroll";
 import PhraseSection from "@/components/projects/shared/PhraseSection";
 import PackagingSection from "@/components/projects/Alquyme/PackagingSection";
 import DetailsGravureSection from "@/components/projects/Alquyme/DetailsGravureSection";
@@ -34,6 +35,7 @@ export function EtudeCasAlquyme({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
+      <BandeauScroll degrade="from-amber-600 to-amber-800" />
       <PackagingSection />
       <PhraseSection>
         Aussi puissante qu&apos;une odeur, la lumière qui glisse sur l&apos;or raconte une histoire.

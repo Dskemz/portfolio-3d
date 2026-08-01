@@ -1,6 +1,7 @@
 import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/SteamOne/HeroSection";
+import BandeauScroll from "@/components/projects/shared/BandeauScroll";
 import PhraseSection from "@/components/projects/shared/PhraseSection";
 import EclateSection from "@/components/projects/SteamOne/EclateSection";
 import ArchitectureSection from "@/components/projects/SteamOne/ArchitectureSection";
@@ -34,6 +35,7 @@ export function EtudeCasSteamOne({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
+      <BandeauScroll degrade="from-sky-500 to-sky-700" />
       <EclateSection />
       <PhraseSection>
         Comprendre un objet, c&apos;est le laisser se raconter, pièce par pièce, geste par geste.

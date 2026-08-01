@@ -1,6 +1,7 @@
 import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/Velo/HeroSection";
+import BandeauScroll from "@/components/projects/shared/BandeauScroll";
 import PhraseSection from "@/components/projects/shared/PhraseSection";
 import InnovationSection from "@/components/projects/Velo/InnovationSection";
 import FlocageSection from "@/components/projects/Velo/FlocageSection";
@@ -34,6 +35,7 @@ export function EtudeCasVelo({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
+      <BandeauScroll degrade="from-emerald-500 to-emerald-700" />
       <InnovationSection />
       <PhraseSection>
         Une architecture technique, mille identités visuelles, la mobilité comme plateforme.

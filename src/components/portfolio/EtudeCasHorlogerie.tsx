@@ -1,6 +1,7 @@
 import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/Horlogerie/HeroSection";
+import BandeauScroll from "@/components/projects/shared/BandeauScroll";
 import PhraseSection from "@/components/projects/shared/PhraseSection";
 import VilleretSection from "@/components/projects/Horlogerie/VilleretSection";
 import PolarisSection from "@/components/projects/Horlogerie/PolarisSection";
@@ -34,6 +35,7 @@ export function EtudeCasHorlogerie({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
+      <BandeauScroll degrade="from-rose-500 to-rose-700" />
       <VilleretSection />
       <PhraseSection>
         Précision du geste, patience de la matière, l&apos;horlogerie comme discipline du regard.
