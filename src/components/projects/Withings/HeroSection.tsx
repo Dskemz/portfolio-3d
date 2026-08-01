@@ -45,7 +45,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-screen bg-gradient-to-br from-sky-500 to-blue-600 overflow-hidden"
+      className="relative w-full h-screen bg-gradient-to-br from-[#c8ccd1] to-[#7a8087] overflow-hidden"
     >
       {/*
         Image de fond immersive (montre sur le sable) :

@@ -45,7 +45,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-screen bg-gradient-to-br from-zinc-900 to-black overflow-hidden"
+      className="relative w-full h-screen bg-gradient-to-br from-[#3a3a3a] to-[#1a1a1a] overflow-hidden"
     >
       <div
         ref={heroImageRef}
