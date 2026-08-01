@@ -1,7 +1,6 @@
 import type { ProjetData } from "../../content/projets";
 import { ProjectNavigation } from "./ProjectNavigation";
 import HeroSection from "@/components/projects/Nft/HeroSection";
-import BandeauScroll from "@/components/projects/shared/BandeauScroll";
 import PhraseSection from "@/components/projects/shared/PhraseSection";
 import ShibasSection from "@/components/projects/Nft/ShibasSection";
 import CompositionsSection from "@/components/projects/Nft/CompositionsSection";
@@ -36,7 +35,6 @@ export function EtudeCasNft({
   return (
     <div className="flex flex-1 flex-col overflow-x-clip bg-black">
       <HeroSection />
-      <BandeauScroll degrade="from-cyan-500 to-fuchsia-600" />
       <ShibasSection />
       <PhraseSection>
         Une base commune, mille personnages, la modularité au service de l&apos;imaginaire.
