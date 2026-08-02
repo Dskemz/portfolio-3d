@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Container from "@/components/layout/Container";
-import CarrouselProjets from "@/components/portfolio/CarrouselProjets";
+import SommaireProjets from "@/components/portfolio/SommaireProjets";
 import BandeauConfiance from "@/components/portfolio/BandeauConfiance";
 import LienSobre from "@/components/portfolio/LienSobre";
 import { CtaSignature } from "@/components/portfolio/CtaSignature";
@@ -42,9 +42,9 @@ export default function PortfolioPage() {
             </h1>
           </div>
 
-          {/* Carrousel principal, 8 projets phares (lazy-load interne) */}
+          {/* Sommaire interactif split-screen, 11 projets phares */}
           <div className="mt-16 lg:mt-20">
-            <CarrouselProjets />
+            <SommaireProjets />
           </div>
         </Container>
       </section>

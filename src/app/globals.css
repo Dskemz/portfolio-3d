@@ -146,6 +146,19 @@
   padding-inline: var(--gouttiere);
 }
 
+/* ─────────────────────────────────────────────────────────────────────────
+ *  Zone de défilement du sommaire de projets (SommaireProjets) — masque la
+ *  barre de défilement native, peu élégante sur le thème sombre. Le défilement
+ *  reste actif ; les fondus haut/bas signalent le contenu masqué.
+ * ───────────────────────────────────────────────────────────────────────── */
+.sommaire-scroll {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE / anciens Edge */
+}
+.sommaire-scroll::-webkit-scrollbar {
+  display: none; /* Chromium / Safari */
+}
+
 @layer base {
   body {
     @apply bg-zinc-950 text-white;
