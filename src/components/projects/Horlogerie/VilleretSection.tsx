@@ -170,6 +170,7 @@ export default function VilleretSection() {
                       src={macro.image}
                       alt={macro.nom}
                       className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3">
                       <p className="text-[11px] md:text-xs font-light text-white leading-tight">
@@ -205,6 +206,7 @@ export default function VilleretSection() {
                       src={vue.image}
                       alt={vue.angle}
                       className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
                     />
                   </div>
                   <div className="flex-1 flex flex-col justify-center">
