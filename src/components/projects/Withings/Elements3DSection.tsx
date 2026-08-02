@@ -34,6 +34,73 @@ const POSTER = '/images/projets/withings/11-eclate.jpg';
 const framePath = (i: number) =>
   `${FRAME_BASE}eclate-${String(i + 1).padStart(2, '0')}.jpg`;
 
+// --- Génération de frames provisoires (cercle qui se déplace) ---
+const generateProvisionalFrames = (): HTMLImageElement[] => {
+  const frames: HTMLImageElement[] = [];
+  const w = 960;
+  const h = 540;
+  const radius = 60;
+
+  for (let i = 0; i < FRAME_COUNT; i++) {
+    const progress = i / (FRAME_COUNT - 1); // 0…1
+    const x = 100 + progress * (w - 200); // cercle se déplace de gauche à droite
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) continue;
+
+    // Fond blanc
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+
+    // Grille légère
+    ctx.strokeStyle = '#e5e5e5';
+    ctx.lineWidth = 1;
+    for (let j = 0; j <= w; j += 60) {
+      ctx.beginPath();
+      ctx.moveTo(j, 0);
+      ctx.lineTo(j, h);
+      ctx.stroke();
+    }
+    for (let j = 0; j <= h; j += 60) {
+      ctx.beginPath();
+      ctx.moveTo(0, j);
+      ctx.lineTo(w, j);
+      ctx.stroke();
+    }
+
+    // Cercle central
+    ctx.fillStyle = '#FF7F50';
+    ctx.beginPath();
+    ctx.arc(x, h / 2, radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Cadre de référence (outline rectangle)
+    ctx.strokeStyle = '#aaaaaa';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(1, 1, w - 2, h - 2);
+
+    // Texte état
+    const stateIdx = Math.min(3, Math.floor(progress * STATE_COUNT));
+    ctx.fillStyle = '#333333';
+    ctx.font = 'bold 20px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(STATE_LABELS[stateIdx], w / 2, 40);
+    ctx.font = '14px sans-serif';
+    ctx.fillStyle = '#999999';
+    ctx.fillText(`Frame ${i + 1}/${FRAME_COUNT}`, w / 2, 65);
+
+    // Convertir en image
+    const img = new Image();
+    img.src = canvas.toDataURL('image/jpeg', 0.85);
+    img.decoding = 'async';
+    frames.push(img);
+  }
+
+  return frames;
+};
+
 const STATE_LABELS = ['Assemblé', 'Ouverture 1', 'Ouverture 2', 'Éclaté'];
 
 // Progression continue 0…(STATE_COUNT-1) → index de frame 0…(FRAME_COUNT-1)
@@ -154,9 +221,11 @@ export default function Elements3DSection() {
     const settle = () => {
       if (cancelled) return;
       if (loaded + failed < FRAME_COUNT) return;
-      // Trop de frames manquantes → on garde l'image statique, sans hijack.
+      // Si > 20% des frames manquent : générer des frames provisoires
       if (failed > FRAME_COUNT * 0.2) {
-        setFallback(true);
+        const provisionalFrames = generateProvisionalFrames();
+        framesRef.current = provisionalFrames;
+        setReady(true);
         return;
       }
       framesRef.current = imgs;
@@ -186,6 +255,14 @@ export default function Elements3DSection() {
           im.onerror = null;
         }
       });
+    };
+  }, []);
+
+  // --- Nettoyage au démontage : débloquer le scroll ---
+  useEffect(() => {
+    return () => {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
     };
   }, []);
 
@@ -256,11 +333,23 @@ export default function Elements3DSection() {
       return Math.abs(center - vh / 2) < vh * ENGAGE_BAND;
     };
 
+    // --- Helper : bloquer/débloquer le scroll du body ---
+    const updateScrollLock = (state: number) => {
+      if (state === 0 || state === STATE_COUNT - 1) {
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+      } else {
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+      }
+    };
+
     // --- Transition fluide vers un état ---
     const goToState = (target: number) => {
       const t = Math.min(Math.max(target, 0), STATE_COUNT - 1);
       tweenRef.current?.kill();
       lockRef.current = true;
+      updateScrollLock(t); // bloquer immédiatement
       setActiveState(t);
       tweenRef.current = gsap.to(progressRef.current, {
         value: t,
@@ -270,6 +359,7 @@ export default function Elements3DSection() {
         onComplete: () => {
           stateNumRef.current = t;
           lockRef.current = false;
+          updateScrollLock(t); // confirmer blocage/déblocage
         },
       });
     };
