@@ -23,7 +23,7 @@ export default function BandeauProjet({
   fondSection = 'bg-black',
 }: BandeauProjetProps) {
   return (
-    <section className={`w-full px-6 md:px-12 lg:px-20 py-12 md:py-16 ${fondSection}`}>
+    <section className={`w-full gouttiere py-12 md:py-16 ${fondSection}`}>
       <div className="max-w-7xl mx-auto">
         <div
           className={`rounded-3xl bg-gradient-to-r ${degrade} px-8 py-14 md:px-16 md:py-20 text-center`}

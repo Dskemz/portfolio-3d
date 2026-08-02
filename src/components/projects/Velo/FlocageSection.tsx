@@ -119,7 +119,7 @@ export default function FlocageSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-20 md:py-32 px-6 md:px-12 lg:px-20 bg-black"
+      className="w-full py-20 md:py-32 gouttiere bg-black"
     >
       <div className="max-w-7xl mx-auto">
         {/* Header */}

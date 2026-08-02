@@ -95,7 +95,7 @@ export default function RaresSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full py-20 md:py-32 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-black via-indigo-950/20 to-black"
+      className="w-full py-20 md:py-32 gouttiere bg-gradient-to-b from-black via-indigo-950/20 to-black"
     >
       <div className="max-w-7xl mx-auto">
         {/* Header */}

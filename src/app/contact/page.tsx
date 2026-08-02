@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Container from '@/components/layout/Container';
 import ContactFormClient from '@/components/ContactFormClient';
 import { FiletAnime } from '@/components/portfolio/FiletAnime';
 
@@ -16,7 +17,7 @@ export default function ContactPage() {
       défilement horizontale.
     */
     <div className="flex flex-1 flex-col overflow-x-clip bg-black text-white">
-      <div className="mx-auto w-full max-w-5xl px-6 py-24 md:py-28 lg:px-12">
+      <Container taille="moyen" className="py-24 md:py-28">
 
         <div className="mb-16">
           <h1 className="font-display text-7xl font-normal leading-tight tracking-tighter text-papier md:text-8xl">
@@ -44,7 +45,7 @@ export default function ContactPage() {
         </div>
 
         <ContactFormClient />
-      </div>
+      </Container>
     </div>
   );
 }

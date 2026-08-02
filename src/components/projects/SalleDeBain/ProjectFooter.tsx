@@ -7,7 +7,7 @@ export default function ProjectFooter() {
   return (
     <footer className="w-full bg-slate-900 text-white">
       {/* Main Footer */}
-      <div className="px-6 md:px-12 lg:px-20 py-16 border-b border-slate-800">
+      <div className="gouttiere py-16 border-b border-slate-800">
         <div className="max-w-7xl mx-auto">
           {/* Project Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-12 mb-20">
@@ -93,7 +93,7 @@ export default function ProjectFooter() {
       </div>
 
       {/* Bottom Footer */}
-      <div className="px-6 md:px-12 lg:px-20 py-8">
+      <div className="gouttiere py-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-xs text-slate-400 font-light">
             <p>© 2024 D. Freelance Designer &amp; Developer</p>

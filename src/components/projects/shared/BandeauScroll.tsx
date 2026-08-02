@@ -22,7 +22,7 @@ export default function BandeauScroll({
   couleurTexte = 'text-white/80',
 }: BandeauScrollProps) {
   return (
-    <div className={`w-full py-6 px-6 md:px-12 lg:px-20 bg-gradient-to-r ${degrade}`}>
+    <div className={`w-full py-6 gouttiere bg-gradient-to-r ${degrade}`}>
       <div className="flex flex-col items-center gap-2">
         <p className={`text-xs font-light ${couleurTexte} uppercase tracking-wider`}>
           Scroll

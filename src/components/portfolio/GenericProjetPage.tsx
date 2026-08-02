@@ -46,7 +46,7 @@ export function GenericProjetPage({
         annee={projet.annee}
       />
 
-      <div className="mx-auto w-full max-w-6xl space-y-20 px-6 pb-24 lg:space-y-28 lg:px-16 xl:px-24">
+      <div className="mx-auto w-full max-w-7xl gouttiere space-y-20 pb-24 lg:space-y-28">
         {/* Viewer ou image hero */}
         <ProjectViewer
           src={projet.viewer ?? projet.couverture}

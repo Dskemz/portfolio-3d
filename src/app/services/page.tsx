@@ -1,3 +1,5 @@
+import Container from "@/components/layout/Container";
+
 export default function ServicesPage() {
   const SERVICES = [
     { id: '01', number: '01', title: 'Visite Virtuelle\nStandard', description: 'Une immersion 3D haute définition, pensée pour offrir une navigation fluide et intuitive sur tous vos supports.', details: ['Modélisation 3D haute fidélité', 'Navigation immersive 360°', 'Optimisation mobile et desktop', 'Hébergement sécurisé 12 mois'] },
@@ -10,19 +12,19 @@ export default function ServicesPage() {
     <div className="bg-black text-white min-h-screen flex flex-col justify-between">
       {/* Header avec espaces doublés */}
       <section className="border-b border-gray-800 pt-16 pb-12">
-        <div className="max-w-6xl mx-auto px-12">
+        <Container>
           <span className="text-[10px] tracking-[0.2em] text-gray-500 uppercase">Notre approche</span>
           
           {/* mt-32 : Espace doublé par rapport au précédent */}
           <h1 className="text-4xl font-light mt-32 mb-32 leading-tight">
             Nous concevons des expériences immersives qui allient esthétique et fluidité.
           </h1>
-        </div>
+        </Container>
       </section>
 
       {/* Main Services */}
       <main className="flex-grow my-8">
-        <div className="max-w-6xl mx-auto px-12">
+        <Container>
           {SERVICES.map((service, index) => (
             <div key={service.id} className={`border-b border-gray-800 py-8 grid grid-cols-[80px_1fr_1fr] gap-12 ${index === SERVICES.length - 1 ? 'border-b-0' : ''}`}>
               <span className="text-sm font-light text-gray-700">/{service.number}</span>
@@ -39,12 +41,12 @@ export default function ServicesPage() {
               </div>
             </div>
           ))}
-        </div>
+        </Container>
       </main>
 
       {/* Footer */}
       <footer className="border-t border-gray-800 py-10">
-        <div className="max-w-6xl mx-auto px-12 flex justify-between items-center">
+        <Container className="flex justify-between items-center">
           <div className="flex gap-12">
             {['01 CONSULTATION', '02 CRÉATION', '03 RÉVISION', '04 DÉPLOIEMENT'].map((step, i) => (
               <span key={i} className="text-[10px] text-gray-500 uppercase tracking-widest">{step}</span>
@@ -53,7 +55,7 @@ export default function ServicesPage() {
           <a href="#contact" className="px-8 py-3 border border-white text-[10px] tracking-[0.2em] uppercase hover:bg-white hover:text-black transition-all">
             CONSULTATION
           </a>
-        </div>
+        </Container>
       </footer>
     </div>
   );

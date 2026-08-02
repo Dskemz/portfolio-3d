@@ -74,7 +74,7 @@ export default function HeroSection() {
       */}
       <div
         ref={textContentRef}
-        className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center md:items-start md:text-left md:px-16 lg:px-24"
+        className="relative z-10 h-full w-full flex flex-col items-center justify-center gouttiere text-center md:items-start md:text-left"
       >
         <div className="mb-6 tracking-widest">
           <p className="text-sm md:text-base font-medium text-slate-900/80 uppercase drop-shadow-sm">

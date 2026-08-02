@@ -57,8 +57,10 @@ export default function VisiteVirtuelle() {
           le dimensionnement est géré ici (voir VisiteEmbed). */}
       <VisiteEmbed />
 
-      {/* Points clés, flux électrique traversant les 3 atouts (cf. /about) */}
-      <section className="px-6 pt-20 pb-24 md:pb-32">
+      {/* Points clés, flux électrique traversant les 3 atouts (cf. /about).
+          Gouttière fluide (au lieu d'un px-6 plat) pour que le flux ne colle
+          pas aux bords sur Full HD / 2K / ultra-wide. */}
+      <section className="gouttiere pt-20 pb-24 md:pb-32">
         <FluxServices />
       </section>
 

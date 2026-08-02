@@ -115,8 +115,35 @@
   --spacing-section: 6rem;
   --spacing-section-lg: 8rem;
 
+  /* ── Points de rupture au-delà de 2xl ────────────────────────────────
+     Tailwind v4 s'arrête à 2xl (1536px). Sans ces deux déclarations, les
+     classes 3xl:* / 4xl:* écrites dans les composants ne génèrent AUCUN
+     CSS (piège identique à celui des couleurs absentes du thème). On les
+     ajoute pour couvrir Full HD → 2K → Ultra-wide.                        */
+  --breakpoint-3xl: 160rem; /* 2560px — 2K / QHD          */
+  --breakpoint-4xl: 215rem; /* 3440px — ultra-wide 21:9   */
+
+  /* ── Gouttière fluide (Option A : contenu aéré, éditorial) ────────────
+     Marge latérale qui GRANDIT avec l'écran, en continu (pas de sauts aux
+     breakpoints). De ~1.5rem sur petit écran à ~14rem au-delà de 2560px,
+     le contenu (plafonné à max-w-7xl = 80rem) respire sans jamais s'étaler.
+     Utilisée par le composant <Container> et la classe .gouttiere.        */
+  --gouttiere: clamp(1.5rem, calc((100vw - 80rem) / 2 + 1.5rem), 14rem);
+
   /* ── Courbe d'animation maison ──────────────────────────────────────── */
   --ease-sobre: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ *  Gouttière partagée — applique la marge latérale fluide à un conteneur
+ *  déjà centré/plafonné. Utilisée par les sections des études de cas qui
+ *  suivent le patron `max-w-7xl mx-auto` : il suffit de leur ajouter la
+ *  classe `gouttiere` (padding horizontal fluide) pour qu'elles respirent
+ *  sur les grands écrans, sans toucher à leur structure interne ni à leur
+ *  logique d'animation au scroll.
+ * ───────────────────────────────────────────────────────────────────────── */
+@utility gouttiere {
+  padding-inline: var(--gouttiere);
 }
 
 @layer base {

@@ -19,7 +19,7 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-mine">
-      <div className="mx-auto w-full max-w-7xl px-6 py-14 md:px-10 md:py-16">
+      <div className="mx-auto w-full max-w-7xl gouttiere py-14 md:py-16">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
           <div>
             <p className="font-display text-base font-medium text-papier">
