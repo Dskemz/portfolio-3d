@@ -14,7 +14,7 @@ interface ComparisonPair {
 
 const PAIRS: ComparisonPair[] = [
   {
-    left: { image: '/images/projets/summum-3d/03-scan-brut.jpg', label: 'Scan brut' },
+    left: { image: '/images/projets/summum-3d/03-scan-brut.jpg', label: 'Maillage High-poly vs Low-poly' },
     right: { image: '/images/projets/summum-3d/04-maillage-clean.jpg', label: 'Maillage nettoyé' },
     caption: 'Suppression des artefacts de reconstruction et retopologie manuelle.',
   },
