@@ -156,13 +156,65 @@ export default function SommaireProjets() {
   return (
     <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1.15fr] lg:gap-16 xl:gap-24">
       {/* ══════════════════════════════════════════════════════════════════
-          VISUEL GRAND FORMAT (à DROITE en desktop, EN HAUT en mobile)
+          GALERIE — MOBILE UNIQUEMENT (< lg)
           ────────────────────────────────────────────────────────────────
-          `order-first lg:order-last` : le visuel passe au-dessus du sommaire
-          sur mobile, à droite sur grand écran. Le bloc est `sticky` en desktop
-          pour rester en vue pendant qu'on parcourt la liste.
+          Le plus simple : les images hero à la suite, cliquables, chacune
+          suivie de son titre « accroché » (petit écart au-dessus, grand
+          écart en dessous → le titre appartient visuellement à l'image du
+          dessus). On scrolle la page normalement pour parcourir les projets.
       ══════════════════════════════════════════════════════════════════ */}
-      <div className="order-first lg:order-last">
+      <div className="flex flex-col gap-12 lg:hidden">
+        {PROJETS.map((p, i) => (
+          <Link
+            key={p.slug}
+            href={`/portfolio/${p.slug}`}
+            className="group block"
+            aria-label={`Voir le projet ${p.titre}`}
+          >
+            {/* Image hero, ratio 16/9, coins vifs (cohérent avec le desktop). */}
+            <div className="relative aspect-video w-full overflow-hidden border border-graphite-700">
+              {p.couverture ? (
+                <Image
+                  src={p.couverture}
+                  alt={p.titre}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                  priority={i === 0}
+                />
+              ) : (
+                <div className="h-full w-full" style={{ background: REPLI_METAL }} />
+              )}
+              {/* Voile bas discret pour asseoir la lisibilité. */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+            </div>
+
+            {/* Titre accroché juste sous SON image (mt court). */}
+            <h3 className="mt-3 font-display text-xl font-light leading-snug tracking-tight text-papier">
+              {p.titre}
+            </h3>
+
+            {/* Ligne catégorie · client · année. */}
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.22em] text-trait">
+              <span style={{ color: ACCENT }}>{p.categorie}</span>
+              <span aria-hidden="true" className="text-graphite-600">/</span>
+              <span>{p.client}</span>
+              <span aria-hidden="true" className="text-graphite-600">/</span>
+              <span>{p.annee}</span>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          VISUEL GRAND FORMAT PARTAGÉ — DESKTOP UNIQUEMENT
+          ────────────────────────────────────────────────────────────────
+          Ce bloc (une image partagée qui change au survol de la liste) n'a
+          de sens qu'en desktop, où le survol existe. Sur mobile il est
+          masqué (`hidden lg:block`) au profit de la galerie de cartes plus
+          haut, chaque projet y portant sa propre image.
+      ══════════════════════════════════════════════════════════════════ */}
+      <div className="hidden lg:order-last lg:block">
         <div className="lg:sticky lg:top-28">
           {/* Cadre du visuel — ratio large, coins vifs (DA « plan technique »). */}
           <Link
@@ -247,16 +299,16 @@ export default function SommaireProjets() {
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════
-          SOMMAIRE NUMÉROTÉ (à GAUCHE en desktop, DESSOUS en mobile)
+          SOMMAIRE AU SURVOL — DESKTOP UNIQUEMENT
           ────────────────────────────────────────────────────────────────
-          En desktop, la zone est calée sur la HAUTEUR DU VISUEL : seuls
-          ~3-4 titres sont visibles, le reste défile À LA MOLETTE dans la
-          zone (overflow interne, sans allonger la page). Deux fondus
-          (haut / bas) signalent qu'il reste des projets masqués.
+          Liste calée sur la hauteur du visuel, sélection au survol, scroll
+          molette interne. Masquée sur mobile (`hidden lg:block`) : le survol
+          n'y existe pas et taper un titre naviguerait aussitôt. La galerie
+          de cartes plus bas prend le relais au doigt.
       ══════════════════════════════════════════════════════════════════ */}
       <nav
         aria-label="Sommaire des projets"
-        className="relative order-last lg:order-first"
+        className="relative hidden lg:order-first lg:block"
       >
         {/* Fondu HAUT — visible seulement s'il reste des projets au-dessus.
             `pointer-events-none` pour ne pas bloquer le survol des titres. */}
