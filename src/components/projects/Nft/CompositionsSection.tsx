@@ -21,12 +21,12 @@ interface Composition {
 }
 
 const ACCESSOIRES: ItemPiece[] = [
-  { id: 'chapeau-1', categorie: 'Chapeau', nom: 'Casque cosmonaute', image: '/images/projets/nft-floofies/05-item-chapeau-1.jpg' },
-  { id: 'oeil-1', categorie: 'Œil', nom: 'Visière LED', image: '/images/projets/nft-floofies/06-item-oeil-1.jpg' },
-  { id: 'bouche-1', categorie: 'Bouche', nom: 'Sourire pixelisé', image: '/images/projets/nft-floofies/07-item-bouche-1.jpg' },
-  { id: 'corps-1', categorie: 'Corps', nom: 'Combinaison spatiale', image: '/images/projets/nft-floofies/08-item-corps-1.jpg' },
-  { id: 'objet-1', categorie: 'Objet dos', nom: 'Propulseur', image: '/images/projets/nft-floofies/09-item-objet-1.jpg' },
-  { id: 'chapeau-2', categorie: 'Chapeau', nom: 'Bandeau néon', image: '/images/projets/nft-floofies/10-item-chapeau-2.jpg' },
+  { id: 'chapeau-1', categorie: 'Chapeau', nom: 'Casque cosmonaute', image: '' },
+  { id: 'oeil-1', categorie: 'Œil', nom: 'Visière LED', image: '' },
+  { id: 'bouche-1', categorie: 'Bouche', nom: 'Sourire pixelisé', image: '' },
+  { id: 'corps-1', categorie: 'Corps', nom: 'Combinaison spatiale', image: '' },
+  { id: 'objet-1', categorie: 'Objet dos', nom: 'Propulseur', image: '' },
+  { id: 'chapeau-2', categorie: 'Chapeau', nom: 'Bandeau néon', image: '' },
 ];
 
 const COMPOSITIONS: Composition[] = [
@@ -34,13 +34,13 @@ const COMPOSITIONS: Composition[] = [
     id: 'vr',
     nom: 'Casque VR',
     description: 'Composition futuriste, visière VR + tenue tech',
-    image: '/images/projets/nft-floofies/11-compo-vr.jpg',
+    image: '',
   },
   {
     id: 'lunettes-3d',
     nom: 'Lunettes 3D',
     description: 'Composition pop, lunettes 3D + bomber lumineux',
-    image: '/images/projets/nft-floofies/12-compo-lunettes.jpg',
+    image: '',
   },
 ];
 
@@ -139,11 +139,13 @@ export default function CompositionsSection() {
                   className="group aspect-square rounded-lg overflow-hidden bg-slate-800 border border-slate-700 transition-all duration-300 hover:border-fuchsia-500/50 hover:shadow-lg hover:shadow-fuchsia-500/10 !opacity-100"
                 >
                   <div className="relative w-full h-full">
-                    <img
-                      src={item.image}
-                      alt={item.nom}
-                      className="w-full h-full object-contain object-center p-2 transition-transform duration-300 group-hover:scale-110"
-                    />
+                    {item.image && (
+                      <img
+                        src={item.image}
+                        alt={item.nom}
+                        className="w-full h-full object-contain object-center p-2 transition-transform duration-300 group-hover:scale-110"
+                      />
+                    )}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <p className="text-[10px] font-light text-white uppercase tracking-wider">
                         {item.categorie}
@@ -171,14 +173,16 @@ export default function CompositionsSection() {
                 <div
                   key={compo.id}
                   ref={(el) => { composRef.current[idx] = el; }}
-                  className="group flex flex-col"
+                  className="group flex flex-col !opacity-100"
                 >
                   <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 transition-all duration-500 group-hover:border-fuchsia-500/50 group-hover:shadow-2xl group-hover:shadow-fuchsia-500/10">
-                    <img
-                      src={compo.image}
-                      alt={compo.nom}
-                      className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
-                    />
+                    {compo.image && (
+                      <img
+                        src={compo.image}
+                        alt={compo.nom}
+                        className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                   </div>
                   <div className="mt-4">
                     <h4 className="text-lg font-light text-white mb-1">{compo.nom}</h4>

@@ -6,23 +6,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Images génériques présentes dans le repo, utilisées en repli tant que les
-// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
-// existe, il s'affiche automatiquement à la place.
-const FALLBACKS = [
-  '/images/projets/alquyme/02-dataviz.jpg',
-  '/images/projets/alquyme/03-detail-1.jpg',
-  '/images/projets/alquyme/04-detail-2.jpg',
-];
-const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
-const handleImgError = (
-  e: React.SyntheticEvent<HTMLImageElement>,
-  idx: number,
-) => {
-  const el = e.currentTarget;
-  el.onerror = null;
-  el.src = fallbackFor(idx);
-};
 
 interface Vue {
   id: string;
@@ -36,19 +19,19 @@ const VUES: Vue[] = [
     id: 'sablier',
     titre: 'Flacon sablier vertical',
     legende: 'Silhouette signature, deux récipients en dualité',
-    image: '/images/projets/alquyme/02-sablier.jpg',
+    image: '',
   },
   {
     id: 'reflets',
     titre: 'Reflets dorés',
     legende: 'La lumière glisse sur les bagues métalliques et se prend dans les gravures',
-    image: '/images/projets/alquyme/03-reflets.jpg',
+    image: '',
   },
   {
     id: 'support',
     titre: 'Mise en scène sur drapé',
     legende: 'Support texturé rouge profond, écho des rituels précieux',
-    image: '/images/projets/alquyme/04-drape.jpg',
+    image: '',
   },
 ];
 
@@ -121,17 +104,17 @@ export default function PackagingSection() {
             <div
               key={vue.id}
               ref={(el) => { cardsRef.current[idx] = el; }}
-              className="group flex flex-col"
+              className="group flex flex-col !opacity-100"
             >
               {/* Image */}
               <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 mb-6 transition-all duration-500 group-hover:border-amber-500/50 group-hover:shadow-2xl group-hover:shadow-amber-500/10">
-                <img
-                  src={vue.image}
-                  alt={vue.titre}
-                  className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                  onError={(e) => handleImgError(e, idx)}
-                />
+                {vue.image && (
+                      <img
+                        src={vue.image}
+                        alt={vue.titre}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                 {/* Golden glow */}
                 <div className="absolute inset-0 bg-gradient-radial from-amber-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </div>

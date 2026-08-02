@@ -6,24 +6,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Images génériques présentes dans le repo, utilisées en repli tant que les
-// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
-// existe, il s'affiche automatiquement à la place.
-const FALLBACKS = [
-  '/images/projets/nft-floofies/02-character.jpg',
-  '/images/projets/nft-floofies/03-environment.jpg',
-  '/images/projets/nft-floofies/04-detail-1.jpg',
-  '/images/projets/nft-floofies/05-detail-2.jpg',
-];
-const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
-const handleImgError = (
-  e: React.SyntheticEvent<HTMLImageElement>,
-  idx: number,
-) => {
-  const el = e.currentTarget;
-  el.onerror = null;
-  el.src = fallbackFor(idx);
-};
 
 interface PieceRare {
   id: string;
@@ -39,10 +21,10 @@ interface RareRendu {
 }
 
 const PIECES_RARES: PieceRare[] = [
-  { id: 'arme-1', nom: 'Blaster plasma', image: '/images/projets/nft-floofies/13-rare-item-1.jpg' },
-  { id: 'arme-2', nom: 'Katana laser', image: '/images/projets/nft-floofies/14-rare-item-2.jpg' },
-  { id: 'casque-1', nom: 'Casque HUD tactique', image: '/images/projets/nft-floofies/15-rare-item-3.jpg' },
-  { id: 'casque-2', nom: 'Masque cyber', image: '/images/projets/nft-floofies/16-rare-item-4.jpg' },
+  { id: 'arme-1', nom: 'Blaster plasma', image: '' },
+  { id: 'arme-2', nom: 'Katana laser', image: '' },
+  { id: 'casque-1', nom: 'Casque HUD tactique', image: '' },
+  { id: 'casque-2', nom: 'Masque cyber', image: '' },
 ];
 
 const RARES_RENDUS: RareRendu[] = [
@@ -50,13 +32,13 @@ const RARES_RENDUS: RareRendu[] = [
     id: 'cyber-armor',
     nom: 'Shiba Cyber Armor',
     description: 'Armure cybernétique complète, équipement de combat',
-    image: '/images/projets/nft-floofies/17-rare-cyber.jpg',
+    image: '',
   },
   {
     id: 'neon-warrior',
     nom: 'Shiba Neon Warrior',
     description: 'Guerrier néon, katana laser + casque HUD',
-    image: '/images/projets/nft-floofies/18-rare-warrior.jpg',
+    image: '',
   },
 ];
 
@@ -152,16 +134,16 @@ export default function RaresSection() {
                 <div
                   key={piece.id}
                   ref={(el) => { piecesRef.current[idx] = el; }}
-                  className="group aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-purple-950/40 to-slate-900 border border-purple-900/50 transition-all duration-500 hover:border-purple-500/70 hover:shadow-2xl hover:shadow-purple-500/20"
+                  className="group aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-purple-950/40 to-slate-900 border border-purple-900/50 transition-all duration-500 hover:border-purple-500/70 hover:shadow-2xl hover:shadow-purple-500/20 !opacity-100"
                 >
                   <div className="relative w-full h-full p-4">
-                    <img
-                      src={piece.image}
-                      alt={piece.nom}
-                      className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-110"
-                      loading="lazy"
-                      onError={(e) => handleImgError(e, idx)}
-                    />
+                    {piece.image && (
+                      <img
+                        src={piece.image}
+                        alt={piece.nom}
+                        className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
                     <div className="absolute bottom-3 left-3 right-3">
                       <p className="text-xs font-light text-slate-300 truncate">
                         {piece.nom}
@@ -186,16 +168,16 @@ export default function RaresSection() {
                 <div
                   key={rendu.id}
                   ref={(el) => { rendusRef.current[idx] = el; }}
-                  className="group flex flex-col"
+                  className="group flex flex-col !opacity-100"
                 >
                   <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden bg-gradient-to-br from-purple-950/60 via-indigo-950/40 to-black border border-purple-900/50 transition-all duration-500 group-hover:border-purple-500/70 group-hover:shadow-2xl group-hover:shadow-purple-500/20">
-                    <img
-                      src={rendu.image}
-                      alt={rendu.nom}
-                      className="w-full h-full object-contain object-center p-6 transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                      onError={(e) => handleImgError(e, idx)}
-                    />
+                    {rendu.image && (
+                      <img
+                        src={rendu.image}
+                        alt={rendu.nom}
+                        className="w-full h-full object-contain object-center p-6 transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                     {/* Cyber glow */}
                     <div className="absolute inset-0 bg-gradient-radial from-purple-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                   </div>

@@ -6,24 +6,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Images génériques présentes dans le repo, utilisées en repli tant que les
-// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
-// existe, il s'affiche automatiquement à la place.
-const FALLBACKS = [
-  '/images/projets/nft-floofies/02-character.jpg',
-  '/images/projets/nft-floofies/03-environment.jpg',
-  '/images/projets/nft-floofies/04-detail-1.jpg',
-  '/images/projets/nft-floofies/05-detail-2.jpg',
-];
-const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
-const handleImgError = (
-  e: React.SyntheticEvent<HTMLImageElement>,
-  idx: number,
-) => {
-  const el = e.currentTarget;
-  el.onerror = null;
-  el.src = fallbackFor(idx);
-};
 
 interface ShibaBase {
   id: string;
@@ -37,19 +19,19 @@ const SHIBAS_BASE: ShibaBase[] = [
     id: 'jaune',
     nom: 'Shiba Jaune',
     variante: 'Base commune, pelage doré',
-    image: '/images/projets/nft-floofies/02-shiba-jaune.jpg',
+    image: '',
   },
   {
     id: 'blanc',
     nom: 'Shiba Blanc',
     variante: 'Base commune, pelage neige',
-    image: '/images/projets/nft-floofies/03-shiba-blanc.jpg',
+    image: '',
   },
   {
     id: 'poils',
     nom: 'Shiba Poilu',
     variante: 'Base commune, fourrure longue',
-    image: '/images/projets/nft-floofies/04-shiba-poils.jpg',
+    image: '',
   },
 ];
 
@@ -120,17 +102,17 @@ export default function ShibasSection() {
             <div
               key={shiba.id}
               ref={(el) => { cardsRef.current[idx] = el; }}
-              className="group flex flex-col items-center"
+              className="group flex flex-col items-center !opacity-100"
             >
               {/* Image */}
               <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 mb-6 transition-all duration-500 group-hover:border-cyan-500/50 group-hover:shadow-2xl group-hover:shadow-cyan-500/10">
-                <img
-                  src={shiba.image}
-                  alt={shiba.nom}
-                  className="w-full h-full object-contain object-center p-6 transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                  onError={(e) => handleImgError(e, idx)}
-                />
+                {shiba.image && (
+                      <img
+                        src={shiba.image}
+                        alt={shiba.nom}
+                        className="w-full h-full object-contain object-center p-6 transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                 {/* Radial glow on hover */}
                 <div className="absolute inset-0 bg-gradient-radial from-cyan-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </div>

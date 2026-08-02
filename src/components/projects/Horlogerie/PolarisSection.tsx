@@ -6,24 +6,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Images génériques présentes dans le repo, utilisées en repli tant que les
-// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
-// existe, il s'affiche automatiquement à la place.
-const FALLBACKS = [
-  '/images/projets/horlogerie-suisse/02-montre.jpg',
-  '/images/projets/horlogerie-suisse/03-mecanisme.jpg',
-  '/images/projets/horlogerie-suisse/04-detail-1.jpg',
-  '/images/projets/horlogerie-suisse/05-detail-2.jpg',
-];
-const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
-const handleImgError = (
-  e: React.SyntheticEvent<HTMLImageElement>,
-  idx: number,
-) => {
-  const el = e.currentTarget;
-  el.onerror = null;
-  el.src = fallbackFor(idx);
-};
 
 interface Materiau {
   id: string;
@@ -44,25 +26,25 @@ const MATERIAUX_POLARIS: Materiau[] = [
     id: 'clay-boitier',
     titre: 'Clay render, Boîtier',
     description: 'Coque neutre, étude des volumes et proportions',
-    image: '/images/projets/horlogerie-suisse/09-polaris-clay.jpg',
+    image: '',
   },
   {
     id: 'acier-poli',
     titre: 'Acier poli miroir',
     description: 'Facettes rehaussées, reflets contrastés',
-    image: '/images/projets/horlogerie-suisse/10-polaris-acier-poli.jpg',
+    image: '',
   },
   {
     id: 'acier-brosse',
     titre: 'Acier brossé satiné',
     description: 'Rayures directionnelles, capture douce de la lumière',
-    image: '/images/projets/horlogerie-suisse/11-polaris-acier-brosse.jpg',
+    image: '',
   },
   {
     id: 'cadran-soleille',
     titre: 'Cadran soleillé',
     description: 'Rayons partant du centre, jeu chromatique subtil',
-    image: '/images/projets/horlogerie-suisse/12-polaris-cadran.jpg',
+    image: '',
   },
 ];
 
@@ -71,13 +53,13 @@ const DUOS_POLARIS: Duo[] = [
     id: 'duo-01',
     titre: 'Composition duo, Édition classique',
     legende: 'Bracelet cuir vs bracelet acier, pièces jumelles',
-    image: '/images/projets/horlogerie-suisse/13-polaris-duo-1.jpg',
+    image: '',
   },
   {
     id: 'duo-02',
     titre: 'Composition duo, Édition anniversaire',
     legende: 'Cadran bleu profond vs cadran gris ardoise',
-    image: '/images/projets/horlogerie-suisse/14-polaris-duo-2.jpg',
+    image: '',
   },
 ];
 
@@ -174,16 +156,16 @@ export default function PolarisSection() {
               <div
                 key={mat.id}
                 ref={(el) => { materiauxRef.current[idx] = el; }}
-                className="group flex flex-col"
+                className="group flex flex-col !opacity-100"
               >
                 <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 mb-4 transition-all duration-500 group-hover:border-rose-300/50 group-hover:shadow-2xl group-hover:shadow-rose-300/10">
-                  <img
-                    src={mat.image}
-                    alt={mat.titre}
-                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                    onError={(e) => handleImgError(e, idx)}
-                  />
+                  {mat.image && (
+                      <img
+                        src={mat.image}
+                        alt={mat.titre}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                   {/* Numéro */}
                   <div className="absolute top-3 left-3 flex items-center gap-2">
                     <span className="text-[10px] font-light text-rose-300 tracking-widest">
@@ -222,16 +204,16 @@ export default function PolarisSection() {
               <div
                 key={duo.id}
                 ref={(el) => { duosRef.current[idx] = el; }}
-                className="group flex flex-col"
+                className="group flex flex-col !opacity-100"
               >
                 <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 mb-6 transition-all duration-500 group-hover:border-rose-300/50 group-hover:shadow-2xl group-hover:shadow-rose-300/10">
-                  <img
-                    src={duo.image}
-                    alt={duo.titre}
-                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                    onError={(e) => handleImgError(e, idx)}
-                  />
+                  {duo.image && (
+                      <img
+                        src={duo.image}
+                        alt={duo.titre}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                   {/* Radial glow */}
                   <div className="absolute inset-0 bg-gradient-radial from-rose-300/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 </div>

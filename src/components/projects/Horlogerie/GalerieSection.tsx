@@ -6,24 +6,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Images génériques présentes dans le repo, utilisées en repli tant que les
-// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
-// existe, il s'affiche automatiquement à la place.
-const FALLBACKS = [
-  '/images/projets/horlogerie-suisse/02-montre.jpg',
-  '/images/projets/horlogerie-suisse/03-mecanisme.jpg',
-  '/images/projets/horlogerie-suisse/04-detail-1.jpg',
-  '/images/projets/horlogerie-suisse/05-detail-2.jpg',
-];
-const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
-const handleImgError = (
-  e: React.SyntheticEvent<HTMLImageElement>,
-  idx: number,
-) => {
-  const el = e.currentTarget;
-  el.onerror = null;
-  el.src = fallbackFor(idx);
-};
 
 /**
  * Fiche horlogère de la galerie.
@@ -53,7 +35,7 @@ const PIECES_HORLOGERES: PieceHorlogere[] = [
     reference: 'Boîtier rectangulaire réversible',
     annee: '2024',
     description: 'Étude du mécanisme de retournement, double cadran',
-    image: '/images/projets/horlogerie-suisse/15-galerie-reverso.jpg',
+    image: '',
     status: 'published',
   },
   {
@@ -62,7 +44,7 @@ const PIECES_HORLOGERES: PieceHorlogere[] = [
     reference: 'Complications classiques',
     annee: '2024',
     description: 'Cadran opalin, index appliques or rose',
-    image: '/images/projets/horlogerie-suisse/16-galerie-master.jpg',
+    image: '',
     status: 'published',
   },
   {
@@ -71,7 +53,7 @@ const PIECES_HORLOGERES: PieceHorlogere[] = [
     reference: 'Édition anniversaire',
     annee: '2025',
     description: 'Aiguille des secondes à saut d\'une seconde',
-    image: '/images/projets/horlogerie-suisse/17-galerie-geophysic.jpg',
+    image: '',
     status: 'published',
   },
   {
@@ -163,7 +145,7 @@ export default function GalerieSection() {
               <div
                 key={piece.id}
                 ref={(el) => { cardsRef.current[idx] = el; }}
-                className={`group flex flex-col ${
+                className={`group flex flex-col !opacity-100 ${
                   isPublished ? 'cursor-pointer' : 'cursor-default'
                 }`}
               >
@@ -177,13 +159,13 @@ export default function GalerieSection() {
                 >
                   {isPublished ? (
                     <>
+                      {piece.image && (
                       <img
                         src={piece.image}
                         alt={piece.nom}
                         className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                        onError={(e) => handleImgError(e, idx)}
                       />
+                    )}
                       {/* Radial glow */}
                       <div className="absolute inset-0 bg-gradient-radial from-rose-300/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     </>

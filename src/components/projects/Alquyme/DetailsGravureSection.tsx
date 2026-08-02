@@ -25,25 +25,25 @@ const MACROS: Macro[] = [
     id: 'bague-cannelee',
     nom: 'Bague cannelée',
     detail: 'Rythme régulier des rainures, jeu tactile et lumineux',
-    image: '/images/projets/alquyme/05-macro-bague.jpg',
+    image: '',
   },
   {
     id: 'logo-relief',
     nom: 'Logo en relief',
     detail: 'Marquage ALQUYME frappé dans la matière dorée',
-    image: '/images/projets/alquyme/06-macro-logo.jpg',
+    image: '',
   },
   {
     id: 'jonction',
     nom: 'Jonction des deux volumes',
     detail: 'Anneau central articulé, finition brossée',
-    image: '/images/projets/alquyme/07-macro-jonction.jpg',
+    image: '',
   },
   {
     id: 'goulot',
     nom: 'Goulot &amp; capsule',
     detail: 'Vissage précis, étanchéité et geste rituel',
-    image: '/images/projets/alquyme/08-macro-goulot.jpg',
+    image: '',
   },
 ];
 
@@ -52,13 +52,13 @@ const COMPOSITIONS: Composition[] = [
     id: 'ouvert',
     titre: 'Flacon ouvert',
     description: 'Séparation des deux volumes, révélation du geste modulaire',
-    image: '/images/projets/alquyme/09-compo-ouvert.jpg',
+    image: '',
   },
   {
     id: 'assemble',
     titre: 'Assemblage complet',
     description: 'Silhouette pleine, équilibre des masses et des matières',
-    image: '/images/projets/alquyme/10-compo-assemble.jpg',
+    image: '',
   },
 ];
 
@@ -160,11 +160,13 @@ export default function DetailsGravureSection() {
                   className="group aspect-square rounded-xl overflow-hidden bg-slate-800 border border-slate-700 transition-all duration-300 hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/10 !opacity-100"
                 >
                   <div className="relative w-full h-full">
-                    <img
-                      src={macro.image}
-                      alt={macro.nom}
-                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
-                    />
+                    {macro.image && (
+                      <img
+                        src={macro.image}
+                        alt={macro.nom}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3">
                       <p className="text-[11px] md:text-xs font-light text-white leading-tight">
                         {macro.nom}
@@ -192,14 +194,16 @@ export default function DetailsGravureSection() {
                 <div
                   key={compo.id}
                   ref={(el) => { composRef.current[idx] = el; }}
-                  className="group flex flex-col"
+                  className="group flex flex-col !opacity-100"
                 >
                   <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden bg-gradient-to-br from-amber-950/30 via-slate-900 to-black border border-slate-700 transition-all duration-500 group-hover:border-amber-500/50 group-hover:shadow-2xl group-hover:shadow-amber-500/10">
-                    <img
-                      src={compo.image}
-                      alt={compo.titre}
-                      className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
-                    />
+                    {compo.image && (
+                      <img
+                        src={compo.image}
+                        alt={compo.titre}
+                        className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                     {/* Golden glow */}
                     <div className="absolute inset-0 bg-gradient-radial from-amber-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                   </div>

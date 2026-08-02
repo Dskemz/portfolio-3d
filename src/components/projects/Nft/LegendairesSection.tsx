@@ -6,24 +6,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Images génériques présentes dans le repo, utilisées en repli tant que les
-// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
-// existe, il s'affiche automatiquement à la place.
-const FALLBACKS = [
-  '/images/projets/nft-floofies/02-character.jpg',
-  '/images/projets/nft-floofies/03-environment.jpg',
-  '/images/projets/nft-floofies/04-detail-1.jpg',
-  '/images/projets/nft-floofies/05-detail-2.jpg',
-];
-const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
-const handleImgError = (
-  e: React.SyntheticEvent<HTMLImageElement>,
-  idx: number,
-) => {
-  const el = e.currentTarget;
-  el.onerror = null;
-  el.src = fallbackFor(idx);
-};
 
 interface TeteVariante {
   id: string;
@@ -40,10 +22,10 @@ interface LegendaireRendu {
 }
 
 const TETES_LEGENDAIRES: TeteVariante[] = [
-  { id: 'tigre', nom: 'Tigre', image: '/images/projets/nft-floofies/19-legend-tete-tigre.jpg' },
-  { id: 'leopard', nom: 'Léopard', image: '/images/projets/nft-floofies/20-legend-tete-leopard.jpg' },
-  { id: 'panda', nom: 'Panda', image: '/images/projets/nft-floofies/21-legend-tete-panda.jpg' },
-  { id: 'renard', nom: 'Renard doré', image: '/images/projets/nft-floofies/22-legend-tete-renard.jpg' },
+  { id: 'tigre', nom: 'Tigre', image: '' },
+  { id: 'leopard', nom: 'Léopard', image: '' },
+  { id: 'panda', nom: 'Panda', image: '' },
+  { id: 'renard', nom: 'Renard doré', image: '' },
 ];
 
 const LEGENDAIRES_RENDUS: LegendaireRendu[] = [
@@ -52,21 +34,21 @@ const LEGENDAIRES_RENDUS: LegendaireRendu[] = [
     nom: 'Caisson Cryogénique',
     description: 'Shiba en stase cryogénique, gaz vert, capsule futuriste',
     edition: '1 / 1',
-    image: '/images/projets/nft-floofies/23-legend-cryo.jpg',
+    image: '',
   },
   {
     id: 'momie',
     nom: 'Shiba Momie',
     description: 'Bandelettes ancestrales, aura mystique, pièce unique',
     edition: '1 / 1',
-    image: '/images/projets/nft-floofies/24-legend-momie.jpg',
+    image: '',
   },
   {
     id: 'armure-maille',
     nom: 'Armure de Mailles',
     description: 'Cotte de mailles médiévale, chevalier du futur',
     edition: '1 / 1',
-    image: '/images/projets/nft-floofies/25-legend-armure.jpg',
+    image: '',
   },
 ];
 
@@ -160,16 +142,16 @@ export default function LegendairesSection() {
               <div
                 key={tete.id}
                 ref={(el) => { tetesRef.current[idx] = el; }}
-                className="group aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-amber-950/40 to-slate-900 border border-amber-900/40 transition-all duration-500 hover:border-amber-500/70 hover:shadow-2xl hover:shadow-amber-500/20"
+                className="group aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-amber-950/40 to-slate-900 border border-amber-900/40 transition-all duration-500 hover:border-amber-500/70 hover:shadow-2xl hover:shadow-amber-500/20 !opacity-100"
               >
                 <div className="relative w-full h-full p-4">
-                  <img
-                    src={tete.image}
-                    alt={tete.nom}
-                    className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
-                    onError={(e) => handleImgError(e, idx)}
-                  />
+                  {tete.image && (
+                      <img
+                        src={tete.image}
+                        alt={tete.nom}
+                        className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
                   <div className="absolute bottom-3 left-3 right-3 text-center">
                     <p className="text-xs font-light text-amber-200 uppercase tracking-wider">
                       {tete.nom}
@@ -194,16 +176,16 @@ export default function LegendairesSection() {
               <div
                 key={rendu.id}
                 ref={(el) => { rendusRef.current[idx] = el; }}
-                className="group flex flex-col"
+                className="group flex flex-col !opacity-100"
               >
                 <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-br from-amber-950/40 via-slate-900 to-black border border-amber-900/50 transition-all duration-500 group-hover:border-amber-500/70 group-hover:shadow-2xl group-hover:shadow-amber-500/20">
-                  <img
-                    src={rendu.image}
-                    alt={rendu.nom}
-                    className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                    onError={(e) => handleImgError(e, idx)}
-                  />
+                  {rendu.image && (
+                      <img
+                        src={rendu.image}
+                        alt={rendu.nom}
+                        className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                   {/* Golden glow */}
                   <div className="absolute inset-0 bg-gradient-radial from-amber-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 

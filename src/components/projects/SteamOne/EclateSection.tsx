@@ -6,23 +6,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Images génériques présentes dans le repo, utilisées en repli tant que les
-// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
-// existe, il s'affiche automatiquement à la place.
-const FALLBACKS = [
-  '/images/projets/steamone/02-visite.jpg',
-  '/images/projets/steamone/03-detail-1.jpg',
-  '/images/projets/steamone/04-detail-2.jpg',
-];
-const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
-const handleImgError = (
-  e: React.SyntheticEvent<HTMLImageElement>,
-  idx: number,
-) => {
-  const el = e.currentTarget;
-  el.onerror = null;
-  el.src = fallbackFor(idx);
-};
 
 interface VueEclate {
   id: string;
@@ -36,25 +19,25 @@ const VUES_ECLATE: VueEclate[] = [
     id: 'reservoir',
     titre: 'Réservoir',
     legende: 'Contenance eau, module amovible',
-    image: '/images/projets/steamone/02-eclate-reservoir.jpg',
+    image: '',
   },
   {
     id: 'boitier',
     titre: 'Boîtier principal',
     legende: 'Coque ergonomique, poignée &amp; commandes',
-    image: '/images/projets/steamone/03-eclate-boitier.jpg',
+    image: '',
   },
   {
     id: 'resistances',
     titre: 'Résistances',
     legende: 'Bloc de chauffe, génération de vapeur',
-    image: '/images/projets/steamone/04-eclate-resistances.jpg',
+    image: '',
   },
   {
     id: 'grille',
     titre: 'Grille de diffusion',
     legende: 'Sortie vapeur, répartition homogène',
-    image: '/images/projets/steamone/05-eclate-grille.jpg',
+    image: '',
   },
 ];
 
@@ -126,17 +109,17 @@ export default function EclateSection() {
             <div
               key={vue.id}
               ref={(el) => { cardsRef.current[idx] = el; }}
-              className="group flex flex-col"
+              className="group flex flex-col !opacity-100"
             >
               {/* Image */}
               <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 mb-6 transition-all duration-500 group-hover:border-sky-500/50 group-hover:shadow-2xl group-hover:shadow-sky-500/10">
-                <img
-                  src={vue.image}
-                  alt={vue.titre}
-                  className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                  onError={(e) => handleImgError(e, idx)}
-                />
+                {vue.image && (
+                      <img
+                        src={vue.image}
+                        alt={vue.titre}
+                        className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                 {/* Glow subtil */}
                 <div className="absolute inset-0 bg-gradient-radial from-sky-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 

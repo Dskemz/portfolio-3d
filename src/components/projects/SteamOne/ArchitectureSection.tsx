@@ -20,10 +20,10 @@ interface VueIsometrique {
 }
 
 const GROS_PLANS: GrosPlan[] = [
-  { id: 'pcb', nom: 'Circuit imprimé principal', image: '/images/projets/steamone/06-close-pcb.jpg' },
-  { id: 'chauffe', nom: 'Élément chauffant', image: '/images/projets/steamone/07-close-chauffe.jpg' },
-  { id: 'connectique', nom: 'Connectique interne', image: '/images/projets/steamone/08-close-connectique.jpg' },
-  { id: 'poignee', nom: 'Ergonomie de la poignée', image: '/images/projets/steamone/09-close-poignee.jpg' },
+  { id: 'pcb', nom: 'Circuit imprimé principal', image: '' },
+  { id: 'chauffe', nom: 'Élément chauffant', image: '' },
+  { id: 'connectique', nom: 'Connectique interne', image: '' },
+  { id: 'poignee', nom: 'Ergonomie de la poignée', image: '' },
 ];
 
 const VUES_ISO: VueIsometrique[] = [
@@ -31,13 +31,13 @@ const VUES_ISO: VueIsometrique[] = [
     id: 'assemblage-1',
     titre: 'Assemblage vue de dessus',
     description: 'Empilement modulaire des sous-ensembles, chaîne d\'assemblage lisible',
-    image: '/images/projets/steamone/10-iso-assemblage-1.jpg',
+    image: '',
   },
   {
     id: 'assemblage-2',
     titre: 'Assemblage vue de côté',
     description: 'Flux thermique et hydraulique, parcours de l\'eau et de la vapeur',
-    image: '/images/projets/steamone/11-iso-assemblage-2.jpg',
+    image: '',
   },
 ];
 
@@ -137,11 +137,13 @@ export default function ArchitectureSection() {
                   className="group aspect-square rounded-xl overflow-hidden bg-slate-800 border border-slate-700 transition-all duration-300 hover:border-sky-500/50 hover:shadow-lg hover:shadow-sky-500/10 !opacity-100"
                 >
                   <div className="relative w-full h-full">
-                    <img
-                      src={plan.image}
-                      alt={plan.nom}
-                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
-                    />
+                    {plan.image && (
+                      <img
+                        src={plan.image}
+                        alt={plan.nom}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3">
                       <p className="text-[11px] md:text-xs font-light text-white leading-tight">
                         {plan.nom}
@@ -169,14 +171,16 @@ export default function ArchitectureSection() {
                 <div
                   key={vue.id}
                   ref={(el) => { isoRef.current[idx] = el; }}
-                  className="group flex flex-col"
+                  className="group flex flex-col !opacity-100"
                 >
                   <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 transition-all duration-500 group-hover:border-sky-500/50 group-hover:shadow-2xl group-hover:shadow-sky-500/10">
-                    <img
-                      src={vue.image}
-                      alt={vue.titre}
-                      className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
-                    />
+                    {vue.image && (
+                      <img
+                        src={vue.image}
+                        alt={vue.titre}
+                        className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                   </div>
                   <div className="mt-4">
                     <h4 className="text-lg font-light text-white mb-1">{vue.titre}</h4>

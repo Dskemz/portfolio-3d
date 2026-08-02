@@ -6,23 +6,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Images génériques présentes dans le repo, utilisées en repli tant que les
-// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
-// existe, il s'affiche automatiquement à la place.
-const FALLBACKS = [
-  '/images/projets/steamone/02-visite.jpg',
-  '/images/projets/steamone/03-detail-1.jpg',
-  '/images/projets/steamone/04-detail-2.jpg',
-];
-const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
-const handleImgError = (
-  e: React.SyntheticEvent<HTMLImageElement>,
-  idx: number,
-) => {
-  const el = e.currentTarget;
-  el.onerror = null;
-  el.src = fallbackFor(idx);
-};
 
 interface VueAxe {
   id: string;
@@ -43,19 +26,19 @@ const VUES_AXES: VueAxe[] = [
     id: 'axe-vertical',
     axe: 'Axe vertical',
     description: 'Décomposition en couches horizontales, lecture par étages',
-    image: '/images/projets/steamone/12-axe-vertical.jpg',
+    image: '',
   },
   {
     id: 'axe-horizontal',
     axe: 'Axe horizontal',
     description: 'Décomposition latérale, pièces alignées en séquence',
-    image: '/images/projets/steamone/13-axe-horizontal.jpg',
+    image: '',
   },
   {
     id: 'axe-radial',
     axe: 'Axe radial',
     description: 'Expansion depuis le centre, organisation spatiale du volume',
-    image: '/images/projets/steamone/14-axe-radial.jpg',
+    image: '',
   },
 ];
 
@@ -64,19 +47,19 @@ const FINITIONS: Finition[] = [
     id: 'plastique-mat',
     titre: 'Plastique mat texturé',
     description: 'Coque principale, toucher agréable, résistant aux traces de doigts',
-    image: '/images/projets/steamone/15-finition-mat.jpg',
+    image: '',
   },
   {
     id: 'aluminium-brosse',
     titre: 'Aluminium brossé',
     description: 'Bandeau frontal, signature premium, réflexion contrôlée',
-    image: '/images/projets/steamone/16-finition-alu.jpg',
+    image: '',
   },
   {
     id: 'grille-inox',
     titre: 'Grille inox perforée',
     description: 'Sortie vapeur, dessin technique visible et lisible',
-    image: '/images/projets/steamone/17-finition-inox.jpg',
+    image: '',
   },
 ];
 
@@ -172,16 +155,16 @@ export default function ExplorationSection() {
               <div
                 key={vue.id}
                 ref={(el) => { axesRef.current[idx] = el; }}
-                className="group flex flex-col"
+                className="group flex flex-col !opacity-100"
               >
                 <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-br from-sky-950/40 via-slate-900 to-black border border-slate-700 transition-all duration-500 group-hover:border-sky-500/50 group-hover:shadow-2xl group-hover:shadow-sky-500/10">
-                  <img
-                    src={vue.image}
-                    alt={vue.axe}
-                    className="w-full h-full object-contain object-center p-6 transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                    onError={(e) => handleImgError(e, idx)}
-                  />
+                  {vue.image && (
+                      <img
+                        src={vue.image}
+                        alt={vue.axe}
+                        className="w-full h-full object-contain object-center p-6 transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                   {/* Radial glow */}
                   <div className="absolute inset-0 bg-gradient-radial from-sky-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 </div>
@@ -221,16 +204,16 @@ export default function ExplorationSection() {
               <div
                 key={finition.id}
                 ref={(el) => { finitionsRef.current[idx] = el; }}
-                className="group flex flex-col"
+                className="group flex flex-col !opacity-100"
               >
                 <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 mb-6 transition-all duration-500 group-hover:border-sky-500/50 group-hover:shadow-2xl group-hover:shadow-sky-500/10">
-                  <img
-                    src={finition.image}
-                    alt={finition.titre}
-                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
-                    onError={(e) => handleImgError(e, idx)}
-                  />
+                  {finition.image && (
+                      <img
+                        src={finition.image}
+                        alt={finition.titre}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
                 </div>
 
                 <div>

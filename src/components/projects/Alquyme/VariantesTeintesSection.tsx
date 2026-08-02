@@ -6,23 +6,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Images génériques présentes dans le repo, utilisées en repli tant que les
-// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
-// existe, il s'affiche automatiquement à la place.
-const FALLBACKS = [
-  '/images/projets/alquyme/02-dataviz.jpg',
-  '/images/projets/alquyme/03-detail-1.jpg',
-  '/images/projets/alquyme/04-detail-2.jpg',
-];
-const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
-const handleImgError = (
-  e: React.SyntheticEvent<HTMLImageElement>,
-  idx: number,
-) => {
-  const el = e.currentTarget;
-  el.onerror = null;
-  el.src = fallbackFor(idx);
-};
 
 interface Ecrin {
   id: string;
@@ -44,13 +27,13 @@ const ECRINS: Ecrin[] = [
     id: 'etui-cuir',
     nom: 'Étui cuir texturé',
     usage: 'Édition Prestige, présentation individuelle',
-    image: '/images/projets/alquyme/11-etui-cuir.jpg',
+    image: '',
   },
   {
     id: 'boite-cadeau',
     nom: 'Boîte-cadeau bicolore',
     usage: 'Édition Coffret, écrin de collection',
-    image: '/images/projets/alquyme/12-boite-cadeau.jpg',
+    image: '',
   },
 ];
 
@@ -60,42 +43,42 @@ const VARIANTES: Variante[] = [
     teinte: 'Verre transparent',
     ambiance: 'Signature, matière originale',
     hex: '#E8E4D4',
-    image: '/images/projets/alquyme/13-var-transparent.jpg',
+    image: '',
   },
   {
     id: 'bleu-pastel',
     teinte: 'Bleu pastel',
     ambiance: 'Marine, fraîcheur aquatique',
     hex: '#A8C5D6',
-    image: '/images/projets/alquyme/14-var-bleu.jpg',
+    image: '',
   },
   {
     id: 'rose-poudre',
     teinte: 'Rose poudré',
     ambiance: 'Florale, douceur romantique',
     hex: '#E8B8B8',
-    image: '/images/projets/alquyme/15-var-rose.jpg',
+    image: '',
   },
   {
     id: 'argent',
     teinte: 'Argent monochrome',
     ambiance: 'Boisée, minéralité argentée',
     hex: '#C0C0C8',
-    image: '/images/projets/alquyme/16-var-argent.jpg',
+    image: '',
   },
   {
     id: 'or',
     teinte: 'Or monochrome',
     ambiance: 'Orientale, chaleur ambrée',
     hex: '#D4AF37',
-    image: '/images/projets/alquyme/17-var-or.jpg',
+    image: '',
   },
   {
     id: 'ambre',
     teinte: 'Ambre profond',
     ambiance: 'Précieuse, mystère résineux',
     hex: '#8B4513',
-    image: '/images/projets/alquyme/18-var-ambre.jpg',
+    image: '',
   },
 ];
 
@@ -191,16 +174,16 @@ export default function VariantesTeintesSection() {
               <div
                 key={ecrin.id}
                 ref={(el) => { ecrinsRef.current[idx] = el; }}
-                className="group flex flex-col"
+                className="group flex flex-col !opacity-100"
               >
                 <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-amber-950/40 via-slate-900 to-black border border-slate-700 transition-all duration-500 group-hover:border-amber-500/50 group-hover:shadow-2xl group-hover:shadow-amber-500/10">
-                  <img
-                    src={ecrin.image}
-                    alt={ecrin.nom}
-                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                    onError={(e) => handleImgError(e, idx)}
-                  />
+                  {ecrin.image && (
+                      <img
+                        src={ecrin.image}
+                        alt={ecrin.nom}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                   <div className="absolute inset-0 bg-gradient-radial from-amber-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 </div>
 
@@ -239,16 +222,16 @@ export default function VariantesTeintesSection() {
               <div
                 key={variante.id}
                 ref={(el) => { variantesRef.current[idx] = el; }}
-                className="group flex flex-col"
+                className="group flex flex-col !opacity-100"
               >
                 <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 mb-4 transition-all duration-500 group-hover:border-amber-500/50 group-hover:shadow-2xl group-hover:shadow-amber-500/10">
-                  <img
-                    src={variante.image}
-                    alt={variante.teinte}
-                    className="w-full h-full object-contain object-center p-6 transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                    onError={(e) => handleImgError(e, idx)}
-                  />
+                  {variante.image && (
+                      <img
+                        src={variante.image}
+                        alt={variante.teinte}
+                        className="w-full h-full object-contain object-center p-6 transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                 </div>
 
                 <div>

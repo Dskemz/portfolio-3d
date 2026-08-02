@@ -6,24 +6,6 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Images génériques présentes dans le repo, utilisées en repli tant que les
-// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
-// existe, il s'affiche automatiquement à la place.
-const FALLBACKS = [
-  '/images/projets/horlogerie-suisse/02-montre.jpg',
-  '/images/projets/horlogerie-suisse/03-mecanisme.jpg',
-  '/images/projets/horlogerie-suisse/04-detail-1.jpg',
-  '/images/projets/horlogerie-suisse/05-detail-2.jpg',
-];
-const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
-const handleImgError = (
-  e: React.SyntheticEvent<HTMLImageElement>,
-  idx: number,
-) => {
-  const el = e.currentTarget;
-  el.onerror = null;
-  el.src = fallbackFor(idx);
-};
 
 interface Macro {
   id: string;
@@ -44,25 +26,25 @@ const MACROS_VILLERET: Macro[] = [
     id: 'cadran',
     nom: 'Cadran émaillé',
     detail: 'Complications chinoises, index gravés à la main',
-    image: '/images/projets/horlogerie-suisse/02-villeret-cadran.jpg',
+    image: '',
   },
   {
     id: 'saphir',
     nom: 'Verre saphir',
     detail: 'Reflets contrôlés, antireflets bombé',
-    image: '/images/projets/horlogerie-suisse/03-villeret-saphir.jpg',
+    image: '',
   },
   {
     id: 'aiguilles',
     nom: 'Aiguilles bleuies',
     detail: 'Feuille finement travaillée, traitement thermique',
-    image: '/images/projets/horlogerie-suisse/04-villeret-aiguilles.jpg',
+    image: '',
   },
   {
     id: 'bracelet',
     nom: 'Bracelet cuir alligator',
     detail: 'Grain texturé, coutures ton sur ton',
-    image: '/images/projets/horlogerie-suisse/05-villeret-bracelet.jpg',
+    image: '',
   },
 ];
 
@@ -71,19 +53,19 @@ const VUES_VILLERET: VueAngle[] = [
     id: 'face',
     angle: 'Face avant',
     description: 'Cadran complet, lecture des complications',
-    image: '/images/projets/horlogerie-suisse/06-villeret-face.jpg',
+    image: '',
   },
   {
     id: 'profil',
     angle: 'Vue de profil',
     description: 'Épaisseur du boîtier, courbes de la carrure',
-    image: '/images/projets/horlogerie-suisse/07-villeret-profil.jpg',
+    image: '',
   },
   {
     id: 'dos',
     angle: 'Fond ouvert',
     description: 'Mouvement mécanique visible, masse oscillante gravée',
-    image: '/images/projets/horlogerie-suisse/08-villeret-dos.jpg',
+    image: '',
   },
 ];
 
@@ -182,16 +164,16 @@ export default function VilleretSection() {
                 <div
                   key={macro.id}
                   ref={(el) => { macrosRef.current[idx] = el; }}
-                  className="group aspect-square rounded-xl overflow-hidden bg-slate-800 border border-slate-700 transition-all duration-300 hover:border-rose-300/50 hover:shadow-lg hover:shadow-rose-300/10"
+                  className="group aspect-square rounded-xl overflow-hidden bg-slate-800 border border-slate-700 transition-all duration-300 hover:border-rose-300/50 hover:shadow-lg hover:shadow-rose-300/10 !opacity-100"
                 >
                   <div className="relative w-full h-full">
-                    <img
-                      src={macro.image}
-                      alt={macro.nom}
-                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
-                      loading="lazy"
-                      onError={(e) => handleImgError(e, idx)}
-                    />
+                    {macro.image && (
+                      <img
+                        src={macro.image}
+                        alt={macro.nom}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3">
                       <p className="text-[11px] md:text-xs font-light text-white leading-tight">
                         {macro.nom}
@@ -219,16 +201,16 @@ export default function VilleretSection() {
                 <div
                   key={vue.id}
                   ref={(el) => { vuesRef.current[idx] = el; }}
-                  className="group flex flex-col md:flex-row gap-4 md:gap-6 p-4 md:p-5 rounded-2xl border border-slate-800 hover:border-rose-300/40 bg-slate-900/40 transition-all duration-500"
+                  className="group flex flex-col md:flex-row gap-4 md:gap-6 p-4 md:p-5 rounded-2xl border border-slate-800 hover:border-rose-300/40 bg-slate-900/40 transition-all duration-500 !opacity-100"
                 >
                   <div className="relative w-full md:w-2/3 aspect-[4/3] rounded-xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-rose-300/10">
-                    <img
-                      src={vue.image}
-                      alt={vue.angle}
-                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                      onError={(e) => handleImgError(e, idx)}
-                    />
+                    {vue.image && (
+                      <img
+                        src={vue.image}
+                        alt={vue.angle}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                   </div>
                   <div className="flex-1 flex flex-col justify-center">
                     <div className="mb-3 flex items-center gap-2">
