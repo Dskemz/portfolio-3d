@@ -42,8 +42,12 @@ export default function PortfolioPage() {
             </h1>
           </div>
 
-          {/* Sommaire interactif split-screen, 11 projets phares */}
-          <div className="mt-16 lg:mt-20">
+          {/* Sommaire interactif split-screen, 11 projets phares.
+              Marges négatives (lg+) : le sommaire déborde la gouttière du
+              Container pour gagner de la largeur des deux côtés (bord gauche
+              du menu ↔ bord droit de l'image), sans toucher au reste de la
+              page ni au titre au-dessus. */}
+          <div className="mt-16 lg:-mx-8 lg:mt-20 xl:-mx-16 2xl:-mx-24">
             <SommaireProjets />
           </div>
         </Container>

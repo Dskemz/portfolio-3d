@@ -153,7 +153,7 @@ export default function SommaireProjets() {
           <Link
             ref={cadreRef}
             href={`/portfolio/${projet.slug}`}
-            className="group relative block aspect-[4/3] w-full overflow-hidden border border-graphite-700 sm:aspect-[16/10] lg:aspect-[4/3]"
+            className="group relative block aspect-video w-full overflow-hidden border border-graphite-700"
             aria-label={`Voir le projet ${projet.titre}`}
           >
             {/* Crossfade : chaque projet est un calque empilé ; seul l'actif est
@@ -226,11 +226,6 @@ export default function SommaireProjets() {
                 <span aria-hidden="true" className="text-graphite-600">/</span>
                 <span>{projet.annee}</span>
               </div>
-
-              {/* Résumé court. */}
-              <p className="mt-4 max-w-xl text-sm font-light leading-relaxed text-papier/70 md:text-base">
-                {projet.resume}
-              </p>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -272,8 +267,6 @@ export default function SommaireProjets() {
           <ul className="flex flex-col">
             {PROJETS.map((p, i) => {
               const estActif = i === actif;
-              /* Numéro /01 → /11, sur deux chiffres. */
-              const num = String(i + 1).padStart(2, "0");
 
               return (
                 <li
@@ -288,7 +281,7 @@ export default function SommaireProjets() {
                        avant la navigation, ce qui met à jour le visuel. */
                     onMouseEnter={() => setActif(i)}
                     onFocus={() => setActif(i)}
-                    className="group relative flex items-baseline gap-4 py-5 outline-none md:gap-6 md:py-6"
+                    className="group relative flex items-baseline py-5 outline-none md:py-6"
                   >
                     {/* Trait actif — filet orange qui se déploie à gauche. */}
                     <span
@@ -300,18 +293,10 @@ export default function SommaireProjets() {
                       }}
                     />
 
-                    {/* Numéro /0N en mono. S'éclaire quand actif. */}
+                    {/* Titre du projet — fin, bascule à l'orange quand actif.
+                        Le retrait gauche (pl-4/6) dégage le filet orange. */}
                     <span
-                      className="shrink-0 pl-4 font-mono text-xs tabular-nums tracking-widest transition-colors duration-300 md:pl-6"
-                      style={{ color: estActif ? ACCENT : undefined }}
-                    >
-                      <span className="text-graphite-500">/</span>
-                      <span className={estActif ? "" : "text-trait"}>{num}</span>
-                    </span>
-
-                    {/* Titre du projet — fin, bascule à l'orange quand actif. */}
-                    <span
-                      className="font-display text-lg font-light leading-snug tracking-tight transition-colors duration-300 md:text-2xl lg:text-[1.7rem]"
+                      className="pl-4 font-display text-lg font-light leading-snug tracking-tight transition-colors duration-300 md:pl-6 md:text-2xl lg:text-[1.7rem]"
                       style={{ color: estActif ? ACCENT : undefined }}
                     >
                       <span
@@ -323,17 +308,6 @@ export default function SommaireProjets() {
                       >
                         {p.titre}
                       </span>
-                    </span>
-
-                    {/* Flèche discrète poussée à droite, révélée quand actif. */}
-                    <span
-                      aria-hidden="true"
-                      className="ml-auto shrink-0 self-center pr-1 opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100 group-focus-visible:translate-x-1 group-focus-visible:opacity-100"
-                      style={{ opacity: estActif ? 1 : undefined, color: ACCENT }}
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" strokeWidth="1.3" />
-                      </svg>
                     </span>
                   </Link>
                 </li>
