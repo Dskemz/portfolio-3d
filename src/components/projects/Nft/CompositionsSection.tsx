@@ -6,6 +6,25 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Images génériques présentes dans le repo, utilisées en repli tant que les
+// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
+// existe, il s'affiche automatiquement à la place.
+const FALLBACKS = [
+  '/images/projets/nft-floofies/02-character.jpg',
+  '/images/projets/nft-floofies/03-environment.jpg',
+  '/images/projets/nft-floofies/04-detail-1.jpg',
+  '/images/projets/nft-floofies/05-detail-2.jpg',
+];
+const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
+const handleImgError = (
+  e: React.SyntheticEvent<HTMLImageElement>,
+  idx: number,
+) => {
+  const el = e.currentTarget;
+  el.onerror = null;
+  el.src = fallbackFor(idx);
+};
+
 interface ItemPiece {
   id: string;
   categorie: string;
@@ -143,6 +162,8 @@ export default function CompositionsSection() {
                       src={item.image}
                       alt={item.nom}
                       className="w-full h-full object-contain object-center p-2 transition-transform duration-300 group-hover:scale-110"
+                      loading="lazy"
+                      onError={(e) => handleImgError(e, idx)}
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <p className="text-[10px] font-light text-white uppercase tracking-wider">
@@ -178,6 +199,8 @@ export default function CompositionsSection() {
                       src={compo.image}
                       alt={compo.nom}
                       className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                      onError={(e) => handleImgError(e, idx)}
                     />
                   </div>
                   <div className="mt-4">

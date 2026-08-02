@@ -6,6 +6,24 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Images génériques présentes dans le repo, utilisées en repli tant que les
+// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
+// existe, il s'affiche automatiquement à la place.
+const FALLBACKS = [
+  '/images/projets/steamone/02-visite.jpg',
+  '/images/projets/steamone/03-detail-1.jpg',
+  '/images/projets/steamone/04-detail-2.jpg',
+];
+const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
+const handleImgError = (
+  e: React.SyntheticEvent<HTMLImageElement>,
+  idx: number,
+) => {
+  const el = e.currentTarget;
+  el.onerror = null;
+  el.src = fallbackFor(idx);
+};
+
 interface GrosPlan {
   id: string;
   nom: string;
@@ -142,6 +160,7 @@ export default function ArchitectureSection() {
                       alt={plan.nom}
                       className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"
+                      onError={(e) => handleImgError(e, idx)}
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3">
                       <p className="text-[11px] md:text-xs font-light text-white leading-tight">
@@ -178,6 +197,7 @@ export default function ArchitectureSection() {
                       alt={vue.titre}
                       className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
+                      onError={(e) => handleImgError(e, idx)}
                     />
                   </div>
                   <div className="mt-4">

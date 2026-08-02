@@ -6,6 +6,25 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Images génériques présentes dans le repo, utilisées en repli tant que les
+// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
+// existe, il s'affiche automatiquement à la place.
+const FALLBACKS = [
+  '/images/projets/horlogerie-suisse/02-montre.jpg',
+  '/images/projets/horlogerie-suisse/03-mecanisme.jpg',
+  '/images/projets/horlogerie-suisse/04-detail-1.jpg',
+  '/images/projets/horlogerie-suisse/05-detail-2.jpg',
+];
+const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
+const handleImgError = (
+  e: React.SyntheticEvent<HTMLImageElement>,
+  idx: number,
+) => {
+  const el = e.currentTarget;
+  el.onerror = null;
+  el.src = fallbackFor(idx);
+};
+
 /**
  * Fiche horlogère de la galerie.
  *
@@ -162,6 +181,8 @@ export default function GalerieSection() {
                         src={piece.image}
                         alt={piece.nom}
                         className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                        onError={(e) => handleImgError(e, idx)}
                       />
                       {/* Radial glow */}
                       <div className="absolute inset-0 bg-gradient-radial from-rose-300/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

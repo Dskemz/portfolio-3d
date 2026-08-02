@@ -6,6 +6,24 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Images génériques présentes dans le repo, utilisées en repli tant que les
+// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
+// existe, il s'affiche automatiquement à la place.
+const FALLBACKS = [
+  '/images/projets/steamone/02-visite.jpg',
+  '/images/projets/steamone/03-detail-1.jpg',
+  '/images/projets/steamone/04-detail-2.jpg',
+];
+const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
+const handleImgError = (
+  e: React.SyntheticEvent<HTMLImageElement>,
+  idx: number,
+) => {
+  const el = e.currentTarget;
+  el.onerror = null;
+  el.src = fallbackFor(idx);
+};
+
 interface VueEclate {
   id: string;
   titre: string;
@@ -116,6 +134,8 @@ export default function EclateSection() {
                   src={vue.image}
                   alt={vue.titre}
                   className="w-full h-full object-contain object-center p-4 transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  onError={(e) => handleImgError(e, idx)}
                 />
                 {/* Glow subtil */}
                 <div className="absolute inset-0 bg-gradient-radial from-sky-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

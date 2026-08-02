@@ -6,6 +6,24 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Images génériques présentes dans le repo, utilisées en repli tant que les
+// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
+// existe, il s'affiche automatiquement à la place.
+const FALLBACKS = [
+  '/images/projets/alquyme/02-dataviz.jpg',
+  '/images/projets/alquyme/03-detail-1.jpg',
+  '/images/projets/alquyme/04-detail-2.jpg',
+];
+const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
+const handleImgError = (
+  e: React.SyntheticEvent<HTMLImageElement>,
+  idx: number,
+) => {
+  const el = e.currentTarget;
+  el.onerror = null;
+  el.src = fallbackFor(idx);
+};
+
 interface Vue {
   id: string;
   titre: string;
@@ -111,6 +129,8 @@ export default function PackagingSection() {
                   src={vue.image}
                   alt={vue.titre}
                   className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  onError={(e) => handleImgError(e, idx)}
                 />
                 {/* Golden glow */}
                 <div className="absolute inset-0 bg-gradient-radial from-amber-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

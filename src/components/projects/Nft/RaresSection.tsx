@@ -6,6 +6,25 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Images génériques présentes dans le repo, utilisées en repli tant que les
+// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
+// existe, il s'affiche automatiquement à la place.
+const FALLBACKS = [
+  '/images/projets/nft-floofies/02-character.jpg',
+  '/images/projets/nft-floofies/03-environment.jpg',
+  '/images/projets/nft-floofies/04-detail-1.jpg',
+  '/images/projets/nft-floofies/05-detail-2.jpg',
+];
+const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
+const handleImgError = (
+  e: React.SyntheticEvent<HTMLImageElement>,
+  idx: number,
+) => {
+  const el = e.currentTarget;
+  el.onerror = null;
+  el.src = fallbackFor(idx);
+};
+
 interface PieceRare {
   id: string;
   nom: string;
@@ -140,6 +159,8 @@ export default function RaresSection() {
                       src={piece.image}
                       alt={piece.nom}
                       className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
+                      onError={(e) => handleImgError(e, idx)}
                     />
                     <div className="absolute bottom-3 left-3 right-3">
                       <p className="text-xs font-light text-slate-300 truncate">
@@ -172,6 +193,8 @@ export default function RaresSection() {
                       src={rendu.image}
                       alt={rendu.nom}
                       className="w-full h-full object-contain object-center p-6 transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                      onError={(e) => handleImgError(e, idx)}
                     />
                     {/* Cyber glow */}
                     <div className="absolute inset-0 bg-gradient-radial from-purple-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

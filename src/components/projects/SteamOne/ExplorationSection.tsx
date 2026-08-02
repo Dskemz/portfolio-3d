@@ -6,6 +6,24 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Images génériques présentes dans le repo, utilisées en repli tant que les
+// visuels définitifs ne sont pas encore déposés. Dès qu'un fichier au bon nom
+// existe, il s'affiche automatiquement à la place.
+const FALLBACKS = [
+  '/images/projets/steamone/02-visite.jpg',
+  '/images/projets/steamone/03-detail-1.jpg',
+  '/images/projets/steamone/04-detail-2.jpg',
+];
+const fallbackFor = (idx: number) => FALLBACKS[idx % FALLBACKS.length];
+const handleImgError = (
+  e: React.SyntheticEvent<HTMLImageElement>,
+  idx: number,
+) => {
+  const el = e.currentTarget;
+  el.onerror = null;
+  el.src = fallbackFor(idx);
+};
+
 interface VueAxe {
   id: string;
   axe: string;
@@ -161,6 +179,8 @@ export default function ExplorationSection() {
                     src={vue.image}
                     alt={vue.axe}
                     className="w-full h-full object-contain object-center p-6 transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                    onError={(e) => handleImgError(e, idx)}
                   />
                   {/* Radial glow */}
                   <div className="absolute inset-0 bg-gradient-radial from-sky-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -208,6 +228,8 @@ export default function ExplorationSection() {
                     src={finition.image}
                     alt={finition.titre}
                     className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                    onError={(e) => handleImgError(e, idx)}
                   />
                 </div>
 
