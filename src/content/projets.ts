@@ -25,6 +25,13 @@ export interface ProjetData {
   annee: number;
   /** URL de l'image hero. Optionnelle : fallback à un gradient si absente. */
   couverture?: string;
+  /**
+   * URL d'une image spécifique pour la PRÉSENTATION des projets (sommaire
+   * desktop + galerie mobile de la page /portfolio). Optionnelle : si absente,
+   * on retombe automatiquement sur `couverture` (l'image hero). Permet
+   * d'afficher une vignette dédiée sans toucher à la hero des pages détail.
+   */
+  apercu?: string;
 
   //, Champs étendus (page projet) —
   role: string;
@@ -57,13 +64,14 @@ export function getCouvertureOuFallback(
 export const PROJETS: ProjetData[] = [
   {
     slug: "withings-scanwatch",
-    titre: "ScanWatch 2 - Light & Nova",
+    titre: "ScanWatch 2, Light et Nova",
     client: "Withings",
     resume:
       "Création de toute la gamme de montres ScanWatch 2, ScanWatch Light et ScanWatch Nova : vidéos 360° pour le shop interactif et packshots pour la grande distribution.",
     categorie: "Modélisation",
     annee: 2025,
     couverture: "/images/projets/withings/01-hero.jpg",
+    apercu: "/images/projets/withings/01-hero.jpg",
     role: "Graphiste 3D indépendant",
     outils: ["Visuels", "Packshots", "Vidéos 360°"],
     types: ["modelisation"],
@@ -74,13 +82,14 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "decotec",
-    titre: "Architecture d'Intérieur - Salle de Bain",
+    titre: "Architecture d'Intérieur, Salle de Bain",
     client: "Décotec",
     resume:
       "Perspectives 3D photoréalistes pour la présentation de collections de mobilier de salle de bain, scénographies de gammes, étude d'éclairage et workflow technique.",
     categorie: "Architecture",
     annee: 2024,
     couverture: "/images/projets/decotec/01-hero.jpg",
+    apercu: "/images/projets/decotec/01-hero.jpg",
     role: "Modélisation 3D · Rendu Photoréaliste · Optimisation GLTF",
     outils: ["Cinema 4D", "Corona Renderer", "Substance 3D", "Blender"],
     types: ["modelisation", "architecture"],
@@ -90,13 +99,14 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "nft-floofies",
-    titre: "Floofies - Le shiba du futur",
+    titre: "Floofies, Le shiba du futur",
     client: "NFT Floofies",
     resume:
       "Collection de NFT 3D mettant en scène un univers cartoon et pop-futuriste, shibas modulaires, accessoires spatiaux et compositions génératives structurées en quatre niveaux de rareté.",
     categorie: "Design Digital",
     annee: 2024,
     couverture: "/images/projets/nft-floofies/01-hero.jpg",
+    apercu: "/images/projets/nft-floofies/01-hero.jpg",
     role: "Art Director 3D · Character Design · NFT Generative",
     outils: ["Cinema 4D", "Substance 3D", "Blender", "Photoshop"],
     types: ["modelisation", "design"],
@@ -106,13 +116,14 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "summum-3d",
-    titre: "Showroom - Sauvegarde Numérique d'Œuvres d'Art",
-    client: "Summum 3D",
+    titre: "Studio Summum, Sauvegarde Numérique d'Œuvres d'Art",
+    client: "Studio Summum",
     resume:
       "Numérisation haute fidélité d'œuvres d'art par photogrammétrie, retopologie et optimisation GLTF/GLB pour une exploitation temps réel (musées virtuels, WebGL, archives).",
     categorie: "Photogrammétrie & 3D Temps Réel",
     annee: 2023,
     couverture: "/images/projets/summum-3d/01-hero.jpg",
+    apercu: "/images/projets/summum-3d/01-hero.jpg",
     role: "Photogrammétrie · Retopologie · Optimisation GLB",
     outils: ["RealityCapture", "Blender", "Substance", "glTF"],
     types: ["modelisation", "temps-reel"],
@@ -122,13 +133,14 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "velyv-elo",
-    titre: "Vélo cargos - Conception de Vélo Électrique",
+    titre: "VélyVélo, Conception de Vélo Électrique",
     client: "VélyVélo",
     resume:
       "Conception 3D d'un vélo électrique de livraison urbaine, structure caisson-selle, personnalisation par enseigne et déclinaisons de flottes professionnelles.",
     categorie: "Design Produit & Mobilité",
     annee: 2023,
     couverture: "/images/projets/velyv-elo/01-hero.jpg",
+    apercu: "/images/projets/velyv-elo/01-hero.jpg",
     role: "Modélisateur 3D lead · Designer produit",
     outils: ["Cinema 4D", "Substance Designer", "Octane Render", "Photoshop"],
     types: ["modelisation", "design"],
@@ -138,13 +150,14 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "agences-georges",
-    titre: "La commanderie - de 2013 à 2021",
+    titre: "Application Showroom 3D, Fashion Luxury",
     client: "Agences Georges",
     resume:
-      "Étude de cas d'un accompagnement complet pour le développement d'une marque de vin.",
+      "Application interactive 3D pour présentation de collections haute couture, essayage virtuel et personnalisation en temps réel.",
     categorie: "Application 3D",
     annee: 2023,
     couverture: "/images/projets/agences-georges/01-hero.jpg",
+    apercu: "/images/projets/agences-georges/01-hero.jpg",
     role: "Lead 3D · Architecture WebGL",
     outils: ["Three.js", "Babylon.js", "React", "Tailwind"],
     types: ["temps-reel"],
@@ -154,13 +167,14 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "alquyme",
-    titre: "Alquyme - Équilibre Parfait",
+    titre: "Alquyme, Flacon d'exception",
     client: "Alquyme",
     resume:
       "Création 3D et mise en scène d'un flacon de parfum ALQUYME, sablier vertical à double récipient, gravures dorées et déclinaisons chromatiques pour une collection modulaire.",
     categorie: "Design Packaging & Parfum",
     annee: 2023,
     couverture: "/images/projets/alquyme/01-hero.jpg",
+    apercu: "/images/projets/alquyme/01-hero.jpg",
     role: "Modélisateur 3D · Designer packaging",
     outils: ["Cinema 4D", "Octane Render", "Substance Designer", "Photoshop"],
     types: ["modelisation", "design"],
@@ -177,6 +191,7 @@ export const PROJETS: ProjetData[] = [
     categorie: "Design Produit & Éclaté 3D",
     annee: 2022,
     couverture: "/images/projets/steamone/01-hero.jpg",
+    apercu: "/images/projets/steamone/01-hero.jpg",
     role: "Modélisateur 3D · Designer produit",
     outils: ["Cinema 4D", "Octane Render", "Substance Designer", "Photoshop"],
     types: ["modelisation", "design"],
@@ -186,13 +201,14 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "creation-originales",
-    titre: "Création Originales - Créations Cartoon 3D",
+    titre: "Création Originales, Design Produit 3D",
     client: "Création Originales",
     resume:
       "Modélisation 3D et rendu de produits design artisanaux pour catalogues, portfolio digital et campagnes e-commerce.",
     categorie: "Design Produit",
     annee: 2022,
     couverture: "/images/projets/creation-originales/01-hero.jpg",
+    apercu: "/images/projets/creation-originales/01-hero.jpg",
     role: "Modélisateur 3D · Product Visualizer",
     outils: ["Cinema 4D", "Octane Render", "Substance 3D", "Lightroom"],
     types: ["modelisation", "design"],
@@ -202,13 +218,14 @@ export const PROJETS: ProjetData[] = [
   },
   {
     slug: "horlogerie-suisse",
-    titre: "Horlogerie - Mise en scène de montres",
+    titre: "Horlogerie, Mise en scène de montres",
     client: "Projet personnel",
     resume:
       "Projets personnels de modélisation 3D horlogère, Villeret Chinese Calendar, Polaris Memovox 50e anniversaire et collection évolutive de pièces d'exception.",
     categorie: "Modélisation Horlogerie",
     annee: 2022,
     couverture: "/images/projets/horlogerie-suisse/01-hero.jpg",
+    apercu: "/images/projets/horlogerie-suisse/01-hero.jpg",
     role: "Modélisateur 3D · Direction artistique",
     outils: ["Cinema 4D", "Octane Render", "Substance Designer", "Photoshop"],
     types: ["modelisation"],

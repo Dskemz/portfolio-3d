@@ -171,11 +171,11 @@ export default function SommaireProjets() {
             className="group block"
             aria-label={`Voir le projet ${p.titre}`}
           >
-            {/* Image hero, ratio 16/9, coins vifs (cohérent avec le desktop). */}
+            {/* Image de présentation : `apercu` si défini, sinon la hero. */}
             <div className="relative aspect-video w-full overflow-hidden border border-graphite-700">
-              {p.couverture ? (
+              {(p.apercu ?? p.couverture) ? (
                 <Image
-                  src={p.couverture}
+                  src={(p.apercu ?? p.couverture) as string}
                   alt={p.titre}
                   fill
                   sizes="100vw"
@@ -234,9 +234,9 @@ export default function SommaireProjets() {
                 transition={{ duration: duree, ease: [0.22, 0.61, 0.36, 1] }}
                 className="absolute inset-0"
               >
-                {projet.couverture ? (
+                {(projet.apercu ?? projet.couverture) ? (
                   <Image
-                    src={projet.couverture}
+                    src={(projet.apercu ?? projet.couverture) as string}
                     alt={projet.titre}
                     fill
                     sizes="(max-width: 1024px) 100vw, 55vw"
