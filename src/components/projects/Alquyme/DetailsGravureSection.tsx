@@ -175,7 +175,7 @@ export default function DetailsGravureSection() {
                 <div
                   key={macro.id}
                   ref={(el) => { macrosRef.current[idx] = el; }}
-                  className="group aspect-square rounded-xl overflow-hidden bg-slate-800 border border-slate-700 transition-all duration-300 hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/10"
+                  className="group aspect-square rounded-xl overflow-hidden bg-slate-800 border border-slate-700 transition-all duration-300 hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/10 !opacity-100"
                 >
                   <div className="relative w-full h-full">
                     <img

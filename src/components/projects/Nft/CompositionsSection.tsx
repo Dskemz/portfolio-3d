@@ -155,7 +155,7 @@ export default function CompositionsSection() {
                 <div
                   key={item.id}
                   ref={(el) => { itemsRef.current[idx] = el; }}
-                  className="group aspect-square rounded-lg overflow-hidden bg-slate-800 border border-slate-700 transition-all duration-300 hover:border-fuchsia-500/50 hover:shadow-lg hover:shadow-fuchsia-500/10"
+                  className="group aspect-square rounded-lg overflow-hidden bg-slate-800 border border-slate-700 transition-all duration-300 hover:border-fuchsia-500/50 hover:shadow-lg hover:shadow-fuchsia-500/10 !opacity-100"
                 >
                   <div className="relative w-full h-full">
                     <img
