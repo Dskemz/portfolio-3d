@@ -13,10 +13,10 @@ interface ShowroomItem {
 }
 
 const ITEMS: ShowroomItem[] = [
-  { image: '/images/projets/summum-3d/11-showroom-1.jpg', title: 'Veste texturée', description: 'Textile plissé, coutures et patine' },
-  { image: '/images/projets/summum-3d/12-showroom-2.jpg', title: 'Sculpture buste', description: 'Pierre sculptée, traces d\'outils' },
-  { image: '/images/projets/summum-3d/13-showroom-3.jpg', title: 'Graffiti urbain', description: 'Couches de peinture et relief mural' },
-  { image: '/images/projets/summum-3d/14-showroom-4.jpg', title: 'Objet céramique', description: 'Émail, glaçure et imperfections' },
+  { image: '/images/projets/summum-3d/11-showroom-1.jpg', title: 'Gilet-sculpture déchirée', description: 'Matière brute, superposition et patine' },
+  { image: '/images/projets/summum-3d/12-showroom-2.jpg', title: 'Corset ajouré', description: 'Cuir perforé, boucles et découpes laser' },
+  { image: '/images/projets/summum-3d/13-showroom-3.jpg', title: 'Bottes graffitées', description: 'Cuir tagué, fermeture et patine urbaine' },
+  { image: '/images/projets/summum-3d/14-showroom-4.jpg', title: 'Objet feutre', description: 'Laine feutrée, surpiqûres et patine mate' },
 ];
 
 export default function ShowroomSection() {
