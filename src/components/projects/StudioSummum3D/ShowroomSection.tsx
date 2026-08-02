@@ -81,6 +81,26 @@ export default function ShowroomSection() {
           ))}
         </div>
 
+        {/* --- AJOUT DU BOUTON DE VISITE VIRTUELLE --- */}
+        <div className="mt-16 p-6 bg-slate-800/80 border border-slate-700 rounded-lg flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div>
+            <h4 className="text-lg font-light text-white mb-1">Immersion en conditions réelles</h4>
+            <p className="text-sm text-slate-300 font-light">Explorez le projet final directement dans son environnement virtuel.</p>
+          </div>
+          <a
+            href="https://palaisgallierashowroom.paris.fr/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-950 hover:bg-slate-200 text-sm font-medium rounded-md transition-colors duration-300 whitespace-nowrap"
+          >
+            <span>Lancer la visite virtuelle</span>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+        </div>
+        {/* --------------------------------------------- */}
+
         <div className="mt-20 pt-16 border-t border-slate-700">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
