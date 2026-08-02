@@ -45,7 +45,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-screen bg-gradient-to-br from-[#d4af37] to-[#a08324] overflow-hidden"
+      className="relative w-full h-screen bg-gradient-to-br from-[#a68f55] to-[#8f7a45] overflow-hidden"
     >
       <div
         ref={heroImageRef}
@@ -64,7 +64,7 @@ export default function HeroSection() {
         className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center md:items-start md:text-left md:px-16 lg:px-24"
       >
         <div className="mb-6 tracking-widest">
-          <p className="text-sm md:text-base font-light text-slate-900/80 uppercase letter-spacing">
+          <p className="text-sm md:text-base font-light text-white uppercase letter-spacing">
             Alquyme / Design Packaging
           </p>
         </div>
@@ -82,11 +82,11 @@ export default function HeroSection() {
         </p>
 
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-          <p className="text-xs text-slate-900/80 uppercase tracking-wider drop-shadow-sm">
+          <p className="text-xs text-white uppercase tracking-wider drop-shadow-sm">
             Scroll
           </p>
           <svg
-            className="w-4 h-6 text-slate-900/80"
+            className="w-4 h-6 text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

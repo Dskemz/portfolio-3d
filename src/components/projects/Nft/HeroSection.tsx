@@ -72,10 +72,10 @@ export default function HeroSection() {
         <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl">
           Floofies
           <br />
-          <span className="text-neutral-300">Le shiba du futur</span>
+          <span className="text-white">Le shiba du futur</span>
         </h1>
 
-        <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
+        <p className="max-w-2xl text-sm md:text-base text-white font-light leading-relaxed">
           Collection de NFT 3D mettant en scène un univers cartoon et pop-futuriste, personnages
           modulaires, accessoires spatiaux et compositions génératives dans une esthétique
           science-fiction assumée.

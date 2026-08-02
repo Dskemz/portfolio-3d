@@ -64,7 +64,7 @@ export default function HeroSection() {
         className="relative z-10 h-full w-full flex flex-col items-center justify-center px-6 text-center md:items-start md:text-left md:px-16 lg:px-24"
       >
         <div className="mb-6 tracking-widest">
-          <p className="text-sm md:text-base font-light text-stone-800 uppercase letter-spacing">
+          <p className="text-sm md:text-base font-light text-white uppercase letter-spacing">
             Projet 3D, Photogrammétrie & Patrimoine
           </p>
         </div>
@@ -72,10 +72,10 @@ export default function HeroSection() {
         <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl">
           Studio Summum
           <br />
-          <span className="text-neutral-400">La Sauvegarde Numérique d&apos;Œuvres d&apos;Art</span>
+          <span className="text-white">La Sauvegarde Numérique d&apos;Œuvres d&apos;Art</span>
         </h1>
 
-        <p className="max-w-2xl text-sm md:text-base text-neutral-300 font-light leading-relaxed">
+        <p className="max-w-2xl text-sm md:text-base text-white font-light leading-relaxed">
           Numérisation haute fidélité d&apos;œuvres d&apos;art par photogrammétrie,
           retopologie et optimisation pour une exploitation fluide en temps
           réel (GLTF/GLB).

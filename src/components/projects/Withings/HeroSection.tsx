@@ -83,9 +83,9 @@ export default function HeroSection() {
         </div>
 
         <h1 className="mb-6 text-4xl md:text-6xl font-thin text-white leading-tight max-w-4xl drop-shadow-md">
-          ScanWatch 2, Light
+          ScanWatch 2, Light 
           <br />
-          <span className="text-white/80">et Nova</span>
+          <span className="text-white">et Nova</span>
         </h1>
 
         <p className="max-w-xl text-sm md:text-base text-white/90 font-light leading-relaxed drop-shadow-sm">
