@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ScrollTrigger } from "@/lib/gsap";
 import { PROJETS } from "@/content/projets";
 
 /**
@@ -95,17 +96,31 @@ export default function SommaireProjets() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  /* Mesure de la hauteur du visuel, réévaluée à chaque redimensionnement. */
+  /* Mesure de la hauteur du visuel, réévaluée à chaque redimensionnement.
+     Le sommaire modifie la hauteur de la page APRÈS le montage (mesure +
+     chargement des images) : on demande alors à ScrollTrigger de recalculer
+     ses positions, sinon les animations au scroll situées PLUS BAS dans la
+     page (ex. le filet du CTA « discutons-en ») gardent des coordonnées
+     périmées et se déclenchent au mauvais moment — voire jamais. */
   useEffect(() => {
     const cadre = cadreRef.current;
     if (!cadre) return;
 
-    const mesurer = () => setHauteur(cadre.offsetHeight);
+    let raf = 0;
+    const mesurer = () => {
+      setHauteur(cadre.offsetHeight);
+      // Recalcule après le reflow, une fois la nouvelle hauteur appliquée.
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => ScrollTrigger.refresh());
+    };
     mesurer();
 
     const ro = new ResizeObserver(mesurer);
     ro.observe(cadre);
-    return () => ro.disconnect();
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
   }, []);
 
   /* Recalcule les fondus (haut/bas) selon la position de scroll de la zone. */
