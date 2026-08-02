@@ -14,7 +14,7 @@ interface MacroItem {
 
 const MACROS: MacroItem[] = [
   { image: '/images/projets/summum-3d/07-macro-cuir.jpg', label: 'Cuir patiné', span: 'col-span-2 row-span-2' },
-  { image: '/images/projets/summum-3d/08-macro-graffiti.jpg', label: 'Graffiti mural', span: 'col-span-1 row-span-1' },
+  { image: '/images/projets/summum-3d/08-macro-graffiti.jpg', label: 'Marquage artistique', span: 'col-span-1 row-span-1' },
   { image: '/images/projets/summum-3d/09-macro-plis.jpg', label: 'Plis complexes', span: 'col-span-1 row-span-1' },
   { image: '/images/projets/summum-3d/10-macro-detail.jpg', label: 'Micro-détails', span: 'col-span-2 row-span-1' },
 ];
