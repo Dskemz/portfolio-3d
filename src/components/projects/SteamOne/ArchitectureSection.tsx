@@ -156,7 +156,7 @@ export default function ArchitectureSection() {
                 >
                   <div className="relative w-full h-full">
                     <img
-                      src={plan.image}
+                      src={fallbackFor(idx)}
                       alt={plan.nom}
                       className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"

@@ -179,7 +179,7 @@ export default function DetailsGravureSection() {
                 >
                   <div className="relative w-full h-full">
                     <img
-                      src={macro.image}
+                      src={fallbackFor(idx)}
                       alt={macro.nom}
                       className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"

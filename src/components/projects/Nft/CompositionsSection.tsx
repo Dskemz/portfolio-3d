@@ -159,9 +159,9 @@ export default function CompositionsSection() {
                 >
                   <div className="relative w-full h-full">
                     <img
-                      src={item.image}
+                      src={fallbackFor(idx)}
                       alt={item.nom}
-                      className="w-full h-full object-contain object-center p-2 transition-transform duration-300 group-hover:scale-110"
+                      className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110"
                       loading="lazy"
                       onError={(e) => handleImgError(e, idx)}
                     />
