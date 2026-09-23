@@ -1,8 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt =
-  "Graphite 3D, Denis Masquet, graphiste 3D généraliste";
+export const alt = "M3D Studio, moteur graphique N3D";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -33,15 +32,15 @@ export default function OpengraphImage() {
             color: "#ff7f50",
           }}
         >
-          Graphite 3D
+          M3D Studio
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", fontSize: 82, color: "#f2f2f0" }}>
-            Denis Masquet
+            M3D Studio
           </div>
           <div style={{ display: "flex", fontSize: 46, color: "#8b9199" }}>
-            Graphiste 3D généraliste
+            Moteur graphique N3D
           </div>
         </div>
 

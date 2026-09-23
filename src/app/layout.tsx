@@ -34,11 +34,15 @@ const mono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://graphite3d.fr"),
   title: {
-    default: "Denis Masquet, Graphiste 3D généraliste | Graphite 3D",
-    template: "%s | Graphite 3D",
+    default: "M3D Studio — Moteur graphique N3D",
+    template: "%s | M3D Studio",
   },
   description:
-    "Modélisation 3D, temps réel Babylon.js et visites virtuelles immersives. Graphite 3D, studio de Denis Masquet.",
+    "M3D Studio. Création de solutions 3D avec moteur graphique N3D",
+  openGraph: {
+    title: "M3D Studio — Moteur graphique N3D",
+    description: "M3D Studio. Création de solutions 3D avec moteur graphique N3D",
+  },
 };
 
 export const viewport: Viewport = {
@@ -48,8 +52,7 @@ export const viewport: Viewport = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
-  name: "Graphite 3D",
-  founder: { "@type": "Person", name: "Denis Masquet" },
+  name: "M3D Studio",
   url: "https://graphite3d.fr",
   areaServed: "FR",
   description:

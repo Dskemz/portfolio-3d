@@ -1,5 +1,6 @@
 @import "./menu-mobile.css";
 @import "tailwindcss";
+@config "../../tailwind.config.ts";
 
 /**
  * ─────────────────────────────────────────────────────────────────────────

@@ -48,13 +48,13 @@ export interface WorkflowNode {
 export const ORIGIN_ID = "wf-origin";
 
 export const INTRO = {
-  name: "Denis Masquet",
+  name: "M3D Studio",
   /**
    * Rendu DANS le <h1> (voir SkillFlow), pas dans un <p> à côté : c'est cette
    * ligne qui porte les mots-clés du document. Elle contient « 3D » et
    * « visites virtuelles », les deux termes que la page doit revendiquer.
    */
-  role: "Artiste 3D indépendant & visites virtuelles interactives",
+  role: "Moteur graphique N3D",
   quote:
     "Modélisations haute qualité et rendu photoréaliste pour la vente retail. " +
     "Création d'expériences interactives, de visites virtuelles immersives " +

@@ -130,7 +130,7 @@ export default function MenuMobile({ liens, actif }: MenuMobileProps) {
             >
               Mentions légales
             </Link>
-            <span>Denis Masquet</span>
+            <span>M3D Studio</span>
           </div>
         </div>
       </div>

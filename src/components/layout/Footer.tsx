@@ -23,7 +23,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
           <div>
             <p className="font-display text-base font-medium text-papier">
-              Denis Masquet
+              M3D Studio
             </p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-trait">
               Artiste 3D généraliste, visites virtuelles 3D immersives performantes et retail.
@@ -68,7 +68,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col gap-2 border-t border-mine pt-6 font-mono text-[11px] uppercase tracking-[0.16em] text-trait sm:flex-row sm:items-center sm:justify-between">
-          <span>© {annee} Graphiste 3D</span>
+          <span>© {annee} M3D Studio</span>
           <span>Micro-entrepreneur, SIRET 880727649</span>
         </div>
       </div>

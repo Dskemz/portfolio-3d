@@ -470,7 +470,7 @@ export default function SkillFlowMobile() {
       <header className="flex min-h-[100svh] flex-col justify-center px-6 pb-16 pt-24">
         <div className="flex w-full flex-col items-center text-center">
           <h1 className="font-display text-[clamp(2.2rem,8vw,3rem)] font-light leading-[1.05] tracking-[-0.02em] text-white">
-            Denis Masquet
+            {INTRO.name}
           </h1>
           <p className="mt-4 text-xs uppercase tracking-[0.18em] text-[#FF7F50]">
             {INTRO.role}
