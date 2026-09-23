@@ -295,6 +295,17 @@ export default function SkillFlow() {
     setBuilt(next);
   }, []);
 
+  /**
+   * Défense en profondeur pour le fix layout.tsx (scroll restoration) : une
+   * navigation CLIENT (retour sur "/" depuis une autre page) ne repasse pas
+   * par le script synchrone du <body>. Sans ce reset, `compute()` (plus bas)
+   * lirait un `scrollY` résiduel au tout premier calcul et allumerait une
+   * fiche à tort.
+   */
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useLayoutEffect(() => {
     const detect = () => {
       const next: Mode = window.innerWidth < BREAKPOINT ? "mobile" : "desktop";

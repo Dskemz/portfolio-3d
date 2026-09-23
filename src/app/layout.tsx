@@ -65,6 +65,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${sora.className} flex min-h-screen flex-col bg-encre text-papier antialiased`}
       >
+        {/*
+          Sans ça, un rechargement restaure la position de scroll précédente
+          (comportement par défaut du navigateur, `history.scrollRestoration`
+          vaut "auto") : la page semble démarrer en plein milieu du contenu
+          noir au lieu du haut. Script synchrone, avant tout le reste du
+          <body>, pour couper court avant la première peinture.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "if('scrollRestoration' in history){history.scrollRestoration='manual';}window.scrollTo(0,0);",
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

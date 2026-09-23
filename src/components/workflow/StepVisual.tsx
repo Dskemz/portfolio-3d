@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import type { WorkflowNode, WorkflowPoint } from "@/content/workflowData";
 import GlbViewer from "./GlbViewer";
 
-/** Durée de l'état 1 (croquis + points) avant bascule vers le rendu baked. */
-const STATE1_HOLD_MS = 3800;
 /** Durée du morph baked ⇄ GLB. */
 const MORPH_S = 0.8;
 
@@ -21,38 +19,37 @@ const getIsTouch = () => window.matchMedia("(hover: none)").matches;
 const getIsTouchServer = () => false;
 
 /**
- * Volet droit d'une fiche étape : croquis annoté → rendu baked figé → modèle
- * GLB interactif au survol (desktop) ou au tap (mobile).
+ * Volet visuel d'une fiche étape : croquis annoté (plein cadre) → rendu baked
+ * figé (colonne droite, une fois dédoublé) → modèle GLB interactif au survol
+ * (desktop) ou au tap (mobile). `phase` est piloté par WorkflowCard, qui
+ * orchestre aussi le dédoublement de la mise en page en même temps.
  */
-export default function StepVisual({ node, active }: { node: WorkflowNode; active: boolean }) {
-  const [phase, setPhase] = useState<"sketch" | "baked">("sketch");
+export default function StepVisual({
+  node,
+  active,
+  phase,
+}: {
+  node: WorkflowNode;
+  active: boolean;
+  phase: "sketch" | "baked";
+}) {
   const [spatial, setSpatial] = useState(false);
   const [glbReady, setGlbReady] = useState(false);
   const isTouch = useSyncExternalStore(subscribeHover, getIsTouch, getIsTouchServer);
 
-  // Fiche qui quitte le flux (scroll arrière) : reset immédiat à l'état 1,
-  // ajusté pendant le rendu plutôt que dans un effet (pas de setState après coup).
-  const [trackedActive, setTrackedActive] = useState(active);
-  if (active !== trackedActive) {
-    setTrackedActive(active);
-    if (!active) {
-      setPhase("sketch");
-      setSpatial(false);
-    }
+  // Sortie de l'état 3 (survol/tap relâché, ou retour à l'état croquis) :
+  // reset ajusté pendant le rendu plutôt que dans un effet.
+  const [trackedPhase, setTrackedPhase] = useState(phase);
+  if (phase !== trackedPhase) {
+    setTrackedPhase(phase);
+    if (phase !== "baked") setSpatial(false);
   }
 
-  // Sortie de l'état 3 (survol/tap relâché) : même logique, ajustée au rendu.
   const [trackedSpatial, setTrackedSpatial] = useState(spatial);
   if (spatial !== trackedSpatial) {
     setTrackedSpatial(spatial);
     if (!spatial) setGlbReady(false);
   }
-
-  useEffect(() => {
-    if (!active) return;
-    const timer = window.setTimeout(() => setPhase("baked"), STATE1_HOLD_MS);
-    return () => window.clearTimeout(timer);
-  }, [active, node.id]);
 
   const canSpatialize = phase === "baked";
 

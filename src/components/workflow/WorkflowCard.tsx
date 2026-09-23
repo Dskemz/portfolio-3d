@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   getNodeAnchorId,
   getNodeCardId,
@@ -29,6 +29,12 @@ const METAL =
   "linear-gradient(150deg, #171717 0%, #121212 44%, #0d0d0d 74%, #151515 100%)";
 const PERIMETER_S = 0.6;
 
+/** Durée de l'état 1 (croquis seul, plein cadre) avant le dédoublement. */
+const STATE1_MS = 3800;
+/** Durée de l'animation de dédoublement (le croquis se réduit vers la colonne droite). */
+const SPLIT_MS = 700;
+const SPLIT_S = SPLIT_MS / 1000;
+
 function WorkflowCard({
   node,
   lit,
@@ -44,6 +50,34 @@ function WorkflowCard({
 
   const frameRef = useRef<HTMLElement>(null);
   const [box, setBox] = useState({ w: 0, h: 0 });
+
+  /**
+   * Dédoublement en 2 temps : la mise en page (pleine largeur → 2 colonnes)
+   * démarre à STATE1_MS, le contenu (croquis → baked) ne bascule qu'une fois
+   * l'animation de mise en page terminée, à STATE1_MS + SPLIT_MS. En mode
+   * `plain` (statique), tout est déjà en place, pas de minuterie.
+   */
+  const [layoutPhase, setLayoutPhase] = useState<"full" | "half">(plain ? "half" : "full");
+  const [contentPhase, setContentPhase] = useState<"sketch" | "baked">(plain ? "baked" : "sketch");
+
+  const [trackedVisible, setTrackedVisible] = useState(visible);
+  if (!plain && visible !== trackedVisible) {
+    setTrackedVisible(visible);
+    if (!visible) {
+      setLayoutPhase("full");
+      setContentPhase("sketch");
+    }
+  }
+
+  useEffect(() => {
+    if (plain || !visible) return;
+    const t1 = window.setTimeout(() => setLayoutPhase("half"), STATE1_MS);
+    const t2 = window.setTimeout(() => setContentPhase("baked"), STATE1_MS + SPLIT_MS);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
+  }, [plain, visible, node.id]);
 
   useEffect(() => {
     if (plain) return;
@@ -110,6 +144,12 @@ function WorkflowCard({
         {node.title}
       </h2>
 
+      {node.points && node.points.length > 0 && (
+        <p className="mt-[clamp(0.35rem,1svh,0.6rem)] font-mono text-[9px] uppercase tracking-[0.2em] text-zinc-500">
+          {node.points.map((point) => point.label).join(" · ")}
+        </p>
+      )}
+
       {node.quote && (
         <p className="mt-[clamp(0.5rem,1.5svh,1rem)] font-body text-[clamp(0.68rem,1.05svh,0.72rem)] italic leading-relaxed text-zinc-500">
           «&nbsp;{node.quote.text}&nbsp;»
@@ -160,11 +200,31 @@ function WorkflowCard({
       <div className="mx-auto mt-[clamp(0.9rem,2.9svh,2rem)] max-w-2xl">{editorial}</div>
     </div>
   ) : (
-    <div className="grid grid-cols-1 md:grid-cols-2">
-      {editorial}
-      <div className="relative border-t border-white/[0.08] md:border-l md:border-t-0">
-        <StepVisual node={node} active={visible} />
-      </div>
+    <div className="relative grid grid-cols-1 md:grid-cols-2">
+      <AnimatePresence initial={false}>
+        {contentPhase === "baked" && (
+          <motion.div
+            key="editorial"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {editorial}
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <motion.div
+        layout
+        transition={{ duration: SPLIT_S, ease: [0.22, 1, 0.36, 1] }}
+        className={`relative border-t border-white/[0.08] ${
+          layoutPhase === "full"
+            ? "md:col-span-2"
+            : "md:border-l md:border-t-0"
+        }`}
+      >
+        <StepVisual node={node} active={visible} phase={contentPhase} />
+      </motion.div>
     </div>
   );
 
@@ -192,7 +252,7 @@ function WorkflowCard({
           <>
             {editorial}
             <div className="border-t border-white/[0.08]">
-              <StepVisual node={node} active={visible} />
+              <StepVisual node={node} active={visible} phase="baked" />
             </div>
           </>
         )}
