@@ -306,6 +306,26 @@ export default function SkillFlow() {
     window.scrollTo(0, 0);
   }, []);
 
+  /**
+   * Retour arrière restauré depuis le bfcache (le navigateur reprend un
+   * instantané JS figé au lieu de recharger) : ni le script de layout.tsx ni
+   * les effets de montage ne se rejouent, donc le scroll ET l'état "carte
+   * déjà allumée" restent ceux d'avant qu'on quitte la page. `pageshow` avec
+   * `persisted: true` est le seul signal fiable pour ce cas précis — on
+   * revient en haut et on réveille `compute()` (plus bas) via un événement
+   * "scroll" de sorte qu'il retrouve son branchement `scrollY < 10`, qui
+   * remet déjà tout à zéro (litIds, stepRef…).
+   */
+  useEffect(() => {
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (!event.persisted) return;
+      window.scrollTo(0, 0);
+      window.dispatchEvent(new Event("scroll"));
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
+
   useLayoutEffect(() => {
     const detect = () => {
       const next: Mode = window.innerWidth < BREAKPOINT ? "mobile" : "desktop";

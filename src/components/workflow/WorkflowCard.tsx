@@ -2,13 +2,14 @@
 
 import { memo, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   getNodeAnchorId,
   getNodeCardId,
   getNodeExitId,
   type WorkflowNode,
 } from "@/content/workflowData";
+import CroquisReveal from "./CroquisReveal";
 import StepVisual from "./StepVisual";
 
 interface WorkflowCardProps {
@@ -29,11 +30,12 @@ const METAL =
   "linear-gradient(150deg, #171717 0%, #121212 44%, #0d0d0d 74%, #151515 100%)";
 const PERIMETER_S = 0.6;
 
-/** Durée de l'état 1 (croquis seul, plein cadre) avant le dédoublement. */
+/** Durée de l'état 1 (croquis seul, plein cadre) avant qu'il ne s'efface. */
 const STATE1_MS = 3800;
-/** Durée de l'animation de dédoublement (le croquis se réduit vers la colonne droite). */
-const SPLIT_MS = 700;
-const SPLIT_S = SPLIT_MS / 1000;
+/** Durée du fondu de sortie du croquis (état 1.5). */
+const CROQUIS_FADE_S = 0.4;
+/** Durée de l'arrivée en glissade des 2 colonnes (état 2), une fois le croquis effacé. */
+const COLUMNS_SLIDE_S = 0.8;
 
 function WorkflowCard({
   node,
@@ -52,31 +54,29 @@ function WorkflowCard({
   const [box, setBox] = useState({ w: 0, h: 0 });
 
   /**
-   * Dédoublement en 2 temps : la mise en page (pleine largeur → 2 colonnes)
-   * démarre à STATE1_MS, le contenu (croquis → baked) ne bascule qu'une fois
-   * l'animation de mise en page terminée, à STATE1_MS + SPLIT_MS. En mode
-   * `plain` (statique), tout est déjà en place, pas de minuterie.
+   * Dédoublement en 3 temps, chacun déclenché par la fin du précédent (pas
+   * par des minuteries indépendantes) :
+   *   "sketch"  → croquis seul, plein cadre, points qui pop (STATE1_MS)
+   *   "fading"  → le croquis s'efface (CROQUIS_FADE_S), les 2 colonnes restent
+   *               masquées pendant ce temps
+   *   "columns" → une fois le croquis à opacité 0 (onAnimationComplete), les
+   *               2 colonnes glissent en place depuis les bords
+   * En mode `plain` (statique), tout est déjà en place, pas de minuterie.
    */
-  const [layoutPhase, setLayoutPhase] = useState<"full" | "half">(plain ? "half" : "full");
-  const [contentPhase, setContentPhase] = useState<"sketch" | "baked">(plain ? "baked" : "sketch");
+  const [stage, setStage] = useState<"sketch" | "fading" | "columns">(
+    plain ? "columns" : "sketch"
+  );
 
   const [trackedVisible, setTrackedVisible] = useState(visible);
   if (!plain && visible !== trackedVisible) {
     setTrackedVisible(visible);
-    if (!visible) {
-      setLayoutPhase("full");
-      setContentPhase("sketch");
-    }
+    if (!visible) setStage("sketch");
   }
 
   useEffect(() => {
     if (plain || !visible) return;
-    const t1 = window.setTimeout(() => setLayoutPhase("half"), STATE1_MS);
-    const t2 = window.setTimeout(() => setContentPhase("baked"), STATE1_MS + SPLIT_MS);
-    return () => {
-      window.clearTimeout(t1);
-      window.clearTimeout(t2);
-    };
+    const t1 = window.setTimeout(() => setStage("fading"), STATE1_MS);
+    return () => window.clearTimeout(t1);
   }, [plain, visible, node.id]);
 
   useEffect(() => {
@@ -199,33 +199,34 @@ function WorkflowCard({
       </p>
       <div className="mx-auto mt-[clamp(0.9rem,2.9svh,2rem)] max-w-2xl">{editorial}</div>
     </div>
-  ) : (
-    <div className="relative grid grid-cols-1 md:grid-cols-2">
-      <AnimatePresence initial={false}>
-        {contentPhase === "baked" && (
-          <motion.div
-            key="editorial"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            {editorial}
-          </motion.div>
-        )}
-      </AnimatePresence>
+  ) : stage === "columns" ? (
+    <div className="grid grid-cols-1 md:grid-cols-2">
       <motion.div
-        layout
-        transition={{ duration: SPLIT_S, ease: [0.22, 1, 0.36, 1] }}
-        className={`relative border-t border-white/[0.08] ${
-          layoutPhase === "full"
-            ? "md:col-span-2"
-            : "md:border-l md:border-t-0"
-        }`}
+        initial={{ opacity: 0, x: "-100%" }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: COLUMNS_SLIDE_S, ease: "easeInOut" }}
       >
-        <StepVisual node={node} active={visible} phase={contentPhase} />
+        {editorial}
+      </motion.div>
+      <motion.div
+        className="relative border-t border-white/[0.08] md:border-l md:border-t-0"
+        initial={{ opacity: 0, x: "100%" }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: COLUMNS_SLIDE_S, ease: "easeInOut" }}
+      >
+        <StepVisual node={node} />
       </motion.div>
     </div>
+  ) : (
+    <motion.div
+      animate={{ opacity: stage === "fading" ? 0 : 1 }}
+      transition={{ duration: CROQUIS_FADE_S }}
+      onAnimationComplete={() => {
+        if (stage === "fading") setStage("columns");
+      }}
+    >
+      <CroquisReveal node={node} active={visible} />
+    </motion.div>
   );
 
   if (plain) {
@@ -252,7 +253,7 @@ function WorkflowCard({
           <>
             {editorial}
             <div className="border-t border-white/[0.08]">
-              <StepVisual node={node} active={visible} phase="baked" />
+              <StepVisual node={node} />
             </div>
           </>
         )}

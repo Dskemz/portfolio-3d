@@ -106,6 +106,22 @@ export default function SkillFlowMobile() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Retour arrière restauré depuis le bfcache : le script de layout.tsx et
+   * les effets de montage ne se rejouent pas dans ce cas, donc le scroll ET
+   * l'état "carte déjà allumée" restent ceux d'avant qu'on quitte la page.
+   * Voir la même défense dans SkillFlow.tsx (desktop).
+   */
+  useEffect(() => {
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (!event.persisted) return;
+      window.scrollTo(0, 0);
+      window.dispatchEvent(new Event("scroll"));
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
+
   /* ── Moteur de scroll : 1:1, aucune inertie, réversible ── */
   useEffect(() => {
     let frame = 0;
