@@ -198,12 +198,13 @@ function WorkflowCard({
       <div className="mx-auto mt-[clamp(0.9rem,2.9svh,2rem)] max-w-2xl">{editorial}</div>
     </div>
   ) : (
-    <div className="relative grid grid-cols-1 md:grid-cols-2">
-      {/* Colonne gauche : n'existe pas encore pendant l'état 1, arrive du bas au dédoublement. */}
+    <div className="relative flex flex-col border-t border-white/[0.08] md:flex-row md:items-stretch md:justify-end">
+      {/* Colonne gauche : n'existe pas pendant l'état 1, arrive du bas-gauche au dédoublement. */}
       {stage === "split" && (
         <motion.div
-          initial={{ opacity: 0, y: 64, x: "-6%" }}
-          animate={{ opacity: 1, y: 0, x: 0 }}
+          className="w-full md:min-w-0 md:flex-1"
+          initial={{ opacity: 0, x: "-100%", y: "100%" }}
+          animate={{ opacity: 1, x: 0, y: 0 }}
           transition={{ duration: SPLIT_S, ease: "easeInOut" }}
         >
           {editorial}
@@ -211,26 +212,30 @@ function WorkflowCard({
       )}
 
       {/*
-        Colonne droite : LE MÊME panneau tout du long — plein cadre centré en
-        état 1 (`md:col-span-2`), puis glisse vers la colonne droite quand
-        `stage` bascule. `layout` fait interpoler le changement de largeur
-        (FLIP), en même temps que le contenu (croquis → rendu) se croise.
+        Colonne droite RÉFÉRENTE : croquis → rendu, carrée, dimensions et
+        position figées du début à la fin (aucun `layout`/resize) — seul le
+        contenu interne se croise (crossfade). Tout le reste de la mise en
+        page s'articule autour d'elle, jamais l'inverse.
       */}
-      <motion.div
-        layout
-        transition={{ duration: SPLIT_S, ease: [0.22, 1, 0.36, 1] }}
-        className={`relative border-t border-white/[0.08] ${
-          stage === "sketch" ? "md:col-span-2" : "md:border-l md:border-t-0"
+      <div
+        className={`relative mx-auto aspect-square w-full max-w-[300px] shrink-0 md:mx-0 md:max-w-none md:w-[clamp(18rem,46svh,34rem)] ${
+          stage === "split" ? "md:border-l md:border-white/[0.08]" : ""
         }`}
       >
         <AnimatePresence initial={false}>
           {stage === "sketch" ? (
-            <motion.div key="croquis" exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+            <motion.div
+              key="croquis"
+              className="absolute inset-0"
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
               <CroquisReveal node={node} active={visible} />
             </motion.div>
           ) : (
             <motion.div
               key="visual"
+              className="absolute inset-0"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -239,7 +244,7 @@ function WorkflowCard({
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </div>
     </div>
   );
 
