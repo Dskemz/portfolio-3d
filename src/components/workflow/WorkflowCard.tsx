@@ -9,7 +9,7 @@ import {
   getNodeExitId,
   type WorkflowNode,
 } from "@/content/workflowData";
-import BlueprintPanel from "./BlueprintPanel";
+import StepVisual from "./StepVisual";
 
 interface WorkflowCardProps {
   node: WorkflowNode;
@@ -37,7 +37,6 @@ function WorkflowCard({
   plain = false,
   stepped = false,
 }: WorkflowCardProps) {
-  const isBis = node.kind === "secondaire";
   const isTerminal = node.kind === "terminal";
   
   // Pour la carte terminale, on s'assure qu'elle ne s'active que si 'lit' est explicitement vrai
@@ -95,13 +94,8 @@ function WorkflowCard({
   );
 
   const editorial = (
-    <div
-      className={`flex flex-col justify-center ${
-        isBis
-          ? "px-[clamp(1rem,3svh,1.75rem)] py-[clamp(1.1rem,3.3svh,2rem)]"
-          : "px-[clamp(1.25rem,3.6svh,2.5rem)] py-[clamp(1.35rem,4.4svh,3rem)]"
-      }`}
-    >
+    <div className="flex flex-col justify-center px-[clamp(1.25rem,3.6svh,2.5rem)] py-[clamp(1.35rem,4.4svh,3rem)]">
+
       <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-[#FF7F50]">
         Étape {node.step}
       </p>
@@ -110,9 +104,7 @@ function WorkflowCard({
         className={`mt-[clamp(0.5rem,1.5svh,1rem)] font-display font-light leading-tight text-white ${
           isTerminal
             ? "text-[clamp(1.4rem,3.4svh,2.6rem)]"
-            : isBis
-              ? "text-[clamp(1rem,1.95svh,1.25rem)]"
-              : "text-[clamp(1.25rem,2.7svh,1.875rem)]"
+            : "text-[clamp(1.25rem,2.7svh,1.875rem)]"
         }`}
       >
         {node.title}
@@ -128,13 +120,7 @@ function WorkflowCard({
 
       <div className="my-[clamp(0.7rem,2.2svh,1.5rem)] h-px w-full bg-white/[0.09]" />
 
-      <p
-        className={`leading-relaxed text-zinc-400 ${
-          isBis
-            ? "text-[clamp(0.75rem,1.25svh,0.84rem)]"
-            : "text-[clamp(0.8rem,1.35svh,0.95rem)]"
-        }`}
-      >
+      <p className="text-[clamp(0.8rem,1.35svh,0.95rem)] leading-relaxed text-zinc-400">
         {node.description}
       </p>
 
@@ -166,9 +152,7 @@ function WorkflowCard({
     </div>
   );
 
-  const body = isBis ? (
-    editorial
-  ) : isTerminal ? (
+  const body = isTerminal ? (
     <div className="px-[clamp(1.25rem,3.6svh,3.5rem)] py-[clamp(1.5rem,4.4svh,4rem)] text-center">
       <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-zinc-500">
         Fin de parcours
@@ -179,7 +163,7 @@ function WorkflowCard({
     <div className="grid grid-cols-1 md:grid-cols-2">
       {editorial}
       <div className="relative border-t border-white/[0.08] md:border-l md:border-t-0">
-        <BlueprintPanel node={node} />
+        <StepVisual node={node} active={visible} />
       </div>
     </div>
   );
@@ -202,13 +186,13 @@ function WorkflowCard({
             background: "linear-gradient(90deg, transparent, #FF7F50 50%, transparent)",
           }}
         />
-        {isBis || isTerminal ? (
+        {isTerminal ? (
           editorial
         ) : (
           <>
             {editorial}
             <div className="border-t border-white/[0.08]">
-              <BlueprintPanel node={node} />
+              <StepVisual node={node} active={visible} />
             </div>
           </>
         )}

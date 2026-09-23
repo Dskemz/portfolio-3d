@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@babylonjs/core": "^7.54.3",
+    "@babylonjs/loaders": "^7.54.3",
     "@hookform/resolvers": "^5.4.0",
     "framer-motion": "^12.42.2",
     "gsap": "^3.15.0",

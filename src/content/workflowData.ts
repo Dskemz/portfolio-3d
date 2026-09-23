@@ -1,28 +1,34 @@
 /**
  * workflowData.ts
- * Flux narratif « SkillFlow », circuit unique, 7 étapes.
+ * Flux narratif « SkillFlow », circuit unique et linéaire, 4 étapes.
  *
- * Les étapes principales et secondaires s'inscrivent À LA SUITE sur le
- * MÊME circuit : le flux descend l'axe, traverse une étape principale,
- * part à angle droit vers l'étape secondaire, revient sur l'axe, et ainsi
- * de suite jusqu'à la fiche finale où il s'arrête net.
+ * Une seule colonne centrale, aucune fiche décalée : le flux descend l'axe
+ * tout droit d'étape en étape jusqu'à la fiche finale où il s'arrête net.
  *
- *   01       · Modélisation 3D            principale
- *   01 - Bis · Modélisation optimisée     secondaire
- *   02       · Textures et shaders        principale
- *   02 - Bis · UV's et matériaux PBR      secondaire
- *   03       · Lighting et rendu          principale
- *   03 - Bis · Visite virtuelle           secondaire
- *   04       · Démarrer votre projet      terminal
+ *   01 · Modélisation 3D
+ *   02 · Textures et shaders
+ *   03 · Lighting et rendu
+ *   04 · Démarrer votre projet   (terminal)
  *
- * Les « Bis » signalent la variante temps réel de l'étape principale qui précède.
+ * Chaque étape porte trois états visuels (voir StepVisual.tsx) :
+ *   1. croquis + points d'intérêt annotés (au scroll)
+ *   2. rendu baked figé + citation + CTA
+ *   3. modèle GLB interactif (survol desktop / tap mobile)
  */
 
-export type NodeKind = "principale" | "secondaire" | "terminal";
+export type NodeKind = "step" | "terminal";
 
 export interface WorkflowQuote {
   text: string;
   author: string;
+}
+
+/** Point d'intérêt annoté sur le croquis, en coordonnées du viewBox (0 0 320 240). */
+export interface WorkflowPoint {
+  id: string;
+  x: number;
+  y: number;
+  label: string;
 }
 
 export interface WorkflowNode {
@@ -38,10 +44,15 @@ export interface WorkflowNode {
   href?: string;
   hrefLabel?: string;
 
-  /** Visuel du volet droit. Absent ⇒ blueprint généré. */
-  media?: string;
-  /** Variante du blueprint généré (0–3) */
+  /** Variante du croquis vectoriel généré (0–3) */
   blueprint?: 0 | 1 | 2 | 3;
+  /** Points d'intérêt annotés sur le croquis (état 1) */
+  points?: WorkflowPoint[];
+
+  /** Rendu 3D figé (état 2). Absent ⇒ placeholder généré à partir du croquis. */
+  bakedImage?: string;
+  /** Modèle glTF/GLB (état 3, survol/tap). Absent ⇒ mesh placeholder animé. */
+  glbUrl?: string;
 }
 
 /** Ancre d'amorçage : le point lumineux en bas de l'accueil */
@@ -67,7 +78,7 @@ export const INTRO = {
 export const WORKFLOW_NODES: WorkflowNode[] = [
   {
     id: "modelisation",
-    kind: "principale",
+    kind: "step",
     step: "01",
     title: "Modélisation 3D",
     quote: {
@@ -76,28 +87,20 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     },
     description:
       "Que vous ayez besoin d'immersion interactive, d'image fixe ou de pièce physique, j'assure la structure 3D pour vous livrer des fichiers propres, stables et prêts à l'emploi. Vous avez l'idée, je m'assure qu'elle s'intègre partout.",
-    tags: ["Échelle réelle", "Quads", "Sur-mesure"],
+    tags: ["Échelle réelle", "Quads", "glTF 2.0", "Sur-mesure"],
     href: "/portfolio/tous",
     hrefLabel: "Voir les projets",
     blueprint: 0,
-  },
-  {
-    id: "glb",
-    kind: "secondaire",
-    step: "01 - Bis",
-    title: "Modélisation optimisée",
-    quote: {
-      text: "La simplicité est la sophistication suprême.",
-      author: "Léonard de Vinci",
-    },
-    description:
-      "Pour garantir une fluidité, un affichage défini et une animation sans artefact, le modèle 3D abandonne la lourdeur des fichiers bruts ou sculptés. En éliminant les N-Gon au profit d'une topologie régulière, le maillage devient un support léger, propre et définitivement prêt à l'emploi.",
-    tags: ["glTF 2.0", "gltf-transform", "Babylon.js"],
-    blueprint: 2,
+    points: [
+      { id: "maillage", x: 157, y: 60, label: "Maillage" },
+      { id: "proportions", x: 110, y: 130, label: "Proportions" },
+      { id: "symetrie", x: 157, y: 96, label: "Symétrie" },
+      { id: "details", x: 128, y: 190, label: "Détails" },
+    ],
   },
   {
     id: "textures-shaders",
-    kind: "principale",
+    kind: "step",
     step: "02",
     title: "Textures et shaders",
     quote: {
@@ -105,23 +108,19 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
       author: "Antoine de Saint-Exupéry",
     },
     description:
-      "Construction des matières : réponse à la lumière, micro-relief, transparence. Les shaders sont écrits pour tenir aussi bien dans un rendu hors ligne que dans un moteur temps réel, sans réécriture d'un support à l'autre.",
-    tags: ["PBR", "KTX2", "Atlas"],
-    blueprint: 1,
-  },
-  {
-    id: "uv-pbr",
-    kind: "secondaire",
-    step: "02 - Bis",
-    title: "UV's et matériaux PBR",
-    description:
-      "Dépliage sans recouvrement, densité de texels homogène, marges maîtrisées. Les cartes albédo, rugosité, métallicité et normales sont calibrées pour rester lisibles à toutes les distances de caméra.",
-    tags: ["UV propres", "Texel density", "4K"],
+      "Construction des matières : réponse à la lumière, micro-relief, transparence. Dépliage UV sans recouvrement et densité de texels homogène, pour des shaders qui tiennent aussi bien dans un rendu hors ligne que dans un moteur temps réel, sans réécriture d'un support à l'autre.",
+    tags: ["PBR", "Texel density", "4K"],
     blueprint: 2,
+    points: [
+      { id: "albedo", x: 160, y: 74, label: "Albédo" },
+      { id: "rugosite", x: 100, y: 106, label: "Rugosité" },
+      { id: "normales", x: 220, y: 106, label: "Normales" },
+      { id: "uv", x: 160, y: 118, label: "UV" },
+    ],
   },
   {
     id: "lighting-rendu",
-    kind: "principale",
+    kind: "step",
     step: "03",
     title: "Lighting et rendu",
     quote: {
@@ -129,21 +128,17 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
       author: "d'après Nicolas Boileau",
     },
     description:
-      "Mise en lumière de la scène, du path tracing hors ligne au budget d'images à la milliseconde dans le navigateur. Éclairage indirect, ombres dynamiques, ambiance : la même scène sert l'image fixe et le temps réel.",
+      "Mise en lumière de la scène, du path tracing hors ligne au budget d'images à la milliseconde dans le navigateur. Éclairage indirect, ombres dynamiques, ambiance : la même scène sert l'image fixe et la visite virtuelle temps réel, navigable et intégrable en iframe.",
     tags: ["HDRI", "Denoise", "Babylon.js"],
-    blueprint: 3,
-  },
-  {
-    id: "visite-virtuelle",
-    kind: "secondaire",
-    step: "03 - Bis",
-    title: "Visite virtuelle",
-    description:
-      "La scène devient navigable : points d'intérêt, trajectoires de caméra, ambiances. Livrée en lien partageable, intégrable en iframe, et pilotable par le client sans une ligne de code.",
-    tags: ["Iframe", "No-code", "< 2 s"],
     href: "/visite-virtuelle",
     hrefLabel: "Essayer la visite",
     blueprint: 3,
+    points: [
+      { id: "hdri", x: 98, y: 89, label: "HDRI" },
+      { id: "ombres", x: 150, y: 118, label: "Ombres" },
+      { id: "reflexions", x: 210, y: 112, label: "Réflexions" },
+      { id: "exposition", x: 160, y: 78, label: "Exposition" },
+    ],
   },
   {
     id: "contact-terminal",

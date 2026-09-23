@@ -22,21 +22,8 @@ import {
 } from "./stepping";
 
 const BREAKPOINT = 1024;
-/** Descente maximale avant le coude à 90°. Réduite au besoin par segment (voir build). */
-const DROP = 88;
-/** Descente minimale : garantit que le tracé ne remonte jamais sur lui-même. */
-const MIN_DROP = 2;
-/** Rayon des coudes du circuit, en px. Clampé par segment dans emitPolyline. */
+/** Rayon des coudes du circuit, en px (défensif : le tracé est désormais toujours vertical). */
 const CORNER_R = 11;
-
-/**
- * Fiches secondaires décalées à GAUCHE de l'axe (les autres restent à droite).
- * Alternance voulue : 01 centre · 02 droite · 03 centre · 04 gauche ·
- * 05 centre · 06 droite · 07 centre.
- * Le circuit est reconstruit à partir des pastilles mesurées dans le DOM :
- * le fil orange suit donc automatiquement le nouveau côté, à angles droits.
- */
-const LEFT_SIDE_IDS = new Set<string>(["uv-pbr"]);
 
 /**
  * Largeur des fiches. Sur un viewport court (1080p, portable), on ÉLARGIT :
@@ -44,12 +31,10 @@ const LEFT_SIDE_IDS = new Set<string>(["uv-pbr"]);
  * haute, donc plus d'air autour d'elle une fois centrée. Sur un grand écran,
  * les valeurs d'origine sont conservées telles quelles.
  *
- * Ces chaînes doivent rester littérales : Tailwind scanne le source brut.
+ * Cette chaîne doit rester littérale : Tailwind scanne le source brut.
  */
 const W_PRINCIPALE =
   "mx-auto w-[54%] [@media(max-height:900px)]:w-[61%] [@media(max-height:760px)]:w-[68%]";
-const W_SECONDAIRE =
-  "w-[32%] [@media(max-height:900px)]:w-[35%] [@media(max-height:760px)]:w-[39%]";
 
 /* ─────────── Mode cranté (« QTE ») ─────────── */
 
@@ -197,23 +182,6 @@ function build(origin: Point, geo: Record<string, Geometry>): Built {
     if (!g) return EMPTY;
 
     if (i > 0 && pendingExit) {
-      const gap = g.entry.y - pendingExit.y;
-
-      if (Math.abs(pendingExit.x - g.entry.x) > 0.5) {
-        /**
-         * Le décrochage latéral se fait à mi-chemin, jamais plus bas.
-         * Avant, la descente valait DROP des deux côtés : dès que l'écart
-         * vertical entre deux fiches passait sous 2 × DROP, le point haut du
-         * raccord se retrouvait AU-DESSUS du point bas et le tracé remontait
-         * sur lui-même (la « boucle »). Le plafond à gap / 2 rend ce cas
-         * impossible quelle que soit la hauteur de viewport.
-         */
-        const drop = Math.max(MIN_DROP, Math.min(DROP, gap / 2));
-        const jogY = pendingExit.y + drop;
-        points.push({ x: pendingExit.x, y: jogY });
-        points.push({ x: g.entry.x, y: jogY });
-      }
-
       points.push({ x: g.entry.x, y: g.entry.y });
     }
 
@@ -935,7 +903,6 @@ export default function SkillFlow() {
       >
         <div className="relative z-10 mx-auto flex w-full max-w-[84rem] flex-col">
           {WORKFLOW_NODES.map((node, index) => {
-            const isSecondary = node.kind === "secondaire";
             /*
               Tailwind est mobile-first : `md:` = min-width 768px, SANS borne haute.
               Les variantes `md:mt-[20vh] / md:mt-[28vh]` censées viser la tablette
@@ -944,20 +911,11 @@ export default function SkillFlow() {
               c'est SkillFlowMobile qui rend, ce composant ne voit jamais 768–1023px.
               Une seule valeur, celle du desktop.
             */
-            const spacing = index === 0
-              ? "mt-[16vh]"
-              : isSecondary
-                ? "mt-[34vh]"
-                : "mt-[44vh]";
-            const width = isSecondary
-              ? LEFT_SIDE_IDS.has(node.id)
-                ? `mr-auto ${W_SECONDAIRE}`
-                : `ml-auto ${W_SECONDAIRE}`
-              : W_PRINCIPALE;
+            const spacing = index === 0 ? "mt-[16vh]" : "mt-[44vh]";
 
             return (
               <div key={node.id} className={spacing}>
-                <div className={width}>
+                <div className={W_PRINCIPALE}>
                   <WorkflowCard
                     node={node}
                     lit={litSet.has(node.id)}
