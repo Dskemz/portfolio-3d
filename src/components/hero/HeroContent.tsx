@@ -25,7 +25,7 @@ export default function HeroContent({
     <div className="flex flex-col justify-start">
       {/* Eyebrow, marque */}
       <p className="font-mono text-xs tracking-widest text-bleu-encre-clair">
-        GRAPHITE 3D
+        M3D STUDIO
       </p>
 
       {/* H1, titre principal avec identité */}

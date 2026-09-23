@@ -26,7 +26,7 @@ export default function Footer() {
               M3D Studio
             </p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-trait">
-              Artiste 3D généraliste, visites virtuelles 3D immersives performantes et retail.
+              Studio de création 3D. Solutions universelles avec moteur graphique N3D : PRISM (visite 3D automatisée), N3D Studio (capture/export), N3D Générateur (variantes produits).
             </p>
           </div>
 

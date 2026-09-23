@@ -5,14 +5,14 @@ import VisiteEmbed from "@/components/visite/VisiteEmbed";
 import FluxServices from "@/components/visite/FluxServices";
 
 export const metadata: Metadata = {
-  title: "Visite virtuelle interactive dans le navigateur | Graphite 3D",
+  title: "PRISM — Écosystème de visite 3D automatisée | M3D Studio",
   description:
-    "Visualisation temps réel et navigation légère et intuitive, sans installation. Solution clé en main pour transformer vos propriétés en expériences automatisées, sur mesure et immersives.",
+    "M3D Studio. PRISM : découvrez notre solution complète pour les visites 3D automatisées. Du plan 2D à l'expérience 3D interactive avec hub de gestion centralisé et éditeur intelligent.",
   alternates: { canonical: "/visite-virtuelle" },
   openGraph: {
-    title: "Visite virtuelle interactive dans le navigateur | Graphite 3D",
+    title: "PRISM — Écosystème de visite 3D automatisée | M3D Studio",
     description:
-      "Solution clé en main de visite virtuelle 3D : temps réel, navigation légère et intuitive pour transformer vos propriétés en expériences immersives.",
+      "PRISM : solution complète pour les visites 3D automatisées. Hub de gestion, éditeur intelligent, export HD photo/vidéo. Découvrez M3D Studio.",
     url: "/visite-virtuelle",
     type: "website",
   },
@@ -26,27 +26,21 @@ export default function VisiteVirtuelle() {
         <div className="mx-auto w-full max-w-3xl px-6 text-center md:px-10">
           <Reveal>
             <h1 className="font-display text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-[1.08] tracking-tight text-papier">
-              Une{" "}
+              PRISM{" "}
               <span className="text-[#FF7F50]">
-                visite virtuelle interactive
-              </span>{" "}
-              dans le navigateur
+                Écosystème de visite 3D automatisée
+              </span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-papier/75">
-              Visualisation en{" "}
-              <strong className="font-semibold text-papier">temps réel</strong>{" "}
-              et navigation{" "}
-              <strong className="font-semibold text-papier">légère</strong> et{" "}
-              <strong className="font-semibold text-papier">intuitive</strong>{" "}
-              sans installation. Découvrez cette solution clé en main pour
-              transformer vos propriétés en{" "}
-              <strong className="font-semibold text-papier">
-                expériences automatisées
-              </strong>
-              ,{" "}
-              <strong className="font-semibold text-papier">sur mesures</strong>{" "}
-              et{" "}
-              <strong className="font-semibold text-papier">immersives</strong>.
+              Découvrez notre{" "}
+              <strong className="font-semibold text-papier">solution complète</strong> :
+              du plan 2D à l'expérience 3D interactive.{" "}
+              <strong className="font-semibold text-papier">Hub de gestion</strong>{" "}
+              centralisé pour vos clients,{" "}
+              <strong className="font-semibold text-papier">éditeur intelligent</strong>{" "}
+              avec configuration en temps réel, et{" "}
+              <strong className="font-semibold text-papier">export HD</strong>{" "}
+              photo/vidéo automatisé.
             </p>
           </Reveal>
         </div>
@@ -69,17 +63,16 @@ export default function VisiteVirtuelle() {
         <div className="mx-auto w-full max-w-3xl px-6 text-center md:px-10">
           <Reveal>
             <h2 className="font-display text-[clamp(1.8rem,4vw,2.8rem)] font-semibold tracking-tight text-papier">
-              Prêt à transformer votre bien en expérience virtuelle ?
+              Découvrir PRISM
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-papier/75">
-              Envoyez-moi le plan ou les photos : je vous conseille sur
-              l&apos;impact d&apos;une visite 3D et les délais de mise en place.
+              Explorez l'écosystème complet de visite 3D automatisée et découvrez comment PRISM peut transformer vos besoins en solutions universelles.
             </p>
             <Link
-              href="/contact"
+              href="/services"
               className="mt-9 inline-block bg-[#FF7F50] px-6 py-3 font-display text-sm font-medium tracking-wide text-black transition-colors hover:bg-[#E67E22]"
             >
-              Demander une démonstration
+              Découvrir PRISM
             </Link>
           </Reveal>
         </div>

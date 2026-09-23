@@ -40,7 +40,7 @@ const ATOUTS: readonly Atout[] = [
 ] as const;
 
 /**
- * Section « Technologie Graphite 3D ».
+ * Section « Technologie M3D Studio ».
  *
  * Porte la démonstration ET le discours produit. Un seul viewer sur la page :
  * le dupliquer coûterait un second téléchargement de modèle pour rien.
@@ -59,7 +59,7 @@ export default function Technologie({
       <div className="mx-auto w-full max-w-5xl px-6 md:px-10">
         <Reveal className="mx-auto max-w-2xl text-center">
           <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-bleu-encre-clair">
-            Technologie Graphite 3D
+            Technologie M3D Studio
           </p>
           <h2
             id="technologie-titre"

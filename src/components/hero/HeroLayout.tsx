@@ -15,7 +15,7 @@ const ModelViewer = dynamic(() => import("./ModelViewer"), {
  */
 export default function HeroLayout({
   modelUrl,
-  modelAlt = "Visite virtuelle 3D interactive, démonstration Graphite 3D",
+  modelAlt = "Visite virtuelle 3D interactive, démonstration M3D Studio",
   className = "",
 }: HeroLayoutProps) {
   return (
