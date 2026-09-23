@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   getNodeAnchorId,
   getNodeCardId,
@@ -56,26 +56,34 @@ function WorkflowCard({
   const [box, setBox] = useState({ w: 0, h: 0 });
 
   /**
-   * Dédoublement en 2 temps :
-   *   "sketch" → croquis seul, plein cadre, points qui pop (STATE1_MS)
-   *   "split"  → bascule synchronisée (SPLIT_S) : la colonne droite (croquis
-   *              → rendu) glisse du centre vers la droite PENDANT que la
-   *              colonne gauche (texte) arrive du bas, en parallèle.
+   * Dédoublement en 3 temps :
+   *   "sketch"  → croquis seul, plein cadre centré, points qui pop (STATE1_MS)
+   *   "sliding" → glisse parallèle (SPLIT_S) : le croquis glisse vers le bas
+   *               EN MÊME TEMPS que le texte arrive du bas-gauche.
+   *   "settled" → figé ; le croquis cède la place au rendu baked/GLB (survol).
    * En mode `plain` (statique), tout est déjà en place, pas de minuterie.
    */
-  const [stage, setStage] = useState<"sketch" | "split">(plain ? "split" : "sketch");
+  const [phase, setPhase] = useState<"sketch" | "sliding" | "settled">(
+    plain ? "settled" : "sketch"
+  );
 
   const [trackedVisible, setTrackedVisible] = useState(visible);
   if (!plain && visible !== trackedVisible) {
     setTrackedVisible(visible);
-    if (!visible) setStage("sketch");
+    if (!visible) setPhase("sketch");
   }
 
   useEffect(() => {
     if (plain || !visible) return;
-    const t1 = window.setTimeout(() => setStage("split"), STATE1_MS);
+    const t1 = window.setTimeout(() => setPhase("sliding"), STATE1_MS);
     return () => window.clearTimeout(t1);
   }, [plain, visible, node.id]);
+
+  useEffect(() => {
+    if (plain || phase !== "sliding") return;
+    const t2 = window.setTimeout(() => setPhase("settled"), SPLIT_S * 1000);
+    return () => window.clearTimeout(t2);
+  }, [plain, phase]);
 
   useEffect(() => {
     if (plain) return;
@@ -197,54 +205,46 @@ function WorkflowCard({
       </p>
       <div className="mx-auto mt-[clamp(0.9rem,2.9svh,2rem)] max-w-2xl">{editorial}</div>
     </div>
-  ) : (
-    <div className="relative flex flex-col border-t border-white/[0.08] md:flex-row md:items-stretch md:justify-end">
-      {/* Colonne gauche : n'existe pas pendant l'état 1, arrive du bas-gauche au dédoublement. */}
-      {stage === "split" && (
-        <motion.div
-          className="w-full md:min-w-0 md:flex-1"
-          initial={{ opacity: 0, x: "-100%", y: "100%" }}
-          animate={{ opacity: 1, x: 0, y: 0 }}
-          transition={{ duration: SPLIT_S, ease: "easeInOut" }}
-        >
-          {editorial}
-        </motion.div>
-      )}
-
-      {/*
-        Colonne droite RÉFÉRENTE : croquis → rendu, carrée, dimensions et
-        position figées du début à la fin (aucun `layout`/resize) — seul le
-        contenu interne se croise (crossfade). Tout le reste de la mise en
-        page s'articule autour d'elle, jamais l'inverse.
-      */}
-      <div
-        className={`relative mx-auto aspect-square w-full max-w-[300px] shrink-0 md:mx-0 md:max-w-none md:w-[clamp(18rem,46svh,34rem)] ${
-          stage === "split" ? "md:border-l md:border-white/[0.08]" : ""
-        }`}
-      >
-        <AnimatePresence initial={false}>
-          {stage === "sketch" ? (
-            <motion.div
-              key="croquis"
-              className="absolute inset-0"
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <CroquisReveal node={node} active={visible} />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="visual"
-              className="absolute inset-0"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <StepVisual node={node} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+  ) : phase === "sketch" ? (
+    // État 1 : croquis seul, carré, centré, plein cadre.
+    <div className="flex w-full justify-center border-t border-white/[0.08] p-[clamp(1rem,2.6svh,1.75rem)]">
+      <div className="aspect-square w-full max-w-[640px]">
+        <CroquisReveal node={node} active={visible} />
       </div>
+    </div>
+  ) : (
+    // États 2-3 : texte à gauche (arrive du bas-gauche) + croquis/rendu à
+    // droite (glisse vers le bas), en parallèle. Une fois "settled", la
+    // colonne droite cède la place au rendu baked/GLB (survol).
+    <div className="flex flex-col gap-10 border-t border-white/[0.08] p-[clamp(1rem,2.6svh,1.75rem)] md:flex-row md:items-start">
+      <motion.div
+        className="w-full md:min-w-0 md:max-w-[500px] md:flex-1"
+        initial={{ opacity: 0, x: "-100%", y: "100%" }}
+        animate={{ opacity: 1, x: 0, y: 0 }}
+        transition={{ duration: SPLIT_S, ease: "easeInOut" }}
+      >
+        {editorial}
+      </motion.div>
+
+      <motion.div
+        className="relative mx-auto aspect-square w-full max-w-[300px] shrink-0 md:mx-0 md:w-[400px] md:max-w-none"
+        initial={{ y: 0 }}
+        animate={{ y: 60 }}
+        transition={{ duration: SPLIT_S, ease: "easeInOut" }}
+      >
+        {phase === "sliding" ? (
+          <CroquisReveal node={node} active={visible} />
+        ) : (
+          <motion.div
+            className="h-full w-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+          >
+            <StepVisual node={node} />
+          </motion.div>
+        )}
+      </motion.div>
     </div>
   );
 

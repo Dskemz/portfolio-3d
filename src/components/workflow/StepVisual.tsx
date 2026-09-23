@@ -77,7 +77,8 @@ export default function StepVisual({ node }: { node: WorkflowNode }) {
             exit={{ opacity: 0 }}
             transition={{ duration: MORPH_S }}
           >
-            <GlbViewer glbUrl={node.glbUrl} active={spatial} realtimeText={node.realtimeText} />
+            {/* Pas d'encart réaltime pour le moment (cf. dernière consigne). */}
+            <GlbViewer glbUrl={node.glbUrl} active={spatial} />
           </motion.div>
         )}
       </AnimatePresence>
