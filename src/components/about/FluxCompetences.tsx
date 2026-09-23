@@ -31,20 +31,16 @@ interface Domaine {
 
 const DOMAINES: readonly Domaine[] = [
   {
-    titre: "Visite\nvirtuelle",
-    description: "Parcourue dans le navigateur, sans installation ni plugin.",
+    titre: "PRISM",
+    description: "Écosystème visite 3D automatisée. Du plan 2D au viewer interactif avec gestion centralisée et branding client.",
   },
   {
-    titre: "Modélisation\n3D",
-    description: "Haute fidélité, pensée pour rester légère sur le web.",
+    titre: "N3D\nMoteur",
+    description: "Infrastructure graphique universelle : viewer, studio, générateur, système de variantes. Config-driven et production-ready.",
   },
   {
-    titre: "Temps réel\nweb",
-    description: "Babylon.js et WebGL, intégrés sur mesure à votre site.",
-  },
-  {
-    titre: "Direction\nartistique",
-    description: "Matières, éclairage, cadrage. La lumière décide.",
+    titre: "N3D Studio",
+    description: "Photo 4K, vidéo, export RTT, exploded views. Transformation de produits bruts en contenus premium.",
   },
 ] as const;
 
