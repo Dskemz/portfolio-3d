@@ -9,7 +9,6 @@ import {
   getNodeExitId,
   type WorkflowNode,
 } from "@/content/workflowData";
-import CroquisReveal from "./CroquisReveal";
 import StepVisual from "./StepVisual";
 
 interface WorkflowCardProps {
@@ -30,15 +29,6 @@ const METAL =
   "linear-gradient(150deg, #171717 0%, #121212 44%, #0d0d0d 74%, #151515 100%)";
 const PERIMETER_S = 0.6;
 
-/** Durée de l'état 1 (croquis seul, plein cadre) avant le dédoublement. */
-const STATE1_MS = 3800;
-/**
- * Durée de l'état 2 : la colonne droite (croquis → rendu) glisse du centre
- * vers la droite EN MÊME TEMPS que la colonne gauche (texte) arrive du bas,
- * toutes deux en 800ms.
- */
-const SPLIT_S = 0.8;
-
 function WorkflowCard({
   node,
   lit,
@@ -54,36 +44,6 @@ function WorkflowCard({
 
   const frameRef = useRef<HTMLElement>(null);
   const [box, setBox] = useState({ w: 0, h: 0 });
-
-  /**
-   * Dédoublement en 3 temps :
-   *   "sketch"  → croquis seul, plein cadre centré, points qui pop (STATE1_MS)
-   *   "sliding" → glisse parallèle (SPLIT_S) : le croquis glisse vers le bas
-   *               EN MÊME TEMPS que le texte arrive du bas-gauche.
-   *   "settled" → figé ; le croquis cède la place au rendu baked/GLB (survol).
-   * En mode `plain` (statique), tout est déjà en place, pas de minuterie.
-   */
-  const [phase, setPhase] = useState<"sketch" | "sliding" | "settled">(
-    plain ? "settled" : "sketch"
-  );
-
-  const [trackedVisible, setTrackedVisible] = useState(visible);
-  if (!plain && visible !== trackedVisible) {
-    setTrackedVisible(visible);
-    if (!visible) setPhase("sketch");
-  }
-
-  useEffect(() => {
-    if (plain || !visible) return;
-    const t1 = window.setTimeout(() => setPhase("sliding"), STATE1_MS);
-    return () => window.clearTimeout(t1);
-  }, [plain, visible, node.id]);
-
-  useEffect(() => {
-    if (plain || phase !== "sliding") return;
-    const t2 = window.setTimeout(() => setPhase("settled"), SPLIT_S * 1000);
-    return () => window.clearTimeout(t2);
-  }, [plain, phase]);
 
   useEffect(() => {
     if (plain) return;
@@ -150,12 +110,6 @@ function WorkflowCard({
         {node.title}
       </h2>
 
-      {node.points && node.points.length > 0 && (
-        <p className="mt-[clamp(0.35rem,1svh,0.6rem)] font-mono text-[9px] uppercase tracking-[0.2em] text-zinc-500">
-          {node.points.map((point) => point.label).join(" · ")}
-        </p>
-      )}
-
       {node.quote && (
         <p className="mt-[clamp(0.5rem,1.5svh,1rem)] font-body text-[clamp(0.68rem,1.05svh,0.72rem)] italic leading-relaxed text-zinc-500">
           «&nbsp;{node.quote.text}&nbsp;»
@@ -205,46 +159,12 @@ function WorkflowCard({
       </p>
       <div className="mx-auto mt-[clamp(0.9rem,2.9svh,2rem)] max-w-2xl">{editorial}</div>
     </div>
-  ) : phase === "sketch" ? (
-    // État 1 : croquis seul, carré, centré, plein cadre.
-    <div className="flex w-full justify-center border-t border-white/[0.08] p-[clamp(1rem,2.6svh,1.75rem)]">
-      <div className="aspect-square w-full max-w-[640px]">
-        <CroquisReveal node={node} active={visible} />
-      </div>
-    </div>
   ) : (
-    // États 2-3 : texte à gauche (arrive du bas-gauche) + croquis/rendu à
-    // droite (glisse vers le bas), en parallèle. Une fois "settled", la
-    // colonne droite cède la place au rendu baked/GLB (survol).
-    <div className="flex flex-col gap-10 border-t border-white/[0.08] p-[clamp(1rem,2.6svh,1.75rem)] md:flex-row md:items-start">
-      <motion.div
-        className="w-full md:min-w-0 md:max-w-[500px] md:flex-1"
-        initial={{ opacity: 0, x: "-100%", y: "100%" }}
-        animate={{ opacity: 1, x: 0, y: 0 }}
-        transition={{ duration: SPLIT_S, ease: "easeInOut" }}
-      >
-        {editorial}
-      </motion.div>
-
-      <motion.div
-        className="relative mx-auto aspect-square w-full max-w-[300px] shrink-0 md:mx-0 md:w-[400px] md:max-w-none"
-        initial={{ y: 0 }}
-        animate={{ y: 60 }}
-        transition={{ duration: SPLIT_S, ease: "easeInOut" }}
-      >
-        {phase === "sliding" ? (
-          <CroquisReveal node={node} active={visible} />
-        ) : (
-          <motion.div
-            className="h-full w-full"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
-          >
-            <StepVisual node={node} />
-          </motion.div>
-        )}
-      </motion.div>
+    <div className="grid grid-cols-1 md:grid-cols-2">
+      {editorial}
+      <div className="relative border-t border-white/[0.08] md:border-l md:border-t-0">
+        <StepVisual node={node} active={visible} />
+      </div>
     </div>
   );
 
@@ -272,7 +192,7 @@ function WorkflowCard({
           <>
             {editorial}
             <div className="border-t border-white/[0.08]">
-              <StepVisual node={node} />
+              <StepVisual node={node} active={visible} />
             </div>
           </>
         )}

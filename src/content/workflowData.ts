@@ -53,8 +53,6 @@ export interface WorkflowNode {
   bakedImage?: string;
   /** Modèle glTF/GLB (état 3, survol/tap). Absent ⇒ mesh placeholder animé. */
   glbUrl?: string;
-  /** Texte de l'encart qui glisse sous le viewer GLB (état 3). */
-  realtimeText?: string;
 }
 
 /** Ancre d'amorçage : le point lumineux en bas de l'accueil */
@@ -99,7 +97,6 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
       { id: "symetrie", x: 157, y: 96, label: "Symétrie" },
       { id: "details", x: 128, y: 190, label: "Détails" },
     ],
-    realtimeText: "Explorez le maillage en temps réel",
   },
   {
     id: "textures-shaders",
@@ -120,7 +117,6 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
       { id: "normales", x: 220, y: 106, label: "Normales" },
       { id: "uv", x: 160, y: 118, label: "UV" },
     ],
-    realtimeText: "Explorez les matières en temps réel",
   },
   {
     id: "lighting-rendu",
@@ -143,7 +139,6 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
       { id: "reflexions", x: 210, y: 112, label: "Réflexions" },
       { id: "exposition", x: 160, y: 78, label: "Exposition" },
     ],
-    realtimeText: "Explorez l'éclairage en temps réel",
   },
   {
     id: "contact-terminal",

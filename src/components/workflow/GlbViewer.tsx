@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import type { Engine, Scene, AbstractMesh } from "@babylonjs/core";
 
 interface GlbViewerProps {
@@ -9,22 +8,18 @@ interface GlbViewerProps {
   glbUrl?: string;
   /** Monte/démonte le moteur Babylon. À couper hors survol/tap pour ne pas garder un contexte WebGL par fiche. */
   active: boolean;
-  /** Texte de l'encart qui glisse depuis le bas une fois le rendu prêt. */
-  realtimeText?: string;
+  onReady?: () => void;
 }
 
 /**
  * Viewer glTF/GLB minimal : caméra orbitale pilotable à la souris/au doigt,
  * autorotation douce, fond transparent. Sans `glbUrl`, affiche un mesh
- * procédural en attendant les vrais fichiers (voir workflowData.ts). Monté
- * uniquement pendant le survol/tap (voir StepVisual), donc `ready` repart
- * toujours de zéro à chaque montage — pas besoin de le réinitialiser.
+ * procédural en attendant les vrais fichiers (voir workflowData.ts).
  */
-export default function GlbViewer({ glbUrl, active, realtimeText }: GlbViewerProps) {
+export default function GlbViewer({ glbUrl, active, onReady }: GlbViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<Engine | null>(null);
   const sceneRef = useRef<Scene | null>(null);
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (!active) return;
@@ -108,7 +103,7 @@ export default function GlbViewer({ glbUrl, active, realtimeText }: GlbViewerPro
       });
 
       engine.runRenderLoop(() => scene.render());
-      setReady(true);
+      onReady?.();
     })();
 
     const onResize = () => engineRef.current?.resize();
@@ -122,30 +117,15 @@ export default function GlbViewer({ glbUrl, active, realtimeText }: GlbViewerPro
       sceneRef.current = null;
       engineRef.current = null;
     };
-  }, [active, glbUrl]);
+  }, [active, glbUrl, onReady]);
 
   if (!active) return null;
 
   return (
-    <>
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 h-full w-full touch-none"
-        aria-label="Modèle 3D interactif"
-      />
-      {realtimeText && (
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center pb-4"
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: ready ? 0 : 40, opacity: ready ? 1 : 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
-        >
-          <span className="border border-white/[0.14] bg-black/60 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.28em] text-white/70 backdrop-blur-sm">
-            {realtimeText}
-          </span>
-        </motion.div>
-      )}
-    </>
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 h-full w-full touch-none"
+      aria-label="Modèle 3D interactif"
+    />
   );
 }
