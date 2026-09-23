@@ -27,15 +27,7 @@ const getIsTouchServer = () => false;
  */
 export default function StepVisual({ node }: { node: WorkflowNode }) {
   const [spatial, setSpatial] = useState(false);
-  const [glbReady, setGlbReady] = useState(false);
   const isTouch = useSyncExternalStore(subscribeHover, getIsTouch, getIsTouchServer);
-
-  // Sortie de l'état 3 (survol/tap relâché) : reset ajusté pendant le rendu.
-  const [trackedSpatial, setTrackedSpatial] = useState(spatial);
-  if (spatial !== trackedSpatial) {
-    setTrackedSpatial(spatial);
-    if (!spatial) setGlbReady(false);
-  }
 
   const engage = () => {
     if (!isTouch) setSpatial(true);
@@ -85,16 +77,7 @@ export default function StepVisual({ node }: { node: WorkflowNode }) {
             exit={{ opacity: 0 }}
             transition={{ duration: MORPH_S }}
           >
-            <GlbViewer glbUrl={node.glbUrl} active={spatial} onReady={() => setGlbReady(true)} />
-            <motion.p
-              aria-hidden
-              className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.28em] text-white/50"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: glbReady ? 1 : 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              Explorez en temps réel
-            </motion.p>
+            <GlbViewer glbUrl={node.glbUrl} active={spatial} realtimeText={node.realtimeText} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -104,38 +87,16 @@ export default function StepVisual({ node }: { node: WorkflowNode }) {
   );
 }
 
-/* ─── Rendu baked figé + citation + CTA discret ─── */
+/* ─── Rendu baked figé (aucun texte dessus : déjà porté par la colonne gauche) ─── */
 
 function BakedRender({ node, showHint }: { node: WorkflowNode; showHint: boolean }) {
   return (
-    <div className="relative flex h-full w-full flex-col justify-end overflow-hidden">
+    <div className="relative h-full w-full overflow-hidden">
       {node.bakedImage ? (
         <Image src={node.bakedImage} alt={node.title} fill className="object-cover" />
       ) : (
         <BakedPlaceholder variant={node.blueprint ?? 0} />
       )}
-
-      {/* Scrim pour la lisibilité du texte */}
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          background: "linear-gradient(0deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.15) 55%, transparent 85%)",
-        }}
-      />
-
-      <div className="relative z-10 p-[clamp(1rem,3svh,1.75rem)]">
-        {node.quote && (
-          <p className="font-body text-[clamp(0.68rem,1.05svh,0.78rem)] italic leading-relaxed text-zinc-300">
-            «&nbsp;{node.quote.text}&nbsp;»
-            <br />
-            <span className="not-italic text-zinc-500">— {node.quote.author}</span>
-          </p>
-        )}
-        <p className="mt-[clamp(0.5rem,1.5svh,0.9rem)] text-[clamp(0.7rem,1.15svh,0.82rem)] leading-relaxed text-zinc-400">
-          {node.description}
-        </p>
-      </div>
 
       {showHint && (
         <div

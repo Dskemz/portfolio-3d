@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   getNodeAnchorId,
   getNodeCardId,
@@ -30,12 +30,14 @@ const METAL =
   "linear-gradient(150deg, #171717 0%, #121212 44%, #0d0d0d 74%, #151515 100%)";
 const PERIMETER_S = 0.6;
 
-/** Durée de l'état 1 (croquis seul, plein cadre) avant qu'il ne s'efface. */
+/** Durée de l'état 1 (croquis seul, plein cadre) avant le dédoublement. */
 const STATE1_MS = 3800;
-/** Durée du fondu de sortie du croquis (état 1.5). */
-const CROQUIS_FADE_S = 0.4;
-/** Durée de l'arrivée en glissade des 2 colonnes (état 2), une fois le croquis effacé. */
-const COLUMNS_SLIDE_S = 0.8;
+/**
+ * Durée de l'état 2 : la colonne droite (croquis → rendu) glisse du centre
+ * vers la droite EN MÊME TEMPS que la colonne gauche (texte) arrive du bas,
+ * toutes deux en 800ms.
+ */
+const SPLIT_S = 0.8;
 
 function WorkflowCard({
   node,
@@ -54,18 +56,14 @@ function WorkflowCard({
   const [box, setBox] = useState({ w: 0, h: 0 });
 
   /**
-   * Dédoublement en 3 temps, chacun déclenché par la fin du précédent (pas
-   * par des minuteries indépendantes) :
-   *   "sketch"  → croquis seul, plein cadre, points qui pop (STATE1_MS)
-   *   "fading"  → le croquis s'efface (CROQUIS_FADE_S), les 2 colonnes restent
-   *               masquées pendant ce temps
-   *   "columns" → une fois le croquis à opacité 0 (onAnimationComplete), les
-   *               2 colonnes glissent en place depuis les bords
+   * Dédoublement en 2 temps :
+   *   "sketch" → croquis seul, plein cadre, points qui pop (STATE1_MS)
+   *   "split"  → bascule synchronisée (SPLIT_S) : la colonne droite (croquis
+   *              → rendu) glisse du centre vers la droite PENDANT que la
+   *              colonne gauche (texte) arrive du bas, en parallèle.
    * En mode `plain` (statique), tout est déjà en place, pas de minuterie.
    */
-  const [stage, setStage] = useState<"sketch" | "fading" | "columns">(
-    plain ? "columns" : "sketch"
-  );
+  const [stage, setStage] = useState<"sketch" | "split">(plain ? "split" : "sketch");
 
   const [trackedVisible, setTrackedVisible] = useState(visible);
   if (!plain && visible !== trackedVisible) {
@@ -75,7 +73,7 @@ function WorkflowCard({
 
   useEffect(() => {
     if (plain || !visible) return;
-    const t1 = window.setTimeout(() => setStage("fading"), STATE1_MS);
+    const t1 = window.setTimeout(() => setStage("split"), STATE1_MS);
     return () => window.clearTimeout(t1);
   }, [plain, visible, node.id]);
 
@@ -199,34 +197,50 @@ function WorkflowCard({
       </p>
       <div className="mx-auto mt-[clamp(0.9rem,2.9svh,2rem)] max-w-2xl">{editorial}</div>
     </div>
-  ) : stage === "columns" ? (
-    <div className="grid grid-cols-1 md:grid-cols-2">
+  ) : (
+    <div className="relative grid grid-cols-1 md:grid-cols-2">
+      {/* Colonne gauche : n'existe pas encore pendant l'état 1, arrive du bas au dédoublement. */}
+      {stage === "split" && (
+        <motion.div
+          initial={{ opacity: 0, y: 64, x: "-6%" }}
+          animate={{ opacity: 1, y: 0, x: 0 }}
+          transition={{ duration: SPLIT_S, ease: "easeInOut" }}
+        >
+          {editorial}
+        </motion.div>
+      )}
+
+      {/*
+        Colonne droite : LE MÊME panneau tout du long — plein cadre centré en
+        état 1 (`md:col-span-2`), puis glisse vers la colonne droite quand
+        `stage` bascule. `layout` fait interpoler le changement de largeur
+        (FLIP), en même temps que le contenu (croquis → rendu) se croise.
+      */}
       <motion.div
-        initial={{ opacity: 0, x: "-100%" }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: COLUMNS_SLIDE_S, ease: "easeInOut" }}
+        layout
+        transition={{ duration: SPLIT_S, ease: [0.22, 1, 0.36, 1] }}
+        className={`relative border-t border-white/[0.08] ${
+          stage === "sketch" ? "md:col-span-2" : "md:border-l md:border-t-0"
+        }`}
       >
-        {editorial}
-      </motion.div>
-      <motion.div
-        className="relative border-t border-white/[0.08] md:border-l md:border-t-0"
-        initial={{ opacity: 0, x: "100%" }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: COLUMNS_SLIDE_S, ease: "easeInOut" }}
-      >
-        <StepVisual node={node} />
+        <AnimatePresence initial={false}>
+          {stage === "sketch" ? (
+            <motion.div key="croquis" exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+              <CroquisReveal node={node} active={visible} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="visual"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <StepVisual node={node} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </div>
-  ) : (
-    <motion.div
-      animate={{ opacity: stage === "fading" ? 0 : 1 }}
-      transition={{ duration: CROQUIS_FADE_S }}
-      onAnimationComplete={() => {
-        if (stage === "fading") setStage("columns");
-      }}
-    >
-      <CroquisReveal node={node} active={visible} />
-    </motion.div>
   );
 
   if (plain) {
