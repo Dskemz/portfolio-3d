@@ -80,21 +80,27 @@ export default function GlbViewer({ glbUrl, active, onReady }: GlbViewerProps) {
       // Sur tactile, seuls les gestes horizontaux pilotent l'orbite. Le geste
       // vertical reste disponible pour le scroll du storytelling.
       let pointerX: number | null = null;
+      let pointerY: number | null = null;
       const onPointerDown = (event: PointerEvent) => {
         pointerX = event.clientX;
+        pointerY = event.clientY;
         canvasRef.current?.setPointerCapture(event.pointerId);
       };
       const onPointerMove = (event: PointerEvent) => {
-        if (!isTouchDevice || pointerX === null) return;
+        if (!isTouchDevice || pointerX === null || pointerY === null) return;
         const dx = event.clientX - pointerX;
+        const dy = event.clientY - pointerY;
         if (Math.abs(dx) > 0.5) {
           camera.alpha -= dx * 0.012;
-          pointerX = event.clientX;
-          if (event.cancelable) event.preventDefault();
         }
+        if (Math.abs(dy) > 0.5) camera.beta += dy * 0.012;
+        pointerX = event.clientX;
+        pointerY = event.clientY;
+        if (event.cancelable) event.preventDefault();
       };
       const onPointerUp = (event: PointerEvent) => {
         pointerX = null;
+        pointerY = null;
         canvasRef.current?.releasePointerCapture(event.pointerId);
       };
       if (isTouchDevice) {
