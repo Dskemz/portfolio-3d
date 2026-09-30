@@ -30,6 +30,16 @@ const STORYTELLING_FRAME = {
 /** Marge autour de la sphère englobante du modèle (1 = tangente au bord du cadre). */
 const FRAME_MARGIN = 1.08;
 
+/**
+ * Étalonnage de l'étape 04 sur `etape-04-rendu.png` (écart moyen par pixel
+ * sur la chaise : 57 → 24) : facteurs d'albédo par matière et part du HDRI.
+ */
+const STUDIO_GRADE = {
+  wood: [2.84, 3.09, 3.82],
+  leather: [0.174, 0.174, 0.174],
+  environmentIntensity: 0.36,
+} as const;
+
 /** Environnement HDRI préfiltré de l'éclairage studio (étape 04). */
 const STUDIO_ENV_URL = "/models/storytelling/studio_small_08_1k.env";
 /**
@@ -344,7 +354,14 @@ export default function GlbViewer({
 
         if (studioLighting && renderMeshes.length > 0) {
           scene.environmentTexture = core.CubeTexture.CreateFromPrefilteredData(STUDIO_ENV_URL, scene);
-          scene.environmentIntensity = 0.6;
+          scene.environmentIntensity = STUDIO_GRADE.environmentIntensity;
+          // Teinte du rendu Cycles : la texture exportée est un noyer foncé,
+          // éclairci et désaturé vers le chêne clair de l'image précalculée.
+          for (const material of scene.materials) {
+            if (!(material instanceof core.PBRMaterial)) continue;
+            if (/wood/i.test(material.name)) material.albedoColor = new Color3(...STUDIO_GRADE.wood);
+            else if (/leather/i.test(material.name)) material.albedoColor = new Color3(...STUDIO_GRADE.leather);
+          }
           light.intensity = 0.15;
           const imageProcessing = scene.imageProcessingConfiguration;
           imageProcessing.toneMappingEnabled = true;
