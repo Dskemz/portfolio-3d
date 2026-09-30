@@ -232,6 +232,7 @@ export default function SkillFlow() {
   const [headId, setHeadId] = useState<string | null>(null);
   const [receding, setReceding] = useState(false);
   const [armed, setArmed] = useState(false);
+  const [leadActive, setLeadActive] = useState(false);
   const [introTransmissionComplete, setIntroTransmissionComplete] = useState(false);
   const progress = useMotionValue(0);
 
@@ -242,6 +243,9 @@ export default function SkillFlow() {
   const modeRef = useRef<Mode>("desktop");
   const builtRef = useRef<Built>(EMPTY);
   const previous = useRef(0);
+  /** Verrou bref : l'introduction doit se terminer avant tout cran suivant. */
+  const introLockRef = useRef(false);
+  const introLockTimerRef = useRef<number | null>(null);
   const ruler = useRef<{ ys: number[]; ls: number[]; total: number }>({
     ys: [],
     ls: [],
@@ -501,6 +505,19 @@ export default function SkillFlow() {
       const clamped = Math.max(-1, Math.min(WORKFLOW_NODES.length - 1, index));
       if (clamped === stepRef.current) return;
 
+      // Le premier geste lance immédiatement la transmission complète vers
+      // l'étape 01, indépendamment de la position de scroll atteinte ensuite.
+      if (clamped === 0 && !introTransmissionComplete) {
+        setLeadActive(true);
+        introLockRef.current = true;
+        if (introLockTimerRef.current !== null) window.clearTimeout(introLockTimerRef.current);
+        // 1,12 s pour le courant, puis la révélation complète des mots du titre.
+        introLockTimerRef.current = window.setTimeout(() => {
+          introLockRef.current = false;
+          introLockTimerRef.current = null;
+        }, 2250);
+      }
+
       const target = scrollTargetFor(clamped);
       if (target === null) return;
 
@@ -524,7 +541,7 @@ export default function SkillFlow() {
         window.setTimeout(() => {
           lockRef.current = false;
         }, STEP_COOLDOWN_MS);
-      });
+      }, clamped === -1 ? 620 : undefined);
     },
     [scrollTargetFor]
   );
@@ -608,6 +625,10 @@ export default function SkillFlow() {
         event.preventDefault();
         return;
       }
+      if (introLockRef.current) {
+        event.preventDefault();
+        return;
+      }
 
       // Vérifier IMMÉDIATEMENT si ce scroll doit être consommé
       const shouldConsume = consume(event.deltaY > 0 ? 1 : -1);
@@ -649,6 +670,10 @@ export default function SkillFlow() {
         event.preventDefault();
         return;
       }
+      if (introLockRef.current) {
+        event.preventDefault();
+        return;
+      }
       if (consume(direction)) event.preventDefault();
     };
 
@@ -670,6 +695,10 @@ export default function SkillFlow() {
         e.preventDefault();
         return;
       }
+      if (introLockRef.current) {
+        e.preventDefault();
+        return;
+      }
 
       if (consume(dy > 0 ? 1 : -1)) e.preventDefault();
       touchStartRef.current = null;
@@ -688,6 +717,17 @@ export default function SkillFlow() {
       parkedRef.current = -1;
       // ✓ Réinitialise l'entrée en mode stepped, pour recommencer depuis zéro.
       enteredSteppedRef.current = false;
+      setLeadActive(false);
+      setIntroTransmissionComplete(false);
+      progress.set(0);
+      setArmed(false);
+      setLitIds([]);
+      setHeadId(null);
+      setReceding(false);
+      previous.current = 0;
+      introLockRef.current = false;
+      if (introLockTimerRef.current !== null) window.clearTimeout(introLockTimerRef.current);
+      introLockTimerRef.current = null;
     };
 
     window.addEventListener(HOME_JUMP_EVENT, onHomeJump);
@@ -703,6 +743,7 @@ export default function SkillFlow() {
       window.removeEventListener(HOME_JUMP_EVENT, onHomeJump);
       cancelRef.current?.();
       cancelRef.current = null;
+      if (introLockTimerRef.current !== null) window.clearTimeout(introLockTimerRef.current);
     };
   }, [mode, goToStep, scrollTargetFor]);
 
@@ -736,6 +777,8 @@ export default function SkillFlow() {
       if (window.scrollY < 10) {
         progress.set(0);
         setArmed(false);
+        setLeadActive(false);
+        setIntroTransmissionComplete(false);
         setLitIds([]);
         setHeadId(null);
         setReceding(false);
@@ -866,10 +909,11 @@ export default function SkillFlow() {
           id={ORIGIN_ID}
           className="block h-3 w-3 rounded-full bg-[#FF7F50]"
           animate={
-            armed
-              ? { scale: 1, boxShadow: "0 0 20px 5px rgba(255,127,80,0.75)" }
+            armed || leadActive
+              ? { scale: 1, opacity: 0, boxShadow: "0 0 20px 5px rgba(255,127,80,0.75)" }
               : {
                   scale: [1, 1.35, 1],
+                  opacity: 1,
                   boxShadow: [
                     "0 0 10px 2px rgba(255,127,80,0.45)",
                     "0 0 28px 8px rgba(255,127,80,0.8)",
@@ -878,12 +922,12 @@ export default function SkillFlow() {
                 }
           }
           transition={
-            armed ? { duration: 0.25 } : { duration: 2.1, repeat: Infinity, ease: "easeInOut" }
+            armed || leadActive ? { duration: 0.25 } : { duration: 2.1, repeat: Infinity, ease: "easeInOut" }
           }
         />
         <motion.p
           className="mt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-zinc-600"
-          animate={{ opacity: armed ? 0 : 1 }}
+          animate={{ opacity: armed || leadActive ? 0 : 1 }}
           transition={{ duration: 0.3 }}
         >
           {INTRO.hint}
@@ -923,13 +967,16 @@ export default function SkillFlow() {
                   fill="none"
                   stroke="#FF7F50"
                   strokeWidth={layer.w}
-                  strokeLinecap="round"
+                  strokeLinecap={leadActive ? "butt" : "round"}
                   strokeOpacity={layer.o}
                   initial={false}
-                  animate={{ pathLength: armed ? 1 : 0, opacity: armed ? 1 : 0 }}
-                  transition={{ duration: 0.72, ease: [0.42, 0, 0.58, 1] }}
+                  animate={{ pathLength: leadActive ? 1 : 0, opacity: leadActive ? 1 : 0 }}
+                  transition={{
+                    duration: leadActive ? 1.12 : 0.35,
+                    ease: [0.42, 0, 0.58, 1],
+                  }}
                   onAnimationComplete={
-                    index === 0 && armed
+                    index === 0 && leadActive
                       ? () => setIntroTransmissionComplete(true)
                       : undefined
                   }

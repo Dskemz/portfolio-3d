@@ -262,7 +262,13 @@ function BakedRender({ node, showHint }: { node: WorkflowNode; showHint: boolean
   return (
     <div className="relative h-full w-full overflow-hidden">
       {node.bakedImage ? (
-        <Image src={node.bakedImage} alt={node.title} fill className="object-cover" />
+        <Image
+          src={node.bakedImage}
+          alt={node.title}
+          fill
+          sizes="(min-width: 768px) 60vw, 100vw"
+          className="object-cover"
+        />
       ) : (
         <BakedPlaceholder variant={node.blueprint ?? 0} />
       )}
@@ -270,7 +276,7 @@ function BakedRender({ node, showHint }: { node: WorkflowNode; showHint: boolean
       {showHint && (
         <div
           aria-hidden
-          className="pointer-events-none absolute bottom-4 right-4 z-10 flex items-center gap-2 opacity-45 transition-opacity duration-300 group-hover/blueprint:opacity-80"
+          className="pointer-events-none absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap opacity-45 transition-opacity duration-300 group-hover/blueprint:opacity-80"
         >
           <svg viewBox="0 0 16 22" className="h-5 w-3" fill="none">
             <rect x="1" y="1" width="14" height="20" rx="7" stroke="white" strokeWidth="1" />

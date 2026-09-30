@@ -6,7 +6,7 @@
  */
 
 /** Durée de l'avancée d'une fiche à la suivante, en ms. C'est LE réglage de vitesse. */
-export const STEP_MS = 1000;
+export const STEP_MS = 1450;
 
 /** Petit silence après l'animation avant d'accepter un nouveau cran (anti-rafale trackpad). */
 export const STEP_COOLDOWN_MS = 140;
@@ -84,7 +84,8 @@ export const STEP_EASE = cubicBezier(...STEP_BEZIER);
  */
 export function animateScrollTo(
   target: number,
-  onDone: () => void
+  onDone: () => void,
+  duration = STEP_MS
 ): () => void {
   const start = window.scrollY;
   const delta = target - start;
@@ -92,7 +93,7 @@ export function animateScrollTo(
   let raf = 0;
 
   const tick = (now: number) => {
-    const p = Math.min(1, (now - t0) / STEP_MS);
+    const p = Math.min(1, (now - t0) / duration);
     window.scrollTo({ top: start + delta * STEP_EASE(p), behavior: "auto" });
     if (p < 1) {
       raf = requestAnimationFrame(tick);

@@ -82,7 +82,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     id: "modelisation",
     kind: "step",
     step: "01",
-    title: "STRUCTURER LA FORME",
+    title: "Structurer la forme",
     kicker: "Étape 01 · Maillage",
     quote: {
       text: "La structure précède la liberté ; sans un cadre solide, l'improvisation n'est que le chaos.",
@@ -93,6 +93,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     tags: ["Échelle réelle", "Quads", "glTF 2.0", "Sur-mesure"],
     href: "/portfolio/tous",
     hrefLabel: "Voir les projets",
+    bakedImage: "/images/storytelling/etape-01-maillage.png",
     blueprint: 0,
     points: [
       { id: "maillage", x: 157, y: 60, label: "Maillage" },
@@ -105,7 +106,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     id: "textures-shaders",
     kind: "step",
     step: "02",
-    title: "TEXTURES ET SHADERS",
+    title: "Textures et shaders",
     quote: {
       text: "La perfection est atteinte non quand il n'y a plus rien à ajouter, mais plus rien à retirer.",
       author: "Antoine de Saint-Exupéry",
@@ -125,7 +126,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     id: "lighting-rendu",
     kind: "step",
     step: "03",
-    title: "LIGHTING ET RENDU",
+    title: "Lighting et rendu",
     quote: {
       text: "Ce que l'on conçoit bien s'énonce clairement, et se manipule sans mode d'emploi.",
       author: "d'après Nicolas Boileau",
@@ -147,7 +148,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     id: "contact-terminal",
     kind: "terminal",
     step: "04",
-    title: "DÉMARRER VOTRE PROJET",
+    title: "Démarrer votre projet",
     description:
       "Le courant s'arrête ici. Décrivez votre projet : je vous dis par quelle étape il commence et ce que cela implique concrètement.",
     tags: ["Réponse sous 48 h", "Devis gratuit"],

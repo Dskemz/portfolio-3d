@@ -30,39 +30,46 @@ const PERIMETER_S = 0.6;
 function TypedQuote({
   quote,
   visible,
+  start,
+  onComplete,
 }: {
   quote: NonNullable<WorkflowNode["quote"]>;
   visible: boolean;
+  start: boolean;
+  onComplete?: () => void;
 }) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (!visible) {
+    if (!visible || !start) {
       setCount(0);
       return;
     }
 
     let timer: number | undefined;
-    const start = window.setTimeout(() => {
+    const startTimer = window.setTimeout(() => {
       let next = 0;
       timer = window.setInterval(() => {
         next += 1;
         setCount(next);
-        if (next >= quote.text.length) window.clearInterval(timer);
+        if (next >= quote.text.length) {
+          window.clearInterval(timer);
+          onComplete?.();
+        }
       }, 11);
-    }, 880);
+    }, 120);
 
     return () => {
-      window.clearTimeout(start);
+      window.clearTimeout(startTimer);
       if (timer !== undefined) window.clearInterval(timer);
     };
-  }, [quote.text, visible]);
+  }, [quote.text, visible, start]);
 
   const complete = count >= quote.text.length;
   return (
     <div className="mt-[clamp(0.5rem,1.5svh,1rem)] min-h-[3.6rem] font-body text-[clamp(0.68rem,1.05svh,0.72rem)] italic leading-relaxed text-zinc-500">
       <span>«&nbsp;{quote.text.slice(0, count)}{complete ? " »" : ""}</span>
-      {!complete && visible && (
+      {!complete && visible && start && (
         <motion.span
           aria-hidden="true"
           className="ml-0.5 inline-block h-[0.9em] w-px align-[-0.1em] bg-[#FF7F50]"
@@ -91,12 +98,25 @@ function WorkflowCard({
   stepped = false,
 }: WorkflowCardProps) {
   const isTerminal = node.kind === "terminal";
+  const isFirstStep = node.step === "01";
   
   // Pour la carte terminale, on s'assure qu'elle ne s'active que si 'lit' est explicitement vrai
   const visible = plain || lit;
+  // À la remontée, le titre quitte la scène dans une dispersion douce plutôt
+  // que de rejouer l'entrée à l'envers.
+  const titleLeaving = !visible && receding;
 
   const frameRef = useRef<HTMLElement>(null);
   const [box, setBox] = useState({ w: 0, h: 0 });
+  const [titleComplete, setTitleComplete] = useState(false);
+  const [quoteComplete, setQuoteComplete] = useState(false);
+
+  useEffect(() => {
+    if (!visible) {
+      setTitleComplete(false);
+      setQuoteComplete(false);
+    }
+  }, [visible]);
 
   useEffect(() => {
     if (plain) return;
@@ -126,13 +146,13 @@ function WorkflowCard({
     ? { duration: 0.05, delay: 0, ease: "linear" as const }
     : {
         duration: 0.7,
-        delay: node.quote ? Math.min(2.25, 1.04 + node.quote.text.length * 0.011) : 0.72,
+        delay: 0,
         ease: [0.22, 1, 0.36, 1] as const,
       };
   const dotTiming = instant ? { duration: 0.05 } : { duration: 0.22 };
 
   /* Pastilles d'ancrage du flux */
-  const dot = (id: string, position: string, bright: boolean) => (
+  const dot = (id: string, position: string, bright: boolean, shown = visible) => (
     <div
       id={id}
       aria-hidden
@@ -142,8 +162,8 @@ function WorkflowCard({
         className="block h-full w-full rounded-full bg-[#FF7F50]"
         initial={false}
         animate={{
-          opacity: visible ? 1 : 0,
-          scale: visible ? 1 : 0.4,
+          opacity: shown ? 1 : 0,
+          scale: shown ? 1 : 0.4,
           boxShadow: bright
             ? "0 0 16px 4px rgba(255,127,80,0.85)"
             : "0 0 8px 2px rgba(255,127,80,0.5)",
@@ -156,11 +176,7 @@ function WorkflowCard({
   const titleBlock = (
       <motion.div
         initial={false}
-        animate={{
-          opacity: visible ? 1 : 0,
-          y: visible ? 0 : 26,
-          clipPath: visible ? "inset(0 0 0% 0)" : "inset(0 0 100% 0)",
-        }}
+        animate={{ opacity: visible ? 1 : 0 }}
         transition={titleTransition}
         className="mt-[clamp(0.5rem,1.5svh,1rem)] max-w-4xl"
       >
@@ -170,14 +186,44 @@ function WorkflowCard({
           </span>
         )}
         <h2
-          className={`font-display font-light uppercase leading-[0.94] text-white ${
+          className={`font-display font-light leading-[0.94] text-white ${
             isTerminal
               ? "text-[clamp(1.4rem,3.4svh,2.6rem)]"
               : "max-w-[12ch] text-[clamp(3.1rem,5.6vw,6.1rem)] tracking-[-0.065em]"
           }`}
         >
-          <span className="font-semibold">{node.title.charAt(0)}</span>
-          <span className="font-extralight">{node.title.slice(1)}</span>
+          {node.title.split(" ").map((word, index, words) => (
+            <span key={`${word}-${index}`} className="mr-[0.18em] inline-block overflow-hidden align-top last:mr-0">
+              <motion.span
+                className="block"
+                initial={false}
+                animate={{
+                  y: visible ? "0%" : titleLeaving ? `${-10 - index * 5}px` : "112%",
+                  x: titleLeaving ? `${(index % 2 === 0 ? -1 : 1) * (10 + index * 4)}px` : "0px",
+                  rotate: titleLeaving ? (index % 2 === 0 ? -1.2 : 1.2) : 0,
+                  opacity: visible ? 1 : 0,
+                  filter: visible ? "blur(0px)" : titleLeaving ? "blur(13px)" : "blur(10px)",
+                  letterSpacing: titleLeaving ? "0.07em" : "0em",
+                }}
+                transition={{
+                  duration: instant ? 0.05 : titleLeaving ? 0.58 : 0.74,
+                  delay: instant ? 0 : titleLeaving ? index * 0.07 : index * 0.1,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                onAnimationComplete={
+                  index === words.length - 1 && visible
+                    ? () => setTitleComplete(true)
+                    : undefined
+                }
+              >
+                {index === 0 ? (
+                  <><span className="font-semibold">{word.charAt(0)}</span><span className="font-extralight">{word.slice(1)}</span></>
+                ) : (
+                  <span className="font-extralight">{word}</span>
+                )}
+              </motion.span>
+            </span>
+          ))}
         </h2>
         {isTerminal && (
           <>
@@ -189,13 +235,20 @@ function WorkflowCard({
       </motion.div>
   );
 
-  const quoteBlock = node.quote && <TypedQuote quote={node.quote} visible={visible} />;
+  const quoteBlock = node.quote && (
+    <TypedQuote
+      quote={node.quote}
+      visible={visible}
+      start={titleComplete}
+      onComplete={() => setQuoteComplete(true)}
+    />
+  );
 
   const detailBlock = (
     <>
       <motion.div
         initial={false}
-        animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 14 }}
+        animate={{ opacity: quoteComplete || !node.quote ? 1 : 0, y: quoteComplete || !node.quote ? 0 : 18 }}
         transition={detailTransition}
       >
         <div className="my-[clamp(0.7rem,2.2svh,1.5rem)] h-px w-16 bg-white/[0.18]" />
@@ -223,7 +276,7 @@ function WorkflowCard({
   );
 
   const editorial = (
-    <div className="flex flex-col justify-center px-[clamp(1.25rem,3.6svh,2.5rem)] py-[clamp(1.35rem,4.4svh,3rem)]">
+    <div className={`flex flex-col justify-center px-[clamp(1.25rem,3.6svh,2.5rem)] py-[clamp(1.35rem,4.4svh,3rem)] ${isTerminal ? "items-center text-center" : ""}`}>
       {titleBlock}
       {quoteBlock}
       {detailBlock}
@@ -248,7 +301,12 @@ function WorkflowCard({
       <motion.div
         className="relative min-h-[clamp(18rem,42svh,32rem)] px-[clamp(1.25rem,3.6svh,2.5rem)] md:min-h-[clamp(20rem,48svh,38rem)]"
         initial={false}
-        animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 14 }}
+        animate={{
+          opacity: quoteComplete || !node.quote ? 1 : 0,
+          y: quoteComplete || !node.quote ? 0 : 18,
+          scale: quoteComplete || !node.quote ? 1 : 1.035,
+          clipPath: quoteComplete || !node.quote ? "inset(0 0 0% 0)" : "inset(5% 5% 5% 5%)",
+        }}
         transition={detailTransition}
       >
         <StepVisual node={node} active={visible} />
@@ -275,19 +333,19 @@ function WorkflowCard({
 
   return (
     <div className="relative h-auto">
-      {/* Le courant traverse la fiche hors champ : il entre et ressort, sans
-          créer une ligne parasite au milieu du contenu. */}
-      {!isTerminal && (
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute bottom-0 left-0 top-0 z-20 hidden w-12 -translate-x-1/2 bg-black [box-shadow:0_0_28px_16px_#000] md:block"
-        />
-      )}
       {/* Ancre supérieure : déclenche l'allumage au contact exact du flux */}
-      {dot(getNodeAnchorId(node.id), "left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 md:left-0", isHead)}
+      {dot(
+        getNodeAnchorId(node.id),
+        "left-1/2 top-0 -translate-x-1/2 -translate-y-1/2",
+        isFirstStep || isHead
+      )}
       {/* Le flux réapparaît ici avant de poursuivre vers l'étape suivante. */}
       {!isTerminal &&
-        dot(getNodeExitId(node.id), "left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 md:left-0", false)}
+        dot(
+          getNodeExitId(node.id),
+          "left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2",
+          false
+        )}
 
       <motion.article
         ref={frameRef}
@@ -298,8 +356,14 @@ function WorkflowCard({
           scale: 1,
           boxShadow: "none",
         }}
-        transition={instant ? shell : { duration: 0.01 }}
-        style={{ background: "transparent", pointerEvents: visible ? "auto" : "none" }}
+        transition={
+          instant
+            ? shell
+            : receding
+              ? { duration: 0.72, ease: [0.22, 1, 0.36, 1] }
+              : { duration: 0.01 }
+        }
+        style={{ background: "#000", pointerEvents: visible ? "auto" : "none" }}
         className="relative h-auto overflow-visible"
       >
         <div className="relative z-10">

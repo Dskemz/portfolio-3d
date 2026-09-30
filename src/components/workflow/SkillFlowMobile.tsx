@@ -454,6 +454,12 @@ export default function SkillFlowMobile() {
       stepRef.current = -1;
       // ✓ Réinitialise l'entrée en mode stepped, pour recommencer depuis zéro.
       enteredSteppedRef.current = false;
+      setFlow(0);
+      setArmed(false);
+      setLitIds([]);
+      setHeadId(null);
+      setReceding(false);
+      previous.current = 0;
     };
 
     window.addEventListener(HOME_JUMP_EVENT, onHomeJump);

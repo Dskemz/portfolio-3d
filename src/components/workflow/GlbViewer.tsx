@@ -67,16 +67,21 @@ export default function GlbViewer({ glbUrl, active, onReady }: GlbViewerProps) {
       // modèle reste animé après le tap, mais ne reçoit pas le geste de scroll
       // comme une commande de caméra (zoom / déplacement involontaire).
       const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
-      if (!isTouchDevice) camera.attachControl(canvasRef.current, true);
+      if (!isTouchDevice) {
+        camera.attachControl(canvasRef.current, true);
+        // La molette reste réservée au parcours vertical : le GLB se tourne au
+        // clic-glissé, mais son échelle ne peut jamais être modifiée par scroll.
+        camera.inputs.removeByType("ArcRotateCameraMouseWheelInput");
+      }
       camera.lowerRadiusLimit = 2.6;
       camera.upperRadiusLimit = 7;
-      camera.wheelPrecision = 60;
       camera.panningSensibility = 0;
 
       const light = new HemisphericLight("light", new Vector3(0.2, 1, 0.3), scene);
       light.intensity = 1.05;
 
       let rotor: AbstractMesh | null = null;
+      let wireRotor: AbstractMesh | null = null;
 
       if (glbUrl) {
         await import("@babylonjs/loaders/glTF");
@@ -89,11 +94,31 @@ export default function GlbViewer({ glbUrl, active, onReady }: GlbViewerProps) {
           scene
         );
         const mat = new StandardMaterial("placeholder-mat", scene);
-        mat.diffuseColor = new Color3(0.92, 0.43, 0.26);
-        mat.specularColor = new Color3(0.2, 0.2, 0.2);
-        mat.emissiveColor = new Color3(0.08, 0.03, 0.01);
+        // Même matière gris clair que le rendu baked de l'étape 01 : le passage
+        // image fixe → GLB reste visuellement continu, l'orange étant réservé
+        // au courant et au maillage du rendu.
+        mat.diffuseColor = new Color3(0.69, 0.7, 0.72);
+        mat.specularColor = new Color3(0.28, 0.28, 0.3);
+        mat.emissiveColor = new Color3(0.018, 0.018, 0.02);
         placeholder.material = mat;
         rotor = placeholder;
+
+        // Même calque wireframe que la version précédente, légèrement adouci
+        // pour conserver toutes les arêtes sans leur donner trop de présence.
+        const wire = MeshBuilder.CreateIcoSphere(
+          "placeholder-wireframe",
+          { radius: 1.304, subdivisions: 2, flat: true },
+          scene
+        );
+        const wireMaterial = new StandardMaterial("placeholder-wireframe-mat", scene);
+        wireMaterial.diffuseColor = new Color3(0.95, 0.36, 0.08);
+        wireMaterial.emissiveColor = new Color3(0.28, 0.055, 0.006);
+        wireMaterial.specularColor = new Color3(0, 0, 0);
+        wireMaterial.wireframe = true;
+        wireMaterial.alpha = 0.72;
+        wireMaterial.backFaceCulling = false;
+        wire.material = wireMaterial;
+        wireRotor = wire;
       }
 
       if (cancelled) {
@@ -104,6 +129,7 @@ export default function GlbViewer({ glbUrl, active, onReady }: GlbViewerProps) {
 
       scene.registerBeforeRender(() => {
         if (rotor) rotor.rotation.y += 0.00035 * engine.getDeltaTime();
+        if (wireRotor) wireRotor.rotation.y += 0.00035 * engine.getDeltaTime();
       });
 
       engine.runRenderLoop(() => scene.render());
