@@ -68,20 +68,11 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
 
   return (
     <div
-      className="blueprint-stage group/blueprint relative h-full min-h-[clamp(9rem,22svh,18rem)] w-full overflow-hidden bg-[#0b0b0b]"
+      className="blueprint-stage group/blueprint relative h-full min-h-[clamp(9rem,22svh,18rem)] w-full overflow-hidden bg-transparent"
       onMouseEnter={engage}
       onMouseLeave={disengage}
       onClick={handleClick}
     >
-      <Grid />
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(80% 70% at 70% 30%, rgba(255,127,80,0.10), rgba(0,0,0,0) 70%)",
-        }}
-      />
 
       <AnimatePresence initial={false}>
         {phase === "sketch" && (
@@ -91,7 +82,7 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Sketch variant={node.blueprint ?? 0} points={node.points} active={active} />
+            <Sketch variant={node.blueprint ?? 0} active={active} />
             <span className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[8px] uppercase tracking-[0.34em] text-white/30">
               Blueprint
             </span>
@@ -134,7 +125,6 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
         )}
       </AnimatePresence>
 
-      <Corners />
     </div>
   );
 }
@@ -152,17 +142,6 @@ function Grid() {
         backgroundSize: "34px 34px",
       }}
     />
-  );
-}
-
-function Corners() {
-  return (
-    <>
-      <span aria-hidden className="pointer-events-none absolute left-4 top-4 h-3 w-3 border-l border-t border-white/25" />
-      <span aria-hidden className="pointer-events-none absolute right-4 top-4 h-3 w-3 border-r border-t border-white/25" />
-      <span aria-hidden className="pointer-events-none absolute bottom-4 left-4 h-3 w-3 border-b border-l border-white/25" />
-      <span aria-hidden className="pointer-events-none absolute bottom-4 right-4 h-3 w-3 border-b border-r border-white/25" />
-    </>
   );
 }
 
@@ -313,18 +292,13 @@ function BakedRender({ node, showHint }: { node: WorkflowNode; showHint: boolean
       {showHint && (
         <div
           aria-hidden
-          className="pointer-events-none absolute right-4 top-4 z-10 flex items-center gap-1.5 opacity-35 transition-opacity duration-300 group-hover/blueprint:opacity-70"
+          className="pointer-events-none absolute bottom-4 right-4 z-10 flex items-center gap-2 opacity-45 transition-opacity duration-300 group-hover/blueprint:opacity-80"
         >
-          <svg viewBox="0 0 16 16" className="h-3 w-3 animate-spin [animation-duration:3s]" fill="none">
-            <path
-              d="M8 1.5a6.5 6.5 0 1 1-4.6 1.9"
-              stroke="white"
-              strokeWidth={1.3}
-              strokeLinecap="round"
-            />
-            <path d="M8 1.5 L8 4.5 M3.4 3.4 L5.5 5.5" stroke="white" strokeWidth={1.3} strokeLinecap="round" />
+          <svg viewBox="0 0 16 22" className="h-5 w-3" fill="none">
+            <rect x="1" y="1" width="14" height="20" rx="7" stroke="white" strokeWidth="1" />
+            <circle cx="8" cy="6" r="1.3" fill="#FF7F50" />
           </svg>
-          <span className="font-mono text-[8px] uppercase tracking-[0.28em] text-white">Animer</span>
+          <span className="font-mono text-[8px] uppercase tracking-[0.22em] text-white">Survoler pour explorer</span>
         </div>
       )}
     </div>
@@ -338,8 +312,7 @@ function BakedPlaceholder({ variant }: { variant: number }) {
       aria-hidden
       className="absolute inset-0"
       style={{
-        background:
-          "radial-gradient(120% 90% at 30% 20%, rgba(255,150,100,0.22), rgba(10,10,10,0.95) 65%)",
+        background: "transparent",
       }}
     >
       <svg viewBox="0 0 320 240" className="absolute inset-0 h-full w-full opacity-70" preserveAspectRatio="xMidYMid meet">

@@ -34,7 +34,7 @@ const CORNER_R = 11;
  * Cette chaîne doit rester littérale : Tailwind scanne le source brut.
  */
 const W_PRINCIPALE =
-  "mx-auto w-[54%] [@media(max-height:900px)]:w-[61%] [@media(max-height:760px)]:w-[68%]";
+  "mx-auto w-[86%] max-w-[84rem]";
 
 /* ─────────── Mode cranté (« QTE ») ─────────── */
 
@@ -50,11 +50,14 @@ interface Geometry { entry: Point; exit: Point }
 interface Built {
   d: string;
   length: number;
+  /** Première transmission autonome : départ, coude, puis arrivée à l'étape 1. */
+  leadD: string;
+  leadLength: number;
   /** Progression (0–1) à laquelle le front touche l'ancre de chaque fiche */
   thresholds: Record<string, number>;
 }
 
-const EMPTY: Built = { d: "", length: 0, thresholds: {} };
+const EMPTY: Built = { d: "", length: 0, leadD: "", leadLength: 0, thresholds: {} };
 
 /* ─────────── Polyligne orthogonale avec arrondis légers et synchro millimétrique ─────────── */
 
@@ -166,9 +169,15 @@ function build(origin: Point, geo: Record<string, Geometry>): Built {
   const firstGeo = firstNode ? geo[firstNode.id] : null;
 
   const points: Point[] = [origin];
+  let leadEnd: Point | null = null;
 
   if (firstGeo) {
-    points.push({ x: origin.x, y: firstGeo.entry.y });
+    // Premier geste : le courant qui vient d'atteindre le centre repart
+    // latéralement vers la timeline, puis seulement ensuite descend vers la
+    // première étape. Le coude est arrondi par `emitPolyline`.
+    leadEnd = { x: firstGeo.entry.x, y: origin.y };
+    points.push(leadEnd);
+    points.push({ x: firstGeo.entry.x, y: firstGeo.entry.y });
   }
 
   const marks: Record<string, number> = {};
@@ -185,7 +194,8 @@ function build(origin: Point, geo: Record<string, Geometry>): Built {
       points.push({ x: g.entry.x, y: g.entry.y });
     }
 
-    marks[node.id] = i > 0 ? points.length - 1 : 1;
+    // `d` démarre à l'ancre de l'étape 1 : les indices sont décalés de deux.
+    marks[node.id] = points.length - 3;
 
     if (node.kind === "terminal") {
       points.push({ x: g.entry.x, y: g.entry.y + 400 });
@@ -196,15 +206,17 @@ function build(origin: Point, geo: Record<string, Geometry>): Built {
     pendingExit = { x: g.exit.x, y: g.exit.y };
   }
 
-  const { d, length, at } = emitPolyline(points);
+  const { d, length, at } = emitPolyline(points.slice(2));
+  const lead = leadEnd
+    ? emitPolyline([origin, leadEnd, firstGeo!.entry])
+    : { d: "", length: 0, at: [] };
   if (!length) return EMPTY;
 
   const thresholds: Record<string, number> = {};
   for (const [id, index] of Object.entries(marks)) {
     thresholds[id] = Math.min(1, (at[index] ?? length) / length);
   }
-
-  return { d, length, thresholds };
+  return { d, length, leadD: lead.d, leadLength: lead.length, thresholds };
 }
 
 /* ═══════════════════════════════════════════════════════════ */
@@ -220,6 +232,12 @@ export default function SkillFlow() {
   const [headId, setHeadId] = useState<string | null>(null);
   const [receding, setReceding] = useState(false);
   const [armed, setArmed] = useState(false);
+  const [introTransmissionComplete, setIntroTransmissionComplete] = useState(false);
+  const progress = useMotionValue(0);
+
+  useEffect(() => {
+    if (!armed) setIntroTransmissionComplete(false);
+  }, [armed]);
 
   const modeRef = useRef<Mode>("desktop");
   const builtRef = useRef<Built>(EMPTY);
@@ -689,8 +707,6 @@ export default function SkillFlow() {
   }, [mode, goToStep, scrollTargetFor]);
 
   /* ── Moteur de scroll : 1:1, aucune inertie, strictement réversible ── */
-  const progress = useMotionValue(0);
-
   useEffect(() => {
     let frame = 0;
 
@@ -739,7 +755,6 @@ export default function SkillFlow() {
       const lineY = vh * LINE_VH - rect.top;
       const total = ruler.current.total;
       let value = total > 0 ? Math.min(1, Math.max(0, lengthAtY(lineY) / total)) : 0;
-
       const table = builtRef.current.thresholds;
 
       // Cap dur : le flux s'arrête NET sur la fiche terminale, quoi qu'il arrive
@@ -898,6 +913,30 @@ export default function SkillFlow() {
           xmlns="http://www.w3.org/2000/svg"
           style={{ overflow: "visible" }}
         >
+          {/* Départ, coude et arrivée au point 01 : un unique geste lumineux. */}
+          {built.leadD && (
+            <>
+              {[{ w: 8, o: 0.08 }, { w: 3.8, o: 0.16 }, { w: 1.3, o: 1 }].map((layer, index) => (
+                <motion.path
+                  key={`lead-${layer.w}`}
+                  d={built.leadD}
+                  fill="none"
+                  stroke="#FF7F50"
+                  strokeWidth={layer.w}
+                  strokeLinecap="round"
+                  strokeOpacity={layer.o}
+                  initial={false}
+                  animate={{ pathLength: armed ? 1 : 0, opacity: armed ? 1 : 0 }}
+                  transition={{ duration: 0.72, ease: [0.42, 0, 0.58, 1] }}
+                  onAnimationComplete={
+                    index === 0 && armed
+                      ? () => setIntroTransmissionComplete(true)
+                      : undefined
+                  }
+                />
+              ))}
+            </>
+          )}
           {/*
             Halo par traits empilés, PLUS AUCUN filtre SVG.
             L'ancien `sf-emission` empilait deux feGaussianBlur (dont un à 7) sur une
@@ -949,8 +988,8 @@ export default function SkillFlow() {
                 <div className={W_PRINCIPALE}>
                   <WorkflowCard
                     node={node}
-                    lit={litSet.has(node.id)}
-                    isHead={headId === node.id}
+                    lit={litSet.has(node.id) && (index !== 0 || introTransmissionComplete)}
+                    isHead={headId === node.id && (index !== 0 || introTransmissionComplete)}
                     receding={receding}
                     stepped
                   />

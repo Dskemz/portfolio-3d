@@ -25,8 +25,6 @@ interface WorkflowCardProps {
   stepped?: boolean;
 }
 
-const METAL =
-  "linear-gradient(150deg, #171717 0%, #121212 44%, #0d0d0d 74%, #151515 100%)";
 const PERIMETER_S = 0.6;
 
 function WorkflowCard({
@@ -56,9 +54,6 @@ function WorkflowCard({
     return () => observer.disconnect();
   }, [plain]);
 
-  const perimeter =
-    box.w > 0 && box.h > 0 ? `M ${box.w / 2} 0 H ${box.w} V ${box.h} H 0 V 0 Z` : "";
-
   const instant = receding && !stepped;
   const shell = instant
     ? { duration: 0.05, ease: "linear" as const }
@@ -69,6 +64,12 @@ function WorkflowCard({
   const inner = instant
     ? { duration: 0.05, delay: 0, ease: "linear" as const }
     : { duration: 0.4, delay: PERIMETER_S * 0.78, ease: [0.22, 1, 0.36, 1] as const };
+  const titleTransition = instant
+    ? { duration: 0.05, ease: "linear" as const }
+    : { duration: 0.68, ease: [0.22, 1, 0.36, 1] as const };
+  const detailTransition = instant
+    ? { duration: 0.05, delay: 0, ease: "linear" as const }
+    : { duration: 0.56, delay: 0.42, ease: [0.22, 1, 0.36, 1] as const };
   const dotTiming = instant ? { duration: 0.05 } : { duration: 0.22 };
 
   /* Pastilles d'ancrage du flux */
@@ -96,59 +97,62 @@ function WorkflowCard({
   const editorial = (
     <div className="flex flex-col justify-center px-[clamp(1.25rem,3.6svh,2.5rem)] py-[clamp(1.35rem,4.4svh,3rem)]">
 
-      <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-[#FF7F50]">
-        Étape {node.step}
-      </p>
-
-      <h2
+      <motion.h2
+        initial={false}
+        animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 18 }}
+        transition={titleTransition}
         className={`mt-[clamp(0.5rem,1.5svh,1rem)] font-display font-light leading-tight text-white ${
           isTerminal
             ? "text-[clamp(1.4rem,3.4svh,2.6rem)]"
-            : "text-[clamp(1.25rem,2.7svh,1.875rem)]"
+            : "flex flex-wrap items-baseline gap-x-5 text-[clamp(2.6rem,5.2vw,5.8rem)] tracking-[-0.06em]"
         }`}
       >
-        {node.title}
-      </h2>
+        {isTerminal ? (
+          node.title
+        ) : (
+          <>
+            <span className="font-medium">{node.title}</span>
+            <span className="font-mono text-[clamp(9px,0.9vw,12px)] uppercase tracking-[0.28em] text-[#FF7F50]">
+              Étape {node.step}
+            </span>
+          </>
+        )}
+      </motion.h2>
 
-      {node.quote && (
-        <p className="mt-[clamp(0.5rem,1.5svh,1rem)] font-body text-[clamp(0.68rem,1.05svh,0.72rem)] italic leading-relaxed text-zinc-500">
-          «&nbsp;{node.quote.text}&nbsp;»
-          <br />
-          <span className="not-italic">— {node.quote.author}</span>
+      <motion.div
+        initial={false}
+        animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 14 }}
+        transition={detailTransition}
+      >
+        {node.quote && (
+          <p className="mt-[clamp(0.5rem,1.5svh,1rem)] font-body text-[clamp(0.68rem,1.05svh,0.72rem)] italic leading-relaxed text-zinc-500">
+            «&nbsp;{node.quote.text}&nbsp;»
+            <br />
+            <span className="not-italic">— {node.quote.author}</span>
+          </p>
+        )}
+
+        <div className="my-[clamp(0.7rem,2.2svh,1.5rem)] h-px w-16 bg-white/[0.18]" />
+
+        <p className="max-w-md text-[clamp(0.8rem,1.35svh,0.95rem)] leading-relaxed text-zinc-400">
+          {node.description}
         </p>
-      )}
 
-      <div className="my-[clamp(0.7rem,2.2svh,1.5rem)] h-px w-full bg-white/[0.09]" />
-
-      <p className="text-[clamp(0.8rem,1.35svh,0.95rem)] leading-relaxed text-zinc-400">
-        {node.description}
-      </p>
-
-      <div className="mt-[clamp(0.75rem,2.5svh,1.75rem)] flex flex-wrap items-center gap-[clamp(0.35rem,0.9svh,0.625rem)]">
-        {node.tags.map((tag) => (
-          <span
-            key={tag}
-            className="border border-white/[0.14] px-[clamp(0.5rem,1.1svh,0.75rem)] py-[clamp(0.25rem,0.6svh,0.375rem)] font-mono text-[clamp(8px,0.85svh,9px)] uppercase tracking-[0.16em] text-zinc-400"
+        {node.href && isTerminal && (
+          <Link
+            href={node.href}
+            className={
+              isTerminal
+                ? "mt-[clamp(0.9rem,2.9svh,2rem)] inline-block self-start bg-[#FF7F50] px-[clamp(1.1rem,2.6svh,1.75rem)] py-[clamp(0.6rem,1.5svh,0.875rem)] font-display text-[clamp(0.8rem,1.4svh,0.875rem)] font-semibold tracking-wide text-black transition-colors hover:bg-[#E67E22]"
+                : "mt-[clamp(0.9rem,2.9svh,2rem)] inline-flex items-center gap-2 self-start font-mono text-[10px] uppercase tracking-[0.24em] text-[#FF7F50] transition-colors hover:text-[#E67E22]"
+            }
+            style={isTerminal ? { touchAction: "manipulation" } : undefined}
           >
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {node.href && (
-        <Link
-          href={node.href}
-          className={
-            isTerminal
-              ? "mt-[clamp(0.9rem,2.9svh,2rem)] inline-block self-start bg-[#FF7F50] px-[clamp(1.1rem,2.6svh,1.75rem)] py-[clamp(0.6rem,1.5svh,0.875rem)] font-display text-[clamp(0.8rem,1.4svh,0.875rem)] font-semibold tracking-wide text-black transition-colors hover:bg-[#E67E22]"
-              : "mt-[clamp(0.9rem,2.9svh,2rem)] inline-flex items-center gap-2 self-start font-mono text-[10px] uppercase tracking-[0.24em] text-[#FF7F50] transition-colors hover:text-[#E67E22]"
-          }
-          style={isTerminal ? { touchAction: "manipulation" } : undefined}
-        >
-          {node.hrefLabel ?? "Voir"}
-          {!isTerminal && <span aria-hidden>—→</span>}
-        </Link>
-      )}
+            {node.hrefLabel ?? "Voir"}
+            {!isTerminal && <span aria-hidden>—→</span>}
+          </Link>
+        )}
+      </motion.div>
     </div>
   );
 
@@ -160,11 +164,16 @@ function WorkflowCard({
       <div className="mx-auto mt-[clamp(0.9rem,2.9svh,2rem)] max-w-2xl">{editorial}</div>
     </div>
   ) : (
-    <div className="grid grid-cols-1 md:grid-cols-2">
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-[0.8fr_1.2fr] md:gap-14">
       {editorial}
-      <div className="relative border-t border-white/[0.08] md:border-l md:border-t-0">
+      <motion.div
+        className="relative min-h-[clamp(18rem,42svh,32rem)] md:min-h-[clamp(20rem,48svh,38rem)]"
+        initial={false}
+        animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 14 }}
+        transition={detailTransition}
+      >
         <StepVisual node={node} active={visible} />
-      </div>
+      </motion.div>
     </div>
   );
 
@@ -172,26 +181,17 @@ function WorkflowCard({
     return (
       <article
         id={getNodeCardId(node.id)}
-        className="relative h-auto overflow-hidden border border-[#FF7F50]/25"
+        className="relative h-auto overflow-visible"
         style={{
-          background: METAL,
-          boxShadow:
-            "0 0 16px rgba(255,127,80,0.08), 0 14px 34px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)",
+          background: "transparent",
         }}
       >
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px opacity-40"
-          style={{
-            background: "linear-gradient(90deg, transparent, #FF7F50 50%, transparent)",
-          }}
-        />
         {isTerminal ? (
           editorial
         ) : (
           <>
             {editorial}
-            <div className="border-t border-white/[0.08]">
+            <div className="mt-8">
               <StepVisual node={node} active={visible} />
             </div>
           </>
@@ -202,11 +202,19 @@ function WorkflowCard({
 
   return (
     <div className="relative h-auto">
+      {/* Le courant traverse la fiche hors champ : il entre et ressort, sans
+          créer une ligne parasite au milieu du contenu. */}
+      {!isTerminal && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-0 left-0 top-0 z-20 w-5 -translate-x-1/2 bg-black"
+        />
+      )}
       {/* Ancre supérieure : déclenche l'allumage au contact exact du flux */}
-      {dot(getNodeAnchorId(node.id), "left-1/2 top-0 -translate-x-1/2 -translate-y-1/2", isHead)}
-      {/* La fiche terminale n'a pas de sortie : la visite s'arrête sur elle. */}
+      {dot(getNodeAnchorId(node.id), "left-0 top-0 -translate-x-1/2 -translate-y-1/2", isHead)}
+      {/* Le flux réapparaît ici avant de poursuivre vers l'étape suivante. */}
       {!isTerminal &&
-        dot(getNodeExitId(node.id), "left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2", false)}
+        dot(getNodeExitId(node.id), "left-0 bottom-0 -translate-x-1/2 translate-y-1/2", false)}
 
       <motion.article
         ref={frameRef}
@@ -214,78 +222,16 @@ function WorkflowCard({
         initial={false}
         animate={{
           opacity: visible ? 1 : 0,
-          scale: visible ? 1 : 0.95,
-          boxShadow: visible
-            ? isHead
-              ? "0 0 48px rgba(255,127,80,0.26), 0 24px 50px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.07)"
-              : "0 0 24px rgba(255,127,80,0.12), 0 20px 42px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)"
-            : "0 0 0 rgba(0,0,0,0)",
+          scale: 1,
+          boxShadow: "none",
         }}
-        transition={shell}
-        style={{ background: METAL, pointerEvents: visible ? "auto" : "none" }}
-        className="relative h-auto overflow-hidden border border-white/[0.07]"
+        transition={instant ? shell : { duration: 0.01 }}
+        style={{ background: "transparent", pointerEvents: visible ? "auto" : "none" }}
+        className="relative h-auto overflow-visible"
       >
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 z-0"
-          style={{
-            background:
-              "linear-gradient(115deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0) 70%, rgba(255,255,255,0.03) 100%)",
-          }}
-        />
-
-        <motion.span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 z-0"
-          style={{
-            background:
-              "radial-gradient(120% 90% at 50% 0%, rgba(255,127,80,0.14), rgba(255,127,80,0) 62%)",
-          }}
-          initial={false}
-          animate={{ opacity: visible ? 1 : 0 }}
-          transition={edge}
-        />
-
-        {perimeter && (
-          <svg
-            aria-hidden
-            className="pointer-events-none absolute inset-0 z-20"
-            width={box.w}
-            height={box.h}
-            viewBox={`0 0 ${box.w} ${box.h}`}
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <filter id={`edge-${node.id}`} x="-30%" y="-30%" width="160%" height="160%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="g" />
-                <feMerge>
-                  <feMergeNode in="g" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-            <motion.path
-              d={perimeter}
-              fill="none"
-              stroke="#FF7F50"
-              strokeWidth={1.2}
-              vectorEffect="non-scaling-stroke"
-              initial={false}
-              animate={{ pathLength: visible ? 1 : 0, opacity: visible ? 1 : 0 }}
-              transition={edge}
-              filter={`url(#edge-${node.id})`}
-            />
-          </svg>
-        )}
-
-        <motion.div
-          className="relative z-10"
-          initial={false}
-          animate={{ opacity: visible ? 1 : 0 }}
-          transition={inner}
-        >
+        <div className="relative z-10">
           {body}
-        </motion.div>
+        </div>
       </motion.article>
     </div>
   );
