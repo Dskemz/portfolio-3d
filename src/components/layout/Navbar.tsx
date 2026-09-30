@@ -7,7 +7,7 @@ import MenuMobile, { type LienNav } from "./MenuMobile";
 import { jumpToTop } from "@/components/workflow/stepping";
 
 const LIENS: readonly LienNav[] = [
-  { libelle: "Visite Virtuelle", href: "/visite-virtuelle" },
+  { libelle: "N3D", href: "/n3d" },
   { libelle: "Projets", href: "/portfolio" },
   { libelle: "À propos", href: "/about" },
   { libelle: "Contact", href: "/contact" },
