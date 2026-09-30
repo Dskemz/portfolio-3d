@@ -22,7 +22,7 @@ const nextConfig = {
 
               // Scripts - Next.js exige 'unsafe-inline' pour les inline scripts
               // À terme, migrer vers strict CSP + script nonces
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.example.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.example.com https://cdn.babylonjs.com",
 
               // Styles - Tailwind nécessite unsafe-inline
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
@@ -45,8 +45,8 @@ const nextConfig = {
               // Manifests
               "manifest-src 'self'",
 
-              // Worker sources (Service Worker, Web Worker)
-              "worker-src 'self'",
+              // Worker sources (Service Worker, Web Worker) - blob: pour le décodeur KTX2 Babylon
+              "worker-src 'self' blob:",
 
               // Base URI - restriction du <base> tag
               "base-uri 'self'",
