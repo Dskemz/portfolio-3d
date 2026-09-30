@@ -35,6 +35,7 @@ export default function GlbViewer({ glbUrl, active, onReady, wireframe = false }
         Engine,
         Scene,
         ArcRotateCamera,
+        TransformNode,
         HemisphericLight,
         Vector3,
         Color3,
@@ -120,10 +121,29 @@ export default function GlbViewer({ glbUrl, active, onReady, wireframe = false }
       if (glbUrl) {
         await import("@babylonjs/loaders/glTF");
         const result = await core.SceneLoader.ImportMeshAsync("", "", glbUrl, scene);
-        rotor = result.meshes[0] ?? null;
+        const modelRoot = new TransformNode("model-root", scene);
+        const renderMeshes = result.meshes.filter((mesh) => mesh.getTotalVertices() > 0);
+        for (const mesh of renderMeshes) {
+          if (!mesh.parent) mesh.parent = modelRoot;
+        }
+
+        // Les exports peuvent avoir leur origine hors du volume de la chaise.
+        // On recale le centre géométrique sur l'origine de la caméra afin que
+        // les deux GLB tournent autour du même pivot visuel.
+        let min = renderMeshes[0].getBoundingInfo().boundingBox.minimumWorld.clone();
+        let max = renderMeshes[0].getBoundingInfo().boundingBox.maximumWorld.clone();
+        for (const mesh of renderMeshes.slice(1)) {
+          const bounds = mesh.getBoundingInfo().boundingBox;
+          min = core.Vector3.Minimize(min, bounds.minimumWorld);
+          max = core.Vector3.Maximize(max, bounds.maximumWorld);
+        }
+        const center = min.add(max).scale(0.5);
+        modelRoot.position = center.scale(-1);
+        modelRoot.rotation.y = Math.PI;
+        camera.target = Vector3.Zero();
+        rotor = modelRoot as unknown as AbstractMesh;
         if (wireframe) {
-          for (const mesh of result.meshes) {
-            if (mesh.getTotalVertices() === 0) continue;
+          for (const mesh of renderMeshes) {
             mesh.enableEdgesRendering();
             mesh.edgesWidth = 1.1;
             mesh.edgesColor = new core.Color4(0.95, 0.36, 0.08, 0.95);
