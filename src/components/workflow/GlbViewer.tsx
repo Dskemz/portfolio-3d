@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import type {
   AbstractMesh,
   Color3 as BabylonColor3,
@@ -29,6 +29,23 @@ const STORYTELLING_FRAME = {
 };
 /** Marge autour de la sphère englobante du modèle (1 = tangente au bord du cadre). */
 const FRAME_MARGIN = 1.08;
+
+/** Environnement HDRI préfiltré de l'éclairage studio (étape 04). */
+const STUDIO_ENV_URL = "/models/storytelling/studio_small_08_1k.env";
+/**
+ * Lumières studio d'après la scène Blender (vue de dessus), converties en
+ * repère Babylon : (x, y, z) = (-X, Z, -Y) Blender. Hauteurs estimées.
+ */
+const STUDIO_LIGHTS = [
+  // Rectangle bas droit, près de la caméra : key light, porte les ombres.
+  { name: "key", position: [-2.9, 2.2, 6.3], intensity: 2.4, color: [1, 0.95, 0.88], shadows: true },
+  // Rectangle haut droit, derrière la chaise : contre-jour qui détache la silhouette.
+  { name: "rim", position: [-2.2, 2.4, -1.0], intensity: 2.6, color: [1, 0.9, 0.78], shadows: false },
+  // Rectangle gauche, éloigné : fill froid rasant.
+  { name: "fill", position: [7.6, 1.2, 2.6], intensity: 0.7, color: [0.82, 0.88, 1], shadows: false },
+  // Grand carré centré à l'origine : douche de lumière zénithale.
+  { name: "top", position: [0, 3.5, 0.5], intensity: 0.4, color: [1, 1, 1], shadows: false },
+] as const;
 
 /**
  * Maillage filaire 1 px reconstruit en quads : les diagonales de
@@ -93,8 +110,16 @@ interface GlbViewerProps {
   glbUrl?: string;
   /** Monte/démonte le moteur Babylon. À couper hors survol/tap pour ne pas garder un contexte WebGL par fiche. */
   active: boolean;
+  /**
+   * GLB visible et manipulable. Faux ⇒ préchargé sous l'image précalculée :
+   * figé dans sa pose initiale, sans autorotation ni rendu continu, pour une
+   * bascule image → 3D instantanée.
+   */
+  revealed?: boolean;
   onReady?: () => void;
   wireframe?: boolean;
+  /** Éclairage studio (HDRI + lumières + ombres) au lieu de la lumière neutre. */
+  studioLighting?: boolean;
 }
 
 /**
@@ -102,10 +127,38 @@ interface GlbViewerProps {
  * autorotation douce, fond transparent. Sans `glbUrl`, affiche un mesh
  * procédural en attendant les vrais fichiers (voir workflowData.ts).
  */
-export default function GlbViewer({ glbUrl, active, onReady, wireframe = false }: GlbViewerProps) {
+export default function GlbViewer({
+  glbUrl,
+  active,
+  revealed = true,
+  onReady,
+  wireframe = false,
+  studioLighting = false,
+}: GlbViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<Engine | null>(null);
   const sceneRef = useRef<Scene | null>(null);
+  // Lus depuis la boucle de rendu : des refs évitent de recréer le moteur
+  // (et de recharger le GLB) à chaque rendu du parent.
+  const onReadyRef = useRef(onReady);
+  const revealedRef = useRef(revealed);
+  const resetPoseRef = useRef<(() => void) | null>(null);
+  const pendingFramesRef = useRef(0);
+  const readyRef = useRef(false);
+
+  useEffect(() => {
+    onReadyRef.current = onReady;
+  }, [onReady]);
+
+  // Layout effect : la frame est redessinée avant l'affichage, dans le même
+  // commit que le retrait de l'image précalculée.
+  useLayoutEffect(() => {
+    revealedRef.current = revealed;
+    // Retour à l'image : le GLB reprend la pose de l'image pour la prochaine
+    // bascule, et on redessine une frame puisque le rendu continu s'arrête.
+    if (!revealed) resetPoseRef.current?.();
+    if (readyRef.current) sceneRef.current?.render();
+  }, [revealed]);
 
   useEffect(() => {
     if (!active) return;
@@ -289,6 +342,50 @@ export default function GlbViewer({ glbUrl, active, onReady, wireframe = false }
           engine.onResizeObservable.add(fitCamera);
         }
 
+        if (studioLighting && renderMeshes.length > 0) {
+          scene.environmentTexture = core.CubeTexture.CreateFromPrefilteredData(STUDIO_ENV_URL, scene);
+          scene.environmentIntensity = 0.6;
+          light.intensity = 0.15;
+          const imageProcessing = scene.imageProcessingConfiguration;
+          imageProcessing.toneMappingEnabled = true;
+          imageProcessing.toneMappingType = core.ImageProcessingConfiguration.TONEMAPPING_ACES;
+          imageProcessing.exposure = 1.15;
+          imageProcessing.contrast = 1.2;
+
+          for (const spec of STUDIO_LIGHTS) {
+            const position = new Vector3(...spec.position);
+            const studioLight = new core.DirectionalLight(
+              `studio-${spec.name}`,
+              camera.target.subtract(position).normalize(),
+              scene
+            );
+            studioLight.position = position;
+            studioLight.intensity = spec.intensity;
+            studioLight.diffuse = new Color3(...spec.color);
+            if (spec.shadows) {
+              const shadows = new core.ShadowGenerator(1024, studioLight);
+              shadows.usePercentageCloserFiltering = true;
+              shadows.filteringQuality = core.ShadowGenerator.QUALITY_MEDIUM;
+              shadows.bias = 0.002;
+              shadows.normalBias = 0.01;
+              for (const mesh of renderMeshes) {
+                shadows.addShadowCaster(mesh);
+                mesh.receiveShadows = true;
+              }
+            }
+          }
+        }
+
+        // Pose de l'image précalculée, restaurée à chaque retour à l'image.
+        const initialRotationY = pivot.rotation.y;
+        const initialAlpha = camera.alpha;
+        const initialBeta = camera.beta;
+        resetPoseRef.current = () => {
+          pivot.rotation.y = initialRotationY;
+          camera.alpha = initialAlpha;
+          camera.beta = initialBeta;
+        };
+
         rotor = pivot;
         rotorSpin = -1;
         if (wireframe) {
@@ -336,26 +433,45 @@ export default function GlbViewer({ glbUrl, active, onReady, wireframe = false }
       }
 
       scene.registerBeforeRender(() => {
+        if (!revealedRef.current) return;
         if (rotor) rotor.rotation.y += rotorSpin * 0.00035 * engine.getDeltaTime();
         if (wireRotor) wireRotor.rotation.y += 0.00035 * engine.getDeltaTime();
       });
 
-      engine.runRenderLoop(() => scene.render());
-      onReady?.();
+      // Shaders compilés et textures (KTX2, HDRI) prêtes avant de signaler le
+      // GLB : la bascule image → 3D se fait alors sur une frame complète.
+      await scene.whenReadyAsync();
+      if (cancelled) return;
+      scene.render();
+      readyRef.current = true;
+
+      engine.runRenderLoop(() => {
+        // Masqué sous l'image : aucun rendu continu, sauf frames demandées.
+        if (!revealedRef.current && pendingFramesRef.current <= 0) return;
+        if (pendingFramesRef.current > 0) pendingFramesRef.current--;
+        scene.render();
+      });
+      onReadyRef.current?.();
     })();
 
-    const onResize = () => engineRef.current?.resize();
+    const onResize = () => {
+      engineRef.current?.resize();
+      // Le redimensionnement vide le canvas : une frame, même masqué.
+      pendingFramesRef.current = 1;
+    };
     window.addEventListener("resize", onResize);
 
     return () => {
       cancelled = true;
       window.removeEventListener("resize", onResize);
+      resetPoseRef.current = null;
+      readyRef.current = false;
       sceneRef.current?.dispose();
       engineRef.current?.dispose();
       sceneRef.current = null;
       engineRef.current = null;
     };
-  }, [active, glbUrl, onReady, wireframe]);
+  }, [active, glbUrl, wireframe, studioLighting]);
 
   if (!active) return null;
 

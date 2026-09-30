@@ -1,13 +1,10 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import type { WorkflowNode, WorkflowPoint } from "@/content/workflowData";
 import GlbViewer from "./GlbViewer";
-
-/** Durée du morph baked ⇄ GLB. */
-const MORPH_S = 0.8;
 
 /** Pas de dispositif de pointage à survol (tactile) : lu sans effet via useSyncExternalStore. */
 function subscribeHover(callback: () => void) {
@@ -36,17 +33,16 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
     setTrackedActive(active);
     if (!active) {
       setSpatial(false);
+      // Le viewer est démonté hors du flux : il devra recharger.
+      setGlbReady(false);
     }
   }
 
-  // Sortie de l'état 3 (survol/tap relâché) : même logique, ajustée au rendu.
-  const [trackedSpatial, setTrackedSpatial] = useState(spatial);
-  if (spatial !== trackedSpatial) {
-    setTrackedSpatial(spatial);
-    if (!spatial) setGlbReady(false);
-  }
-
   const canSpatialize = true;
+  // Le GLB est préchargé sous l'image dès que la fiche est active ; la
+  // bascule image → 3D est alors instantanée, sans fondu ni chargement.
+  const revealed = spatial && glbReady;
+  const handleGlbReady = useCallback(() => setGlbReady(true), []);
 
   const engage = () => {
     if (!isTouch && canSpatialize) setSpatial(true);
@@ -62,59 +58,45 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
       onMouseLeave={disengage}
     >
 
-      <AnimatePresence initial={false}>
-        {!spatial && (
-          <motion.div
-            key="baked"
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: MORPH_S }}
-          >
-            <BakedRender node={node} showHint={!isTouch} />
-            {isTouch && (
-              <button
-                type="button"
-                className="absolute bottom-3 left-1/2 z-20 -translate-x-1/2 border border-white/25 bg-black/70 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.2em] text-white/75"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setSpatial(true);
-                }}
-              >
-                Explorer en 3D
-              </button>
-            )}
-          </motion.div>
-        )}
+      {/* Masqué (sans fondu) tant qu'il n'est pas dévoilé : le canvas garde sa
+          frame, prête pour la bascule. */}
+      <div className={`absolute inset-0 ${revealed ? "" : "invisible"}`}>
+        <GlbViewer
+          glbUrl={node.glbUrl}
+          active={active}
+          revealed={revealed}
+          wireframe={node.step === "01"}
+          studioLighting={node.step === "04"}
+          onReady={handleGlbReady}
+        />
+        <motion.p
+          aria-hidden
+          className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.28em] text-white/50"
+          initial={false}
+          animate={{ opacity: revealed ? 1 : 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          Explorez en temps réel
+        </motion.p>
+      </div>
 
-        {spatial && (
-          <motion.div
-            key="glb"
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: MORPH_S }}
-          >
-            <GlbViewer
-              glbUrl={node.glbUrl}
-              active={spatial}
-              wireframe={node.step === "01"}
-              onReady={() => setGlbReady(true)}
-            />
-            <motion.p
-              aria-hidden
-              className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.28em] text-white/50"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: glbReady ? 1 : 0 }}
-              transition={{ duration: 0.4 }}
+      {!revealed && (
+        <div className="absolute inset-0">
+          <BakedRender node={node} showHint={!isTouch} />
+          {isTouch && (
+            <button
+              type="button"
+              className="absolute bottom-3 left-1/2 z-20 -translate-x-1/2 border border-white/25 bg-black/70 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.2em] text-white/75"
+              onClick={(event) => {
+                event.stopPropagation();
+                setSpatial(true);
+              }}
             >
-              Explorez en temps réel
-            </motion.p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              Explorer en 3D
+            </button>
+          )}
+        </div>
+      )}
 
     </div>
   );

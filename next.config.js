@@ -30,8 +30,8 @@ const nextConfig = {
               // Fonts
               "font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com",
 
-              // Images - autoriser https et data URLs (pour SVG inline)
-              "img-src 'self' https: data:",
+              // Images - https, data URLs (SVG inline) et blob: (faces du HDRI .env Babylon)
+              "img-src 'self' https: data: blob:",
 
               // Iframes - ESSENTIEL pour l'éditeur 3D
               "frame-src 'self' https://hub-visite-3d.vercel.app",
