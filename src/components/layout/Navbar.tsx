@@ -202,7 +202,7 @@ export default function Navbar() {
                   href={href}
                   aria-current={estActif(href) ? "page" : undefined}
                   className={`relative inline-block whitespace-nowrap text-sm transition-colors duration-200 ${
-                    estActif(href) ? "text-white" : "text-zinc-400 hover:text-white"
+                    estActif(href) ? "text-white" : "text-zinc-400 hover:text-[#FF7F50]"
                   }`}
                 >
                   {libelle}

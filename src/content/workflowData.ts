@@ -37,6 +37,8 @@ export interface WorkflowNode {
   step: string;
 
   title: string;
+  /** Repère éditorial associé au titre principal. */
+  kicker?: string;
   quote?: WorkflowQuote;
   description: string;
   tags: string[];
@@ -80,7 +82,8 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     id: "modelisation",
     kind: "step",
     step: "01",
-    title: "Modélisation 3D",
+    title: "STRUCTURER LA FORME",
+    kicker: "Étape 01 · Maillage",
     quote: {
       text: "La structure précède la liberté ; sans un cadre solide, l'improvisation n'est que le chaos.",
       author: "Jean Cocteau",
@@ -102,7 +105,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     id: "textures-shaders",
     kind: "step",
     step: "02",
-    title: "Textures et shaders",
+    title: "TEXTURES ET SHADERS",
     quote: {
       text: "La perfection est atteinte non quand il n'y a plus rien à ajouter, mais plus rien à retirer.",
       author: "Antoine de Saint-Exupéry",
@@ -122,7 +125,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     id: "lighting-rendu",
     kind: "step",
     step: "03",
-    title: "Lighting et rendu",
+    title: "LIGHTING ET RENDU",
     quote: {
       text: "Ce que l'on conçoit bien s'énonce clairement, et se manipule sans mode d'emploi.",
       author: "d'après Nicolas Boileau",
@@ -144,7 +147,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     id: "contact-terminal",
     kind: "terminal",
     step: "04",
-    title: "Démarrer votre projet",
+    title: "DÉMARRER VOTRE PROJET",
     description:
       "Le courant s'arrête ici. Décrivez votre projet : je vous dis par quelle étape il commence et ce que cela implique concrètement.",
     tags: ["Réponse sous 48 h", "Devis gratuit"],

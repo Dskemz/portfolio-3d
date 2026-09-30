@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import type { WorkflowNode, WorkflowPoint } from "@/content/workflowData";
 import GlbViewer from "./GlbViewer";
 
-/** Durée de l'état 1 (croquis + points) avant bascule vers le rendu baked. */
-const STATE1_HOLD_MS = 3800;
 /** Durée du morph baked ⇄ GLB. */
 const MORPH_S = 0.8;
 
@@ -21,11 +19,12 @@ const getIsTouch = () => window.matchMedia("(hover: none)").matches;
 const getIsTouchServer = () => false;
 
 /**
- * Volet droit d'une fiche étape : croquis annoté → rendu baked figé → modèle
- * GLB interactif au survol (desktop) ou au tap (mobile).
+ * Volet droit d'une fiche étape : rendu baked figé → modèle GLB interactif au
+ * survol (desktop) ou au tap (mobile). Le rendu final transparent prendra
+ * naturellement le relais du GLB, sans cadre ni croquis intermédiaire.
  */
 export default function StepVisual({ node, active }: { node: WorkflowNode; active: boolean }) {
-  const [phase, setPhase] = useState<"sketch" | "baked">("sketch");
+  const phase = "baked" as const;
   const [spatial, setSpatial] = useState(false);
   const [glbReady, setGlbReady] = useState(false);
   const isTouch = useSyncExternalStore(subscribeHover, getIsTouch, getIsTouchServer);
@@ -36,7 +35,6 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
   if (active !== trackedActive) {
     setTrackedActive(active);
     if (!active) {
-      setPhase("sketch");
       setSpatial(false);
     }
   }
@@ -48,13 +46,7 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
     if (!spatial) setGlbReady(false);
   }
 
-  useEffect(() => {
-    if (!active) return;
-    const timer = window.setTimeout(() => setPhase("baked"), STATE1_HOLD_MS);
-    return () => window.clearTimeout(timer);
-  }, [active, node.id]);
-
-  const canSpatialize = phase === "baked";
+  const canSpatialize = true;
 
   const engage = () => {
     if (!isTouch && canSpatialize) setSpatial(true);
@@ -75,21 +67,7 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
     >
 
       <AnimatePresence initial={false}>
-        {phase === "sketch" && (
-          <motion.div
-            key="sketch"
-            className="absolute inset-0"
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Sketch variant={node.blueprint ?? 0} active={active} />
-            <span className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[8px] uppercase tracking-[0.34em] text-white/30">
-              Blueprint
-            </span>
-          </motion.div>
-        )}
-
-        {phase === "baked" && !spatial && (
+        {!spatial && (
           <motion.div
             key="baked"
             className="absolute inset-0"
@@ -102,7 +80,7 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
           </motion.div>
         )}
 
-        {phase === "baked" && spatial && (
+        {spatial && (
           <motion.div
             key="glb"
             className="absolute inset-0"

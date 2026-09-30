@@ -27,6 +27,61 @@ interface WorkflowCardProps {
 
 const PERIMETER_S = 0.6;
 
+function TypedQuote({
+  quote,
+  visible,
+}: {
+  quote: NonNullable<WorkflowNode["quote"]>;
+  visible: boolean;
+}) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!visible) {
+      setCount(0);
+      return;
+    }
+
+    let timer: number | undefined;
+    const start = window.setTimeout(() => {
+      let next = 0;
+      timer = window.setInterval(() => {
+        next += 1;
+        setCount(next);
+        if (next >= quote.text.length) window.clearInterval(timer);
+      }, 11);
+    }, 880);
+
+    return () => {
+      window.clearTimeout(start);
+      if (timer !== undefined) window.clearInterval(timer);
+    };
+  }, [quote.text, visible]);
+
+  const complete = count >= quote.text.length;
+  return (
+    <div className="mt-[clamp(0.5rem,1.5svh,1rem)] min-h-[3.6rem] font-body text-[clamp(0.68rem,1.05svh,0.72rem)] italic leading-relaxed text-zinc-500">
+      <span>«&nbsp;{quote.text.slice(0, count)}{complete ? " »" : ""}</span>
+      {!complete && visible && (
+        <motion.span
+          aria-hidden="true"
+          className="ml-0.5 inline-block h-[0.9em] w-px align-[-0.1em] bg-[#FF7F50]"
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ duration: 0.7, repeat: Infinity, ease: "linear" }}
+        />
+      )}
+      <motion.span
+        className="block not-italic"
+        initial={false}
+        animate={{ opacity: complete ? 1 : 0 }}
+        transition={{ duration: 0.25 }}
+      >
+        — {quote.author}
+      </motion.span>
+    </div>
+  );
+}
+
 function WorkflowCard({
   node,
   lit,
@@ -69,7 +124,11 @@ function WorkflowCard({
     : { duration: 0.68, ease: [0.22, 1, 0.36, 1] as const };
   const detailTransition = instant
     ? { duration: 0.05, delay: 0, ease: "linear" as const }
-    : { duration: 0.56, delay: 0.42, ease: [0.22, 1, 0.36, 1] as const };
+    : {
+        duration: 0.7,
+        delay: node.quote ? Math.min(2.25, 1.04 + node.quote.text.length * 0.011) : 0.72,
+        ease: [0.22, 1, 0.36, 1] as const,
+      };
   const dotTiming = instant ? { duration: 0.05 } : { duration: 0.22 };
 
   /* Pastilles d'ancrage du flux */
@@ -94,44 +153,51 @@ function WorkflowCard({
     </div>
   );
 
-  const editorial = (
-    <div className="flex flex-col justify-center px-[clamp(1.25rem,3.6svh,2.5rem)] py-[clamp(1.35rem,4.4svh,3rem)]">
-
-      <motion.h2
+  const titleBlock = (
+      <motion.div
         initial={false}
-        animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 18 }}
+        animate={{
+          opacity: visible ? 1 : 0,
+          y: visible ? 0 : 26,
+          clipPath: visible ? "inset(0 0 0% 0)" : "inset(0 0 100% 0)",
+        }}
         transition={titleTransition}
-        className={`mt-[clamp(0.5rem,1.5svh,1rem)] font-display font-light leading-tight text-white ${
-          isTerminal
-            ? "text-[clamp(1.4rem,3.4svh,2.6rem)]"
-            : "flex flex-wrap items-baseline gap-x-5 text-[clamp(2.6rem,5.2vw,5.8rem)] tracking-[-0.06em]"
-        }`}
+        className="mt-[clamp(0.5rem,1.5svh,1rem)] max-w-4xl"
       >
-        {isTerminal ? (
-          node.title
-        ) : (
+        {!isTerminal && (
+          <span className="mb-[clamp(0.75rem,2svh,1.35rem)] block font-mono text-[clamp(9px,0.9vw,12px)] uppercase tracking-[0.3em] text-[#FF7F50]">
+            {node.kicker ?? `Étape ${node.step}`}
+          </span>
+        )}
+        <h2
+          className={`font-display font-light uppercase leading-[0.94] text-white ${
+            isTerminal
+              ? "text-[clamp(1.4rem,3.4svh,2.6rem)]"
+              : "max-w-[12ch] text-[clamp(3.1rem,5.6vw,6.1rem)] tracking-[-0.065em]"
+          }`}
+        >
+          <span className="font-semibold">{node.title.charAt(0)}</span>
+          <span className="font-extralight">{node.title.slice(1)}</span>
+        </h2>
+        {isTerminal && (
           <>
-            <span className="font-medium">{node.title}</span>
             <span className="font-mono text-[clamp(9px,0.9vw,12px)] uppercase tracking-[0.28em] text-[#FF7F50]">
-              Étape {node.step}
+              {node.kicker ?? `Étape ${node.step}`}
             </span>
           </>
         )}
-      </motion.h2>
+      </motion.div>
+  );
 
+  const quoteBlock = node.quote && <TypedQuote quote={node.quote} visible={visible} />;
+
+  const detailBlock = (
+    <>
       <motion.div
         initial={false}
         animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 14 }}
         transition={detailTransition}
       >
-        {node.quote && (
-          <p className="mt-[clamp(0.5rem,1.5svh,1rem)] font-body text-[clamp(0.68rem,1.05svh,0.72rem)] italic leading-relaxed text-zinc-500">
-            «&nbsp;{node.quote.text}&nbsp;»
-            <br />
-            <span className="not-italic">— {node.quote.author}</span>
-          </p>
-        )}
-
         <div className="my-[clamp(0.7rem,2.2svh,1.5rem)] h-px w-16 bg-white/[0.18]" />
 
         <p className="max-w-md text-[clamp(0.8rem,1.35svh,0.95rem)] leading-relaxed text-zinc-400">
@@ -153,6 +219,14 @@ function WorkflowCard({
           </Link>
         )}
       </motion.div>
+    </>
+  );
+
+  const editorial = (
+    <div className="flex flex-col justify-center px-[clamp(1.25rem,3.6svh,2.5rem)] py-[clamp(1.35rem,4.4svh,3rem)]">
+      {titleBlock}
+      {quoteBlock}
+      {detailBlock}
     </div>
   );
 
@@ -164,16 +238,24 @@ function WorkflowCard({
       <div className="mx-auto mt-[clamp(0.9rem,2.9svh,2rem)] max-w-2xl">{editorial}</div>
     </div>
   ) : (
-    <div className="grid grid-cols-1 gap-8 md:grid-cols-[0.8fr_1.2fr] md:gap-14">
-      {editorial}
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.2fr_0.8fr] md:gap-x-14 md:gap-y-5">
+      <div className="px-[clamp(1.25rem,3.6svh,2.5rem)] pt-[clamp(1.35rem,4.4svh,3rem)] md:col-span-2">
+        {titleBlock}
+      </div>
+      <div className="px-[clamp(1.25rem,3.6svh,2.5rem)] md:col-span-2">
+        {quoteBlock}
+      </div>
       <motion.div
-        className="relative min-h-[clamp(18rem,42svh,32rem)] md:min-h-[clamp(20rem,48svh,38rem)]"
+        className="relative min-h-[clamp(18rem,42svh,32rem)] px-[clamp(1.25rem,3.6svh,2.5rem)] md:min-h-[clamp(20rem,48svh,38rem)]"
         initial={false}
         animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 14 }}
         transition={detailTransition}
       >
         <StepVisual node={node} active={visible} />
       </motion.div>
+      <div className="flex flex-col justify-center px-[clamp(1.25rem,3.6svh,2.5rem)] pb-[clamp(1.35rem,4.4svh,3rem)]">
+        {detailBlock}
+      </div>
     </div>
   );
 
@@ -186,16 +268,7 @@ function WorkflowCard({
           background: "transparent",
         }}
       >
-        {isTerminal ? (
-          editorial
-        ) : (
-          <>
-            {editorial}
-            <div className="mt-8">
-              <StepVisual node={node} active={visible} />
-            </div>
-          </>
-        )}
+        {body}
       </article>
     );
   }
@@ -207,14 +280,14 @@ function WorkflowCard({
       {!isTerminal && (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute bottom-0 left-0 top-0 z-20 w-5 -translate-x-1/2 bg-black"
+          className="pointer-events-none absolute bottom-0 left-0 top-0 z-20 hidden w-12 -translate-x-1/2 bg-black [box-shadow:0_0_28px_16px_#000] md:block"
         />
       )}
       {/* Ancre supérieure : déclenche l'allumage au contact exact du flux */}
-      {dot(getNodeAnchorId(node.id), "left-0 top-0 -translate-x-1/2 -translate-y-1/2", isHead)}
+      {dot(getNodeAnchorId(node.id), "left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 md:left-0", isHead)}
       {/* Le flux réapparaît ici avant de poursuivre vers l'étape suivante. */}
       {!isTerminal &&
-        dot(getNodeExitId(node.id), "left-0 bottom-0 -translate-x-1/2 translate-y-1/2", false)}
+        dot(getNodeExitId(node.id), "left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 md:left-0", false)}
 
       <motion.article
         ref={frameRef}

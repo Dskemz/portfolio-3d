@@ -63,7 +63,11 @@ export default function GlbViewer({ glbUrl, active, onReady }: GlbViewerProps) {
         Vector3.Zero(),
         scene
       );
-      camera.attachControl(canvasRef.current, true);
+      // Sur téléphone, le swipe vertical appartient entièrement au récit. Le
+      // modèle reste animé après le tap, mais ne reçoit pas le geste de scroll
+      // comme une commande de caméra (zoom / déplacement involontaire).
+      const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+      if (!isTouchDevice) camera.attachControl(canvasRef.current, true);
       camera.lowerRadiusLimit = 2.6;
       camera.upperRadiusLimit = 7;
       camera.wheelPrecision = 60;
@@ -124,7 +128,7 @@ export default function GlbViewer({ glbUrl, active, onReady }: GlbViewerProps) {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 h-full w-full touch-none"
+      className="absolute inset-0 h-full w-full touch-pan-y"
       aria-label="Modèle 3D interactif"
     />
   );

@@ -38,6 +38,8 @@ export default function SkillFlowMobile() {
   const [endY, setEndY] = useState(0);
   /** Y du centre de chaque fiche, relative au conteneur. */
   const [anchors, setAnchors] = useState<Record<string, number>>({});
+  /** Bas de chaque fiche : le courant ne traverse jamais cette zone. */
+  const [exits, setExits] = useState<Record<string, number>>({});
 
   /** Hauteur courante du trait, en pixels depuis startY. */
   const [flow, setFlow] = useState(0);
@@ -65,6 +67,7 @@ export default function SkillFlowMobile() {
     const start = o.top - box.top + o.height / 2;
 
     const next: Record<string, number> = {};
+    const nextExits: Record<string, number> = {};
     let last = start;
 
     for (const node of WORKFLOW_NODES) {
@@ -73,6 +76,7 @@ export default function SkillFlowMobile() {
       const r = el.getBoundingClientRect();
       // Le courant « touche » la fiche quand il atteint son bord haut
       next[node.id] = r.top - box.top;
+      nextExits[node.id] = r.bottom - box.top;
       last = r.bottom - box.top;
     }
 
@@ -84,6 +88,7 @@ export default function SkillFlowMobile() {
     setStartY(start);
     setEndY(last);
     setAnchors(next);
+    setExits(nextExits);
   };
 
   useLayoutEffect(() => {
@@ -471,6 +476,21 @@ export default function SkillFlowMobile() {
   }, []);
 
   const litSet = new Set(litIds);
+  const visibleEnd = startY + flow;
+  const flowSegments: Array<{ top: number; height: number }> = [];
+  let segmentStart = startY;
+
+  for (const node of WORKFLOW_NODES) {
+    const entry = anchors[node.id];
+    if (entry === undefined) continue;
+    const height = Math.max(0, Math.min(entry, visibleEnd) - segmentStart);
+    if (height > 0) flowSegments.push({ top: segmentStart, height });
+
+    // Une fois la fiche touchée, le courant réapparaît sous celle-ci. La fiche
+    // terminale clôt le récit : il n'y a volontairement pas de segment après.
+    if (node.kind === "terminal") break;
+    segmentStart = exits[node.id] ?? entry;
+  }
 
   return (
     <div ref={containerRef} className="relative w-full overflow-hidden">
@@ -530,22 +550,24 @@ export default function SkillFlowMobile() {
         </div>
       </header>
 
-      {/* ═══ LE TRAIT, simple div centrée, aucune SVG ═══ */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 z-0"
-        style={{
-          top: startY,
-          height: flow,
-          width: TRAIT,
-          marginLeft: -TRAIT / 2,
-          background: "#FF7F50",
-          boxShadow: "0 0 8px 1px rgba(255,127,80,0.7), 0 0 18px 4px rgba(255,127,80,0.35)",
-          opacity: flow > 0 ? 1 : 0,
-        }}
-      />
+      {/* ═══ Courant découpé : aucun halo ne passe à travers une fiche ═══ */}
+      {flowSegments.map((segment, index) => (
+        <div
+          key={`${segment.top}-${index}`}
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 z-0"
+          style={{
+            top: segment.top,
+            height: segment.height,
+            width: TRAIT,
+            marginLeft: -TRAIT / 2,
+            background: "#FF7F50",
+            boxShadow: "0 0 8px 1px rgba(255,127,80,0.7), 0 0 18px 4px rgba(255,127,80,0.35)",
+          }}
+        />
+      ))}
 
-      {/* ═══ Les fiches, centrées, le trait passe au milieu ═══ */}
+      {/* ═══ Les fiches : axe central raccordé au point d'arrivée de l'intro ═══ */}
       <section
         aria-label="Processus de production 3D"
         className="relative z-10 flex w-full flex-col gap-16 px-6 pb-24 pt-10"
