@@ -56,6 +56,7 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
   };
   return (
     <div
+      data-glb-interaction="true"
       className="blueprint-stage group/blueprint relative h-full min-h-[clamp(9rem,22svh,18rem)] w-full overflow-hidden bg-transparent"
       onMouseEnter={engage}
       onMouseLeave={disengage}

@@ -205,6 +205,8 @@ export default function SkillFlowMobile() {
    * le défilement natif reste intact pour toute la durée du geste.
    */
   const gestureFreeRef = useRef(false);
+  /** Geste commencé dans la zone du visuel : le scroll vertical y est verrouillé. */
+  const glbGestureRef = useRef(false);
   /**
    * Flag stable : une fois qu'on a VRAIMENT entré en mode stepped (premier swipe
    * vers le bas détecté et capturé), on y reste. Élimine le problème du premier
@@ -333,6 +335,9 @@ export default function SkillFlowMobile() {
       }
       touchStartRef.current = { x: t.clientX, y: t.clientY };
       firedRef.current = false;
+      glbGestureRef.current = Boolean(
+        (e.target as HTMLElement | null)?.closest?.("[data-glb-interaction]")
+      );
       // Geste démarré sous la fiche terminale ? → défilement natif libre (footer).
       gestureFreeRef.current = belowTail();
     };
@@ -353,6 +358,13 @@ export default function SkillFlowMobile() {
       const start = touchStartRef.current;
       const t = e.touches[0];
       if (!start || !t) return;
+
+      // Tant que le doigt est parti dans le visuel, aucun mouvement vertical
+      // ne doit atteindre le scroll cranté. Le GLB garde la main pour tourner.
+      if (glbGestureRef.current) {
+        if (e.cancelable) e.preventDefault();
+        return;
+      }
 
       const dx = t.clientX - start.x;
       const dy = start.y - t.clientY; // + = le doigt remonte = la page descend
@@ -396,6 +408,7 @@ export default function SkillFlowMobile() {
       touchStartRef.current = null;
       firedRef.current = false;
       gestureFreeRef.current = false;
+      glbGestureRef.current = false;
       if (!start || alreadyFired || wasFree) return;
 
       const end = e.changedTouches[0];
