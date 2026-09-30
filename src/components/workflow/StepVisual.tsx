@@ -48,26 +48,17 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
 
   const canSpatialize = true;
 
-  useEffect(() => {
-    if (isTouch && active) setSpatial(true);
-  }, [active, isTouch]);
-
   const engage = () => {
     if (!isTouch && canSpatialize) setSpatial(true);
   };
   const disengage = () => {
     if (!isTouch) setSpatial(false);
   };
-  const handleClick = () => {
-    if (isTouch && canSpatialize) setSpatial((v) => !v);
-  };
-
   return (
     <div
       className="blueprint-stage group/blueprint relative h-full min-h-[clamp(9rem,22svh,18rem)] w-full overflow-hidden bg-transparent"
       onMouseEnter={engage}
       onMouseLeave={disengage}
-      onClick={handleClick}
     >
 
       <AnimatePresence initial={false}>
@@ -81,6 +72,18 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
             transition={{ duration: MORPH_S }}
           >
             <BakedRender node={node} showHint={!isTouch} />
+            {isTouch && (
+              <button
+                type="button"
+                className="absolute bottom-3 left-1/2 z-20 -translate-x-1/2 border border-white/25 bg-black/70 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.2em] text-white/75"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setSpatial(true);
+                }}
+              >
+                Explorer en 3D
+              </button>
+            )}
           </motion.div>
         )}
 

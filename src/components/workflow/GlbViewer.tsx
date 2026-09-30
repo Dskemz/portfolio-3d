@@ -77,6 +77,33 @@ export default function GlbViewer({ glbUrl, active, onReady }: GlbViewerProps) {
       camera.upperRadiusLimit = 7;
       camera.panningSensibility = 0;
 
+      // Sur tactile, seuls les gestes horizontaux pilotent l'orbite. Le geste
+      // vertical reste disponible pour le scroll du storytelling.
+      let pointerX: number | null = null;
+      const onPointerDown = (event: PointerEvent) => {
+        pointerX = event.clientX;
+        canvasRef.current?.setPointerCapture(event.pointerId);
+      };
+      const onPointerMove = (event: PointerEvent) => {
+        if (!isTouchDevice || pointerX === null) return;
+        const dx = event.clientX - pointerX;
+        if (Math.abs(dx) > 0.5) {
+          camera.alpha -= dx * 0.012;
+          pointerX = event.clientX;
+          if (event.cancelable) event.preventDefault();
+        }
+      };
+      const onPointerUp = (event: PointerEvent) => {
+        pointerX = null;
+        canvasRef.current?.releasePointerCapture(event.pointerId);
+      };
+      if (isTouchDevice) {
+        canvasRef.current?.addEventListener("pointerdown", onPointerDown);
+        canvasRef.current?.addEventListener("pointermove", onPointerMove);
+        canvasRef.current?.addEventListener("pointerup", onPointerUp);
+        canvasRef.current?.addEventListener("pointercancel", onPointerUp);
+      }
+
       const light = new HemisphericLight("light", new Vector3(0.2, 1, 0.3), scene);
       light.intensity = 1.05;
 
@@ -137,7 +164,7 @@ export default function GlbViewer({ glbUrl, active, onReady }: GlbViewerProps) {
     })();
 
     const onResize = () => engineRef.current?.resize();
-    window.addEventListener("resize", onResize);
+      window.addEventListener("resize", onResize);
 
     return () => {
       cancelled = true;
