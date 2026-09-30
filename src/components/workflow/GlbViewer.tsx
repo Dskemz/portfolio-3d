@@ -9,6 +9,7 @@ interface GlbViewerProps {
   /** Monte/démonte le moteur Babylon. À couper hors survol/tap pour ne pas garder un contexte WebGL par fiche. */
   active: boolean;
   onReady?: () => void;
+  wireframe?: boolean;
 }
 
 /**
@@ -16,7 +17,7 @@ interface GlbViewerProps {
  * autorotation douce, fond transparent. Sans `glbUrl`, affiche un mesh
  * procédural en attendant les vrais fichiers (voir workflowData.ts).
  */
-export default function GlbViewer({ glbUrl, active, onReady }: GlbViewerProps) {
+export default function GlbViewer({ glbUrl, active, onReady, wireframe = false }: GlbViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<Engine | null>(null);
   const sceneRef = useRef<Scene | null>(null);
@@ -120,6 +121,14 @@ export default function GlbViewer({ glbUrl, active, onReady }: GlbViewerProps) {
         await import("@babylonjs/loaders/glTF");
         const result = await core.SceneLoader.ImportMeshAsync("", "", glbUrl, scene);
         rotor = result.meshes[0] ?? null;
+        if (wireframe) {
+          for (const mesh of result.meshes) {
+            if (mesh.getTotalVertices() === 0) continue;
+            mesh.enableEdgesRendering();
+            mesh.edgesWidth = 1.1;
+            mesh.edgesColor = new core.Color4(0.95, 0.36, 0.08, 0.95);
+          }
+        }
       } else {
         const placeholder = MeshBuilder.CreateIcoSphere(
           "placeholder",
@@ -180,7 +189,7 @@ export default function GlbViewer({ glbUrl, active, onReady }: GlbViewerProps) {
       sceneRef.current = null;
       engineRef.current = null;
     };
-  }, [active, glbUrl, onReady]);
+  }, [active, glbUrl, onReady, wireframe]);
 
   if (!active) return null;
 

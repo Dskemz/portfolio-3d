@@ -97,7 +97,12 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
             exit={{ opacity: 0 }}
             transition={{ duration: MORPH_S }}
           >
-            <GlbViewer glbUrl={node.glbUrl} active={spatial} onReady={() => setGlbReady(true)} />
+            <GlbViewer
+              glbUrl={node.glbUrl}
+              active={spatial}
+              wireframe={node.step === "01"}
+              onReady={() => setGlbReady(true)}
+            />
             <motion.p
               aria-hidden
               className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.28em] text-white/50"

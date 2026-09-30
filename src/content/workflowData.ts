@@ -94,6 +94,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     href: "/portfolio/tous",
     hrefLabel: "Voir les projets",
     bakedImage: "/images/storytelling/etape-01-maillage.png",
+    glbUrl: "/models/storytelling/chaise-blanc.glb",
     blueprint: 0,
     points: [
       { id: "maillage", x: 157, y: 60, label: "Maillage" },
@@ -114,6 +115,8 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     description:
       "Construction des matières : réponse à la lumière, micro-relief, transparence. Dépliage UV sans recouvrement et densité de texels homogène, pour des shaders qui tiennent aussi bien dans un rendu hors ligne que dans un moteur temps réel, sans réécriture d'un support à l'autre.",
     tags: ["PBR", "Texel density", "4K"],
+    bakedImage: "/images/storytelling/etape-02-textures.png",
+    glbUrl: "/models/storytelling/chaise-textures.glb",
     blueprint: 2,
     points: [
       { id: "albedo", x: 160, y: 74, label: "Albédo" },
@@ -123,9 +126,24 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     ],
   },
   {
-    id: "lighting-rendu",
+    id: "animation",
     kind: "step",
     step: "03",
+    title: "Animation",
+    quote: {
+      text: "Le mouvement donne une intention à la forme et une présence à l'expérience.",
+      author: "M3D Studio",
+    },
+    description:
+      "Préparation des animations et des interactions pour donner vie au modèle, avec un mouvement fluide et cohérent avec l'expérience finale.",
+    tags: ["Animation", "Interaction", "Temps réel"],
+    blueprint: 2,
+    points: [],
+  },
+  {
+    id: "lighting-rendu",
+    kind: "step",
+    step: "04",
     title: "Lighting et rendu",
     quote: {
       text: "Ce que l'on conçoit bien s'énonce clairement, et se manipule sans mode d'emploi.",
@@ -134,6 +152,8 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
     description:
       "Mise en lumière de la scène, du path tracing hors ligne au budget d'images à la milliseconde dans le navigateur. Éclairage indirect, ombres dynamiques, ambiance : la même scène sert l'image fixe et la visite virtuelle temps réel, navigable et intégrable en iframe.",
     tags: ["HDRI", "Denoise", "Babylon.js"],
+    bakedImage: "/images/storytelling/etape-04-rendu.png",
+    glbUrl: "/models/storytelling/chaise-textures.glb",
     href: "/visite-virtuelle",
     hrefLabel: "Essayer la visite",
     blueprint: 3,
@@ -147,7 +167,7 @@ export const WORKFLOW_NODES: WorkflowNode[] = [
   {
     id: "contact-terminal",
     kind: "terminal",
-    step: "04",
+    step: "05",
     title: "Démarrer votre projet",
     description:
       "Le courant s'arrête ici. Décrivez votre projet : je vous dis par quelle étape il commence et ce que cela implique concrètement.",
