@@ -127,19 +127,10 @@ export default function GlbViewer({ glbUrl, active, onReady, wireframe = false }
           if (!mesh.parent) mesh.parent = modelRoot;
         }
 
-        // Les exports peuvent avoir leur origine hors du volume de la chaise.
-        // On recale le centre géométrique sur l'origine de la caméra afin que
-        // les deux GLB tournent autour du même pivot visuel.
-        let min = renderMeshes[0].getBoundingInfo().boundingBox.minimumWorld.clone();
-        let max = renderMeshes[0].getBoundingInfo().boundingBox.maximumWorld.clone();
-        for (const mesh of renderMeshes.slice(1)) {
-          const bounds = mesh.getBoundingInfo().boundingBox;
-          min = core.Vector3.Minimize(min, bounds.minimumWorld);
-          max = core.Vector3.Maximize(max, bounds.maximumWorld);
-        }
-        const center = min.add(max).scale(0.5);
-        modelRoot.position = center.scale(-1);
-        modelRoot.rotation.y = Math.PI;
+        // Les nouveaux exports ont leur pivot au centre du monde. On conserve
+        // donc ce pivot et applique uniquement l'orientation de raccord avec
+        // l'image précalculée.
+        modelRoot.rotation.y = (34.77 * Math.PI) / 180;
         camera.target = Vector3.Zero();
         rotor = modelRoot as unknown as AbstractMesh;
         if (wireframe) {
