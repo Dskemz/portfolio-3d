@@ -23,6 +23,8 @@ interface WorkflowCardProps {
   plain?: boolean;
   /** Mode cranté : le retour en arrière est une animation délibérée, pas un scrub */
   stepped?: boolean;
+  /** Mise en page compacte réservée au storytelling mobile. */
+  mobile?: boolean;
 }
 
 const PERIMETER_S = 0.6;
@@ -96,6 +98,7 @@ function WorkflowCard({
   receding,
   plain = false,
   stepped = false,
+  mobile = false,
 }: WorkflowCardProps) {
   const isTerminal = node.kind === "terminal";
   const isFirstStep = node.step === "01";
@@ -189,7 +192,7 @@ function WorkflowCard({
           className={`font-display font-light leading-[0.94] text-white ${
             isTerminal
               ? "text-[clamp(1.4rem,3.4svh,2.6rem)]"
-              : "max-w-[12ch] text-[clamp(3.1rem,5.6vw,6.1rem)] tracking-[-0.065em]"
+              : "max-w-[12ch] text-[clamp(3.1rem,7.2svh,6.1rem)] tracking-[-0.065em]"
           }`}
         >
           {node.title.split(" ").map((word, index, words) => (
@@ -291,7 +294,7 @@ function WorkflowCard({
       <div className="mx-auto mt-[clamp(0.9rem,2.9svh,2rem)] max-w-2xl">{editorial}</div>
     </div>
   ) : (
-    <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.2fr_0.8fr] md:gap-x-14 md:gap-y-5">
+    <div className={`grid grid-cols-1 gap-8 md:grid-cols-[1.2fr_0.8fr] md:gap-x-14 md:gap-y-5 ${mobile ? "gap-4" : ""}`}>
       <div className="px-[clamp(1.25rem,3.6svh,2.5rem)] pt-[clamp(1.35rem,4.4svh,3rem)] md:col-span-2">
         {titleBlock}
       </div>
@@ -299,7 +302,7 @@ function WorkflowCard({
         {quoteBlock}
       </div>
       <motion.div
-        className="relative min-h-[clamp(18rem,42svh,32rem)] px-[clamp(1.25rem,3.6svh,2.5rem)] md:min-h-[clamp(20rem,48svh,38rem)]"
+        className={`relative px-[clamp(1.25rem,3.6svh,2.5rem)] ${mobile ? "min-h-[clamp(12rem,30svh,18rem)]" : "min-h-[clamp(18rem,42svh,32rem)] md:min-h-[clamp(20rem,48svh,38rem)]"}`}
         initial={false}
         animate={{
           opacity: quoteComplete || !node.quote ? 1 : 0,

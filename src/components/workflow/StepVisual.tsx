@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import type { WorkflowNode, WorkflowPoint } from "@/content/workflowData";
@@ -47,6 +47,10 @@ export default function StepVisual({ node, active }: { node: WorkflowNode; activ
   }
 
   const canSpatialize = true;
+
+  useEffect(() => {
+    if (isTouch && active) setSpatial(true);
+  }, [active, isTouch]);
 
   const engage = () => {
     if (!isTouch && canSpatialize) setSpatial(true);

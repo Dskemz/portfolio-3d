@@ -228,12 +228,9 @@ export default function SkillFlowMobile() {
       const rect = el.getBoundingClientRect();
       const top = rect.top + window.scrollY;
 
-      // Une fiche plus haute que l'écran ne peut pas être centrée : on cale son
-      // haut sous la navbar, sinon on n'en verrait jamais le début.
-      const wanted =
-        rect.height > vh * 0.9
-          ? top - vh * 0.14
-          : top + rect.height / 2 - vh / 2;
+      // Chaque geste pose une fiche dans le viewport. La mise en page mobile
+      // est compacte afin que le récit reste entièrement lisible à ce cran.
+      const wanted = top + rect.height / 2 - vh / 2;
 
       const maxScroll = Math.max(
         0,
@@ -273,25 +270,6 @@ export default function SkillFlowMobile() {
     };
 
     /**
-     * Fiche plus haute que l'écran : on rend la main au défilement natif tant que
-     * le bord concerné n'est pas atteint. Sans ça, le cran sauterait par-dessus la
-     * fin de la fiche, qui deviendrait tout simplement illisible.
-     */
-    const overflowFree = (direction: 1 | -1) => {
-      const idx = stepRef.current;
-      if (idx < 0) return false;
-      const node = WORKFLOW_NODES[idx];
-      const el = node && cardRefs.current.get(node.id);
-      if (!el) return false;
-
-      const vh = window.innerHeight || 1;
-      const rect = el.getBoundingClientRect();
-      if (rect.height <= vh * 0.92) return false;
-
-      return direction === 1 ? rect.bottom > vh - 8 : rect.top < 8;
-    };
-
-    /**
      * La visite guidée prend-elle la main pour ce sens de défilement ?
      * Une fois entré en mode stepped, on capture TOUS les swipes sauf ceux
      * vers la fin du document.
@@ -302,8 +280,6 @@ export default function SkillFlowMobile() {
       if (!cardsReadyRef.current) {
         return false;
       }
-
-      if (overflowFree(direction)) return false;
 
       // Si on est déjà entré en mode stepped, capturer tout sauf tail.
       if (enteredSteppedRef.current) {
@@ -592,6 +568,7 @@ export default function SkillFlowMobile() {
               isHead={headId === node.id}
               receding={receding}
               stepped={MOBILE_STEPPED}
+              mobile
             />
           </div>
         ))}
