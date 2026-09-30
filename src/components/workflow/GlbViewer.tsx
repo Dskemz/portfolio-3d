@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import type { Engine, Scene, AbstractMesh } from "@babylonjs/core";
+import type { Engine, Scene, TransformNode as BabylonTransformNode } from "@babylonjs/core";
+
+/** Orientation Y des chaises du storytelling, raccord avec les images précalculées. */
+const STORYTELLING_ROTATION_Y_DEG = 34.77;
+/** Marge autour de la sphère englobante du modèle (1 = tangente au bord du cadre). */
+const FRAME_MARGIN = 1.08;
 
 interface GlbViewerProps {
   /** Chemin d'un .glb à charger. Absent ⇒ mesh placeholder animé. */
@@ -115,24 +120,80 @@ export default function GlbViewer({ glbUrl, active, onReady, wireframe = false }
       const light = new HemisphericLight("light", new Vector3(0.2, 1, 0.3), scene);
       light.intensity = 1.05;
 
-      let rotor: AbstractMesh | null = null;
-      let wireRotor: AbstractMesh | null = null;
+      let rotor: BabylonTransformNode | null = null;
+      let wireRotor: BabylonTransformNode | null = null;
+      // Le pivot glTF vit sous `__root__`, dont le scale Z = -1 inverse le sens
+      // de rotation : on compense pour garder la même autorotation visuelle.
+      let rotorSpin = 1;
 
       if (glbUrl) {
         await import("@babylonjs/loaders/glTF");
         const result = await core.SceneLoader.ImportMeshAsync("", "", glbUrl, scene);
-        const modelRoot = new TransformNode("model-root", scene);
-        const renderMeshes = result.meshes.filter((mesh) => mesh.getTotalVertices() > 0);
-        for (const mesh of renderMeshes) {
-          if (!mesh.parent) mesh.parent = modelRoot;
+        // Hiérarchie glTF : `__root__` (conversion de repère, sans géométrie)
+        // → node(s) Blender, dont l'origine est le pivot de l'objet → primitives.
+        const gltfRoot = result.meshes[0];
+        const renderMeshes = result.meshes.filter(
+          (mesh) => mesh.getTotalVertices() > 0 && mesh.isVisible && mesh.isEnabled()
+        );
+
+        // Le pivot Blender est conservé tel quel. Un TransformNode n'est créé
+        // que si l'export contient plusieurs objets racines à tourner ensemble.
+        const topNodes = gltfRoot.getChildren(
+          (node): node is BabylonTransformNode => node instanceof TransformNode,
+          true
+        );
+        let pivot: BabylonTransformNode;
+        if (topNodes.length === 1) {
+          pivot = topNodes[0];
+        } else {
+          pivot = new TransformNode("model-root", scene);
+          pivot.parent = gltfRoot;
+          for (const node of topNodes) node.parent = pivot;
+        }
+        if (pivot.rotationQuaternion) {
+          pivot.rotation = pivot.rotationQuaternion.toEulerAngles();
+          pivot.rotationQuaternion = null;
+        }
+        if (glbUrl.startsWith("/models/storytelling/")) {
+          // Valeur imposée (et non ajoutée) : identique à l'orientation native
+          // de l'export, sans risque de doublon si l'export change.
+          pivot.rotation.set(0, (STORYTELLING_ROTATION_Y_DEG * Math.PI) / 180, 0);
         }
 
-        // Les nouveaux exports ont leur pivot au centre du monde. On conserve
-        // donc ce pivot et applique uniquement l'orientation de raccord avec
-        // l'image précalculée.
-        modelRoot.rotation.y = (34.77 * Math.PI) / 180;
-        camera.target = Vector3.Zero();
-        rotor = modelRoot as unknown as AbstractMesh;
+        // Bounding box monde, après rotation, sur les seuls meshes rendus.
+        gltfRoot.computeWorldMatrix(true);
+        pivot.computeWorldMatrix(true);
+        let min = new Vector3(Infinity, Infinity, Infinity);
+        let max = new Vector3(-Infinity, -Infinity, -Infinity);
+        for (const mesh of renderMeshes) {
+          mesh.computeWorldMatrix(true);
+          const box = mesh.getBoundingInfo().boundingBox;
+          min = Vector3.Minimize(min, box.minimumWorld);
+          max = Vector3.Maximize(max, box.maximumWorld);
+        }
+
+        if (renderMeshes.length > 0) {
+          camera.target = min.add(max).scale(0.5);
+          // Sphère englobante : le modèle reste entier quel que soit l'angle
+          // d'orbite ou de l'autorotation.
+          const boundingRadius = max.subtract(min).length() / 2;
+          camera.minZ = boundingRadius * 0.05;
+          camera.maxZ = boundingRadius * 100;
+          const fitRadius = () => {
+            const halfV = camera.fov / 2;
+            const halfH = Math.atan(Math.tan(halfV) * engine.getAspectRatio(camera));
+            const radius = (boundingRadius / Math.sin(Math.min(halfV, halfH))) * FRAME_MARGIN;
+            // Distance verrouillée : aucun zoom possible, quel que soit l'input.
+            camera.lowerRadiusLimit = radius;
+            camera.upperRadiusLimit = radius;
+            camera.radius = radius;
+          };
+          fitRadius();
+          engine.onResizeObservable.add(fitRadius);
+        }
+
+        rotor = pivot;
+        rotorSpin = -1;
         if (wireframe) {
           for (const mesh of renderMeshes) {
             mesh.enableEdgesRendering();
@@ -181,7 +242,7 @@ export default function GlbViewer({ glbUrl, active, onReady, wireframe = false }
       }
 
       scene.registerBeforeRender(() => {
-        if (rotor) rotor.rotation.y += 0.00035 * engine.getDeltaTime();
+        if (rotor) rotor.rotation.y += rotorSpin * 0.00035 * engine.getDeltaTime();
         if (wireRotor) wireRotor.rotation.y += 0.00035 * engine.getDeltaTime();
       });
 
@@ -190,7 +251,7 @@ export default function GlbViewer({ glbUrl, active, onReady, wireframe = false }
     })();
 
     const onResize = () => engineRef.current?.resize();
-      window.addEventListener("resize", onResize);
+    window.addEventListener("resize", onResize);
 
     return () => {
       cancelled = true;
