@@ -53,7 +53,8 @@ function Motif({ step, revision }: { step: number; revision: number }) {
         lineFieldHalfHeight * 2 / Math.max(currentFrame[1], 1),
       );
       const layoutScale = Math.min(1, width / 1100, compactScale, frameFitScale);
-      const scaledFrame = currentFrame.map(value => value * layoutScale) as [number, number, number, number];
+      const frameScale = layoutScale * (2 / 3);
+      const scaledFrame = currentFrame.map(value => value * frameScale) as [number, number, number, number];
       const responsiveFrame: [number, number, number, number] = [
         scaledFrame[0],
         scaledFrame[1],
