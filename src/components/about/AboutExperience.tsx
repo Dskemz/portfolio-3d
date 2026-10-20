@@ -61,7 +61,7 @@ function Motif({ step, revision }: { step: number; revision: number }) {
         Math.max(-width / 2 + scaledFrame[0] / 2, Math.min(width / 2 - scaledFrame[0] / 2, scaledFrame[2])),
         Math.max(-lineFieldHalfHeight + scaledFrame[1] / 2, Math.min(lineFieldHalfHeight - scaledFrame[1] / 2, scaledFrame[3])),
       ];
-      const responsiveLineWidth = Math.max(1.35, 2.25 * layoutScale);
+      const responsiveLineWidth = Math.max(1.6, 2.8 * layoutScale);
       const responsiveBlur = Math.max(2.5, 5 * layoutScale);
       context.clearRect(0, 0, width, height);
       const drawLines = (strokeStyle = "rgba(218,228,231,.88)", lineWidth = responsiveLineWidth) => {
@@ -117,7 +117,12 @@ function Motif({ step, revision }: { step: number; revision: number }) {
       context.beginPath();
       context.rect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
       context.clip();
-      drawLines("rgba(255,104,48,.98)", responsiveLineWidth);
+      context.fillStyle = "rgba(255,82,24,.94)";
+      context.fillRect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
+      context.filter = `blur(${Math.max(.45, .8 * layoutScale)}px)`;
+      context.globalAlpha = 1;
+      drawLines("rgba(255,255,255,.86)", Math.max(2, responsiveLineWidth * 1.15));
+      context.filter = "none";
       context.restore();
       context.save();
       context.filter = `blur(${170 * layoutScale}px)`;
