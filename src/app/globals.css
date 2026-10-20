@@ -185,3 +185,25 @@
     transition: none !important;
   }
 }
+
+/* Le fond plein écran ne doit jamais intercepter la molette. */
+main canvas {
+  pointer-events: none !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+/* Les deux contours du focus restent synchronisés avec la fenêtre nette. */
+.duration-900 {
+  transition: all 700ms ease-out !important;
+}
+
+/* Le bloc éditorial reste sous le champ de lignes sur les écrans courts. */
+@media (max-height: 760px) {
+  .about-v7-info {
+    top: 78% !important;
+  }
+}
+
