@@ -56,7 +56,8 @@ function Motif({ step, revision }: { step: number; revision: number }) {
         const frameTop = cy + frameY - frameHeight / 2;
         const frameBottom = cy + frameY + frameHeight / 2;
         for (let row = -52; row <= 52; row += 2) {
-          const base = cy + row * 8.2;
+          const rowSpacing = Math.min(8.2, height * .42 / 52);
+          const base = cy + row * rowSpacing;
           context.beginPath();
           for (let x = -50; x <= width + 50; x += .5) {
             const nx = (x - cx) / width;
@@ -179,7 +180,7 @@ export default function AboutExperience() {
   return <main className="min-h-screen bg-[#090c11] text-white"><div className="relative flex h-screen flex-col overflow-hidden px-5 py-6 sm:px-10 lg:px-16">
     <header className="relative z-30 flex justify-between font-mono text-[10px] uppercase tracking-[.2em] text-white/50"><span>M3D STUDIO</span></header>
     <div className="absolute inset-0 z-10 flex items-center justify-center"><div className="pointer-events-none absolute inset-0"><Motif step={step} revision={revision} /></div>
-      <div className="absolute left-1/2 top-[72%] z-20 w-[92vw] -translate-x-1/2 pt-4 max-[760px]:top-[68%] sm:top-[77%] sm:w-[min(88vw,980px)] lg:top-[80%]"><div className="grid grid-cols-1 gap-4 font-mono sm:grid-cols-[1.1fr_1fr] sm:gap-0"><div className="border-r-0 pr-0 sm:border-r sm:border-white/50 sm:pr-5"><h1 className="font-display text-[clamp(1.7rem,8vw,4rem)] font-semibold uppercase leading-none max-[760px]:text-[clamp(1.5rem,6vw,3rem)]">{stageTitle}</h1></div><div className="pl-0 sm:pl-5"><p className="max-w-xl text-sm leading-6 text-[#ff6a3d] sm:text-base max-[760px]:text-xs max-[760px]:leading-5">{released ? "Footer accessible" : stageText}</p></div></div></div>
+      <div className="absolute left-1/2 top-[72%] z-20 w-[92vw] -translate-x-1/2 bg-[#090c11]/90 px-4 py-3 pt-4 max-[760px]:top-[70%] sm:top-[77%] sm:w-[min(88vw,980px)] lg:top-[80%]"><div className="grid grid-cols-1 gap-4 font-mono sm:grid-cols-[1.1fr_1fr] sm:gap-0"><div className="border-r-0 pr-0 sm:border-r sm:border-white/50 sm:pr-5"><h1 className="font-display text-[clamp(1.7rem,8vw,4rem)] font-semibold uppercase leading-none max-[760px]:text-[clamp(1.5rem,6vw,3rem)]">{stageTitle}</h1></div><div className="pl-0 sm:pl-5"><p className="max-w-xl text-sm leading-6 text-[#ff6a3d] sm:text-base max-[760px]:text-xs max-[760px]:leading-5">{released ? "Footer accessible" : stageText}</p></div></div></div>
     </div>
   </div></main>;
 }
