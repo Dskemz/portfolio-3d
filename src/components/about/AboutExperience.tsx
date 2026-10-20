@@ -47,8 +47,10 @@ function Motif({ step, revision }: { step: number; revision: number }) {
       const compactScale = height < 760 ? height / 1200 : 1;
       const layoutScale = Math.min(1, width / 1100, compactScale);
       const responsiveFrame = currentFrame.map(value => value * layoutScale) as [number, number, number, number];
+      const responsiveLineWidth = Math.max(1.35, 2.25 * layoutScale);
+      const responsiveBlur = Math.max(2.5, 5 * layoutScale);
       context.clearRect(0, 0, width, height);
-      const drawLines = (strokeStyle = "rgba(218,228,231,.88)", lineWidth = 2.25) => {
+      const drawLines = (strokeStyle = "rgba(218,228,231,.88)", lineWidth = responsiveLineWidth) => {
         context.lineCap = "round"; context.lineJoin = "round";
         context.strokeStyle = strokeStyle; context.lineWidth = lineWidth;
         const [frameWidth, frameHeight, frameX, frameY] = responsiveFrame;
@@ -94,7 +96,7 @@ function Motif({ step, revision }: { step: number; revision: number }) {
           context.stroke();
         }
       };
-      context.filter = "blur(5px)";
+      context.filter = `blur(${responsiveBlur}px)`;
       drawLines();
       context.filter = "none";
       const [boxWidth, boxHeight, boxX, boxY] = responsiveFrame;
@@ -102,14 +104,14 @@ function Motif({ step, revision }: { step: number; revision: number }) {
       context.beginPath();
       context.rect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
       context.clip();
-      drawLines("rgba(255,104,48,.98)", 2.25);
+      drawLines("rgba(255,104,48,.98)", responsiveLineWidth);
       context.restore();
       context.save();
-      context.filter = "blur(170px)";
+      context.filter = `blur(${170 * layoutScale}px)`;
       context.strokeStyle = "rgba(255,88,38,.24)";
       context.lineWidth = 80;
       context.strokeRect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
-      context.filter = "blur(360px)";
+      context.filter = `blur(${360 * layoutScale}px)`;
       context.strokeStyle = "rgba(255,88,38,.1)";
       context.lineWidth = 130;
       context.strokeRect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
@@ -121,14 +123,14 @@ function Motif({ step, revision }: { step: number; revision: number }) {
       const top = cy + boxY - boxHeight / 2;
       const right = left + boxWidth;
       const bottom = top + boxHeight;
-      const handle = 8;
+      const handle = Math.max(5, 8 * layoutScale);
       context.strokeStyle = "rgba(255,255,255,.9)";
       context.lineWidth = 1.5;
       context.strokeRect(left - handle / 2, top - handle / 2, handle, handle);
       context.strokeRect(right - handle / 2, top - handle / 2, handle, handle);
       context.strokeRect(left - handle / 2, bottom - handle / 2, handle, handle);
       context.strokeRect(right - handle / 2, bottom - handle / 2, handle, handle);
-      const crossSize = 24;
+      const crossSize = Math.max(16, 24 * layoutScale);
       context.beginPath();
       context.moveTo(cx + boxX - crossSize / 2, cy + boxY);
       context.lineTo(cx + boxX + crossSize / 2, cy + boxY);
