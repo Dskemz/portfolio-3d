@@ -44,11 +44,13 @@ function Motif({ step, revision }: { step: number; revision: number }) {
       const noisePhase = noiseFrom + (noiseTo - noiseFrom) * eased;
       const cx = width * .5, cy = height * .5;
       const currentFrame = fromFrame.map((value, index) => value + (toFrame[index] - value) * eased) as [number, number, number, number];
+      const layoutScale = Math.min(1, width / 1100, height / 850);
+      const responsiveFrame = currentFrame.map(value => value * layoutScale) as [number, number, number, number];
       context.clearRect(0, 0, width, height);
       const drawLines = (strokeStyle = "rgba(218,228,231,.88)", lineWidth = 2.25) => {
         context.lineCap = "round"; context.lineJoin = "round";
         context.strokeStyle = strokeStyle; context.lineWidth = lineWidth;
-        const [frameWidth, frameHeight, frameX, frameY] = currentFrame;
+        const [frameWidth, frameHeight, frameX, frameY] = responsiveFrame;
         const frameLeft = cx + frameX - frameWidth / 2;
         const frameRight = cx + frameX + frameWidth / 2;
         const frameTop = cy + frameY - frameHeight / 2;
@@ -93,7 +95,7 @@ function Motif({ step, revision }: { step: number; revision: number }) {
       context.filter = "blur(5px)";
       drawLines();
       context.filter = "none";
-      const [boxWidth, boxHeight, boxX, boxY] = currentFrame;
+      const [boxWidth, boxHeight, boxX, boxY] = responsiveFrame;
       context.save();
       context.beginPath();
       context.rect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
@@ -177,7 +179,7 @@ export default function AboutExperience() {
   return <main className="min-h-screen bg-[#090c11] text-white"><div className="relative flex h-screen flex-col overflow-hidden px-5 py-6 sm:px-10 lg:px-16">
     <header className="relative z-30 flex justify-between font-mono text-[10px] uppercase tracking-[.2em] text-white/50"><span>M3D STUDIO</span></header>
     <div className="absolute inset-0 z-10 flex items-center justify-center"><div className="pointer-events-none absolute inset-0"><Motif step={step} revision={revision} /></div>
-      <div className="absolute left-1/2 top-[80%] z-20 w-[min(86vw,980px)] -translate-x-1/2 pt-4"><div className="grid grid-cols-[1.2fr_1fr] font-mono"><div className="border-r border-white/50 pr-5"><h1 className="font-display text-[clamp(1.7rem,4vw,4rem)] font-semibold uppercase leading-none">{stageTitle}</h1></div><div className="pl-5"><p className="text-sm leading-6 text-[#ff6a3d] sm:text-base">{released ? "Footer accessible" : stageText}</p></div></div></div>
+      <div className="absolute left-1/2 top-[72%] z-20 w-[92vw] -translate-x-1/2 pt-4 sm:top-[77%] sm:w-[min(88vw,980px)] lg:top-[80%]"><div className="grid grid-cols-1 gap-4 font-mono sm:grid-cols-[1.1fr_1fr] sm:gap-0"><div className="border-r-0 pr-0 sm:border-r sm:border-white/50 sm:pr-5"><h1 className="font-display text-[clamp(1.7rem,8vw,4rem)] font-semibold uppercase leading-none">{stageTitle}</h1></div><div className="pl-0 sm:pl-5"><p className="max-w-xl text-sm leading-6 text-[#ff6a3d] sm:text-base">{released ? "Footer accessible" : stageText}</p></div></div></div>
     </div>
   </div></main>;
 }
