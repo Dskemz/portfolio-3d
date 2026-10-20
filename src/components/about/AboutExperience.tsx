@@ -45,13 +45,21 @@ function Motif({ step, revision }: { step: number; revision: number }) {
       const cx = width * .5, cy = height * .5;
       const currentFrame = fromFrame.map((value, index) => value + (toFrame[index] - value) * eased) as [number, number, number, number];
       const compactScale = height < 760 ? height / 1200 : 1;
+      const rowSpacing = Math.min(8.2, height * .24 / 52);
+      const lineFieldHalfHeight = 52 * rowSpacing;
       const frameFitScale = Math.min(
         1,
         width * .78 / Math.max(currentFrame[0], 1),
-        height * .42 / Math.max(currentFrame[1], 1),
+        lineFieldHalfHeight * 2 / Math.max(currentFrame[1], 1),
       );
       const layoutScale = Math.min(1, width / 1100, compactScale, frameFitScale);
-      const responsiveFrame = currentFrame.map(value => value * layoutScale) as [number, number, number, number];
+      const scaledFrame = currentFrame.map(value => value * layoutScale) as [number, number, number, number];
+      const responsiveFrame: [number, number, number, number] = [
+        scaledFrame[0],
+        scaledFrame[1],
+        Math.max(-width / 2 + scaledFrame[0] / 2, Math.min(width / 2 - scaledFrame[0] / 2, scaledFrame[2])),
+        Math.max(-lineFieldHalfHeight + scaledFrame[1] / 2, Math.min(lineFieldHalfHeight - scaledFrame[1] / 2, scaledFrame[3])),
+      ];
       const responsiveLineWidth = Math.max(1.35, 2.25 * layoutScale);
       const responsiveBlur = Math.max(2.5, 5 * layoutScale);
       context.clearRect(0, 0, width, height);
@@ -64,7 +72,6 @@ function Motif({ step, revision }: { step: number; revision: number }) {
         const frameTop = cy + frameY - frameHeight / 2;
         const frameBottom = cy + frameY + frameHeight / 2;
         for (let row = -52; row <= 52; row += 2) {
-          const rowSpacing = Math.min(8.2, height * .24 / 52);
           const base = cy + row * rowSpacing;
           context.beginPath();
           for (let x = -50; x <= width + 50; x += .5) {
