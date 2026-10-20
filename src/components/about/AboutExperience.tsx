@@ -62,7 +62,7 @@ function Motif({ step, revision }: { step: number; revision: number }) {
         Math.max(-lineFieldHalfHeight + scaledFrame[1] / 2, Math.min(lineFieldHalfHeight - scaledFrame[1] / 2, scaledFrame[3])),
       ];
       const responsiveLineWidth = Math.max(1.6, 2.8 * layoutScale);
-      const responsiveBlur = Math.max(2.5, 5 * layoutScale);
+      const responsiveBlur = Math.max(1.25, 2.5 * layoutScale);
       context.clearRect(0, 0, width, height);
       const drawLines = (strokeStyle = "rgba(218,228,231,.88)", lineWidth = responsiveLineWidth) => {
         context.lineCap = "round"; context.lineJoin = "round";
@@ -112,49 +112,6 @@ function Motif({ step, revision }: { step: number; revision: number }) {
       context.filter = `blur(${responsiveBlur}px)`;
       drawLines();
       context.filter = "none";
-      const [boxWidth, boxHeight, boxX, boxY] = responsiveFrame;
-      context.save();
-      context.beginPath();
-      context.rect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
-      context.clip();
-      context.fillStyle = "rgba(255,82,24,.94)";
-      context.fillRect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
-      context.filter = `blur(${Math.max(.45, .8 * layoutScale)}px)`;
-      context.globalAlpha = 1;
-      drawLines("rgba(255,255,255,.86)", Math.max(2, responsiveLineWidth * 1.15));
-      context.filter = "none";
-      context.restore();
-      context.save();
-      context.filter = `blur(${170 * layoutScale}px)`;
-      context.strokeStyle = "rgba(255,88,38,.08)";
-      context.lineWidth = 80;
-      context.strokeRect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
-      context.filter = `blur(${360 * layoutScale}px)`;
-      context.strokeStyle = "rgba(255,88,38,.03)";
-      context.lineWidth = 130;
-      context.strokeRect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
-      context.restore();
-      context.strokeStyle = "rgba(255,255,255,.55)";
-      context.lineWidth = 1;
-      context.strokeRect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
-      const left = cx + boxX - boxWidth / 2;
-      const top = cy + boxY - boxHeight / 2;
-      const right = left + boxWidth;
-      const bottom = top + boxHeight;
-      const handle = Math.max(5, 8 * layoutScale);
-      context.strokeStyle = "rgba(255,255,255,.9)";
-      context.lineWidth = 1.5;
-      context.strokeRect(left - handle / 2, top - handle / 2, handle, handle);
-      context.strokeRect(right - handle / 2, top - handle / 2, handle, handle);
-      context.strokeRect(left - handle / 2, bottom - handle / 2, handle, handle);
-      context.strokeRect(right - handle / 2, bottom - handle / 2, handle, handle);
-      const crossSize = Math.max(16, 24 * layoutScale);
-      context.beginPath();
-      context.moveTo(cx + boxX - crossSize / 2, cy + boxY);
-      context.lineTo(cx + boxX + crossSize / 2, cy + boxY);
-      context.moveTo(cx + boxX, cy + boxY - crossSize / 2);
-      context.lineTo(cx + boxX, cy + boxY + crossSize / 2);
-      context.stroke();
       if (p < 1) animation.current = requestAnimationFrame(draw); else previous.current = step;
     };
     animation.current = requestAnimationFrame(draw);
@@ -200,8 +157,12 @@ export default function AboutExperience() {
   const [stageTitle, stageText] = stages[step];
   return <main className="min-h-screen bg-[#090c11] text-white"><div className="relative flex h-screen flex-col overflow-hidden px-5 py-6 sm:px-10 lg:px-16">
     <header className="relative z-30 flex justify-between font-mono text-[10px] uppercase tracking-[.2em] text-white/50"><span>M3D STUDIO</span></header>
+    <div className="absolute right-5 top-1/2 z-30 hidden -translate-y-1/2 flex-col items-center gap-3 sm:flex lg:right-10" aria-label="Progression des étapes">
+      <div className="absolute top-2 bottom-2 w-px bg-white/15" />
+      {stages.map((_, index) => <span key={index} className={`relative z-10 h-1.5 w-1.5 rounded-full transition-all duration-500 ${index === step ? "scale-150 bg-[#ff6a3d] shadow-[0_0_10px_rgba(255,106,61,.8)]" : "bg-white/35"}`} />)}
+    </div>
     <div className="absolute inset-0 z-10 flex items-center justify-center"><div className="pointer-events-none absolute inset-0"><Motif step={step} revision={revision} /></div>
-      <div className="about-v7-info absolute left-1/2 top-[72%] z-20 w-[92vw] -translate-x-1/2 px-4 py-3 pt-4 sm:top-[77%] sm:w-[min(88vw,980px)] lg:top-[80%]"><div className="grid grid-cols-1 gap-4 font-mono sm:grid-cols-[1.1fr_1fr] sm:gap-0"><div className="border-r-0 pr-0 sm:border-r sm:border-white/50 sm:pr-5"><h1 className="font-display text-[clamp(1.7rem,8vw,4rem)] font-semibold uppercase leading-none max-[760px]:text-[clamp(1.5rem,6vw,3rem)]">{stageTitle}</h1></div><div className="pl-0 sm:pl-5"><p className="max-w-xl text-sm leading-6 text-[#ff6a3d] sm:text-base max-[760px]:text-xs max-[760px]:leading-5">{released ? "Footer accessible" : stageText}</p></div></div></div>
+      <div className="about-v7-info absolute left-1/2 top-1/2 z-20 w-[86vw] -translate-x-1/2 -translate-y-1/2 px-8 py-8 sm:w-[min(82vw,900px)]"><div className="grid grid-cols-1 gap-6 font-mono sm:grid-cols-[1.1fr_1fr] sm:gap-0"><div className="border-r-0 pr-0 sm:border-r sm:border-white/50 sm:pr-8"><h1 className="font-display text-[clamp(1.7rem,8vw,4rem)] font-semibold uppercase leading-none max-[760px]:text-[clamp(1.5rem,6vw,3rem)]">{stageTitle}</h1></div><div className="pl-0 sm:pl-8"><p className="max-w-xl text-sm leading-6 text-white sm:text-base max-[760px]:text-xs max-[760px]:leading-5">{released ? "Footer accessible" : stageText}</p></div></div></div>
     </div>
   </div></main>;
 }

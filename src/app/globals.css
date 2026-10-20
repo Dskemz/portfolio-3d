@@ -212,7 +212,8 @@ main canvas {
 
 @media (max-height: 760px) {
   .about-v7-info {
-    top: 80% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
   }
 
   .about-v7-info h1 {
