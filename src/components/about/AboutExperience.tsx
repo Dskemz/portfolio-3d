@@ -57,7 +57,7 @@ function Motif({ step, revision }: { step: number; revision: number }) {
         const frameTop = cy + frameY - frameHeight / 2;
         const frameBottom = cy + frameY + frameHeight / 2;
         for (let row = -52; row <= 52; row += 2) {
-          const rowSpacing = Math.min(8.2, height * .42 / 52);
+          const rowSpacing = Math.min(8.2, height * .24 / 52);
           const base = cy + row * rowSpacing;
           context.beginPath();
           for (let x = -50; x <= width + 50; x += .5) {

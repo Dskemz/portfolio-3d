@@ -203,7 +203,7 @@ main canvas {
 /* Le bloc éditorial reste sous le champ de lignes sur les écrans courts. */
 @media (max-height: 760px) {
   .about-v7-info {
-    top: 78% !important;
+    top: 80% !important;
   }
 
   .about-v7-info h1 {
