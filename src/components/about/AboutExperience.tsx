@@ -3,20 +3,41 @@
 import { useEffect, useRef, useState } from "react";
 
 const stages = [
-  ["M3D STUDIO", "Créateur de solutions 3D universelles. Nous transformons la manière dont les marques présentent leurs produits et services à travers le moteur graphique N3D et l’écosystème PRISM."],
+  ["M3D STUDIO", "Créateur de solutions 3D virtuelles et interactives. Nous transformons la manière dont les marques présentent leurs produits et services."],
   ["NOS SOLUTIONS", "Trois produits pour construire, présenter et déployer des expériences 3D universelles."],
-  ["PRISM", "Écosystème visite 3D automatisée. Du plan 2D au viewer interactif avec gestion centralisée et branding client."],
-  ["N3D MOTEUR", "Infrastructure graphique universelle : viewer, studio, générateur, système de variantes. Config-driven et production-ready."],
-  ["N3D STUDIO", "Photo 4K, vidéo, export RTT, exploded views. Transformation de produits bruts en contenus premium."],
-  ["NOTRE VISION", "M3D Studio est un studio de création spécialisé dans les solutions 3D universelles. Fondé sur l’expertise en modélisation 3D haute-fidélité et rendu Babylon.js, nous concevons des expériences interactives clef-en-main pour le retail, l’immobilier, les musées, et l’industrie."],
-  ["COMMENCER", "Consultez nos études de cas ou contactez-nous pour explorer comment PRISM, N3D Studio ou N3D Générateur peuvent transformer votre approche."],
-  ["ONE PROJECT", "Prêt à déployer une solution N3D pour votre cas d’usage ?"],
+  ["N3D MOTEUR", "Infrastructure graphique universelle : visualiseur 3D, studio, générateur et système de variantes. Configurable et prête pour la production."],
+  ["N3D STUDIO", "Photo 4K, vidéo 3D, export en temps réel et vues éclatées. Un studio virtuel construit sur mesure pour vos besoins, de la transformation de produits bruts jusqu’aux contenus premium."],
+  ["NOTRE VISION", "M3D Studio est un studio de création spécialisé dans les expériences interactives 3D. Fondé sur l’expertise en modélisation 3D haute-fidélité et rendu Babylon.js, nous concevons des expériences interactives clé en main pour le retail, les musées, l’industrie et tout autre domaine souhaitant repousser les limites de l’interaction."],
+  ["BABYLON.JS", "Nous avons choisi Babylon.js pour concevoir des expériences 3D performantes et accessibles directement depuis votre navigateur."],
+  ["EXPERTISE GLTF / GLB", "Forts de dix années d’expertise dans les formats glTF et GLB, nous créons des expériences 3D précises et adaptées à chaque projet."],
+  ["PROJET SUR MESURE", "Une expérience 3D pensée autour de vos produits, de vos usages et de vos objectifs, du concept jusqu’à la mise en ligne."],
 ] as const;
 const geometry = [
   [360, 520, 0, 0], [780, 260, 260, -160], [420, 620, -180, 80],
   [900, 300, 80, -20], [520, 520, 250, 120], [760, 380, -260, 40],
   [440, 600, 140, -40], [980, 500, 0, 0],
 ] as const;
+
+const highlightTermsByTitle: Record<string, string[]> = {
+  "M3D STUDIO": ["solutions 3D virtuelles et interactives", "produits et services"],
+  "NOS SOLUTIONS": ["construire", "présenter", "déployer", "expériences 3D universelles"],
+  "N3D MOTEUR": ["visualiseur 3D", "studio", "générateur", "variantes", "production"],
+  "N3D STUDIO": ["Photo 4K", "vidéo 3D", "temps réel", "vues éclatées", "contenus premium"],
+  "NOTRE VISION": ["expériences interactives 3D", "Babylon.js", "retail", "musées", "industrie", "tout autre domaine"],
+  "BABYLON.JS": ["Babylon.js", "expériences 3D performantes", "navigateur"],
+  "EXPERTISE GLTF / GLB": ["glTF", "GLB", "expériences 3D", "sur mesure"],
+  "PROJET SUR MESURE": ["produits", "usages", "objectifs", "mise en ligne"],
+};
+
+const highlightTerms = (text: string, title: string) => {
+  const terms = highlightTermsByTitle[title] ?? [];
+  if (!terms.length) return text;
+  const pattern = new RegExp(`(${terms.map(term => term.replace(/[.*+?^${}()|[\\]\\]/g, "\\\\$&")).join("|")})`, "gi");
+  const exactPattern = new RegExp(`^(?:${terms.map(term => term.replace(/[.*+?^${}()|[\\]\\]/g, "\\\\$&")).join("|")})$`, "i");
+  return text.split(pattern).map((part, index) => exactPattern.test(part)
+    ? <span key={`${part}-${index}`} className="text-[#ff6a3d]">{part}</span>
+    : part);
+};
 
 function Motif({ step, revision }: { step: number; revision: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -151,8 +172,29 @@ export default function AboutExperience() {
       if (next >= stages.length) { setReleased(true); window.setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }), 100); } else { setRevision(value => value + 1); setStep(Math.max(0, next)); }
       window.setTimeout(() => { busy.current = false; }, 820);
     };
+    let touchStartY = 0;
+    const onTouchStart = (event: TouchEvent) => { touchStartY = event.touches[0]?.clientY ?? 0; };
+    const onTouchEnd = (event: TouchEvent) => {
+      const touchEndY = event.changedTouches[0]?.clientY ?? touchStartY;
+      const deltaY = touchEndY - touchStartY;
+      if (Math.abs(deltaY) < 40) return;
+      if (released) {
+        if (deltaY <= 0 || busy.current) return;
+        event.preventDefault(); busy.current = true; window.scrollTo({ top: 0, behavior: "smooth" });
+        window.setTimeout(() => { setReleased(false); setRevision(value => value + 1); setStep(stages.length - 1); busy.current = false; }, 820);
+        return;
+      }
+      event.preventDefault(); if (busy.current) return; busy.current = true;
+      const next = step + (deltaY < 0 ? 1 : -1);
+      if (next >= stages.length) { setReleased(true); window.setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }), 100); } else { setRevision(value => value + 1); setStep(Math.max(0, next)); }
+      window.setTimeout(() => { busy.current = false; }, 820);
+    };
+    const onTouchMove = (event: TouchEvent) => { if (!released) event.preventDefault(); };
     window.addEventListener("wheel", onWheel, { passive: false });
-    return () => { window.removeEventListener("wheel", onWheel); document.documentElement.style.overflow = ""; document.body.style.overflow = ""; };
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: false });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    return () => { window.removeEventListener("wheel", onWheel); window.removeEventListener("touchstart", onTouchStart); window.removeEventListener("touchend", onTouchEnd); window.removeEventListener("touchmove", onTouchMove); document.documentElement.style.overflow = ""; document.body.style.overflow = ""; };
   }, [released, step]);
   const [stageTitle, stageText] = stages[step];
   return <main className="min-h-screen bg-[#090c11] text-white"><div className="relative flex h-screen flex-col overflow-hidden px-5 py-6 sm:px-10 lg:px-16">
@@ -162,7 +204,7 @@ export default function AboutExperience() {
       {stages.map((_, index) => <span key={index} className={`relative z-10 h-1.5 w-1.5 rounded-full transition-all duration-500 ${index === step ? "scale-150 bg-[#ff6a3d] shadow-[0_0_10px_rgba(255,106,61,.8)]" : "bg-white/35"}`} />)}
     </div>
     <div className="absolute inset-0 z-10 flex items-center justify-center"><div className="pointer-events-none absolute inset-0"><Motif step={step} revision={revision} /></div>
-      <div className="about-v7-info absolute left-1/2 top-1/2 z-20 w-[86vw] -translate-x-1/2 -translate-y-1/2 px-8 py-8 sm:w-[min(82vw,900px)]"><div className="grid grid-cols-1 gap-6 font-mono sm:grid-cols-[1.1fr_1fr] sm:gap-0"><div className="border-r-0 pr-0 sm:border-r sm:border-white/50 sm:pr-8"><h1 className="font-display text-[clamp(1.7rem,8vw,4rem)] font-semibold uppercase leading-none max-[760px]:text-[clamp(1.5rem,6vw,3rem)]">{stageTitle}</h1></div><div className="pl-0 sm:pl-8"><p className="max-w-xl text-sm leading-6 text-white sm:text-base max-[760px]:text-xs max-[760px]:leading-5">{released ? "Footer accessible" : stageText}</p></div></div></div>
+      <div className="about-v7-info absolute left-1/2 top-1/2 z-20 h-[360px] w-[92vw] -translate-x-1/2 -translate-y-1/2 px-8 py-8 sm:h-[300px] sm:w-[min(86vw,960px)]"><div className="grid h-full grid-cols-1 gap-6 font-mono sm:grid-cols-2 sm:gap-0"><div className="flex items-center justify-center border-r-0 pr-0 text-center sm:border-r sm:border-white/50 sm:pr-8"><h1 className={`font-display max-w-full font-semibold uppercase leading-none ${stageTitle.length > 8 ? "text-[clamp(1.4rem,6vw,3.2rem)]" : "text-[clamp(1.7rem,8vw,4rem)]"} max-[760px]:text-[clamp(1.5rem,6vw,3rem)]`}>{stageTitle}</h1></div><div className="flex items-center justify-center pl-0 text-center sm:pl-8"><p className={`max-w-xl text-white ${stageText.length > 180 ? "text-xs leading-5 sm:text-sm sm:leading-6" : "text-sm leading-6 sm:text-base"} max-[760px]:text-xs max-[760px]:leading-5`}>{highlightTerms(stageText, stageTitle)}</p></div></div></div>
     </div>
   </div></main>;
 }
