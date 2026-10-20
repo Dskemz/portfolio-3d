@@ -121,11 +121,11 @@ function Motif({ step, revision }: { step: number; revision: number }) {
       context.restore();
       context.save();
       context.filter = `blur(${170 * layoutScale}px)`;
-      context.strokeStyle = "rgba(255,88,38,.24)";
+      context.strokeStyle = "rgba(255,88,38,.08)";
       context.lineWidth = 80;
       context.strokeRect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
       context.filter = `blur(${360 * layoutScale}px)`;
-      context.strokeStyle = "rgba(255,88,38,.1)";
+      context.strokeStyle = "rgba(255,88,38,.03)";
       context.lineWidth = 130;
       context.strokeRect(cx + boxX - boxWidth / 2, cy + boxY - boxHeight / 2, boxWidth, boxHeight);
       context.restore();
