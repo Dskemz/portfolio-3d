@@ -205,5 +205,14 @@ main canvas {
   .about-v7-info {
     top: 78% !important;
   }
+
+  .about-v7-info h1 {
+    font-size: clamp(1.4rem, 5vw, 3rem) !important;
+  }
+
+  .about-v7-info p {
+    font-size: 0.8rem !important;
+    line-height: 1.25rem !important;
+  }
 }
 

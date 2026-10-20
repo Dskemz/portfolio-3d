@@ -44,7 +44,7 @@ function Motif({ step, revision }: { step: number; revision: number }) {
       const noisePhase = noiseFrom + (noiseTo - noiseFrom) * eased;
       const cx = width * .5, cy = height * .5;
       const currentFrame = fromFrame.map((value, index) => value + (toFrame[index] - value) * eased) as [number, number, number, number];
-      const compactScale = height < 760 ? height / 1000 : 1;
+      const compactScale = height < 760 ? height / 1200 : 1;
       const layoutScale = Math.min(1, width / 1100, compactScale);
       const responsiveFrame = currentFrame.map(value => value * layoutScale) as [number, number, number, number];
       context.clearRect(0, 0, width, height);
