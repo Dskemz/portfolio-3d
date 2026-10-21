@@ -139,14 +139,7 @@ export default function Navbar() {
         bas, pour que le flux de la home s'évanouisse en approchant du haut au
         lieu de rester visible dans les marges autour de la navbar.
       */}
-      <div
-        className="absolute inset-x-0 top-0 z-0 h-24 pointer-events-none md:h-28"
-        style={{
-          background: `linear-gradient(to bottom, rgba(0, 0, 0, ${opacite}) 0%, rgba(0, 0, 0, ${
-            opacite * 0.92
-          }) 62%, rgba(0, 0, 0, 0) 100%)`,
-        }}
-      />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-24 bg-transparent md:h-28" />
 
       {/*
         `relative z-10` : SANS ça, le masque ci-dessus recouvrait l'îlot.

@@ -4,7 +4,7 @@ import TheVault from "@/components/portfolio/TheVault";
 import { CtaSignature } from "@/components/portfolio/CtaSignature";
 
 export const metadata: Metadata = {
-  title: "Tous les projets",
+  title: "Toutes les expériences 3D",
   description:
     "L'ensemble des réalisations 3D, filtrables par typologie : visites virtuelles interactives, temps réel web, modélisation produit et architecture.",
   alternates: { canonical: "/portfolio/tous" },
@@ -25,11 +25,11 @@ export default function TousLesProjetsPage() {
         <Container>
           <div className="lg:grid lg:grid-cols-[8rem_1fr] lg:gap-8">
             <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-trait lg:pt-4">
-              Tous les projets
+              Expériences 3D
             </p>
 
             <h1 className="mt-8 max-w-3xl font-display text-[clamp(1.4rem,2.1vw,2rem)] font-light leading-[1.35] tracking-tight text-papier lg:mt-0">
-              L&apos;intégralité du travail, réuni au même endroit.{" "}
+              L&apos;ensemble des expériences professionnelles, réuni au même endroit.{" "}
               <span className="text-orange-500">Filtrez par typologie</span> pour
               aller droit à ce qui vous intéresse.
             </h1>

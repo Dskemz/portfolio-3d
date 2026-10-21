@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Sora, IBM_Plex_Mono } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import ConditionalFooter from "@/components/layout/ConditionalFooter";
 import "./globals.css";
 
 /**
@@ -86,7 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="contenu" className="flex flex-1 flex-col">
           {children}
         </main>
-        <Footer />
+        <ConditionalFooter />
       </body>
     </html>
   );

@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { PROJETS, TYPES_PROJETS } from "@/content/projets";
+import { EXPERIENCES_3D, TYPES_PROJETS } from "@/content/projets";
 
 /**
  * The Vault, grille globale filtrable par typologie.
@@ -18,8 +18,8 @@ export default function TheVault() {
   const [filtre, setFiltre] = useState<string>("tous");
 
   const projetsFiltres = useMemo(() => {
-    if (filtre === "tous") return PROJETS;
-    return PROJETS.filter((p) => p.types.includes(filtre as never));
+    if (filtre === "tous") return EXPERIENCES_3D;
+    return EXPERIENCES_3D.filter((p) => p.types.includes(filtre as never));
   }, [filtre]);
 
   return (

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ScrollTrigger } from "@/lib/gsap";
-import { PROJETS } from "@/content/projets";
+import { EXPERIENCES_3D } from "@/content/projets";
 
 /**
  * SommaireProjets — navigation « galerie d'art numérique » entre les projets.
@@ -61,7 +61,7 @@ export default function SommaireProjets() {
      tap (tactile). Démarre sur le premier projet. */
   const [actif, setActif] = useState(0);
 
-  const projet = PROJETS[actif];
+  const projet = EXPERIENCES_3D[actif];
 
   /* Durée du fondu — nulle si l'utilisateur a demandé moins d'animation. */
   const duree = reduit ? 0 : 0.5;
@@ -164,7 +164,7 @@ export default function SommaireProjets() {
           dessus). On scrolle la page normalement pour parcourir les projets.
       ══════════════════════════════════════════════════════════════════ */}
       <div className="flex flex-col gap-12 lg:hidden">
-        {PROJETS.map((p, i) => (
+        {EXPERIENCES_3D.map((p, i) => (
           <Link
             key={p.slug}
             href={`/portfolio/${p.slug}`}
@@ -332,7 +332,7 @@ export default function SommaireProjets() {
           }}
         >
           <ul className="flex flex-col">
-            {PROJETS.map((p, i) => {
+            {EXPERIENCES_3D.map((p, i) => {
               const estActif = i === actif;
 
               return (

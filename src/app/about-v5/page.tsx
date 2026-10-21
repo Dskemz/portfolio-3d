@@ -1,0 +1,31 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+
+export const metadata: Metadata = { title: "Denis Masquet — À propos", description: "Designer 3D et créateur d’expériences virtuelles interactives pour le web." };
+
+const traits = [
+  ["01", "STRUCTURE", "Je pose un cadre clair pour que le projet puisse bouger librement."],
+  ["02", "RYTHME", "Je travaille en musique : les idées avancent par mouvement, écoute et variations."],
+  ["03", "PASSERELLE", "Je fais le lien entre une demande, une intention et une expérience qui fonctionne."],
+  ["04", "ADAPTATION", "Chaque projet trouve sa forme. Je m’adapte à ce qu’il demande réellement."],
+] as const;
+
+export default function AProposV5() {
+  return <main className="overflow-hidden bg-[#080a12] text-[#f4f1eb]">
+    <section className="relative min-h-screen overflow-hidden px-5 py-6 sm:px-10 lg:px-16">
+      <div className="pointer-events-none absolute inset-0 opacity-50 [background-image:linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] [background-size:72px_72px]" />
+      <div className="relative flex justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-white/45"><span>M3D Studio / À propos</span><span>Denis Masquet — 01</span></div>
+      <div className="relative mx-auto flex min-h-[78vh] max-w-[1500px] items-center justify-center">
+        <div className="absolute h-[min(65vw,700px)] w-[min(65vw,700px)] rounded-full border border-[#9af7df]/25 shadow-[0_0_100px_rgba(154,247,223,.12)]" /><div className="absolute h-[min(45vw,480px)] w-[min(45vw,480px)] rounded-full border border-[#ff5f72]/40 [transform:rotateX(68deg)_rotateZ(-20deg)]" /><div className="absolute h-[min(26vw,290px)] w-[min(26vw,290px)] rounded-full bg-[radial-gradient(circle_at_35%_30%,#fff1c7_0%,#ff5f72_24%,#6f55ff_58%,#11152e_78%)] shadow-[0_0_90px_rgba(111,85,255,.5)]" /><div className="absolute h-1 w-[min(72vw,820px)] bg-gradient-to-r from-transparent via-[#9af7df] to-transparent opacity-70" />
+        <div className="relative z-10 text-center"><p className="mb-7 font-mono text-[10px] uppercase tracking-[0.3em] text-[#9af7df]">Designer 3D · expériences virtuelles · web</p><h1 className="font-display text-[clamp(3.5rem,10vw,10rem)] font-semibold leading-[0.78] tracking-[-0.1em]">Denis<br /><span className="text-[#ff5f72]">Masquet</span></h1><p className="mx-auto mt-10 max-w-md text-base leading-7 text-white/65">Je crée des expériences virtuelles interactives qui donnent envie d&apos;entrer, de comprendre et de rester.</p></div>
+      </div>
+      <div className="relative flex justify-between border-t border-white/15 pt-4 font-mono text-[10px] uppercase tracking-[0.17em] text-white/45"><span>Artiste 3D généraliste &amp; retail</span><span>Scroll / Play</span></div>
+    </section>
+
+    <section className="relative bg-[#f4f1eb] px-5 py-24 text-[#11131d] sm:px-10 lg:px-16 lg:py-36"><div className="mx-auto max-w-[1500px]"><div className="flex items-center justify-between border-b border-[#11131d]/20 pb-5"><p className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#6f55ff]">Comment je fonctionne</p><span className="font-mono text-[10px] text-[#11131d]/40">02 — 04</span></div><div className="mt-16 grid gap-16 lg:grid-cols-12 lg:gap-8"><h2 className="text-[clamp(3rem,7vw,8rem)] font-display font-semibold leading-[0.82] tracking-[-0.09em] lg:col-span-7">Structuré dans le cadre.<br /><span className="text-[#6f55ff]">Libre dans le mouvement.</span></h2><div className="space-y-7 text-lg leading-8 text-[#11131d]/65 lg:col-span-4 lg:col-start-9"><p>Je travaille constamment en musique. Elle m’aide à trouver le rythme, les respirations et les variations qui donnent vie à une expérience.</p><p>Je ne plaque pas une méthode sur un projet : je construis des passerelles avec mes clients pour comprendre leur demande et m&apos;adapter à chaque situation.</p></div></div></div></section>
+
+    <section className="bg-[#161a2a] px-5 py-24 sm:px-10 lg:px-16 lg:py-36"><div className="mx-auto max-w-[1500px]"><div className="mb-14 flex items-end justify-between"><p className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#ffcf4a]">Le système</p><span className="text-sm text-white/40">Une structure. Plusieurs directions.</span></div><div className="grid gap-px overflow-hidden rounded-3xl bg-white/15 sm:grid-cols-2 lg:grid-cols-4">{traits.map(([number,title,text]) => <article key={number} className="group min-h-[19rem] bg-[#161a2a] p-7 transition-colors duration-500 hover:bg-[#242a42]"><span className="font-mono text-[10px] text-[#9af7df]">{number}</span><h3 className="mt-20 font-display text-2xl font-semibold tracking-[-0.05em] text-white group-hover:text-[#ff5f72]">{title}</h3><p className="mt-4 text-sm leading-6 text-white/50">{text}</p></article>)}</div></div></section>
+
+    <section className="relative overflow-hidden bg-[#ff5f72] px-5 py-24 text-[#080a12] sm:px-10 lg:px-16 lg:py-36"><div className="absolute -right-20 -top-20 h-80 w-80 rounded-full border-[40px] border-[#9af7df]/40" /><div className="relative mx-auto grid max-w-[1500px] gap-14 lg:grid-cols-12 lg:items-end"><div className="lg:col-span-7"><p className="font-mono text-[10px] uppercase tracking-[0.25em] text-black/55">Ce que je construis</p><h2 className="mt-8 text-[clamp(3rem,7vw,8rem)] font-display font-semibold leading-[0.82] tracking-[-0.09em]">Des expériences<br />qui ont du goût.</h2><p className="mt-8 max-w-xl text-lg leading-8 text-black/70">Je préfère une direction claire, beaucoup de caractère et une idée qui va au bout de ce qu&apos;elle veut raconter. Pas un mélange sans intention.</p></div><div className="lg:col-span-4 lg:col-start-9"><p className="text-lg leading-8 text-black/70">Tu arrives avec une idée, un produit ou une direction ? On regarde ensemble ce qu&apos;il faut construire pour lui donner forme.</p><div className="mt-8 flex flex-wrap gap-3"><Link href="/portfolio" className="rounded-full bg-[#080a12] px-6 py-4 text-sm font-semibold text-white transition-transform hover:-translate-y-1">Voir mes projets</Link><Link href="/contact" className="rounded-full border border-black/40 px-6 py-4 text-sm font-semibold transition-colors hover:bg-white/30">On en parle</Link></div></div></div></section>
+  </main>;
+}

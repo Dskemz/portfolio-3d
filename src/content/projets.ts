@@ -234,3 +234,8 @@ export const PROJETS: ProjetData[] = [
       "Modélisation haute précision (Villeret Chinese Calendar, Polaris Memovox), rendus clay et matériaux, compositions duo, galerie évolutive prête à accueillir les futures pièces.",
   },
 ];
+
+/** Expériences professionnelles présentées sur la vitrine publique. */
+export const EXPERIENCES_3D = PROJETS.filter(
+  (projet) => projet.client !== "Projet personnel",
+);
